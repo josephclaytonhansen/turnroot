@@ -20,6 +20,23 @@ with open("preferences.json", "r") as read_file:
             ah_tasks = data["ah_tasks"]
             ah_taskss = data["ah_taskss"]
             ah_overlays = data["ah_overlays"]
+            read_file.close()
+            
+def updateJSON():
+    with open("preferences.json", "r") as read_file:
+        read_file.seek(0)
+        data = json.load(read_file)
+        font_size = data["font_size"]
+        icon_size = data["icon_size"]
+        rfont_size = data["rfont_size"]
+        active_theme = data["active_theme"]
+        active_layout = data["active_layout"]
+        ah_rte = ["ah_rte"]
+        ah_tasks = data["ah_tasks"]
+        ah_taskss = data["ah_taskss"]
+        ah_overlays = data["ah_overlays"]
+        read_file.close()
+        return data
 
 import UI_colorTheme
 
@@ -62,19 +79,21 @@ class main(QMainWindow):
         layout.addWidget(self.task_settings, 4, 40, 10, 8)
         layout.addWidget(self.tools, 2, 0, 13, 1)
         
-        menubar = self.menuBar()
-        menubar.setNativeMenuBar(False)
-        fileMenu = menubar.addMenu('&File')
-        bar = self.menuBar()
+        self.menubar = self.menuBar()
+        font = self.menubar.font()
+        font.setPointSize(font_size)
+        self.menubar.setNativeMenuBar(False)
+        fileMenu = self.menubar.addMenu('&File')
+        self.bar = self.menuBar()
 
-        menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;")
-        editMenu = bar.addMenu("&Edit")
-        viewMenu = bar.addMenu( "&View")
+        self.menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;font-size: "+str(font_size))
+        editMenu = self.bar.addMenu("&Edit")
+        viewMenu = self.bar.addMenu( "&View")
         
-        toolbar = QToolBar("")
-        toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: 15px;" )
-        toolbar.setIconSize(QSize(int(icon_size), int(icon_size)))
-        toolbar.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.toolbar = QToolBar("")
+        self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(font_size))
+        self.toolbar.setIconSize(QSize(int(icon_size), int(icon_size)))
+        self.toolbar.setToolButtonStyle(Qt.ToolButtonIconOnly)
               
         resourcesButton = QAction(QIcon("ui_icons/package-2-32.png"), "Resources", self)
         optionsButton = QAction(QIcon("ui_icons/settings-17-32.png"),"Options", self)
@@ -87,25 +106,25 @@ class main(QMainWindow):
         
         optionsButton.triggered.connect(self.OptionsMenu)
         
-        toolbar.addAction(backButton)
-        toolbar.addAction(optionsButton)
-        toolbar.addSeparator()
-        toolbar.addSeparator()
-        toolbar.addSeparator()
-        toolbar.addAction(resourcesButton)
-        toolbar.addSeparator()
-        toolbar.addSeparator()
-        toolbar.addSeparator()
-        toolbar.addAction(playSoundButton)
-        toolbar.addAction(playAnimationButton)
-        toolbar.addAction(justTilesButton)
-        toolbar.addSeparator()
-        toolbar.addSeparator()
-        toolbar.addSeparator()
-        toolbar.addAction(helpButton)
-        toolbar.addAction(forumButton)
+        self.toolbar.addAction(backButton)
+        self.toolbar.addAction(optionsButton)
+        self.toolbar.addSeparator()
+        self.toolbar.addSeparator()
+        self.toolbar.addSeparator()
+        self.toolbar.addAction(resourcesButton)
+        self.toolbar.addSeparator()
+        self.toolbar.addSeparator()
+        self.toolbar.addSeparator()
+        self.toolbar.addAction(playSoundButton)
+        self.toolbar.addAction(playAnimationButton)
+        self.toolbar.addAction(justTilesButton)
+        self.toolbar.addSeparator()
+        self.toolbar.addSeparator()
+        self.toolbar.addSeparator()
+        self.toolbar.addAction(helpButton)
+        self.toolbar.addAction(forumButton)
         
-        self.addToolBar(toolbar)
+        self.addToolBar(self.toolbar)
 
         widget = QWidget()
 
@@ -116,6 +135,20 @@ class main(QMainWindow):
     def OptionsMenu(self):
         p = PreferencesDialog()
         p.exec_()
+        data = updateJSON()
+        self.menubar.style().unpolish(self.menubar)
+        self.menubar.style().polish(self.menubar)
+        self.menubar.update()
+        self.toolbar.style().unpolish(self.toolbar)
+        self.toolbar.style().polish(self.toolbar)
+        self.toolbar.update()
+        active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold; font-size: "+str(data["font_size"]))
+        self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(data["font_size"]))
+        font = self.menubar.font()
+        font.setPointSize(data["font_size"])
+        self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
+
               
 window = main()
 

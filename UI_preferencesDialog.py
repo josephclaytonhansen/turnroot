@@ -23,29 +23,44 @@ color_themes_dict = [midnight_spark, midnight_spark_yellow,
     chili_pepper,garden_morning]
 #update portion ends here
 
-with open("preferences.json", "r") as read_file:
-            data = json.load(read_file)
-            font_size = data["font_size"]
-            icon_size = data["icon_size"]
-            rfont_size = data["rfont_size"]
-            active_theme = data["active_theme"]
-            active_layout = data["active_layout"]
-            ah_rte = ["ah_rte"]
-            ah_tasks = data["ah_tasks"]
-            ah_taskss = data["ah_taskss"]
-            ah_overlays = data["ah_overlays"]
-
-import UI_colorTheme
-
-active_theme = getattr(UI_colorTheme, active_theme)
-print(active_theme)
-
-
 data = {"font_size": 15, "rfont_size": 15,
         "active_theme": "midnight_spark_yellow",
         "active_layout": "right_lower", "icon_size": "26",
         "ah_rte": True, "ah_tasks": True, "ah_taskss": True,
         "ah_overlays": False}
+
+with open("preferences.json", "r") as read_file:
+    data = json.load(read_file)
+    font_size = data["font_size"]
+    icon_size = data["icon_size"]
+    rfont_size = data["rfont_size"]
+    active_theme = data["active_theme"]
+    active_layout = data["active_layout"]
+    ah_rte = ["ah_rte"]
+    ah_tasks = data["ah_tasks"]
+    ah_taskss = data["ah_taskss"]
+    ah_overlays = data["ah_overlays"]
+    read_file.close()
+    
+def updateJSON():
+    with open("preferences.json", "r") as read_file:
+        read_file.seek(0)
+        data = json.load(read_file)
+        font_size = data["font_size"]
+        icon_size = data["icon_size"]
+        rfont_size = data["rfont_size"]
+        active_theme = data["active_theme"]
+        active_layout = data["active_layout"]
+        ah_rte = ["ah_rte"]
+        ah_tasks = data["ah_tasks"]
+        ah_taskss = data["ah_taskss"]
+        ah_overlays = data["ah_overlays"]
+        read_file.close()
+        return data
+
+import UI_colorTheme
+
+active_theme = getattr(UI_colorTheme, active_theme)
 
 #update below when importing more layouts!
 from UI_layoutOption import (right_lower,left_lower,lower_lower,left_left,right_right,simple)
@@ -63,10 +78,11 @@ for x in range(0, len(layout_dict)):
 class PreferencesDialog(QDialog):
 
     def __init__(self, parent=None):
+        data = updateJSON()
+        active_theme = getattr(UI_colorTheme, data["active_theme"])
         self.active_theme = active_theme
         self.active_layout = right_lower
 
-        
         #sizing options
         super().__init__()
         self.font_size = font_size
@@ -133,7 +149,6 @@ class PreferencesDialog(QDialog):
         self.aes_layout.addWidget(self.ct,4,0)
         self.color_theme_list = QListWidget()
         self.color_theme_list.addItems(color_themes)
-        self.color_theme_list.setCurrentRow(0)
         self.color_theme_list.currentTextChanged.connect(self.color_theme_changed)
         self.aes_layout.addWidget(self.color_theme_list,4,1)
         
@@ -171,7 +186,7 @@ class PreferencesDialog(QDialog):
         self.tis_slider = QSlider(Qt.Horizontal)
         self.tis_slider.setTickPosition(3)
         self.tis_slider.setTickInterval(4)
-        self.tis_slider.setValue(26)
+        self.tis_slider.setValue(int(icon_size))
         self.tis_slider.setRange(16,48)
         self.tis_slider.setSingleStep(4)
         self.tis_slider.valueChanged.connect(self.tis_size_changed)
@@ -197,33 +212,40 @@ class PreferencesDialog(QDialog):
         self.setLayout(layout)
     
     def category_change(self, s):
+        data = updateJSON()
         for x in range(0, len(entries)):
             if (s == entries[x]):
                 ind = x
                 self.prefs_layout.setCurrentIndex(ind)
     
     def font_size_changed(self, i):
+        data = updateJSON()
         font_size = i
         self.pref_categories.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.list_background_color)
         self.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         data["font_size"] = font_size
         with open("preferences.json", "w") as write_file:
             json.dump(data, write_file)
+            write_file.close()
     
     def rfont_size_changed(self, i):
+        data = updateJSON()
         rfont_size = i
         data["rfont_size"] = rfont_size
         with open("preferences.json", "w") as write_file:
             json.dump(data, write_file)
+            write_file.close()
 
 
     def color_theme_changed(self, s):
+        data = updateJSON()
         for x in range(0, len(color_themes_dict)):
             if (s == color_themes_dict[x].name):
                 self.active_theme = color_themes_dict[x]
         data["active_theme"] = str(self.active_theme.tag)
         with open("preferences.json", "w") as write_file:
             json.dump(data, write_file)
+            write_file.close()
                 
         self.pref_categories.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.list_background_color)
         self.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
@@ -237,8 +259,12 @@ class PreferencesDialog(QDialog):
     def ah_taskss_changed(self, s):
         pass
     
-    def tis_size_changed(self, s):
-        pass
+    def tis_size_changed(self, i):
+        icon_size = i
+        data["icon_size"] = str(i)
+        with open("preferences.json", "w") as write_file:
+            json.dump(data, write_file)
+            write_file.close()
     
     def ah_overlays_changed(self, s):
         pass
