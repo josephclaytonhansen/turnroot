@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
+import json
 
 ind = 0
 entries = ["Appearance", "System", "Keyboard Shortcuts"]
@@ -11,16 +12,40 @@ from UI_colorTheme import (
     midnight_spark, midnight_spark_yellow,
     coral_reef,sand_dunes,
     rainforest,charcoal,
-    snow,ocean_waves,
+    system_light,ocean_waves,
     autumn_orchard,chocolate,
     chili_pepper,garden_morning)
 color_themes_dict = [midnight_spark, midnight_spark_yellow,
     coral_reef,sand_dunes,
     rainforest,charcoal,
-    snow,ocean_waves,
+    system_light,ocean_waves,
     autumn_orchard,chocolate,
     chili_pepper,garden_morning]
 #update portion ends here
+
+with open("preferences.json", "r") as read_file:
+            data = json.load(read_file)
+            font_size = data["font_size"]
+            icon_size = data["icon_size"]
+            rfont_size = data["rfont_size"]
+            active_theme = data["active_theme"]
+            active_layout = data["active_layout"]
+            ah_rte = ["ah_rte"]
+            ah_tasks = data["ah_tasks"]
+            ah_taskss = data["ah_taskss"]
+            ah_overlays = data["ah_overlays"]
+
+import UI_colorTheme
+
+active_theme = getattr(UI_colorTheme, active_theme)
+print(active_theme)
+
+
+data = {"font_size": 15, "rfont_size": 15,
+        "active_theme": "midnight_spark_yellow",
+        "active_layout": "right_lower", "icon_size": "26",
+        "ah_rte": True, "ah_tasks": True, "ah_taskss": True,
+        "ah_overlays": False}
 
 #update below when importing more layouts!
 from UI_layoutOption import (right_lower,left_lower,lower_lower,left_left,right_right,simple)
@@ -35,14 +60,13 @@ layout_names = []
 for x in range(0, len(layout_dict)):
     layout_names.append(layout_dict[x].name)
 
-font_size = 15 #JSON style variables TODO
-rfont_size = 15
-
 class PreferencesDialog(QDialog):
 
     def __init__(self, parent=None):
-        self.active_theme = midnight_spark
+        self.active_theme = active_theme
         self.active_layout = right_lower
+
+        
         #sizing options
         super().__init__()
         self.font_size = font_size
@@ -182,16 +206,24 @@ class PreferencesDialog(QDialog):
         font_size = i
         self.pref_categories.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.list_background_color)
         self.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
-        #update overall stylesheet TODO
+        data["font_size"] = font_size
+        with open("preferences.json", "w") as write_file:
+            json.dump(data, write_file)
     
     def rfont_size_changed(self, i):
         rfont_size = i
-        #update overall stylesheet TODO
+        data["rfont_size"] = rfont_size
+        with open("preferences.json", "w") as write_file:
+            json.dump(data, write_file)
+
 
     def color_theme_changed(self, s):
         for x in range(0, len(color_themes_dict)):
             if (s == color_themes_dict[x].name):
                 self.active_theme = color_themes_dict[x]
+        data["active_theme"] = str(self.active_theme.tag)
+        with open("preferences.json", "w") as write_file:
+            json.dump(data, write_file)
                 
         self.pref_categories.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.list_background_color)
         self.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)

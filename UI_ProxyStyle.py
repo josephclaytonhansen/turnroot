@@ -10,6 +10,6 @@ class ProxyStyle(QProxyStyle):
     def pixelMetric(self, QStyle_PixelMetric, option=None, widget=None):
 
         if QStyle_PixelMetric == QStyle.PM_SmallIconSize:
-            return IconSize.icon_size
+            return 12
         else:
             return QProxyStyle.pixelMetric(self, QStyle_PixelMetric, option, widget)

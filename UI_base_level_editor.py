@@ -4,10 +4,29 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
 import qtmodern.styles
 import qtmodern.windows
+import json
 from UI_preferencesDialog import PreferencesDialog
 from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
-icon_size = 26 #JSON TODO: link to UI_icon_size.py
+
+
+with open("preferences.json", "r") as read_file:
+            data = json.load(read_file)
+            font_size = data["font_size"]
+            icon_size = data["icon_size"]
+            rfont_size = data["rfont_size"]
+            active_theme = data["active_theme"]
+            active_layout = data["active_layout"]
+            ah_rte = ["ah_rte"]
+            ah_tasks = data["ah_tasks"]
+            ah_taskss = data["ah_taskss"]
+            ah_overlays = data["ah_overlays"]
+
+import UI_colorTheme
+
+active_theme = getattr(UI_colorTheme, active_theme)
+print(active_theme)
+        
 
 app = QApplication([])
 
@@ -29,7 +48,7 @@ class main(QMainWindow):
         layout = QGridLayout()
         layout.setContentsMargins(0,0,0,0)
         layout.setSpacing(0)
-
+        
         self.rte = Color("#f9cb9c")
         self.tiles = Color("#d9ead3")
         self.tasks = Color("#fdf2cc")
@@ -49,13 +68,13 @@ class main(QMainWindow):
         fileMenu = menubar.addMenu('&File')
         bar = self.menuBar()
 
-        menubar.setStyleSheet("background-color: #252c31; color: #8bdfc7; padding: 2px; font:bold;")
+        menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;")
         editMenu = bar.addMenu("&Edit")
         viewMenu = bar.addMenu( "&View")
         
         toolbar = QToolBar("")
-        toolbar.setStyleSheet("background-color: #252c31;color: #ffffff; font-size: 15px;" )
-        toolbar.setIconSize(QSize(28, 28))
+        toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: 15px;" )
+        toolbar.setIconSize(QSize(int(icon_size), int(icon_size)))
         toolbar.setToolButtonStyle(Qt.ToolButtonIconOnly)
               
         resourcesButton = QAction(QIcon("ui_icons/package-2-32.png"), "Resources", self)

@@ -1,3 +1,3 @@
 class IconSize:
-    icon_size = 26
+    icon_size = 16
     
