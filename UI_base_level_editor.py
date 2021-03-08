@@ -9,7 +9,6 @@ from UI_preferencesDialog import PreferencesDialog
 from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
 
-
 with open("preferences.json", "r") as read_file:
             data = json.load(read_file)
             font_size = data["font_size"]
