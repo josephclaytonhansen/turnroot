@@ -50,9 +50,9 @@ class main(QMainWindow):
         self.setMaximumSize(QSize(int(size.width()), int(size.height())))
         self.resize(QSize(int(size.width()*.9), int(size.height()*.9)))
 
-        layout = QGridLayout()
-        layout.setContentsMargins(0,0,0,0)
-        layout.setSpacing(0)
+        self.layout = QGridLayout()
+        self.layout.setContentsMargins(0,0,0,0)
+        self.layout.setSpacing(0)
         
         self.rte = workspaceContainer("rte", data["active_layout"])
         self.tiles = workspaceContainer("tiles", data["active_layout"])
@@ -61,12 +61,13 @@ class main(QMainWindow):
         self.tile_grid = Color("black")
         self.tools = workspaceContainer("tools", data["active_layout"])
 
-        layout.addWidget(self.tile_grid, 0, 0, 26, 48)
-        layout.addWidget(self.rte, 17, 0, 9, 17)
-        layout.addWidget(self.tiles, 20, 17, 6, 23)
-        layout.addWidget(self.tasks, 14, 40, 12, 8)
-        layout.addWidget(self.task_settings, 4, 40, 10, 8)
-        layout.addWidget(self.tools, 2, 0, 13, 1)
+        self.layout.addWidget(self.tile_grid, 0, 0, 26, 48)
+        self.layout.addWidget(self.rte, 17, 0, 9, 17)
+        self.layout.addWidget(self.tiles, 20, 17, 6, 23)
+        self.layout.addWidget(self.tasks, 14, 40, 12, 8)
+        self.layout.addWidget(self.task_settings, 4, 40, 10, 8)
+        self.layout.addWidget(self.tools, 2, 0, 13, 1)
+        
         
         self.menubar = self.menuBar()
         font = self.menubar.font()
@@ -132,7 +133,7 @@ class main(QMainWindow):
 
         widget = QWidget()
 
-        widget.setLayout(layout)
+        widget.setLayout(self.layout)
 
         self.setCentralWidget(widget)
         
@@ -150,7 +151,7 @@ class main(QMainWindow):
         active_theme = getattr(UI_colorTheme, data["active_theme"])
         self.menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold; font-size: "+str(data["font_size"]))
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(data["font_size"]))
-        self.setStyleSheet("color: "+active_theme.window_text_color+";font:bold; font-size: "+str(data["font_size"]))
+        self.setStyleSheet("color: "+active_theme.window_text_color+"; padding: 2px; font:bold; font-size: "+str(data["font_size"]))
         font = self.menubar.font()
         font.setPointSize(data["font_size"])
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
@@ -162,6 +163,7 @@ class main(QMainWindow):
         c.exec_()
         if(c.return_confirm):
             sys.exit()
+    
               
 window = main()
 
