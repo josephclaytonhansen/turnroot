@@ -2,7 +2,7 @@ class colorTheme:
     name = ""
     window_background_color = ""
     list_background_color = ""
-    editor_windows_background_color = ""
+    workspace_background_color = ""
     search_background_color = ""
     text_entry_background_color = ""
     rows_background_color1 = ""
@@ -21,8 +21,9 @@ class colorTheme:
 class midnight_spark(colorTheme):
     name = "Midnight Spark"
     tag = "midnight_spark"
-    window_background_color = "#252c31"
-    list_background_color = "#1e2d48"
+    window_background_color = "#1E2D48"
+    workspace_background_color = "#475768"
+    list_background_color = "#252C31"
     window_text_color = "#8bdfc7"
 
 class midnight_spark_yellow(colorTheme):

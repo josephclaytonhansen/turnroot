@@ -53,8 +53,6 @@ from UI_updateJSON import updateJSON
 import UI_colorTheme
 
 active_theme = getattr(UI_colorTheme, active_theme)
-print(active_theme)
-print(active_theme.name)
 
 #update below when importing more layouts!
 from UI_layoutOption import (right_lower,left_lower,lower_lower,left_left,right_right,simple)
@@ -66,7 +64,6 @@ for x in range(0, len(color_themes_dict)):
     color_themes.append(color_themes_dict[x].name)
 if(active_theme.name in color_themes):
     active_index = color_themes.index(active_theme.name)
-    print(active_index)
 
 layout_names = []
 for x in range(0, len(layout_dict)):
@@ -148,6 +145,7 @@ class PreferencesDialog(QDialog):
         self.color_theme_list.addItems(color_themes)
         self.color_theme_list.setCurrentRow(active_index)
         self.current_theme_check = color_themes[active_index]
+        self.current_font = data["font_size"]
         self.color_theme_list.currentTextChanged.connect(self.color_theme_changed)
         self.aes_layout.addWidget(self.color_theme_list,4,1)
         
@@ -185,7 +183,6 @@ class PreferencesDialog(QDialog):
         self.tis_slider = QSlider(Qt.Horizontal)
         self.tis_slider.setTickPosition(3)
         self.tis_slider.setTickInterval(4)
-        print(int(data["icon_size"]))
         self.tis_slider.setValue(int(data["icon_size"]))
         self.tis_slider.setRange(16,48)
         self.tis_slider.setSingleStep(4)
@@ -222,6 +219,9 @@ class PreferencesDialog(QDialog):
     def font_size_changed(self, i):
         data = updateJSON()
         font_size = i
+        if (self.current_font != i):
+            data["theme_changed"] = True
+            self.buttonBox.setText("Apply changes and restart")
         self.pref_categories.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.list_background_color)
         self.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         data["font_size"] = font_size

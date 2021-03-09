@@ -10,6 +10,8 @@ from UI_preferencesDialog import PreferencesDialog
 from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction
+from UI_updateJSON import updateJSON
+from UI_workspaceContainer import workspaceContainer
 
 with open("preferences.json", "r") as read_file:
             data = json.load(read_file)
@@ -25,23 +27,6 @@ with open("preferences.json", "r") as read_file:
             data["theme_changed"] = False
             read_file.close()
             
-def updateJSON():
-    with open("preferences.json", "r") as read_file:
-        read_file.seek(0)
-        data = json.load(read_file)
-        font_size = data["font_size"]
-        icon_size = data["icon_size"]
-        rfont_size = data["rfont_size"]
-        active_theme = data["active_theme"]
-        active_layout = data["active_layout"]
-        ah_rte = ["ah_rte"]
-        ah_tasks = data["ah_tasks"]
-        ah_taskss = data["ah_taskss"]
-        ah_overlays = data["ah_overlays"]
-
-        read_file.close()
-        return data
-
 import UI_colorTheme
 
 active_theme = getattr(UI_colorTheme, active_theme)
@@ -69,12 +54,12 @@ class main(QMainWindow):
         layout.setContentsMargins(0,0,0,0)
         layout.setSpacing(0)
         
-        self.rte = Color("#f9cb9c")
-        self.tiles = Color("#d9ead3")
-        self.tasks = Color("#fdf2cc")
-        self.task_settings = Color("#ea9999")
-        self.tile_grid = Color("#222222")
-        self.tools = Color("#d5a6be")
+        self.rte = workspaceContainer("rte", data["active_layout"])
+        self.tiles = workspaceContainer("tiles", data["active_layout"])
+        self.tasks = workspaceContainer("tasks", data["active_layout"])
+        self.task_settings = workspaceContainer("task_settings", data["active_layout"])
+        self.tile_grid = Color("black")
+        self.tools = workspaceContainer("tools", data["active_layout"])
 
         layout.addWidget(self.tile_grid, 0, 0, 26, 48)
         layout.addWidget(self.rte, 17, 0, 9, 17)
@@ -165,6 +150,7 @@ class main(QMainWindow):
         active_theme = getattr(UI_colorTheme, data["active_theme"])
         self.menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold; font-size: "+str(data["font_size"]))
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(data["font_size"]))
+        self.setStyleSheet("color: "+active_theme.window_text_color+";font:bold; font-size: "+str(data["font_size"]))
         font = self.menubar.font()
         font.setPointSize(data["font_size"])
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
