@@ -94,7 +94,7 @@ class PreferencesDialog(QDialog):
         self.setMinimumHeight(340)
         self.setMaximumHeight(780)
         self.setMaximumWidth(900)
-        self.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
         QBtn = QDialogButtonBox.Ok
         self.buttonBox = QDialogButtonBox(QBtn)
@@ -108,7 +108,7 @@ class PreferencesDialog(QDialog):
         self.pref_categories.addItems(entries)
         self.pref_categories.setMinimumWidth(120)
         self.pref_categories.setMaximumWidth(260)
-        self.pref_categories.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.list_background_color)
+        self.pref_categories.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color)
         self.pref_categories.currentTextChanged.connect(self.category_change)
         
         #options on the right
@@ -129,7 +129,7 @@ class PreferencesDialog(QDialog):
         self.font_slider = QSlider(Qt.Horizontal)
         self.font_slider.setTickPosition(3)
         self.font_slider.setTickInterval(2)
-        self.font_slider.setValue(font_size)
+        self.font_slider.setValue(data["font_size"])
         self.font_slider.setRange(8,30)
         self.font_slider.setSingleStep(1)
         self.font_slider.valueChanged.connect(self.font_size_changed)
@@ -141,7 +141,7 @@ class PreferencesDialog(QDialog):
         self.rfont_slider = QSlider(Qt.Horizontal)
         self.rfont_slider.setTickPosition(3)
         self.rfont_slider.setTickInterval(2)
-        self.rfont_slider.setValue(rfont_size)
+        self.rfont_slider.setValue(data["rfont_size"])
         self.rfont_slider.setRange(8,30)
         self.rfont_slider.setSingleStep(1)
         self.rfont_slider.valueChanged.connect(self.rfont_size_changed)
@@ -189,7 +189,8 @@ class PreferencesDialog(QDialog):
         self.tis_slider = QSlider(Qt.Horizontal)
         self.tis_slider.setTickPosition(3)
         self.tis_slider.setTickInterval(4)
-        self.tis_slider.setValue(int(icon_size))
+        print(int(data["icon_size"]))
+        self.tis_slider.setValue(int(data["icon_size"]))
         self.tis_slider.setRange(16,48)
         self.tis_slider.setSingleStep(4)
         self.tis_slider.valueChanged.connect(self.tis_size_changed)

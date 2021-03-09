@@ -157,6 +157,7 @@ class main(QMainWindow):
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(data["font_size"]))
         font = self.menubar.font()
         font.setPointSize(data["font_size"])
+        self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
         if (data["theme_changed"]):
             os.execl(sys.executable, sys.executable, *sys.argv)
 
