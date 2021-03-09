@@ -1,5 +1,6 @@
 import sys
-from PyQt5.QtCore import QSize, Qt
+import os
+from PyQt5.QtCore import QSize, Qt 
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
 import qtmodern.styles
@@ -113,34 +114,25 @@ class main(QMainWindow):
         elif (active_theme.tag == "chili_pepper"):
             icon_string = "red/"
               
-        resourcesButton = QAction(QIcon("ui_icons/"+icon_string+"package-2-32.png"), "Resources", self)
-        optionsButton = QAction(QIcon("ui_icons/"+icon_string+"settings-17-32.png"),"Options", self)
-        helpButton = QAction(QIcon("ui_icons/"+icon_string+"question-mark-4-32.png"),"Read docs", self)
-        backButton = QAction(QIcon("ui_icons/"+icon_string+"grid-three-up-32.png"),"Return to editor selection", self)
-        playAnimationButton = QAction(QIcon("ui_icons/"+icon_string+"play-2-32.png"),"Play animations", self)
-        playSoundButton = QAction(QIcon("ui_icons/"+icon_string+"mute-2-32.png"),"Play sounds", self)
-        justTilesButton = QAction(QIcon("ui_icons/"+icon_string+"fit-to-width-32.png"),"Show just tiles", self)
-        forumButton = QAction(QIcon("ui_icons/"+icon_string+"speech-bubble-2-32.png"),"Access forum", self)
+        self.resourcesButton = QAction(QIcon("ui_icons/"+icon_string+"package-2-32.png"), "Resources", self)
+        self.optionsButton = QAction(QIcon("ui_icons/"+icon_string+"settings-17-32.png"),"Options", self)
+        self.helpButton = QAction(QIcon("ui_icons/"+icon_string+"question-mark-4-32.png"),"Read docs", self)
+        self.backButton = QAction(QIcon("ui_icons/"+icon_string+"grid-three-up-32.png"),"Return to editor selection", self)
+        self.playAnimationButton = QAction(QIcon("ui_icons/"+icon_string+"play-2-32.png"),"Play animations", self)
+        self.playSoundButton = QAction(QIcon("ui_icons/"+icon_string+"mute-2-32.png"),"Play sounds", self)
+        self.justTilesButton = QAction(QIcon("ui_icons/"+icon_string+"fit-to-width-32.png"),"Show just tiles", self)
+        self.forumButton = QAction(QIcon("ui_icons/"+icon_string+"speech-bubble-2-32.png"),"Access forum", self)
         
-        optionsButton.triggered.connect(self.OptionsMenu)
+        self.optionsButton.triggered.connect(self.OptionsMenu)
         
-        self.toolbar.addAction(backButton)
-        self.toolbar.addAction(optionsButton)
-        self.toolbar.addSeparator()
-        self.toolbar.addSeparator()
-        self.toolbar.addSeparator()
-        self.toolbar.addAction(resourcesButton)
-        self.toolbar.addSeparator()
-        self.toolbar.addSeparator()
-        self.toolbar.addSeparator()
-        self.toolbar.addAction(playSoundButton)
-        self.toolbar.addAction(playAnimationButton)
-        self.toolbar.addAction(justTilesButton)
-        self.toolbar.addSeparator()
-        self.toolbar.addSeparator()
-        self.toolbar.addSeparator()
-        self.toolbar.addAction(helpButton)
-        self.toolbar.addAction(forumButton)
+        self.toolbar.addAction(self.backButton)
+        self.toolbar.addAction(self.optionsButton)
+        self.toolbar.addAction(self.resourcesButton)
+        self.toolbar.addAction(self.playSoundButton)
+        self.toolbar.addAction(self.playAnimationButton)
+        self.toolbar.addAction(self.justTilesButton)
+        self.toolbar.addAction(self.helpButton)
+        self.toolbar.addAction(self.forumButton)
         
         self.addToolBar(self.toolbar)
 
@@ -152,7 +144,7 @@ class main(QMainWindow):
         
     def OptionsMenu(self):
         p = PreferencesDialog()
-        p.exec_()
+        theme = p.exec_()
         data = updateJSON()
         self.menubar.style().unpolish(self.menubar)
         self.menubar.style().polish(self.menubar)
@@ -165,7 +157,9 @@ class main(QMainWindow):
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(data["font_size"]))
         font = self.menubar.font()
         font.setPointSize(data["font_size"])
-        self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
+        if (data["theme_changed"]):
+            os.execl(sys.executable, sys.executable, *sys.argv)
+
 
               
 window = main()

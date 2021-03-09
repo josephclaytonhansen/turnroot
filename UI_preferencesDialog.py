@@ -6,6 +6,7 @@ import json
 
 ind = 0
 entries = ["Appearance", "System", "Keyboard Shortcuts"]
+returnv = False
 
 #update below when importing more color themes!
 from UI_colorTheme import (
@@ -27,7 +28,7 @@ data = {"font_size": 15, "rfont_size": 15,
         "active_theme": "midnight_spark_yellow",
         "active_layout": "right_lower", "icon_size": "26",
         "ah_rte": True, "ah_tasks": True, "ah_taskss": True,
-        "ah_overlays": False}
+        "ah_overlays": False, "theme_changed": False}
 
 with open("preferences.json", "r") as read_file:
     data = json.load(read_file)
@@ -40,6 +41,8 @@ with open("preferences.json", "r") as read_file:
     ah_tasks = data["ah_tasks"]
     ah_taskss = data["ah_taskss"]
     ah_overlays = data["ah_overlays"]
+    theme_changed = False
+    data["theme_changed"] = False
     read_file.close()
     
 def updateJSON():
@@ -55,6 +58,7 @@ def updateJSON():
         ah_tasks = data["ah_tasks"]
         ah_taskss = data["ah_taskss"]
         ah_overlays = data["ah_overlays"]
+
         read_file.close()
         return data
 
@@ -92,11 +96,10 @@ class PreferencesDialog(QDialog):
         self.setMaximumWidth(900)
         self.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
-        QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+        QBtn = QDialogButtonBox.Ok
         self.buttonBox = QDialogButtonBox(QBtn)
         self.buttonBox.accepted.connect(self.accept)
-        self.buttonBox.rejected.connect(self.reject)
-        
+
         #the overall layout is a grid
         layout = QGridLayout()
         self.pref_categories = QListWidget()
@@ -144,7 +147,7 @@ class PreferencesDialog(QDialog):
         self.rfont_slider.valueChanged.connect(self.rfont_size_changed)
         self.aes_layout.addWidget(self.rfont_slider,2,1)
         
-        self.ct = QLabel("Color theme\n (restart required for icon colors)")
+        self.ct = QLabel("Color theme\n (will automatically restart)")
         self.ct.setAlignment( Qt.AlignVCenter)
         self.aes_layout.addWidget(self.ct,4,0)
         self.color_theme_list = QListWidget()
@@ -208,7 +211,9 @@ class PreferencesDialog(QDialog):
 
         layout.addWidget(self.pref_categories, 0, 0, 1, 1)
         layout.addWidget(self.prefs, 0, 1, 1, 3)
+        layout.addWidget(self.buttonBox, 12, 1)
         self.setLayout(layout)
+
     
     def category_change(self, s):
         data = updateJSON()
@@ -242,12 +247,14 @@ class PreferencesDialog(QDialog):
             if (s == color_themes_dict[x].name):
                 self.active_theme = color_themes_dict[x]
         data["active_theme"] = str(self.active_theme.tag)
+        data["theme_changed"] = True
         with open("preferences.json", "w") as write_file:
             json.dump(data, write_file)
             write_file.close()
                 
         self.pref_categories.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.list_background_color)
         self.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+
     
     def ah_rte_changed(self, s):
         pass
