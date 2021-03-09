@@ -94,15 +94,33 @@ class main(QMainWindow):
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(font_size))
         self.toolbar.setIconSize(QSize(int(icon_size), int(icon_size)))
         self.toolbar.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        
+        icon_string = ""
+        if (active_theme.tag == "midnight_spark"):
+            icon_string = "teal/"
+        elif (active_theme.tag == "midnight_spark_yellow"):
+            icon_string = "yellow/"
+        elif (active_theme.tag == "coral_reef"):
+            icon_string = "pink/"
+        elif (active_theme.tag == "sand_dunes" or active_theme.tag == "chocolate"):
+            icon_string = "brown/"
+        elif (active_theme.tag == "rainforest"):
+            icon_string = "green/"
+        elif (active_theme.tag == "charcoal" or active_theme.tag == "ocean_waves"  or active_theme.tag == "garden_morning"):
+            icon_string = "white/"
+        elif (active_theme.tag == "system_light" or active_theme.tag == "clouds"):
+            icon_string = "blue/"
+        elif (active_theme.tag == "chili_pepper"):
+            icon_string = "red/"
               
-        resourcesButton = QAction(QIcon("ui_icons/package-2-32.png"), "Resources", self)
-        optionsButton = QAction(QIcon("ui_icons/settings-17-32.png"),"Options", self)
-        helpButton = QAction(QIcon("ui_icons/question-mark-4-32.png"),"Read docs", self)
-        backButton = QAction(QIcon("ui_icons/grid-three-up-32.png"),"Return to editor selection", self)
-        playAnimationButton = QAction(QIcon("ui_icons/play-2-32.png"),"Play animations", self)
-        playSoundButton = QAction(QIcon("ui_icons/mute-2-32.png"),"Play sounds", self)
-        justTilesButton = QAction(QIcon("ui_icons/fit-to-width-32.png"),"Show just tiles", self)
-        forumButton = QAction(QIcon("ui_icons/speech-bubble-2-32.png"),"Access forum", self)
+        resourcesButton = QAction(QIcon("ui_icons/"+icon_string+"package-2-32.png"), "Resources", self)
+        optionsButton = QAction(QIcon("ui_icons/"+icon_string+"settings-17-32.png"),"Options", self)
+        helpButton = QAction(QIcon("ui_icons/"+icon_string+"question-mark-4-32.png"),"Read docs", self)
+        backButton = QAction(QIcon("ui_icons/"+icon_string+"grid-three-up-32.png"),"Return to editor selection", self)
+        playAnimationButton = QAction(QIcon("ui_icons/"+icon_string+"play-2-32.png"),"Play animations", self)
+        playSoundButton = QAction(QIcon("ui_icons/"+icon_string+"mute-2-32.png"),"Play sounds", self)
+        justTilesButton = QAction(QIcon("ui_icons/"+icon_string+"fit-to-width-32.png"),"Show just tiles", self)
+        forumButton = QAction(QIcon("ui_icons/"+icon_string+"speech-bubble-2-32.png"),"Access forum", self)
         
         optionsButton.triggered.connect(self.OptionsMenu)
         

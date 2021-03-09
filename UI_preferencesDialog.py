@@ -13,13 +13,13 @@ from UI_colorTheme import (
     coral_reef,sand_dunes,
     rainforest,charcoal,
     system_light,ocean_waves,
-    autumn_orchard,chocolate,
+    clouds,chocolate,
     chili_pepper,garden_morning)
 color_themes_dict = [midnight_spark, midnight_spark_yellow,
     coral_reef,sand_dunes,
     rainforest,charcoal,
     system_light,ocean_waves,
-    autumn_orchard,chocolate,
+    clouds,chocolate,
     chili_pepper,garden_morning]
 #update portion ends here
 
@@ -144,7 +144,7 @@ class PreferencesDialog(QDialog):
         self.rfont_slider.valueChanged.connect(self.rfont_size_changed)
         self.aes_layout.addWidget(self.rfont_slider,2,1)
         
-        self.ct = QLabel("Color theme")
+        self.ct = QLabel("Color theme\n (restart required for icon colors)")
         self.ct.setAlignment( Qt.AlignVCenter)
         self.aes_layout.addWidget(self.ct,4,0)
         self.color_theme_list = QListWidget()
@@ -208,7 +208,6 @@ class PreferencesDialog(QDialog):
 
         layout.addWidget(self.pref_categories, 0, 0, 1, 1)
         layout.addWidget(self.prefs, 0, 1, 1, 3)
-        layout.addWidget(self.buttonBox, 10, 1)
         self.setLayout(layout)
     
     def category_change(self, s):
