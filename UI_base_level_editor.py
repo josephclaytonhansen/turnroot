@@ -9,6 +9,7 @@ import json
 from UI_preferencesDialog import PreferencesDialog
 from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
+from UI_Dialogs import confirmAction
 
 with open("preferences.json", "r") as read_file:
             data = json.load(read_file)
@@ -92,6 +93,7 @@ class main(QMainWindow):
         self.menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;font-size: "+str(font_size))
         editMenu = self.bar.addMenu("&Edit")
         viewMenu = self.bar.addMenu( "&View")
+
         
         self.toolbar = QToolBar("")
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(font_size))
@@ -137,6 +139,11 @@ class main(QMainWindow):
         self.toolbar.addAction(self.forumButton)
         
         self.addToolBar(self.toolbar)
+        
+        self.quitButton = QAction("Quit", self)
+        self.quitButton.triggered.connect(self.quitWindow)
+        fileMenu.addAction(self.quitButton)
+        editMenu.addAction(self.optionsButton)
 
         widget = QWidget()
 
@@ -145,7 +152,7 @@ class main(QMainWindow):
         self.setCentralWidget(widget)
         
     def OptionsMenu(self):
-        p = PreferencesDialog()
+        p = PreferencesDialog(parent=self)
         theme = p.exec_()
         print(theme)
         data = updateJSON()
@@ -163,8 +170,12 @@ class main(QMainWindow):
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
         if (theme != 0 and data["theme_changed"] == True):
             os.execl(sys.executable, sys.executable, *sys.argv)
-
-
+    
+    def quitWindow(self):
+        c = confirmAction(parent=self, s="quit the level editor")
+        c.exec_()
+        if(c.return_confirm):
+            sys.exit()
               
 window = main()
 
