@@ -12,7 +12,9 @@ import UI_colorTheme
 from UI_color_test_widget import Color
 hidev = False
 import json
-
+with open("workspaces.json", "r") as read_file:
+    workspaces = json.load(read_file)
+    read_file.close()
 class workspaceContainer(QWidget):
         def __init__(self, workspace, layout):
             self.hidev = hidev
@@ -25,13 +27,7 @@ class workspaceContainer(QWidget):
             self.setStyleSheet("font-size: "+str(data["font_size"])+"px;color: "+self.active_theme.window_text_color)
             palette = self.palette()
             self.background_color = QColor(self.active_theme.workspace_background_color)
-            
-            
-            with open("workspaces.json", "r") as read_file:
-                self.workspaces = json.load(read_file)
-                read_file.close()
-                print(self.workspaces)
-    
+            self.workspaces = workspaces
             palette.setColor(QPalette.Window, self.background_color)
             self.setPalette(palette)
             self.layout = QVBoxLayout()
@@ -58,9 +54,10 @@ class workspaceContainer(QWidget):
             self.close()
             print(self.ws)
             self.workspaces[self.ws] = "closed"
+            print(self.workspaces)
             with open("workspaces.json", "w") as write_file:
                 json.dump(self.workspaces, write_file)
-                write_file.close()
+                
 
             
 
