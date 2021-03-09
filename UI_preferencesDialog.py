@@ -44,6 +44,10 @@ with open("preferences.json", "r") as read_file:
     theme_changed = False
     data["theme_changed"] = False
     read_file.close()
+
+with open("preferences.json", "w") as write_file:
+    json.dump(data, write_file)
+    write_file.close()
     
 def updateJSON():
     with open("preferences.json", "r") as read_file:
@@ -65,6 +69,8 @@ def updateJSON():
 import UI_colorTheme
 
 active_theme = getattr(UI_colorTheme, active_theme)
+print(active_theme)
+print(active_theme.name)
 
 #update below when importing more layouts!
 from UI_layoutOption import (right_lower,left_lower,lower_lower,left_left,right_right,simple)
@@ -74,6 +80,9 @@ layout_dict = [right_lower,left_lower,lower_lower,left_left,right_right,simple]
 color_themes = []
 for x in range(0, len(color_themes_dict)):
     color_themes.append(color_themes_dict[x].name)
+if(active_theme.name in color_themes):
+    active_index = color_themes.index(active_theme.name)
+    print(active_index)
 
 layout_names = []
 for x in range(0, len(layout_dict)):
@@ -95,10 +104,11 @@ class PreferencesDialog(QDialog):
         self.setMaximumHeight(780)
         self.setMaximumWidth(900)
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
-        
-        QBtn = QDialogButtonBox.Ok
-        self.buttonBox = QDialogButtonBox(QBtn)
-        self.buttonBox.accepted.connect(self.accept)
+        self.ok_label = "Apply changes"
+        QBtn = QPushButton(self.ok_label)
+        self.buttonBox = QBtn
+        self.buttonBox.clicked.connect(self.accept)
+
 
         #the overall layout is a grid
         layout = QGridLayout()
@@ -152,6 +162,8 @@ class PreferencesDialog(QDialog):
         self.aes_layout.addWidget(self.ct,4,0)
         self.color_theme_list = QListWidget()
         self.color_theme_list.addItems(color_themes)
+        self.color_theme_list.setCurrentRow(active_index)
+        self.current_theme_check = color_themes[active_index]
         self.color_theme_list.currentTextChanged.connect(self.color_theme_changed)
         self.aes_layout.addWidget(self.color_theme_list,4,1)
         
@@ -248,7 +260,9 @@ class PreferencesDialog(QDialog):
             if (s == color_themes_dict[x].name):
                 self.active_theme = color_themes_dict[x]
         data["active_theme"] = str(self.active_theme.tag)
-        data["theme_changed"] = True
+        if (self.current_theme_check!= s):
+            data["theme_changed"] = True
+            self.buttonBox.setText("Apply changes and restart")
         with open("preferences.json", "w") as write_file:
             json.dump(data, write_file)
             write_file.close()

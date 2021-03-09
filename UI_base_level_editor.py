@@ -21,6 +21,7 @@ with open("preferences.json", "r") as read_file:
             ah_tasks = data["ah_tasks"]
             ah_taskss = data["ah_taskss"]
             ah_overlays = data["ah_overlays"]
+            data["theme_changed"] = False
             read_file.close()
             
 def updateJSON():
@@ -36,6 +37,7 @@ def updateJSON():
         ah_tasks = data["ah_tasks"]
         ah_taskss = data["ah_taskss"]
         ah_overlays = data["ah_overlays"]
+
         read_file.close()
         return data
 
@@ -145,6 +147,7 @@ class main(QMainWindow):
     def OptionsMenu(self):
         p = PreferencesDialog()
         theme = p.exec_()
+        print(theme)
         data = updateJSON()
         self.menubar.style().unpolish(self.menubar)
         self.menubar.style().polish(self.menubar)
@@ -158,7 +161,7 @@ class main(QMainWindow):
         font = self.menubar.font()
         font.setPointSize(data["font_size"])
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
-        if (data["theme_changed"]):
+        if (theme != 0 and data["theme_changed"] == True):
             os.execl(sys.executable, sys.executable, *sys.argv)
 
 
