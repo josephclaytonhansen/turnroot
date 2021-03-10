@@ -146,21 +146,23 @@ class main(QMainWindow):
         theme = p.exec_()
         print(theme)
         data = updateJSON()
-        self.menubar.style().unpolish(self.menubar)
-        self.menubar.style().polish(self.menubar)
-        self.menubar.update()
-        self.toolbar.style().unpolish(self.toolbar)
-        self.toolbar.style().polish(self.toolbar)
-        self.toolbar.update()
-        active_theme = getattr(UI_colorTheme, data["active_theme"])
-        self.menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold; font-size: "+str(data["font_size"]))
-        self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(data["font_size"]))
-        self.setStyleSheet("color: "+active_theme.window_text_color+"; padding: 2px; font:bold; font-size: "+str(data["font_size"]))
-        font = self.menubar.font()
-        font.setPointSize(data["font_size"])
-        self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
-        if (theme != 0 and data["theme_changed"] == True):
-            os.execl(sys.executable, sys.executable, *sys.argv)
+
+        if (theme != 0):
+            self.menubar.style().unpolish(self.menubar)
+            self.menubar.style().polish(self.menubar)
+            self.menubar.update()
+            self.toolbar.style().unpolish(self.toolbar)
+            self.toolbar.style().polish(self.toolbar)
+            self.toolbar.update()
+            active_theme = getattr(UI_colorTheme, data["active_theme"])
+            self.menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold; font-size: "+str(data["font_size"]))
+            self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(data["font_size"]))
+            self.setStyleSheet("color: "+active_theme.window_text_color+"; padding: 2px; font:bold; font-size: "+str(data["font_size"]))
+            font = self.menubar.font()
+            font.setPointSize(data["font_size"])
+            self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
+            if (data["theme_changed"] == True):
+                os.execl(sys.executable, sys.executable, *sys.argv)
     
     def quitWindow(self):
         c = confirmAction(parent=self, s="quit the level editor")
