@@ -10,17 +10,10 @@ from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction
 import UI_colorTheme
 from UI_color_test_widget import Color
-hidev = False
-showv = False
 import json
-with open("workspaces.json", "r") as read_file:
-    workspaces = json.load(read_file)
-    read_file.close()
-    
+   
 class workspaceContainer(QWidget):
         def __init__(self, workspace, layout):
-            self.hidev = hidev
-            self.ws = workspace
             super().__init__()
             self.setAutoFillBackground(True)
             data = updateJSON()
@@ -28,7 +21,6 @@ class workspaceContainer(QWidget):
             self.setStyleSheet("font-size: "+str(data["font_size"])+"px;color: "+self.active_theme.window_text_color)
             palette = self.palette()
             self.background_color = QColor(self.active_theme.workspace_background_color)
-            self.workspaces = workspaces
             palette.setColor(QPalette.Window, self.background_color)
             self.setPalette(palette)
             self.layout = QVBoxLayout()
