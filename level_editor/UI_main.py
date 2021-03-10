@@ -208,6 +208,15 @@ class main(QMainWindow):
             if (data["theme_changed"] == True):
                 os.execl(sys.executable, sys.executable, *sys.argv)
     
+    def closeEvent(self, event):
+        c = confirmAction(parent=self, s="quit the level editor")
+        c.exec_()
+        print(c.return_confirm)
+        if(c.return_confirm):
+            event.accept()
+        else:
+            event.ignore()
+        
     def quitWindow(self):
         c = confirmAction(parent=self, s="quit the level editor")
         c.exec_()
@@ -264,8 +273,11 @@ class main(QMainWindow):
         self.tools_hide.setVisible(False)
         self.tools_show.setVisible(True)
 
-           
+
+        
 window = main()
 
 window.show()
-sys.exit(app.exec_())
+a = app.exec_()
+
+
