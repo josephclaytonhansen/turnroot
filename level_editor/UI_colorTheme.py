@@ -32,13 +32,15 @@ class midnight_spark_yellow(colorTheme):
     window_background_color = "#37464a"
     list_background_color = "#272e35"
     window_text_color = "#efef8f"
+    workspace_background_color = "#95A3B3"
 
 class coral_reef(colorTheme):
     name = "Coral Reef"
     tag = "coral_reef"
-    window_background_color = "#BF726B"
+    window_background_color = "#FF7094"
     list_background_color = "#C0414A"
     window_text_color = "#F2E6CE"
+    workspace_background_color = "#F76F8E"
 
 class sand_dunes(colorTheme):
     name = "Sand Dunes"
@@ -46,25 +48,31 @@ class sand_dunes(colorTheme):
     window_background_color = "#F2E6D8"
     list_background_color = "#F2B66D"
     window_text_color = "#734C36"
+    workspace_background_color = "#64b5c1"
 
 class rainforest(colorTheme):
-    name = "Rainforest"
+    name = "Rainforest Dusk"
     tag = "rainforest"
-    window_background_color = "#789187"
+    workspace_background_color = "#789187"
     list_background_color = "#85A687"
     window_text_color = "#EFE4AE"
+    window_background_color = "#2E3532"
 
 class charcoal(colorTheme):
     name = "Charcoal"
     tag = "charcoal"
     window_background_color = "#262626"
     list_background_color = "#545454"
+    workspace_background_color = "#363636"
     window_text_color = "#c4c4c4"
 
 class system_light(colorTheme):
     name = "System Light"
     tag = "system_light"
     list_background_color = "#dddddd"
+    workspace_background_color = "#f3f3f3"
+    window_background_color = "#eeeeee"
+    window_text_color = "#020202"
 
 class ocean_waves(colorTheme):
     name = "Ocean Waves"
@@ -72,6 +80,7 @@ class ocean_waves(colorTheme):
     window_background_color = "#568EBF"
     list_background_color = "#394159"
     window_text_color = "#DCEEF2"
+    workspace_background_color = "#7AA6CD"
 
 class chocolate(colorTheme):
     name = "Chocolate"
@@ -79,6 +88,7 @@ class chocolate(colorTheme):
     window_background_color = "#59302C"
     list_background_color = "#733A2D"
     window_text_color = "#DB8C50"
+    workspace_background_color = "#994E33"
 
 class chili_pepper(colorTheme):
     name = "Chili Pepper"
@@ -86,6 +96,7 @@ class chili_pepper(colorTheme):
     window_background_color = "#f2eae4"
     list_background_color = "#C0414A"
     window_text_color = "#262523"
+    workspace_background_color = "#E8DBC5"
 
 class garden_morning(colorTheme):
     name = "Garden"
@@ -93,13 +104,15 @@ class garden_morning(colorTheme):
     window_background_color = "#354025"
     list_background_color = "#6C8C3B"
     window_text_color = "#DBD1C8"
+    workspace_background_color = "#849962"
 
 class clouds(colorTheme):
-    name = "Deep Sea"
+    name = "Misty Sunrise"
     tag = "clouds"
-    window_background_color = "#394159"
-    list_background_color = "#26263E"
-    window_text_color = "#91B7D9"
+    window_background_color = "#DDF8E8"
+    list_background_color = "#E94F37"
+    window_text_color = "#111111"
+    workspace_background_color = "#FFB870"
 
     
     

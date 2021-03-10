@@ -141,13 +141,11 @@ class main(QMainWindow):
             icon_string = "teal/"
         elif (active_theme.tag == "midnight_spark_yellow"):
             icon_string = "yellow/"
-        elif (active_theme.tag == "coral_reef"):
-            icon_string = "pink/"
         elif (active_theme.tag == "sand_dunes" or active_theme.tag == "chocolate"):
             icon_string = "brown/"
         elif (active_theme.tag == "rainforest"):
             icon_string = "green/"
-        elif (active_theme.tag == "charcoal" or active_theme.tag == "ocean_waves"  or active_theme.tag == "garden_morning"):
+        elif (active_theme.tag == "charcoal" or active_theme.tag == "ocean_waves"  or active_theme.tag == "garden_morning" or  active_theme.tag == "coral_reef"):
             icon_string = "white/"
         elif (active_theme.tag == "system_light" or active_theme.tag == "clouds"):
             icon_string = "blue/"
