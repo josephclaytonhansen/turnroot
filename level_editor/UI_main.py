@@ -42,6 +42,7 @@ screen = app.primaryScreen()
 size = screen.size()
 title = "Window"
 
+
 class main(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -67,6 +68,9 @@ class main(QMainWindow):
         self.layout.addWidget(self.tasks, 14, 40, 12, 8)
         self.layout.addWidget(self.task_settings, 4, 40, 10, 8)
         self.layout.addWidget(self.tools, 2, 0, 13, 1)
+        
+        self.wsl = ["rte", "tiles", "tasks", "task_settings", "tools"]
+        #add overlays
         
         
         self.menubar = self.menuBar()
@@ -163,8 +167,7 @@ class main(QMainWindow):
         c.exec_()
         if(c.return_confirm):
             sys.exit()
-    
-              
+           
 window = main()
 
 window.show()

@@ -15,6 +15,7 @@ import json
 with open("workspaces.json", "r") as read_file:
     workspaces = json.load(read_file)
     read_file.close()
+    
 class workspaceContainer(QWidget):
         def __init__(self, workspace, layout):
             self.hidev = hidev
@@ -51,12 +52,13 @@ class workspaceContainer(QWidget):
             self.setLayout(self.layout)
         
         def hide(self):
-            self.close()
-            print(self.ws)
-            self.workspaces[self.ws] = "closed"
-            print(self.workspaces)
-            with open("workspaces.json", "w") as write_file:
-                json.dump(self.workspaces, write_file)
+            c = confirmAction("hide workspace")
+            c.exec_()
+            if (c.return_confirm):
+                self.close()
+                self.workspaces[self.ws] = "closed"
+                with open("workspaces.json", "w") as write_file:
+                    json.dump(self.workspaces, write_file)
                 
 
             
