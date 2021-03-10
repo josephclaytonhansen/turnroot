@@ -11,6 +11,7 @@ from UI_Dialogs import confirmAction
 import UI_colorTheme
 from UI_color_test_widget import Color
 hidev = False
+showv = False
 import json
 with open("workspaces.json", "r") as read_file:
     workspaces = json.load(read_file)
@@ -20,7 +21,6 @@ class workspaceContainer(QWidget):
         def __init__(self, workspace, layout):
             self.hidev = hidev
             self.ws = workspace
-            print(self.ws)
             super().__init__()
             self.setAutoFillBackground(True)
             data = updateJSON()
@@ -39,27 +39,37 @@ class workspaceContainer(QWidget):
             font.setPointSize(int(data["icon_size"])/2)
             self.label.setFont(font)
             self.label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            
-            self.hide_button = QPushButton("<<")
-            self.hide_button.clicked.connect(self.hide)
-            self.hide_button.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
 
-            self.hide_button.setFixedSize((int(data["icon_size"])), (int(data["icon_size"])))
-            self.layout.addWidget(self.hide_button)
             self.layout.addWidget(self.label)
             self.layout.addWidget(Color(self.active_theme.window_background_color))
             self.layout.addWidget(Color(self.active_theme.list_background_color))
             self.setLayout(self.layout)
+
+class showWorkspace(QPushButton):
+    def __init__(self, workspace, layout):
+        super().__init__()
+        data = updateJSON()
+        self.workspace = workspace
+        self.layout = layout
+        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.setText("+")
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setFixedSize((int(data["icon_size"]) -3), (int(data["icon_size"]) -3))
         
-        def hide(self):
-            c = confirmAction("hide workspace")
-            c.exec_()
-            if (c.return_confirm):
-                self.close()
-                self.workspaces[self.ws] = "closed"
-                with open("workspaces.json", "w") as write_file:
-                    json.dump(self.workspaces, write_file)
-                
+class hideWorkspace(QPushButton):
+    def __init__(self, workspace, layout):
+        super().__init__()
+        data = updateJSON()
+        self.workspace = workspace
+        self.layout = layout
+        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.setText("—")
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setFixedSize((int(data["icon_size"])-3), (int(data["icon_size"])-3))
+
+        
+
+    
 
             
 
