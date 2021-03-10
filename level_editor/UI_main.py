@@ -214,6 +214,7 @@ class main(QMainWindow):
         print(c.return_confirm)
         if(c.return_confirm):
             event.accept()
+            sys.exit()
         else:
             event.ignore()
         
