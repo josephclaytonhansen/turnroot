@@ -115,7 +115,7 @@ class main(QMainWindow):
         viewMenu = self.bar.addMenu( "&View")
 
         self.toolbar = QToolBar("")
-        self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(data["font_size"]))
+        self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
         self.toolbar.setToolButtonStyle(Qt.ToolButtonIconOnly)
         
