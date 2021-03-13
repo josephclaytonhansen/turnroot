@@ -41,7 +41,7 @@ app.setStyle(myStyle)
 screen = app.primaryScreen()
 size = screen.size()
 title = "Window"
-
+fullscreen = False
 
 class main(QMainWindow):
     def __init__(self):
@@ -50,6 +50,7 @@ class main(QMainWindow):
         self.setMinimumSize(QSize(int(size.width()/3), int(size.height()/3)))
         self.setMaximumSize(QSize(int(size.width()), int(size.height())))
         self.resize(QSize(int(size.width()*.9), int(size.height()*.9)))
+        self.fullscreen = fullscreen
 
         self.layout = QGridLayout()
         self.layout.setContentsMargins(0,0,0,0)
@@ -162,6 +163,7 @@ class main(QMainWindow):
         self.forumButton = QAction(QIcon("ui_icons/"+icon_string+"speech-bubble-2-32.png"),"Access forum", self)
         
         self.optionsButton.triggered.connect(self.OptionsMenu)
+        self.justTilesButton.triggered.connect(self.full_screen)
         
         self.toolbar.addAction(self.backButton)
         self.toolbar.addAction(self.optionsButton)
@@ -273,7 +275,24 @@ class main(QMainWindow):
         self.tools.setVisible(False)
         self.tools_hide.setVisible(False)
         self.tools_show.setVisible(True)
-
+    
+    def full_screen(self):
+        if self.fullscreen == True:
+            self.fullscreen = False
+        elif self.fullscreen == False:
+            self.fullscreen = True
+        if self.fullscreen == True:
+            self.hide_tiles()
+            self.hide_tasks()
+            self.hide_tools()
+            self.hide_tasks_settings()
+            self.hideRTE()
+        elif self.fullscreen == False:
+            self.show_tiles()
+            self.show_tasks()
+            self.show_tools()
+            self.show_tasks_settings()
+            self.showRTE()
 
         
 window = main()
