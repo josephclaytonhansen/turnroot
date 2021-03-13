@@ -14,25 +14,11 @@ from UI_updateJSON import updateJSON
 from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace
 from UI_WebViewer import webView
 
-with open("preferences.json", "r") as read_file:
-            data = json.load(read_file)
-            font_size = data["font_size"]
-            icon_size = data["icon_size"]
-            rfont_size = data["rfont_size"]
-            active_theme = data["active_theme"]
-            active_layout = data["active_layout"]
-            ah_rte = ["ah_rte"]
-            ah_tasks = data["ah_tasks"]
-            ah_taskss = data["ah_taskss"]
-            ah_overlays = data["ah_overlays"]
-            data["theme_changed"] = False
-            read_file.close()
+data = updateJSON()
             
 import UI_colorTheme
 
-active_theme = getattr(UI_colorTheme, active_theme)
-print(active_theme)
-        
+active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 app = QApplication([])
 
@@ -41,7 +27,7 @@ app.setStyle(myStyle)
     
 screen = app.primaryScreen()
 size = screen.size()
-title = "Window"
+title = "Turnroot 0.0.0 - Level Editor"
 fullscreen = False
 
 class main(QMainWindow):
@@ -71,9 +57,6 @@ class main(QMainWindow):
         self.layout.addWidget(self.tasks, 14, 40, 12, 8)
         self.layout.addWidget(self.task_settings, 4, 40, 10, 8)
         self.layout.addWidget(self.tools, 2, 0, 13, 1)
-        
-        self.wsl = ["rte", "tiles", "tasks", "task_settings", "tools"]
-        #add overlays
 
         self.tiles_show = showWorkspace("tiles", data["active_layout"])
         self.tasks_show = showWorkspace("tasks", data["active_layout"])
@@ -120,22 +103,20 @@ class main(QMainWindow):
         self.tools_hide.clicked.connect(self.hide_tools)
         self.tools_show.setVisible(False)
 
-
         self.menubar = self.menuBar()
         font = self.menubar.font()
-        font.setPointSize(font_size)
+        font.setPointSize(data["font_size"])
         self.menubar.setNativeMenuBar(False)
         fileMenu = self.menubar.addMenu('&File')
         self.bar = self.menuBar()
 
-        self.menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;font-size: "+str(font_size))
+        self.menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;font-size: "+str(data["font_size"]))
         editMenu = self.bar.addMenu("&Edit")
         viewMenu = self.bar.addMenu( "&View")
 
-        
         self.toolbar = QToolBar("")
-        self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(font_size))
-        self.toolbar.setIconSize(QSize(int(icon_size), int(icon_size)))
+        self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(data["font_size"]))
+        self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
         self.toolbar.setToolButtonStyle(Qt.ToolButtonIconOnly)
         
         icon_string = ""
@@ -184,17 +165,13 @@ class main(QMainWindow):
         editMenu.addAction(self.optionsButton)
 
         widget = QWidget()
-
         widget.setLayout(self.layout)
-
         self.setCentralWidget(widget)
         
     def OptionsMenu(self):
         p = PreferencesDialog(parent=self)
         theme = p.exec_()
         data = updateJSON()
-
-
         if (theme != 0):
             self.menubar.style().unpolish(self.menubar)
             self.menubar.style().polish(self.menubar)
@@ -300,10 +277,6 @@ class main(QMainWindow):
             self.show_tasks_settings()
             self.showRTE()
 
-        
 window = main()
-
 window.show()
 a = app.exec_()
-
-

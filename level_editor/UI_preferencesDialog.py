@@ -3,6 +3,7 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
 import json
+from UI_updateJSON import updateJSON
 
 ind = 0
 entries = ["Appearance", "System", "Keyboard Shortcuts"]
@@ -16,6 +17,7 @@ from UI_colorTheme import (
     system_light,ocean_waves,
     clouds,chocolate,
     chili_pepper,garden_morning)
+
 color_themes_dict = [midnight_spark, midnight_spark_yellow,
     coral_reef,sand_dunes,
     rainforest,charcoal,
@@ -30,29 +32,15 @@ data = {"font_size": 15, "rfont_size": 15,
         "ah_rte": True, "ah_tasks": True, "ah_taskss": True,
         "ah_overlays": False, "theme_changed": False}
 
-with open("preferences.json", "r") as read_file:
-    data = json.load(read_file)
-    font_size = data["font_size"]
-    icon_size = data["icon_size"]
-    rfont_size = data["rfont_size"]
-    active_theme = data["active_theme"]
-    active_layout = data["active_layout"]
-    ah_rte = ["ah_rte"]
-    ah_tasks = data["ah_tasks"]
-    ah_taskss = data["ah_taskss"]
-    ah_overlays = data["ah_overlays"]
-    theme_changed = False
-    data["theme_changed"] = False
-    read_file.close()
+data = updateJSON()
 
 with open("preferences.json", "w") as write_file:
     json.dump(data, write_file)
     write_file.close()
     
-from UI_updateJSON import updateJSON
 import UI_colorTheme
 
-active_theme = getattr(UI_colorTheme, active_theme)
+active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 #update below when importing more layouts!
 from UI_layoutOption import (right_lower,left_lower,lower_lower,left_left,right_right,simple)
@@ -79,7 +67,7 @@ class PreferencesDialog(QDialog):
 
         #sizing options
         super().__init__()
-        self.font_size = font_size
+        self.font_size = data["font_size"]
         self.setWindowTitle("Preferences")
         self.setMinimumHeight(340)
         self.setMaximumHeight(780)
@@ -251,8 +239,8 @@ class PreferencesDialog(QDialog):
             json.dump(data, write_file)
             write_file.close()
                 
-        self.pref_categories.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.list_background_color)
-        self.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.pref_categories.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color)
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
 
     
     def ah_rte_changed(self, s):

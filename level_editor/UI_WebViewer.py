@@ -1,9 +1,10 @@
-#thanks to janbodnar
+#thanks to janbodnar for the skeleton
 
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import json
+from UI_updateJSON import updateJSON
 
 ind = 0
 entries = ["Help Topic 1", "Help Topic 2", "Help Topic 3"]
@@ -13,25 +14,10 @@ data = {"font_size": 15, "rfont_size": 15,
         "ah_rte": True, "ah_tasks": True, "ah_taskss": True,
         "ah_overlays": False, "theme_changed": False}
 
-with open("preferences.json", "r") as read_file:
-    data = json.load(read_file)
-    font_size = data["font_size"]
-    icon_size = data["icon_size"]
-    rfont_size = data["rfont_size"]
-    active_theme = data["active_theme"]
-    active_layout = data["active_layout"]
-    ah_rte = ["ah_rte"]
-    ah_tasks = data["ah_tasks"]
-    ah_taskss = data["ah_taskss"]
-    ah_overlays = data["ah_overlays"]
-    theme_changed = False
-    data["theme_changed"] = False
-    read_file.close()
-
-from UI_updateJSON import updateJSON
+data = updateJSON()
 import UI_colorTheme
 
-active_theme = getattr(UI_colorTheme, active_theme)
+active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 
 class webView(QDialog):
@@ -80,5 +66,4 @@ class webView(QDialog):
         for x in range(0, len(entries)):
             if (s == entries[x]):
                 self.ind = x
-                print(ind)
                 self.help_layout.setCurrentIndex(self.ind)
