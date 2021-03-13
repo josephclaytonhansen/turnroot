@@ -77,6 +77,8 @@ class PreferencesDialog(QDialog):
         QBtn = QPushButton(self.ok_label)
         self.buttonBox = QBtn
         self.buttonBox.clicked.connect(self.accept)
+        self.cancelBox = QPushButton("Cancel")
+        self.cancelBox.clicked.connect(self.cancel)
 
 
         #the overall layout is a grid
@@ -181,9 +183,21 @@ class PreferencesDialog(QDialog):
         self.prefs_layout.addWidget(self.aes)
         
         #new stack
-        self.sys = QLabel("green")
+        self.sys = QWidget()
+        self.sys_layout = QGridLayout()
+        self.sys_layout.setSpacing(25)
+        
+        self.updates = QLabel("Check for updates")
+        self.updates.setAlignment(Qt.AlignVCenter)
+        self.sys_layout.addWidget(self.updates,0,0)
+        self.c_updates = QPushButton("Check for Updates")
+        self.c_updates.clicked.connect(self.check_updates)
+        self.sys_layout.addWidget(self.c_updates, 0, 1)
+        
+        self.sys.setLayout(self.sys_layout)
         self.prefs_layout.addWidget(self.sys)
         
+        #new stack
         self.shortcuts = QLabel("blue")
         self.prefs_layout.addWidget(self.shortcuts)
         
@@ -194,9 +208,13 @@ class PreferencesDialog(QDialog):
         layout.addWidget(self.pref_categories, 0, 0, 1, 1)
         layout.addWidget(self.prefs, 0, 1, 1, 3)
         layout.addWidget(self.buttonBox, 12, 1)
+        layout.addWidget(self.cancelBox, 12, 2)
         self.setLayout(layout)
 
     
+    def cancel(self):
+        self.close()
+        
     def category_change(self, s):
         data = updateJSON()
         for x in range(0, len(entries)):
@@ -266,4 +284,10 @@ class PreferencesDialog(QDialog):
         for x in range(0, len(layout_dict)):
             if (s == layout_dict[x].name):
                 self.active_layout = layout_dict[x]
+    
+    def check_updates(self):
+        #check for updates
+        self.c_updates.setText("No updates found")
+        self.c_updates.setEnabled(False)
+        
         

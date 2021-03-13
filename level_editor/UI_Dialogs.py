@@ -78,8 +78,33 @@ class stackedInfoImgDialog(QDialog):
             self.labels[x].setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.labels[x].setStyleSheet(self.row_styles[x]+"background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
             self.layout.addWidget(self.labels[x])
+
+class infoClose(QDialog):
+    def __init__(self, info, parent=None):
+        data = updateJSON()
+        self.return_confirm = return_confirm
+        self.info = info
+        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
-            
+        layout = QVBoxLayout()
+        layout.setContentsMargins( 8,8,8,8)
+        layout.setSpacing(0)
+        self.setFixedSize((data["font_size"] * 22)+40, data["font_size"] * 7.4)
+        
+        self.label =QLabel(self.info)
+        self.label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        layout.addWidget(self.label, 1)
+        self.ok = QPushButton(QIcon(), "Ok", self)    
+        self.ok.clicked.connect(self.ok_clicked)
+        layout.addWidget(self.ok, 2)
+        self.setLayout(layout)
+        self.show()
+        
+    def ok_clicked(self):
+        self.return_confirm = True
+        self.close()
      
 
         

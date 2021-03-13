@@ -9,7 +9,7 @@ import json
 from UI_preferencesDialog import PreferencesDialog
 from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
-from UI_Dialogs import confirmAction, stackedInfoImgDialog
+from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose
 from UI_updateJSON import updateJSON
 from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace
 from UI_WebViewer import webView
@@ -192,7 +192,10 @@ class main(QMainWindow):
         self.quitButton.triggered.connect(self.quitWindow)
         self.aboutButton = QAction("About", self)
         self.aboutButton.triggered.connect(self.about)
+        self.checkUpdatesButton = QAction("Check for updates", self)
+        self.checkUpdatesButton.triggered.connect(self.checkUpdates)
         fileMenu.addAction(self.aboutButton)
+        fileMenu.addAction(self.checkUpdatesButton)
         fileMenu.addAction(self.quitButton)
         editMenu.addAction(self.optionsButton)
 
@@ -317,6 +320,11 @@ class main(QMainWindow):
                                  ["font-size: 30px; font: bold;", "font-size:15px;"],
                                  parent=self)
         a.exec_()
+    
+    def checkUpdates(self):
+        #check updates
+        u = infoClose("Turnroot is up to date")
+        u.exec_()
 
 window = main()
 window.show()
