@@ -71,7 +71,6 @@ class webView(QDialog):
         self.show()
 
     def loadPage(self):
-        print(ind)
         with open('help_docs/help_'+str(self.ind)+'.html', 'r') as f:
  
              html = f.read()
