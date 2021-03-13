@@ -32,6 +32,8 @@ fullscreen = False
 
 class main(QMainWindow):
     def __init__(self):
+        
+        #create, title, and size mainwindow
         super().__init__()
         self.setWindowTitle(title)
         self.setMinimumSize(QSize(int(size.width()/3), int(size.height()/3)))
@@ -39,10 +41,12 @@ class main(QMainWindow):
         self.resize(QSize(int(size.width()*.9), int(size.height()*.9)))
         self.fullscreen = fullscreen
 
+        #set main layout to grid
         self.layout = QGridLayout()
         self.layout.setContentsMargins(0,0,0,0)
         self.layout.setSpacing(0)
         
+        #add workspaces
         self.rte = workspaceContainer("rte", data["active_layout"])
         self.tiles = workspaceContainer("tiles", data["active_layout"])
         self.tasks = workspaceContainer("tasks", data["active_layout"])
@@ -51,19 +55,22 @@ class main(QMainWindow):
         self.tools = workspaceContainer("tools", data["active_layout"])
         self.setStyleSheet("font: bold; font-size: "+str(data["font_size"]))
 
+        #add workspaces to main layout
         self.layout.addWidget(self.tile_grid, 0, 0, 26, 48)
         self.layout.addWidget(self.rte, 17, 0, 9, 17)
         self.layout.addWidget(self.tiles, 20, 17, 6, 23)
         self.layout.addWidget(self.tasks, 14, 40, 12, 8)
         self.layout.addWidget(self.task_settings, 4, 40, 10, 8)
         self.layout.addWidget(self.tools, 2, 0, 13, 1)
-
+        
+        #add show workspace buttons
         self.tiles_show = showWorkspace("tiles", data["active_layout"])
         self.tasks_show = showWorkspace("tasks", data["active_layout"])
         self.task_settings_show = showWorkspace("task_settings", data["active_layout"])
         self.tools_show = showWorkspace("tools", data["active_layout"])
-        
         self.rte_show = showWorkspace("rte", data["active_layout"])
+        
+        #add RTE workspace show/hide toggle to main layout
         self.layout.addWidget(self.rte_show, 25, 0, 1, 1)
         self.rte_show.clicked.connect(self.showRTE)
         self.rte_hide = hideWorkspace("rte", data["active_layout"])
@@ -71,6 +78,7 @@ class main(QMainWindow):
         self.rte_hide.clicked.connect(self.hideRTE)
         self.rte_show.setVisible(False)
         
+        #add Tiles workspace show/hide toggle to main layout
         self.tiles_show = showWorkspace("tiles", data["active_layout"])
         self.layout.addWidget(self.tiles_show, 25, 17, 1, 1)
         self.tiles_show.clicked.connect(self.show_tiles)
@@ -78,7 +86,8 @@ class main(QMainWindow):
         self.layout.addWidget(self.tiles_hide, 25, 17, 1, 1)
         self.tiles_hide.clicked.connect(self.hide_tiles)
         self.tiles_show.setVisible(False)
-        
+
+        #add Tasks workspace show/hide toggle to main layout
         self.tasks_show = showWorkspace("tasks", data["active_layout"])
         self.layout.addWidget(self.tasks_show, 14, 47, 1, 1)
         self.tasks_show.clicked.connect(self.show_tasks)
@@ -86,7 +95,8 @@ class main(QMainWindow):
         self.layout.addWidget(self.tasks_hide, 14, 47, 1, 1)
         self.tasks_hide.clicked.connect(self.hide_tasks)
         self.tasks_show.setVisible(False)
-        
+
+        #add Task Settings workspace show/hide toggle to main layout
         self.tasks_settings_show = showWorkspace("tasks_settings", data["active_layout"])
         self.layout.addWidget(self.tasks_settings_show, 4, 47, 1, 1)
         self.tasks_settings_show.clicked.connect(self.show_tasks_settings)
@@ -94,7 +104,8 @@ class main(QMainWindow):
         self.layout.addWidget(self.tasks_settings_hide, 4, 47, 1, 1)
         self.tasks_settings_hide.clicked.connect(self.hide_tasks_settings)
         self.tasks_settings_show.setVisible(False)
-        
+
+        #add Tools workspace show/hide toggle to main layout
         self.tools_show = showWorkspace("tools", data["active_layout"])
         self.layout.addWidget(self.tools_show, 2, 0, 1, 1)
         self.tools_show.clicked.connect(self.show_tools)
@@ -103,22 +114,26 @@ class main(QMainWindow):
         self.tools_hide.clicked.connect(self.hide_tools)
         self.tools_show.setVisible(False)
 
+        #add Menu, File
         self.menubar = self.menuBar()
         font = self.menubar.font()
         font.setPointSize(data["font_size"])
         self.menubar.setNativeMenuBar(False)
         fileMenu = self.menubar.addMenu('&File')
         self.bar = self.menuBar()
-
+        
+        #add Edit and View to menu
         self.menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;font-size: "+str(data["font_size"]))
         editMenu = self.bar.addMenu("&Edit")
         viewMenu = self.bar.addMenu( "&View")
 
+        #add toolbar
         self.toolbar = QToolBar("")
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
         self.toolbar.setToolButtonStyle(Qt.ToolButtonIconOnly)
         
+        #color toolbar icons based on theme
         icon_string = ""
         if (active_theme.tag == "midnight_spark"):
             icon_string = "teal/"
@@ -134,7 +149,8 @@ class main(QMainWindow):
             icon_string = "blue/"
         elif (active_theme.tag == "chili_pepper"):
             icon_string = "red/"
-              
+
+        #add actions for toolbar
         self.resourcesButton = QAction(QIcon("ui_icons/"+icon_string+"package-2-32.png"), "Resources", self)
         self.optionsButton = QAction(QIcon("ui_icons/"+icon_string+"settings-17-32.png"),"Options", self)
         self.helpButton = QAction(QIcon("ui_icons/"+icon_string+"question-mark-4-32.png"),"Read docs", self)
@@ -144,10 +160,12 @@ class main(QMainWindow):
         self.justTilesButton = QAction(QIcon("ui_icons/"+icon_string+"fit-to-width-32.png"),"Show just tiles", self)
         self.forumButton = QAction(QIcon("ui_icons/"+icon_string+"speech-bubble-2-32.png"),"Access forum", self)
         
+        #connect toolbar buttons to actions
         self.optionsButton.triggered.connect(self.OptionsMenu)
         self.helpButton.triggered.connect(self.helpView)
         self.justTilesButton.triggered.connect(self.full_screen)
         
+        #add toolbar buttons to toolbar
         self.toolbar.addAction(self.backButton)
         self.toolbar.addAction(self.optionsButton)
         self.toolbar.addAction(self.resourcesButton)
@@ -159,11 +177,13 @@ class main(QMainWindow):
         
         self.addToolBar(self.toolbar)
         
+        #add menu actions
         self.quitButton = QAction("Quit", self)
         self.quitButton.triggered.connect(self.quitWindow)
         fileMenu.addAction(self.quitButton)
         editMenu.addAction(self.optionsButton)
 
+        #put everything together
         widget = QWidget()
         widget.setLayout(self.layout)
         self.setCentralWidget(widget)
