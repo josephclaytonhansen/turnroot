@@ -9,7 +9,7 @@ import json
 from UI_preferencesDialog import PreferencesDialog
 from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
-from UI_Dialogs import confirmAction
+from UI_Dialogs import confirmAction, stackedInfoImgDialog
 from UI_updateJSON import updateJSON
 from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace
 from UI_WebViewer import webView
@@ -27,7 +27,12 @@ app.setStyle(myStyle)
     
 screen = app.primaryScreen()
 size = screen.size()
-title = "Turnroot 0.0.0 - Level Editor"
+version = "0.0.0d"
+title = "Turnroot" +version+ "- Level Editor"
+icon_loc = ""
+
+warning_text = "This software was downloaded from an unverified source, and may be compromised. Please download an official release of Turnroot"
+
 fullscreen = False
 
 class main(QMainWindow):
@@ -135,20 +140,25 @@ class main(QMainWindow):
         
         #color toolbar icons based on theme
         icon_string = ""
+        self.icon_loc = icon_loc
+        self.icon_loc = "ui_icons/logo-color.png"
         if (active_theme.tag == "midnight_spark"):
             icon_string = "teal/"
         elif (active_theme.tag == "midnight_spark_yellow"):
             icon_string = "yellow/"
         elif (active_theme.tag == "sand_dunes" or active_theme.tag == "chocolate"):
             icon_string = "brown/"
+            self.icon_loc = "ui_icons/logo-white.png"
         elif (active_theme.tag == "rainforest"):
             icon_string = "green/"
         elif (active_theme.tag == "charcoal" or active_theme.tag == "ocean_waves"  or active_theme.tag == "garden_morning" or  active_theme.tag == "coral_reef"):
             icon_string = "white/"
+            self.icon_loc = "ui_icons/logo-white.png"
         elif (active_theme.tag == "system_light" or active_theme.tag == "clouds"):
             icon_string = "blue/"
         elif (active_theme.tag == "chili_pepper"):
             icon_string = "red/"
+            self.icon_loc = "ui_icons/logo-white.png"
 
         #add actions for toolbar
         self.resourcesButton = QAction(QIcon("ui_icons/"+icon_string+"package-2-32.png"), "Resources", self)
@@ -180,6 +190,9 @@ class main(QMainWindow):
         #add menu actions
         self.quitButton = QAction("Quit", self)
         self.quitButton.triggered.connect(self.quitWindow)
+        self.aboutButton = QAction("About", self)
+        self.aboutButton.triggered.connect(self.about)
+        fileMenu.addAction(self.aboutButton)
         fileMenu.addAction(self.quitButton)
         editMenu.addAction(self.optionsButton)
 
@@ -296,6 +309,14 @@ class main(QMainWindow):
             self.show_tools()
             self.show_tasks_settings()
             self.showRTE()
+            
+    def about(self):
+        a = stackedInfoImgDialog(str(self.icon_loc),
+                                 ["Turnroot "+version,
+                                  "Copyright 2021 - Joseph Hansen",],
+                                 ["font-size: 30px; font: bold;", "font-size:15px;"],
+                                 parent=self)
+        a.exec_()
 
 window = main()
 window.show()

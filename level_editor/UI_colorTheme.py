@@ -1,5 +1,6 @@
 class colorTheme:
     name = ""
+    tag= ""
     window_background_color = ""
     list_background_color = ""
     workspace_background_color = ""
@@ -8,7 +9,6 @@ class colorTheme:
     rows_background_color1 = ""
     rows_background_color2 = ""
     rows_header_background_color = ""
-    menu_background_color = ""
     button_color = ""
     window_text_color = ""
     list_text_color = ""

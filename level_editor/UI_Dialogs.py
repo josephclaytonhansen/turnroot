@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QColor, QPalette, QIcon
+from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
 import json
 from UI_updateJSON import updateJSON
 import UI_colorTheme
@@ -48,6 +48,38 @@ class confirmAction(QDialog):
         self.return_confirm = False
         self.close()
 
-    
+class stackedInfoImgDialog(QDialog):
+    def __init__(self, img, info, row_styles, parent=None):
+        data = updateJSON()
+        self.img = img
+        self.info = info
+        self.rows = len(info)
+        self.row_styles = row_styles
+        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setSpacing(4)
+        
+        self.img_label = QLabel()
+        self.img_label.setPixmap(QPixmap(img))
+        self.img_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        
+        self.layout.addWidget(self.img_label)
+        self.setLayout(self.layout)
+        self.layout.setSizeConstraint( QLayout.SetFixedSize)
+        self.show()
+        self.labels = {}
+        
+        for x in range(0, self.rows):
+            self.labels[x] = QLabel(self.info[x])
+            self.labels[x].setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            self.labels[x].setStyleSheet(self.row_styles[x]+"background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+            self.layout.addWidget(self.labels[x])
+        
+            
+     
 
         
