@@ -12,6 +12,7 @@ from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction
 from UI_updateJSON import updateJSON
 from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace
+from UI_WebViewer import webView
 
 with open("preferences.json", "r") as read_file:
             data = json.load(read_file)
@@ -163,6 +164,7 @@ class main(QMainWindow):
         self.forumButton = QAction(QIcon("ui_icons/"+icon_string+"speech-bubble-2-32.png"),"Access forum", self)
         
         self.optionsButton.triggered.connect(self.OptionsMenu)
+        self.helpButton.triggered.connect(self.helpView)
         self.justTilesButton.triggered.connect(self.full_screen)
         
         self.toolbar.addAction(self.backButton)
@@ -190,8 +192,8 @@ class main(QMainWindow):
     def OptionsMenu(self):
         p = PreferencesDialog(parent=self)
         theme = p.exec_()
-        print(theme)
         data = updateJSON()
+
 
         if (theme != 0):
             self.menubar.style().unpolish(self.menubar)
@@ -209,6 +211,10 @@ class main(QMainWindow):
             self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
             if (data["theme_changed"] == True):
                 os.execl(sys.executable, sys.executable, *sys.argv)
+        
+    def helpView(self):
+        h = webView(parent=self)
+        h.exec_()
     
     def closeEvent(self, event):
         c = confirmAction(parent=self, s="quit the level editor")
