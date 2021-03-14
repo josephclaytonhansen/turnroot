@@ -1,0 +1,38 @@
+body {
+    margin: 20px;
+    margin: 20px;
+    width: 90vw;
+}
+
+h1 {
+    font-family: Verdana, Helvetica, sans-serif;
+    text-align: center;
+}
+
+h2 {
+    font-family: Verdana, Helvetica, sans-serif;
+    text-align: center;
+}
+
+p {
+    font-family: Verdana, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+#dev {
+    font-family: monospace;
+    font-size: 12px;
+    background-color: darkslategrey;
+    color: floralwhite;
+    padding: 4px;
+}
+
+#highlight {
+    background-color: greenyellow;
+    padding: 4px;
+}
+
+#little {
+    font-style: italic;
+    font-size: 9px;
+}

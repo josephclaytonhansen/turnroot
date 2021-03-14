@@ -2,12 +2,13 @@
 
 import sys
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QFile
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import json
 from UI_updateJSON import updateJSON
 
 ind = 0
-entries = ["Help Topic 1", "Help Topic 2", "Help Topic 3"]
+entries = ["Keyboard Shortcuts", "Help Topic 2", "Help Topic 3"]
 data = {"font_size": 15, "rfont_size": 15,
         "active_theme": "midnight_spark_yellow",
         "active_layout": "right_lower", "icon_size": "26",

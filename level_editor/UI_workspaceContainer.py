@@ -90,7 +90,7 @@ class tileGridWorkspace(QWidget):
                 if self.checker % 2 == 0:
                     self.squares[self.count].setStyleSheet("color: white; background-color: black;")
                 else:
-                    self.squares[self.count].setStyleSheet("color: white; background-color: #222222;")
+                    self.squares[self.count].setStyleSheet("color: white; background-color: #111111;")
         self.setLayout(self.layout)
     
     def change_color(self):

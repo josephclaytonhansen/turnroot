@@ -70,7 +70,7 @@ class main(QMainWindow):
         elif (active_theme.tag == "charcoal" or active_theme.tag == "ocean_waves"  or active_theme.tag == "garden_morning" or  active_theme.tag == "coral_reef"):
             icon_string = "white/"
             self.icon_loc = "ui_icons/logo-white.png"
-        elif (active_theme.tag == "system_light" or active_theme.tag == "clouds"):
+        elif (active_theme.tag == "system_light"):
             icon_string = "blue/"
         elif (active_theme.tag == "chili_pepper"):
             icon_string = "red/"
@@ -109,28 +109,30 @@ class main(QMainWindow):
         self.goto_fr.setToolTip("Go to bottom right (.)")
         self.goto_fr.setPixmap(QPixmap(("ui_icons/"+icon_string+"goto_fr.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
         self.goto_fr.clicked.connect(self.scrollFr)
-        
-        self.add_above = ClickableQLabel()
-        self.add_above.setToolTip("Add above (Left Click)")
-        self.add_above.setPixmap(QPixmap(("ui_icons/"+icon_string+"add_above.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
-        self.add_above.clicked.connect(self.addAbove)
+
         
         self.remove_above = ClickableQLabel()
         self.remove_above.setToolTip("Remove above (Right Click)")
         self.remove_above.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove_above.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
         self.remove_above.clicked.connect(self.removeAbove)
-        
-        self.add_below = ClickableQLabel()
-        self.add_below.setToolTip("Add below (Shift+Left Click)")
-        self.add_below.setPixmap(QPixmap(("ui_icons/"+icon_string+"add_below.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
-        self.add_below.clicked.connect(self.addBelow)
+
         
         self.remove_below = ClickableQLabel()
         self.remove_below.setToolTip("Remove below (Shift+Right Click)")
         self.remove_below.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove_below.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
         self.remove_below.clicked.connect(self.removeBelow)
         
-        self.tools = toolsWorkspace("tools", data["active_layout"], [self.z_in, self.z_out, self.goto_00, self.goto_fr, self.add_above, self.add_below, self.remove_above, self.remove_below])
+        self.remove_effect = ClickableQLabel()
+        self.remove_effect.setToolTip("Remove tile effects (Alt+Right Click)")
+        self.remove_effect.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove_effect.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
+        self.remove_effect.clicked.connect(self.removeEffect)
+        
+        self.random_decoration_add = ClickableQLabel()
+        self.random_decoration_add.setToolTip("Add random decoration (Shift+Left Click)")
+        self.random_decoration_add.setPixmap(QPixmap(("ui_icons/"+icon_string+"random_decoration_add.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
+        self.random_decoration_add.clicked.connect(self.randomDecorationAdd)
+        
+        self.tools = toolsWorkspace("tools", data["active_layout"], [self.z_in, self.z_out, self.goto_00, self.goto_fr, self.remove_above, self.remove_below, self.remove_effect, self.random_decoration_add])
 
         #add workspaces to main layout
         self.layout.addWidget(self.scroll, 0, 0, 26, 48)
@@ -429,16 +431,16 @@ class main(QMainWindow):
         self.scroll.horizontalScrollBar().setValue(2200)
         self.scroll.verticalScrollBar().setValue(2200)
     
-    def addAbove(self):
-        pass
-
     def removeAbove(self):
         pass
-    
-    def addBelow(self):
+       
+    def removeBelow(self):
         pass
     
-    def removeBelow(self):
+    def randomDecorationAdd(self):
+        pass
+    
+    def removeEffect(self):
         pass
             
 window = main()

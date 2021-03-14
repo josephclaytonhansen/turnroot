@@ -14,15 +14,15 @@ from UI_colorTheme import (
     midnight_spark, midnight_spark_yellow,
     coral_reef,sand_dunes,
     rainforest,charcoal,
-    system_light,ocean_waves,
-    clouds,chocolate,
+    system_light,ocean_waves
+    ,chocolate,
     chili_pepper,garden_morning)
 
 color_themes_dict = [midnight_spark, midnight_spark_yellow,
     coral_reef,sand_dunes,
     rainforest,charcoal,
-    system_light,ocean_waves,
-    clouds,chocolate,
+    system_light,ocean_waves
+    ,chocolate,
     chili_pepper,garden_morning]
 #update portion ends here
 
