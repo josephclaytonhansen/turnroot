@@ -1,6 +1,6 @@
 import sys
 import os
-from PyQt5.QtCore import QSize, Qt 
+from PyQt5.QtCore import QSize, Qt, pyqtSignal 
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
 import qtmodern.styles
@@ -11,7 +11,7 @@ from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose
 from UI_updateJSON import updateJSON
-from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace
+from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace, tileGridWorkspace, ClickableQLabel, toolsWorkspace
 from UI_WebViewer import webView
 
 data = updateJSON()
@@ -34,6 +34,7 @@ icon_loc = ""
 warning_text = "This software was downloaded from an unverified source, and may be compromised. Please download an official release of Turnroot"
 
 fullscreen = False
+zoom_level = 2.5
 
 class main(QMainWindow):
     def __init__(self):
@@ -45,6 +46,7 @@ class main(QMainWindow):
         self.setMaximumSize(QSize(int(size.width()), int(size.height())))
         self.resize(QSize(int(size.width()*.9), int(size.height()*.9)))
         self.fullscreen = fullscreen
+        self.zoom_level = zoom_level
 
         #set main layout to grid
         self.layout = QGridLayout()
@@ -56,12 +58,25 @@ class main(QMainWindow):
         self.tiles = workspaceContainer("tiles", data["active_layout"])
         self.tasks = workspaceContainer("tasks", data["active_layout"])
         self.task_settings = workspaceContainer("task_settings", data["active_layout"])
-        self.tile_grid = Color("black")
-        self.tools = workspaceContainer("tools", data["active_layout"])
+        self.tile_grid = tileGridWorkspace()
+        self.tile_grid.setMinimumWidth(size.width())
+        self.tile_grid.setMaximumHeight(size.height()) 
+        scroll = QScrollArea()
+        scroll.setWidget(self.tile_grid)
+        self.tile_grid.setFixedSize(int(size.width())*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
+        scroll.setWidgetResizable(True)     
         self.setStyleSheet("font: bold; font-size: "+str(data["font_size"]))
+        #tools workspace
+        self.z_in = ClickableQLabel("Z+")
+        self.z_out = ClickableQLabel("Z-")
+        self.z_in.clicked.connect(self.zoom_in)
+        self.z_out.clicked.connect(self.zoom_out)
+        
+        self.tools = toolsWorkspace("tools", data["active_layout"], [self.z_in, self.z_out])
+
 
         #add workspaces to main layout
-        self.layout.addWidget(self.tile_grid, 0, 0, 26, 48)
+        self.layout.addWidget(scroll, 0, 0, 26, 48)
         self.layout.addWidget(self.rte, 17, 0, 9, 17)
         self.layout.addWidget(self.tiles, 20, 17, 6, 23)
         self.layout.addWidget(self.tasks, 14, 40, 12, 8)
@@ -325,7 +340,22 @@ class main(QMainWindow):
         #check updates
         u = infoClose("Turnroot is up to date")
         u.exec_()
-
+    
+    def zoom_in(self):
+        if self.zoom_level < 4:
+            self.zoom_level += .25
+        else:
+            self.zoom_level = 4
+        self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
+    
+    def zoom_out(self):
+        if self.zoom_level >= 1.1:
+            self.zoom_level -= .25
+        else:
+            self.zoom_level = 1
+        self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
+        print(self.zoom_level)
+            
 window = main()
 window.show()
 a = app.exec_()
