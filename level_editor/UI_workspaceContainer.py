@@ -110,11 +110,17 @@ class toolsWorkspace(QWidget):
             self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
             
             self.layout = QVBoxLayout()
-            self.layout.setContentsMargins(2,2,2,2)
-            self.layout.setSpacing(4)
+            self.layout.setContentsMargins(0,0,0,0)
+            self.layout.setSpacing(0)
+            self.k = QWidget()
+            self.k.setMinimumHeight(0)
+            self.k.setMinimumWidth(int(data["icon_size"])+6)
+            self.layout.addWidget(self.k)
             for x in range(0, len(labels)):
                 self.layout.addWidget(labels[x])
-
+                labels[x].setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+                labels[x].setMinimumHeight(int(data["icon_size"]))
+                labels[x].setMinimumWidth(int(data["icon_size"]))
             self.setLayout(self.layout)
             
     

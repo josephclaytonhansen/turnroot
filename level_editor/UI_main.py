@@ -2,7 +2,7 @@ import sys
 import os
 from PyQt5.QtCore import QSize, Qt, pyqtSignal
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QColor, QPalette, QIcon
+from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
 import qtmodern.styles
 import qtmodern.windows
 import json
@@ -47,11 +47,34 @@ class main(QMainWindow):
         self.resize(QSize(int(size.width()*.9), int(size.height()*.9)))
         self.fullscreen = fullscreen
         self.zoom_level = zoom_level
+        self.setFocusPolicy(Qt.ClickFocus)
 
         #set main layout to grid
         self.layout = QGridLayout()
         self.layout.setContentsMargins(0,0,0,0)
         self.layout.setSpacing(0)
+             
+        #color toolbar icons based on theme
+        icon_string = ""
+        self.icon_loc = icon_loc
+        self.icon_loc = "ui_icons/logo-color.png"
+        if (active_theme.tag == "midnight_spark"):
+            icon_string = "teal/"
+        elif (active_theme.tag == "midnight_spark_yellow"):
+            icon_string = "yellow/"
+        elif (active_theme.tag == "sand_dunes" or active_theme.tag == "chocolate"):
+            icon_string = "brown/"
+            self.icon_loc = "ui_icons/logo-white.png"
+        elif (active_theme.tag == "rainforest"):
+            icon_string = "green/"
+        elif (active_theme.tag == "charcoal" or active_theme.tag == "ocean_waves"  or active_theme.tag == "garden_morning" or  active_theme.tag == "coral_reef"):
+            icon_string = "white/"
+            self.icon_loc = "ui_icons/logo-white.png"
+        elif (active_theme.tag == "system_light" or active_theme.tag == "clouds"):
+            icon_string = "blue/"
+        elif (active_theme.tag == "chili_pepper"):
+            icon_string = "red/"
+            self.icon_loc = "ui_icons/logo-white.png"
         
         #add workspaces
         self.rte = workspaceContainer("rte", data["active_layout"])
@@ -61,24 +84,56 @@ class main(QMainWindow):
         self.tile_grid = tileGridWorkspace()
         self.tile_grid.setMinimumWidth(size.width())
         self.tile_grid.setMaximumHeight(size.height()) 
-        scroll = QScrollArea()
-        scroll.setWidget(self.tile_grid)
+        self.scroll = QScrollArea()
+        self.scroll.setWidget(self.tile_grid)
         self.tile_grid.setFixedSize(int(size.width())*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
-        scroll.setWidgetResizable(True)
-        scroll.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
-        scroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOff ) 
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
+        self.scroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOff ) 
         self.setStyleSheet("font: bold; font-size: "+str(data["font_size"]))
+        
         #tools workspace
-        self.z_in = ClickableQLabel("Z+")
-        self.z_out = ClickableQLabel("Z-")
+        self.z_in = ClickableQLabel()
+        self.z_in.setPixmap(QPixmap(("ui_icons/"+icon_string+"zoom_in.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
+        self.z_in.setToolTip("Zoom in (I)")
+        self.z_out = ClickableQLabel()
+        self.z_out.setToolTip("Zoom out (O)")
+        self.z_out.setPixmap(QPixmap(("ui_icons/"+icon_string+"zoom_out.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
+        self.goto_00 = ClickableQLabel()
+        self.goto_00.setToolTip("Go to top left (L)")
+        self.goto_00.setPixmap(QPixmap(("ui_icons/"+icon_string+"goto_00.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
         self.z_in.clicked.connect(self.zoom_in)
         self.z_out.clicked.connect(self.zoom_out)
+        self.goto_00.clicked.connect(self.scrollReset)
+        self.goto_fr = ClickableQLabel()
+        self.goto_fr.setToolTip("Go to bottom right (.)")
+        self.goto_fr.setPixmap(QPixmap(("ui_icons/"+icon_string+"goto_fr.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
+        self.goto_fr.clicked.connect(self.scrollFr)
         
-        self.tools = toolsWorkspace("tools", data["active_layout"], [self.z_in, self.z_out])
-
+        self.add_above = ClickableQLabel()
+        self.add_above.setToolTip("Add above (Left Click)")
+        self.add_above.setPixmap(QPixmap(("ui_icons/"+icon_string+"add_above.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
+        self.add_above.clicked.connect(self.addAbove)
+        
+        self.remove_above = ClickableQLabel()
+        self.remove_above.setToolTip("Remove above (Right Click)")
+        self.remove_above.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove_above.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
+        self.remove_above.clicked.connect(self.removeAbove)
+        
+        self.add_below = ClickableQLabel()
+        self.add_below.setToolTip("Add below (Shift+Left Click)")
+        self.add_below.setPixmap(QPixmap(("ui_icons/"+icon_string+"add_below.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
+        self.add_below.clicked.connect(self.addBelow)
+        
+        self.remove_below = ClickableQLabel()
+        self.remove_below.setToolTip("Remove below (Shift+Right Click)")
+        self.remove_below.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove_below.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
+        self.remove_below.clicked.connect(self.removeBelow)
+        
+        self.tools = toolsWorkspace("tools", data["active_layout"], [self.z_in, self.z_out, self.goto_00, self.goto_fr, self.add_above, self.add_below, self.remove_above, self.remove_below])
 
         #add workspaces to main layout
-        self.layout.addWidget(scroll, 0, 0, 26, 48)
+        self.layout.addWidget(self.scroll, 0, 0, 26, 48)
         self.layout.addWidget(self.rte, 17, 0, 9, 17)
         self.layout.addWidget(self.tiles, 20, 17, 6, 23)
         self.layout.addWidget(self.tasks, 14, 40, 12, 8)
@@ -154,38 +209,16 @@ class main(QMainWindow):
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
         self.toolbar.setToolButtonStyle(Qt.ToolButtonIconOnly)
-        
-        #color toolbar icons based on theme
-        icon_string = ""
-        self.icon_loc = icon_loc
-        self.icon_loc = "ui_icons/logo-color.png"
-        if (active_theme.tag == "midnight_spark"):
-            icon_string = "teal/"
-        elif (active_theme.tag == "midnight_spark_yellow"):
-            icon_string = "yellow/"
-        elif (active_theme.tag == "sand_dunes" or active_theme.tag == "chocolate"):
-            icon_string = "brown/"
-            self.icon_loc = "ui_icons/logo-white.png"
-        elif (active_theme.tag == "rainforest"):
-            icon_string = "green/"
-        elif (active_theme.tag == "charcoal" or active_theme.tag == "ocean_waves"  or active_theme.tag == "garden_morning" or  active_theme.tag == "coral_reef"):
-            icon_string = "white/"
-            self.icon_loc = "ui_icons/logo-white.png"
-        elif (active_theme.tag == "system_light" or active_theme.tag == "clouds"):
-            icon_string = "blue/"
-        elif (active_theme.tag == "chili_pepper"):
-            icon_string = "red/"
-            self.icon_loc = "ui_icons/logo-white.png"
 
         #add actions for toolbar
-        self.resourcesButton = QAction(QIcon("ui_icons/"+icon_string+"package-2-32.png"), "Resources", self)
-        self.optionsButton = QAction(QIcon("ui_icons/"+icon_string+"settings-17-32.png"),"Options", self)
-        self.helpButton = QAction(QIcon("ui_icons/"+icon_string+"question-mark-4-32.png"),"Read docs", self)
-        self.backButton = QAction(QIcon("ui_icons/"+icon_string+"grid-three-up-32.png"),"Return to editor selection", self)
-        self.playAnimationButton = QAction(QIcon("ui_icons/"+icon_string+"play-2-32.png"),"Play animations", self)
-        self.playSoundButton = QAction(QIcon("ui_icons/"+icon_string+"mute-2-32.png"),"Play sounds", self)
-        self.justTilesButton = QAction(QIcon("ui_icons/"+icon_string+"fit-to-width-32.png"),"Show just tiles", self)
-        self.forumButton = QAction(QIcon("ui_icons/"+icon_string+"speech-bubble-2-32.png"),"Access forum", self)
+        self.resourcesButton = QAction(QIcon("ui_icons/"+icon_string+"package-2-32.png"), "Resources (R)", self)
+        self.optionsButton = QAction(QIcon("ui_icons/"+icon_string+"settings-17-32.png"),"Options (S)", self)
+        self.helpButton = QAction(QIcon("ui_icons/"+icon_string+"question-mark-4-32.png"),"Read docs (H)", self)
+        self.backButton = QAction(QIcon("ui_icons/"+icon_string+"grid-three-up-32.png"),"Return to editor selection (Esc)", self)
+        self.playAnimationButton = QAction(QIcon("ui_icons/"+icon_string+"play-2-32.png"),"Play animations (Spacebar)", self)
+        self.playSoundButton = QAction(QIcon("ui_icons/"+icon_string+"mute-2-32.png"),"Play sounds (Shift+Spacebar)", self)
+        self.justTilesButton = QAction(QIcon("ui_icons/"+icon_string+"fit-to-width-32.png"),"Show just tiles (F)", self)
+        self.forumButton = QAction(QIcon("ui_icons/"+icon_string+"speech-bubble-2-32.png"),"Access forum (Q)", self)
         
         #connect toolbar buttons to actions
         self.optionsButton.triggered.connect(self.OptionsMenu)
@@ -220,7 +253,30 @@ class main(QMainWindow):
         widget = QWidget()
         widget.setLayout(self.layout)
         self.setCentralWidget(widget)
-        
+    
+    #keyboard events
+    def keyPressEvent(self, e):
+        modifiers = QApplication.keyboardModifiers()
+        if e.key() == Qt.Key_F:
+            self.full_screen()
+        elif e.key() == Qt.Key_S:
+            self.OptionsMenu()
+        elif e.key() == Qt.Key_H:
+            self.helpView()
+        elif e.key() == Qt.Key_I:
+            self.zoom_in()
+        elif e.key() == Qt.Key_O:
+            self.zoom_out()
+        elif e.key() == Qt.Key_L:
+            self.scrollReset()
+        elif e.key() == Qt.Key_Period:
+            self.scrollFr()
+            
+        if modifiers == Qt.ControlModifier:
+            if e.key() == Qt.Key_Q:
+                self.quitWindow()
+
+    #custom events
     def OptionsMenu(self):
         p = PreferencesDialog(parent=self)
         theme = p.exec_()
@@ -241,7 +297,7 @@ class main(QMainWindow):
             self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
             if (data["theme_changed"] == True):
                 os.execl(sys.executable, sys.executable, *sys.argv)
-        
+            
     def helpView(self):
         h = webView(parent=self)
         h.exec_()
@@ -356,6 +412,30 @@ class main(QMainWindow):
         else:
             self.zoom_level = 1
         self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
+    
+    def scrollReset(self):
+        self.scroll.horizontalScrollBar().setValue(0)
+        self.scroll.verticalScrollBar().setValue(0)
+        self.fullscreen = True
+        self.full_screen()
+    
+    def scrollFr(self):
+        self.scroll.horizontalScrollBar().setValue(2200)
+        self.scroll.verticalScrollBar().setValue(2200)
+        self.fullscreen = True
+        self.full_screen()
+    
+    def addAbove(self):
+        pass
+
+    def removeAbove(self):
+        pass
+    
+    def addBelow(self):
+        pass
+    
+    def removeBelow(self):
+        pass
             
 window = main()
 window.show()

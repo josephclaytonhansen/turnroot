@@ -273,6 +273,7 @@ class PreferencesDialog(QDialog):
     def tis_size_changed(self, i):
         icon_size = i
         data["icon_size"] = str(i)
+        self.buttonBox.setText("Apply changes and restart")
         with open("preferences.json", "w") as write_file:
             json.dump(data, write_file)
             write_file.close()
