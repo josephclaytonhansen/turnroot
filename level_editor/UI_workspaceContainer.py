@@ -76,9 +76,9 @@ class tileGridWorkspace(QWidget):
         self.setMaximumHeight(self.height)
         self.ratio = self.width/self.height
         #each square is ratio width/1 height
-        for x in range(0,int(self.height/(50*self.ratio))*4):
+        for x in range(0,int(int(self.height/(50*self.ratio))*4.2)):
             self.checker = self.checker + 1
-            for y in range(0,int(self.width/50)*4):
+            for y in range(0,int(int(self.width/50)*4.2)):
                 
                 self.count = self.count + 1
                 self.checker = self.checker + 1

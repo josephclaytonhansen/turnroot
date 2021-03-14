@@ -1,6 +1,6 @@
 import sys
 import os
-from PyQt5.QtCore import QSize, Qt, pyqtSignal 
+from PyQt5.QtCore import QSize, Qt, pyqtSignal
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
 import qtmodern.styles
@@ -34,7 +34,7 @@ icon_loc = ""
 warning_text = "This software was downloaded from an unverified source, and may be compromised. Please download an official release of Turnroot"
 
 fullscreen = False
-zoom_level = 2.5
+zoom_level = 1.75
 
 class main(QMainWindow):
     def __init__(self):
@@ -64,7 +64,9 @@ class main(QMainWindow):
         scroll = QScrollArea()
         scroll.setWidget(self.tile_grid)
         self.tile_grid.setFixedSize(int(size.width())*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
-        scroll.setWidgetResizable(True)     
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
+        scroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOff ) 
         self.setStyleSheet("font: bold; font-size: "+str(data["font_size"]))
         #tools workspace
         self.z_in = ClickableQLabel("Z+")
@@ -342,10 +344,10 @@ class main(QMainWindow):
         u.exec_()
     
     def zoom_in(self):
-        if self.zoom_level < 4:
+        if self.zoom_level < 3:
             self.zoom_level += .25
         else:
-            self.zoom_level = 4
+            self.zoom_level = 3
         self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
     
     def zoom_out(self):
@@ -354,7 +356,6 @@ class main(QMainWindow):
         else:
             self.zoom_level = 1
         self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
-        print(self.zoom_level)
             
 window = main()
 window.show()
