@@ -15,3 +15,8 @@ def updateJSON():
 
         read_file.close()
         return data
+
+def dumpJSON(data):
+        with open("preferences.json", "w") as write_file:
+            json.dump(data, write_file)
+            write_file.close()

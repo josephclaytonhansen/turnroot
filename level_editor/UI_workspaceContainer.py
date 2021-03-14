@@ -76,9 +76,9 @@ class tileGridWorkspace(QWidget):
         self.setMaximumHeight(self.height)
         self.ratio = self.width/self.height
         #each square is ratio width/1 height
-        for x in range(0,int(int(self.height/(50*self.ratio))*4.2)):
+        for x in range(0,int(int(self.height/(50*self.ratio))*4.4)):
             self.checker = self.checker + 1
-            for y in range(0,int(int(self.width/50)*4.2)):
+            for y in range(0,int(int(self.width/50)*4.4)):
                 
                 self.count = self.count + 1
                 self.checker = self.checker + 1
@@ -89,11 +89,13 @@ class tileGridWorkspace(QWidget):
                 self.layout.addWidget(self.squares[self.count], x, y)
                 if self.checker % 2 == 0:
                     self.squares[self.count].setStyleSheet("color: white; background-color: black;")
+                else:
+                    self.squares[self.count].setStyleSheet("color: white; background-color: #222222;")
         self.setLayout(self.layout)
     
     def change_color(self):
         self.sender().setStyleSheet("color: white; background-color: red;")
-        print(str(self.sender().gridIndex))
+        print(self.sender().gridIndex)
         
 class ClickableQLabel(QLabel):
     clicked=pyqtSignal()

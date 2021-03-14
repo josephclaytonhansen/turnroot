@@ -3,7 +3,7 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
 import json
-from UI_updateJSON import updateJSON
+from UI_updateJSON import updateJSON, dumpJSON
 
 ind = 0
 entries = ["Appearance", "System", "Keyboard Shortcuts"]
@@ -33,18 +33,15 @@ data = {"font_size": 15, "rfont_size": 15,
         "ah_overlays": False, "theme_changed": False}
 
 data = updateJSON()
-
-with open("preferences.json", "w") as write_file:
-    json.dump(data, write_file)
-    write_file.close()
+dumpJSON(data)
     
 import UI_colorTheme
 
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 #update below when importing more layouts!
-from UI_layoutOption import (right_lower,left_lower,lower_lower,left_left,right_right,simple)
-layout_dict = [right_lower,left_lower,lower_lower,left_left,right_right,simple]
+from UI_layoutOption import (right_lower,left_lower,left_left,right_right)
+layout_dict = [right_lower,left_lower,left_left,right_right]
 #update portion ends here
 
 color_themes = []
@@ -143,19 +140,23 @@ class PreferencesDialog(QDialog):
         self.ah.setAlignment(Qt.AlignVCenter)
         self.aes_layout.addWidget(self.ah,5,0,3,0)
         self.ah_rte = QCheckBox("Rules/text editor")
-        self.ah_rte.setCheckState(Qt.Checked)
+        if(data["ah_rte"]):
+            self.ah_rte.setCheckState(Qt.Checked)
         self.ah_rte.stateChanged.connect(self.ah_rte_changed)
         self.aes_layout.addWidget(self.ah_rte,5,1)
         self.ah_tasks = QCheckBox("Task selector")
-        self.ah_tasks.setCheckState(Qt.Checked)
+        if(data["ah_tasks"]):
+            self.ah_tasks.setCheckState(Qt.Checked)
         self.ah_tasks.stateChanged.connect(self.ah_tasks_changed)
         self.aes_layout.addWidget(self.ah_tasks,6,1)
         self.ah_taskss = QCheckBox("Task settings")
-        self.ah_taskss.setCheckState(Qt.Checked)
+        if(data["ah_taskss"]):
+            self.ah_taskss.setCheckState(Qt.Checked)
         self.ah_taskss.stateChanged.connect(self.ah_taskss_changed)
         self.aes_layout.addWidget(self.ah_taskss,7,1)
         self.ah_overlays = QCheckBox("Editor overlay buttons")
-        self.ah_overlays.setCheckState(0)
+        if(data["ah_overlays"]):
+            self.ah_overlays.setCheckState(Checked)
         self.ah_overlays.stateChanged.connect(self.ah_overlays_changed)
         self.aes_layout.addWidget(self.ah_overlays,8,1)
         
@@ -231,17 +232,13 @@ class PreferencesDialog(QDialog):
         self.pref_categories.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.list_background_color)
         self.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         data["font_size"] = font_size
-        with open("preferences.json", "w") as write_file:
-            json.dump(data, write_file)
-            write_file.close()
+        dumpJSON(data)
     
     def rfont_size_changed(self, i):
         data = updateJSON()
         rfont_size = i
         data["rfont_size"] = rfont_size
-        with open("preferences.json", "w") as write_file:
-            json.dump(data, write_file)
-            write_file.close()
+        dumpJSON(data)
 
 
     def color_theme_changed(self, s):
@@ -253,30 +250,29 @@ class PreferencesDialog(QDialog):
         if (self.current_theme_check!= s):
             data["theme_changed"] = True
             self.buttonBox.setText("Apply changes and restart")
-        with open("preferences.json", "w") as write_file:
-            json.dump(data, write_file)
-            write_file.close()
+        dumpJSON(data)
                 
         self.pref_categories.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color)
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
 
     
     def ah_rte_changed(self, s):
-        pass
+        data["ah_rte"] = s
+        dumpJSON(data)
     
     def ah_tasks_changed(self, s):
-        pass
+        data["ah_tasks"] = s
+        dumpJSON(data)
     
     def ah_taskss_changed(self, s):
-        pass
+        data["ah_taskss"] = s
+        dumpJSON(data)
     
     def tis_size_changed(self, i):
         icon_size = i
         data["icon_size"] = str(i)
         self.buttonBox.setText("Apply changes and restart")
-        with open("preferences.json", "w") as write_file:
-            json.dump(data, write_file)
-            write_file.close()
+        dumpJSON(data)
     
     def ah_overlays_changed(self, s):
         pass

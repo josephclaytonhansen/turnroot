@@ -253,6 +253,14 @@ class main(QMainWindow):
         widget = QWidget()
         widget.setLayout(self.layout)
         self.setCentralWidget(widget)
+        
+        #honor autohide
+        if(data["ah_rte"]):
+            self.hideRTE()
+        if(data["ah_tasks"]):
+            self.hide_tasks()
+        if(data["ah_taskss"]):
+            self.hide_tasks_settings()
     
     #keyboard events
     def keyPressEvent(self, e):
@@ -400,10 +408,10 @@ class main(QMainWindow):
         u.exec_()
     
     def zoom_in(self):
-        if self.zoom_level < 3:
+        if self.zoom_level < 3.25:
             self.zoom_level += .25
         else:
-            self.zoom_level = 3
+            self.zoom_level = 3.25
         self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
     
     def zoom_out(self):
@@ -416,14 +424,10 @@ class main(QMainWindow):
     def scrollReset(self):
         self.scroll.horizontalScrollBar().setValue(0)
         self.scroll.verticalScrollBar().setValue(0)
-        self.fullscreen = True
-        self.full_screen()
-    
+
     def scrollFr(self):
         self.scroll.horizontalScrollBar().setValue(2200)
         self.scroll.verticalScrollBar().setValue(2200)
-        self.fullscreen = True
-        self.full_screen()
     
     def addAbove(self):
         pass
