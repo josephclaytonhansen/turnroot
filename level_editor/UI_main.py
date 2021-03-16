@@ -82,7 +82,7 @@ class main(QMainWindow):
         self.tiles = Tiles()
         self.tiles_info = TilesInfo()
         self.tscroll = QScrollArea()
-        self.tscroll.setMaximumHeight(212)
+        self.tscroll.setMaximumHeight((size.height()/4))
         self.tscroll.setWidget(self.tiles)
         self.tscroll.setWidgetResizable(True)
         self.tscroll.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOn )
@@ -428,7 +428,7 @@ class main(QMainWindow):
     
     def zoom_in(self):
         if self.zoom_level < 3.25:
-            self.zoom_level += .25
+            self.zoom_level += .1
         else:
             self.zoom_level = 3.25
         self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
@@ -436,7 +436,7 @@ class main(QMainWindow):
     
     def zoom_out(self):
         if self.zoom_level >= 1.76:
-            self.zoom_level -= .25
+            self.zoom_level -= .1
         else:
             self.zoom_level = 1.75
         self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
