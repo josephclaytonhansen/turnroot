@@ -11,7 +11,7 @@ from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose
 from UI_updateJSON import updateJSON
-from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace, tileGridWorkspace, ClickableQLabel, toolsWorkspace, Tiles
+from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace, tileGridWorkspace, ClickableQLabel, toolsWorkspace, Tiles, TilesInfo
 from UI_WebViewer import webView
 
 data = updateJSON()
@@ -80,7 +80,7 @@ class main(QMainWindow):
         self.rte = workspaceContainer("rte", data["active_layout"])
         
         self.tiles = Tiles()
-        self.tiles_info = workspaceContainer("tasks", data["active_layout"])
+        self.tiles_info = TilesInfo()
         self.tscroll = QScrollArea()
         self.tscroll.setMaximumHeight(212)
         self.tscroll.setWidget(self.tiles)
