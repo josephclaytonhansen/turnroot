@@ -11,7 +11,7 @@ from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose
 from UI_updateJSON import updateJSON
-from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace, tileGridWorkspace, ClickableQLabel, toolsWorkspace
+from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace, tileGridWorkspace, ClickableQLabel, toolsWorkspace, Tiles
 from UI_WebViewer import webView
 
 data = updateJSON()
@@ -36,6 +36,14 @@ warning_text = "This software was downloaded from an unverified source, and may 
 fullscreen = False
 zoom_level = 1.75
 
+#customize scrollbars
+with open("UI_scroll_sheet.css", "r") as read_file:
+        read_file.seek(0)
+        scroll_sheet = read_file.read()
+        read_file.close()
+scroll_sheet = scroll_sheet.replace("bck", str(active_theme.window_background_color))
+scroll_sheet = scroll_sheet.replace("hnl", str(active_theme.window_text_color))
+
 class main(QMainWindow):
     def __init__(self):
         
@@ -48,6 +56,8 @@ class main(QMainWindow):
         self.fullscreen = fullscreen
         self.zoom_level = zoom_level
         self.setFocusPolicy(Qt.ClickFocus)
+        self.scroll_sheet = scroll_sheet
+        QScrollBar.setStyleSheet(self, self.scroll_sheet)
 
         #set main layout to grid
         self.layout = QGridLayout()
@@ -78,9 +88,17 @@ class main(QMainWindow):
         
         #add workspaces
         self.rte = workspaceContainer("rte", data["active_layout"])
-        self.tiles = workspaceContainer("tiles", data["active_layout"])
+        
+        self.tiles = Tiles()       
+        self.tscroll = QScrollArea()
+        self.tscroll.setWidget(self.tiles)
+        self.tscroll.setWidgetResizable(True)
+        self.tscroll.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOn )
+        self.tscroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
+        
         self.tasks = workspaceContainer("tasks", data["active_layout"])
         self.task_settings = workspaceContainer("task_settings", data["active_layout"])
+        
         self.tile_grid = tileGridWorkspace()
         self.tile_grid.setMinimumWidth(size.width())
         self.tile_grid.setMaximumHeight(size.height()) 
@@ -89,7 +107,8 @@ class main(QMainWindow):
         self.tile_grid.setFixedSize(int(size.width())*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
         self.scroll.setWidgetResizable(True)
         self.scroll.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
-        self.scroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOff ) 
+        self.scroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
+        
         self.setStyleSheet("font: bold; font-size: "+str(data["font_size"]))
         
         #tools workspace
@@ -137,7 +156,7 @@ class main(QMainWindow):
         #add workspaces to main layout
         self.layout.addWidget(self.scroll, 0, 0, 26, 48)
         self.layout.addWidget(self.rte, 17, 0, 9, 17)
-        self.layout.addWidget(self.tiles, 20, 17, 6, 23)
+        self.layout.addWidget(self.tscroll, 20, 17, 6, 23)
         self.layout.addWidget(self.tasks, 14, 40, 12, 8)
         self.layout.addWidget(self.task_settings, 4, 40, 10, 8)
         self.layout.addWidget(self.tools, 2, 0, 13, 1)
@@ -281,7 +300,7 @@ class main(QMainWindow):
             self.scrollReset()
         elif e.key() == Qt.Key_Period:
             self.scrollFr()
-            
+
         if modifiers == Qt.ControlModifier:
             if e.key() == Qt.Key_Q:
                 self.quitWindow()
@@ -291,6 +310,8 @@ class main(QMainWindow):
         p = PreferencesDialog(parent=self)
         theme = p.exec_()
         data = updateJSON()
+        global scroll_sheet
+        
         if (theme != 0):
             self.menubar.style().unpolish(self.menubar)
             self.menubar.style().polish(self.menubar)
@@ -298,6 +319,7 @@ class main(QMainWindow):
             self.toolbar.style().unpolish(self.toolbar)
             self.toolbar.style().polish(self.toolbar)
             self.toolbar.update()
+            
             active_theme = getattr(UI_colorTheme, data["active_theme"])
             self.menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold; font-size: "+str(data["font_size"]))
             self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(data["font_size"]))
@@ -305,6 +327,14 @@ class main(QMainWindow):
             font = self.menubar.font()
             font.setPointSize(data["font_size"])
             self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
+            
+            with open("UI_scroll_sheet.css", "r") as read_file:
+                read_file.seek(0)
+                scroll_sheet = read_file.read()
+                read_file.close()
+            scroll_sheet = scroll_sheet.replace("bck", str(active_theme.window_background_color))
+            scroll_sheet = scroll_sheet.replace("hnl", str(active_theme.window_text_color))
+            
             if (data["theme_changed"] == True):
                 os.execl(sys.executable, sys.executable, *sys.argv)
             
@@ -339,12 +369,12 @@ class main(QMainWindow):
         self.rte_show.setVisible(True)
         
     def show_tiles(self):
-        self.tiles.setVisible(True)
+        self.tscroll.setVisible(True)
         self.tiles_hide.setVisible(True)
         self.tiles_show.setVisible(False)
     
     def hide_tiles(self):
-        self.tiles.setVisible(False)
+        self.tscroll.setVisible(False)
         self.tiles_hide.setVisible(False)
         self.tiles_show.setVisible(True)
         
@@ -415,13 +445,15 @@ class main(QMainWindow):
         else:
             self.zoom_level = 3.25
         self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
+        self.tile_grid.update()
     
     def zoom_out(self):
-        if self.zoom_level >= 1.1:
+        if self.zoom_level >= 1.76:
             self.zoom_level -= .25
         else:
-            self.zoom_level = 1
+            self.zoom_level = 1.75
         self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
+        self.tile_grid.update()
     
     def scrollReset(self):
         self.scroll.horizontalScrollBar().setValue(0)

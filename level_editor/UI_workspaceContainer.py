@@ -2,7 +2,7 @@ import sys
 import os
 from PyQt5.QtCore import QSize, Qt, pyqtSignal
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QColor, QPalette, QIcon
+from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
 import qtmodern.styles
 import qtmodern.windows
 from UI_updateJSON import updateJSON
@@ -12,7 +12,10 @@ import UI_colorTheme
 from UI_color_test_widget import Color
 import json
 import math
-   
+
+current_tile = None
+tiles = {0:{}, 1:{}, 2:{}, 3:{}}
+
 class workspaceContainer(QWidget):
         def __init__(self, workspace, layout):
             super().__init__()
@@ -84,24 +87,35 @@ class tileGridWorkspace(QWidget):
                 self.checker = self.checker + 1
                 self.squares[self.count] = ClickableQLabel()
                 self.squares[self.count].gridIndex = self.count
+                self.squares[self.count].setScaledContents( True )
                 self.squares[self.count].clicked.connect(self.change_color)
+                self.squares[self.count].right_clicked.connect(self.reset_color)
                 self.squares[self.count].setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                 self.layout.addWidget(self.squares[self.count], x, y)
                 if self.checker % 2 == 0:
                     self.squares[self.count].setStyleSheet("color: white; background-color: black;")
                 else:
                     self.squares[self.count].setStyleSheet("color: white; background-color: #111111;")
+                if x % 5 == 0 and y % 5 == 0:
+                    self.squares[self.count].setText(str(self.squares[self.count].gridIndex))
         self.setLayout(self.layout)
     
     def change_color(self):
-        self.sender().setStyleSheet("color: white; background-color: red;")
-        print(self.sender().gridIndex)
+        global current_tile
+        self.sender().setPixmap(current_tile)
+        
+    def reset_color(self):
+        self.sender().clear()
         
 class ClickableQLabel(QLabel):
     clicked=pyqtSignal()
+    right_clicked=pyqtSignal()
     QLabel.gridIndex = 0
     def mousePressEvent(self, ev):
-        self.clicked.emit()
+        if ev.button() == Qt.LeftButton:
+            self.clicked.emit()
+        elif ev.button() == Qt.RightButton:
+            self.right_clicked.emit()
 
 class toolsWorkspace(QWidget):
         def __init__(self, workspace, layout, labels):
@@ -124,7 +138,42 @@ class toolsWorkspace(QWidget):
                 labels[x].setMinimumHeight(int(data["icon_size"]))
                 labels[x].setMinimumWidth(int(data["icon_size"]))
             self.setLayout(self.layout)
-            
+ 
+class Tiles(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setAutoFillBackground(True)
+        data = updateJSON()
+        global tiles
+
+        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: black;color: "+self.active_theme.window_text_color)
+        self.pixmap = QPixmap("tiles/ple_grass_basic.png")
+        self.label = QLabel()
+        self.label.setPixmap(self.pixmap)
+        self.layout = QGridLayout()
+        self.layout.setSpacing(1)
+        self.layout.setContentsMargins(0,0,0,0)
+        self.setLayout(self.layout)
+        
+        for x in range(0,14):
+            for y in range(0,4):
+                tiles[y][x] = ClickableQLabel()
+                tiles[y][x].clicked.connect(self.assignCurrentTile)
+                tiles[y][x].setPixmap(self.pixmap.copy(x*32, y*32, 32, 32).scaled(int(64), int(64), Qt.KeepAspectRatio))
+                tiles[y][x].setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+                self.layout.addWidget(tiles[y][x], y+1, x+1)
+    
+    def assignCurrentTile(self):
+        global current_tile
+        global tiles
+        for x in range(0,14):
+            for y in range(0,4):
+                tiles[y][x].setStyleSheet("background-color: black;")
+        current_tile = self.sender().pixmap()
+        self.sender().setStyleSheet("background-color: "+self.active_theme.window_background_color+";")
+        
+                
     
 
             
