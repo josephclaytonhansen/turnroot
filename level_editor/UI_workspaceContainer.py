@@ -14,7 +14,9 @@ import json
 import math
 
 current_tile = None
-tiles = {0:{}, 1:{}, 2:{}, 3:{}}
+previous_sender = None
+current_sender = None
+tiles = {0:{}, 1:{}, 2:{}, 3:{}, 4:{}, 5:{}, 6:{}}
 
 class workspaceContainer(QWidget):
         def __init__(self, workspace, layout):
@@ -148,7 +150,7 @@ class Tiles(QWidget):
 
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: black;color: "+self.active_theme.window_text_color)
-        self.pixmap = QPixmap("tiles/ple_grass_basic.png")
+        self.pixmap = QPixmap("tiles/ple_grass_dirt_and_water.png")
         self.label = QLabel()
         self.label.setPixmap(self.pixmap)
         self.layout = QGridLayout()
@@ -166,10 +168,15 @@ class Tiles(QWidget):
     
     def assignCurrentTile(self):
         global current_tile
+        global previous_sender
+        global current_sender
+        previous_sender = current_sender
         global tiles
-        for x in range(0,22):
-            for y in range(0,4):
-                tiles[y][x].setStyleSheet("background-color: black;")
+        try:
+            previous_sender.setStyleSheet("background-color: black;")
+        except:
+            pass
+        current_sender = self.sender()
         current_tile = self.sender().pixmap()
         self.sender().setStyleSheet("background-color: "+self.active_theme.window_background_color+";")
         

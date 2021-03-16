@@ -36,14 +36,6 @@ warning_text = "This software was downloaded from an unverified source, and may 
 fullscreen = False
 zoom_level = 1.75
 
-#customize scrollbars
-with open("UI_scroll_sheet.css", "r") as read_file:
-        read_file.seek(0)
-        scroll_sheet = read_file.read()
-        read_file.close()
-scroll_sheet = scroll_sheet.replace("bck", str(active_theme.window_background_color))
-scroll_sheet = scroll_sheet.replace("hnl", str(active_theme.window_text_color))
-
 class main(QMainWindow):
     def __init__(self):
         
@@ -56,8 +48,6 @@ class main(QMainWindow):
         self.fullscreen = fullscreen
         self.zoom_level = zoom_level
         self.setFocusPolicy(Qt.ClickFocus)
-        self.scroll_sheet = scroll_sheet
-        QScrollBar.setStyleSheet(self, self.scroll_sheet)
 
         #set main layout to grid
         self.layout = QGridLayout()
@@ -89,12 +79,14 @@ class main(QMainWindow):
         #add workspaces
         self.rte = workspaceContainer("rte", data["active_layout"])
         
-        self.tiles = Tiles()       
+        self.tiles = Tiles()
+        self.tiles_info = workspaceContainer("tasks", data["active_layout"])
         self.tscroll = QScrollArea()
+        self.tscroll.setMaximumHeight(212)
         self.tscroll.setWidget(self.tiles)
         self.tscroll.setWidgetResizable(True)
         self.tscroll.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOn )
-        self.tscroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
+        self.tscroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOn )
         
         self.tasks = workspaceContainer("tasks", data["active_layout"])
         self.task_settings = workspaceContainer("task_settings", data["active_layout"])
@@ -155,8 +147,9 @@ class main(QMainWindow):
 
         #add workspaces to main layout
         self.layout.addWidget(self.scroll, 0, 0, 26, 48)
-        self.layout.addWidget(self.rte, 17, 0, 9, 17)
-        self.layout.addWidget(self.tscroll, 20, 17, 6, 23)
+        self.layout.addWidget(self.rte, 17, 0, 9, 14)
+        self.layout.addWidget(self.tscroll, 20, 14, 6, 23)
+        self.layout.addWidget(self.tiles_info, 20, 37, 6, 3)
         self.layout.addWidget(self.tasks, 14, 40, 12, 8)
         self.layout.addWidget(self.task_settings, 4, 40, 10, 8)
         self.layout.addWidget(self.tools, 2, 0, 13, 1)
@@ -178,10 +171,10 @@ class main(QMainWindow):
         
         #add Tiles workspace show/hide toggle to main layout
         self.tiles_show = showWorkspace("tiles", data["active_layout"])
-        self.layout.addWidget(self.tiles_show, 25, 17, 1, 1)
+        self.layout.addWidget(self.tiles_show, 25, 15, 1, 1)
         self.tiles_show.clicked.connect(self.show_tiles)
         self.tiles_hide = hideWorkspace("tiles", data["active_layout"])
-        self.layout.addWidget(self.tiles_hide, 25, 17, 1, 1)
+        self.layout.addWidget(self.tiles_hide, 25, 15, 1, 1)
         self.tiles_hide.clicked.connect(self.hide_tiles)
         self.tiles_show.setVisible(False)
 
@@ -310,7 +303,6 @@ class main(QMainWindow):
         p = PreferencesDialog(parent=self)
         theme = p.exec_()
         data = updateJSON()
-        global scroll_sheet
         
         if (theme != 0):
             self.menubar.style().unpolish(self.menubar)
@@ -327,13 +319,6 @@ class main(QMainWindow):
             font = self.menubar.font()
             font.setPointSize(data["font_size"])
             self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
-            
-            with open("UI_scroll_sheet.css", "r") as read_file:
-                read_file.seek(0)
-                scroll_sheet = read_file.read()
-                read_file.close()
-            scroll_sheet = scroll_sheet.replace("bck", str(active_theme.window_background_color))
-            scroll_sheet = scroll_sheet.replace("hnl", str(active_theme.window_text_color))
             
             if (data["theme_changed"] == True):
                 os.execl(sys.executable, sys.executable, *sys.argv)
@@ -370,11 +355,13 @@ class main(QMainWindow):
         
     def show_tiles(self):
         self.tscroll.setVisible(True)
+        self.tiles_info.setVisible(True)
         self.tiles_hide.setVisible(True)
         self.tiles_show.setVisible(False)
     
     def hide_tiles(self):
         self.tscroll.setVisible(False)
+        self.tiles_info.setVisible(False)
         self.tiles_hide.setVisible(False)
         self.tiles_show.setVisible(True)
         
