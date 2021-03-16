@@ -156,8 +156,8 @@ class Tiles(QWidget):
         self.layout.setContentsMargins(0,0,0,0)
         self.setLayout(self.layout)
         
-        for x in range(0,14):
-            for y in range(0,4):
+        for x in range(0,int(self.pixmap.width()/32)):
+            for y in range(0,int(self.pixmap.height()/32)):
                 tiles[y][x] = ClickableQLabel()
                 tiles[y][x].clicked.connect(self.assignCurrentTile)
                 tiles[y][x].setPixmap(self.pixmap.copy(x*32, y*32, 32, 32).scaled(int(64), int(64), Qt.KeepAspectRatio))
@@ -167,7 +167,7 @@ class Tiles(QWidget):
     def assignCurrentTile(self):
         global current_tile
         global tiles
-        for x in range(0,14):
+        for x in range(0,22):
             for y in range(0,4):
                 tiles[y][x].setStyleSheet("background-color: black;")
         current_tile = self.sender().pixmap()
