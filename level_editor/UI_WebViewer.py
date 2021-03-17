@@ -2,13 +2,13 @@
 
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import QFile
+from PyQt5.QtCore import QFile, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import json
 from UI_updateJSON import updateJSON
 
 ind = 0
-entries = ["Keyboard Shortcuts", "Help Topic 2", "Help Topic 3"]
+entries = ["Keyboard Shortcuts", "Help Topic 2", "Help Topic 3", "Read the Docs"]
 data = {"font_size": 15, "rfont_size": 15,
         "active_theme": "midnight_spark_yellow",
         "active_layout": "right_lower", "icon_size": "26",
@@ -58,10 +58,12 @@ class webView(QDialog):
         self.show()
 
     def loadPage(self):
-        with open('help_docs/help_'+str(self.ind)+'.html', 'r') as f:
- 
-             html = f.read()
-             self.help.setHtml(html)
+        if (self.ind != 3):
+            with open('help_docs/help_'+str(self.ind)+'.html', 'r') as f:
+                html = f.read()
+                self.help.setHtml(html)
+        else:
+            self.help.setUrl(QUrl("https://turnroot.readthedocs.io/en/latest/")) 
 
     def category_change(self, s):
         for x in range(0, len(entries)):
