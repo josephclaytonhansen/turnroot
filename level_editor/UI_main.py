@@ -11,7 +11,7 @@ from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose
 from UI_updateJSON import updateJSON
-from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace, tileGridWorkspace, ClickableQLabel, toolsWorkspace, Tiles, TilesInfo
+from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace, tileGridWorkspace, ClickableQLabel, toolsWorkspace, Tiles, TilesInfo, LevelData, TileSets
 from UI_WebViewer import webView
 
 data = updateJSON()
@@ -28,7 +28,7 @@ app.setStyle(myStyle)
 screen = app.primaryScreen()
 size = screen.size()
 version = "0.0.0d"
-title = "Turnroot" +version+ "- Level Editor"
+title = "Turnroot" +version+ "- Level Editor - "
 icon_loc = ""
 
 warning_text = "This software was downloaded from an unverified source, and may be compromised. Please download an official release of Turnroot"
@@ -48,6 +48,10 @@ class main(QMainWindow):
         self.fullscreen = fullscreen
         self.zoom_level = zoom_level
         self.setFocusPolicy(Qt.ClickFocus)
+        self.level_data = LevelData().level_data
+        
+        self.path = None
+        self.tilesets = TileSets().tile_stack
 
         #set main layout to grid
         self.layout = QGridLayout()
@@ -258,6 +262,16 @@ class main(QMainWindow):
         self.aboutButton.triggered.connect(self.about)
         self.checkUpdatesButton = QAction("Check for updates", self)
         self.checkUpdatesButton.triggered.connect(self.checkUpdates)
+        self.saveAsButton = QAction("Save As", self)
+        self.saveAsButton.triggered.connect(self.saveFileDialog)
+        self.SaveButton = QAction("Save", self)
+        self.SaveButton.triggered.connect(self.Save)
+        self.OpenButton = QAction("Open", self)
+        self.OpenButton.triggered.connect(self.openFileDialog)
+        
+        fileMenu.addAction(self.OpenButton)
+        fileMenu.addAction(self.SaveButton)
+        fileMenu.addAction(self.saveAsButton)
         fileMenu.addAction(self.aboutButton)
         fileMenu.addAction(self.checkUpdatesButton)
         fileMenu.addAction(self.quitButton)
@@ -461,6 +475,60 @@ class main(QMainWindow):
     
     def removeEffect(self):
         pass
+    
+    #thanks to pythonspot for these functions
+    def openFileDialog(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","Turnroot Level File (*.trl)", options=options)
+        if fileName:
+            self.path = fileName
+            self.setWindowTitle(title+self.path)
+            with open(self.path, "r") as read_file:
+                level_data = json.load(read_file)
+                read_file.close()
+                tile_data = {}
+                for x in range(0, len(self.tilesets)):
+                    with open("tiles/"+self.tilesets[x]+".json", "r") as read_file:
+                        read_file.seek(0)
+                        tile_data[x] = json.load(read_file)
+                for g in range(1, self.tile_grid.count+1):
+                    self.tile_grid.squares[g].clear()
+                    if level_data[str(g)] != 'e':
+                        print(level_data[str(g)] )
+                        for x in range(0, len(tile_data) - 1):
+                            for k in range(0, 6):
+                                for y in range(0, 27):
+                                    tile = tile_data[x][str(k)][str(y)]
+                                    if (level_data[str(g)] ) == tile[0]:
+                                        image = QPixmap("tiles/"+self.tilesets[x]+".png")
+                                        self.tile_grid.squares[g].setPixmap(image.copy(y*32, k*32, 32, 32).scaled(int(64), int(64), Qt.KeepAspectRatio))
+                                        self.level_data[g] = level_data[str(g)]
+                                        with open(self.path, "w") as write_file:
+                                            json.dump(self.level_data, write_file)
+                                            write_file.close()
+                                        
+
+    
+    def saveFileDialog(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()","","Turnroot Level File (*.trl)", options=options)
+        if fileName:
+            self.path = fileName+".trl"
+            self.setWindowTitle(title+self.path)
+            with open(self.path, "w") as write_file:
+                json.dump(self.level_data, write_file)
+                write_file.close()
+    
+    def Save(self):
+        if self.path == None:
+            self.saveFileDialog()
+        else:
+            self.setWindowTitle(title+self.path)
+            with open(self.path, "w") as write_file:
+                json.dump(self.level_data, write_file)
+                write_file.close()
             
 window = main()
 window.show()

@@ -27,11 +27,22 @@ p_ttype_pix = None
 p_ttype_label = None
 current_stack = tile_set
 playout = None
+level_data = {}
+current_name = None
 
+class LevelData():
+    def __init__(self):
+        global level_data
+        self.level_data = level_data
+
+class TileSets():
+    def __init__(self):
+        self.tile_stack = tile_stack
 
 with open("tiles/"+tile_set+".json", "r") as read_file:
     read_file.seek(0)
     tile_data = json.load(read_file)
+    read_file.close()
     
 class workspaceContainer(QWidget):
         def __init__(self, workspace, layout):
@@ -101,6 +112,7 @@ class tileGridWorkspace(QWidget):
             for y in range(0,int(int(self.width/50)*4.4)):
                 
                 self.count = self.count + 1
+                level_data[self.count] = 'e'
                 self.checker = self.checker + 1
                 self.squares[self.count] = ClickableQLabel()
                 self.squares[self.count].gridIndex = self.count
@@ -119,11 +131,12 @@ class tileGridWorkspace(QWidget):
     
     def change_color(self):
         global current_tile
-        try:
-            self.sender().setPixmap(current_tile)
-        except:
-            pass
+        global level_data
+        global current_name
         
+        self.sender().setPixmap(current_tile)
+        level_data[self.sender().gridIndex] = current_name
+   
     def reset_color(self):
         self.sender().clear()
         
@@ -268,10 +281,13 @@ class Tiles(QWidget):
             self.layout.setContentsMargins(0,0,0,0)
             self.stacks[x].setLayout(self.layout)
             
+            self.count = 0
                 
             for x in range(0,int(self.pixmap.width()/32)):
                 for y in range(0,int(self.pixmap.height()/32)):
+                    self.count +=1
                     tiles[y][x] = ClickableQLabel()
+                    tiles[y][x].count = self.count
                     tiles[y][x].clicked.connect(self.assignCurrentTile)
 
                     tiles[y][x].setPixmap(self.pixmap.copy(x*32, y*32, 32, 32).scaled(int(64), int(64), Qt.KeepAspectRatio))
@@ -298,6 +314,8 @@ class Tiles(QWidget):
         global tiles
         global ttype_pix
         global p_ttype_label
+        global level_data
+        global current_name
         
         try:
             previous_sender.setStyleSheet("background-color: black;")
@@ -314,9 +332,5 @@ class Tiles(QWidget):
         ttype_label.setText(ttype)
         ttype_pix.setPixmap(ttype_img.scaled(int(64), int(64), Qt.KeepAspectRatio))
         self.sender().setStyleSheet("background-color: "+self.active_theme.window_background_color+";")
-
-        
-
-
 
         
