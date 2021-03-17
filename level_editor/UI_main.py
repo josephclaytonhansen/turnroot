@@ -307,6 +307,8 @@ class main(QMainWindow):
             self.scrollReset()
         elif e.key() == Qt.Key_Period:
             self.scrollFr()
+        elif e.key() == Qt.Key_P:
+            self.tiles_info.assignLastTile()
 
         if modifiers == Qt.ControlModifier:
             if e.key() == Qt.Key_Q:
@@ -480,7 +482,7 @@ class main(QMainWindow):
     def openFileDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","Turnroot Level File (*.trl)", options=options)
+        fileName, _ = QFileDialog.getOpenFileName(self,"Open", "","Turnroot Level File (*.trl)", options=options)
         if fileName:
             self.path = fileName
             self.setWindowTitle(title+self.path)
@@ -513,7 +515,7 @@ class main(QMainWindow):
     def saveFileDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()","","Turnroot Level File (*.trl)", options=options)
+        fileName, _ = QFileDialog.getSaveFileName(self,"Save","","Turnroot Level File (*.trl)", options=options)
         if fileName:
             self.path = fileName+".trl"
             self.setWindowTitle(title+self.path)

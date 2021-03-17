@@ -133,9 +133,11 @@ class tileGridWorkspace(QWidget):
         global current_tile
         global level_data
         global current_name
-        
-        self.sender().setPixmap(current_tile)
-        level_data[self.sender().gridIndex] = current_name
+        try:
+            self.sender().setPixmap(current_tile)
+            level_data[self.sender().gridIndex] = current_name
+        except:
+            pass
    
     def reset_color(self):
         self.sender().clear()
@@ -191,7 +193,7 @@ class TilesInfo(QTabWidget):
         ttype_pix = QLabel()
         p_ttype_label = ClickableQLabel()
         p_ttype_label.clicked.connect(self.assignLastTile)
-        pr_label = QLabel("  Previous tile\n  (click to select)  ")
+        pr_label = QLabel("  Previous tile\n  (click to select or press P)  ")
         
         p_ttype_label.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
         pr_label.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
