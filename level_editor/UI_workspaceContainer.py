@@ -138,8 +138,11 @@ class tileGridWorkspace(QWidget):
         global current_tile
         global level_data
         global current_name
-        self.sender().setPixmap(current_tile)
-        level_data[self.sender().gridIndex] = current_name
+        try:
+            self.sender().setPixmap(current_tile)
+            level_data[self.sender().gridIndex] = current_name
+        except:
+            pass
    
     def reset_color(self):
         self.sender().clear()
@@ -215,7 +218,7 @@ class TilesInfo(QTabWidget):
         ttype_pix = QLabel()
         p_ttype_label = ClickableQLabel()
         p_ttype_label.clicked.connect(self.assignLastTile)
-        pr_label = QLabel("  Previous tile\n  (click to select or press P)  ")
+        pr_label = QLabel("  Previous tile (click to select or press P)  ")
         
         ht = QLabel()
        
@@ -242,7 +245,7 @@ class TilesInfo(QTabWidget):
         ttype_label.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         ttype_pix.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         pr_label.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
-        ht.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        ht.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.wi = QWidget()
         self.wi.setLayout(self.layout)
         self.addTab(self.wi, "Selections")
@@ -272,12 +275,15 @@ class TilesInfo(QTabWidget):
         global p_ttype_label
         global ttype_pix
         global ttype
-        ttype = previous_sender.ttype
-        ttype_img = previous_sender.pixmap()
-        ttype_label.setText(ttype)
-        ttype_pix.setPixmap(ttype_img.scaled(int(64), int(64), Qt.KeepAspectRatio))
-        current_sender = previous_sender
-        current_tile = current_sender.pixmap()
+        try:
+            ttype = previous_sender.ttype
+            ttype_img = previous_sender.pixmap()
+            ttype_label.setText(ttype)
+            ttype_pix.setPixmap(ttype_img.scaled(int(64), int(64), Qt.KeepAspectRatio))
+            current_sender = previous_sender
+            current_tile = current_sender.pixmap()
+        except:
+            pass
         
 class Tiles(QWidget):
     def __init__(self):
