@@ -42,9 +42,9 @@ class main(QMainWindow):
         #create, title, and size mainwindow
         super().__init__()
         self.setWindowTitle(title)
-        self.setMinimumSize(QSize(int(size.width()/3), int(size.height()/3)))
+        self.setMinimumSize(QSize(int(size.width()/3), int(size.height()/2)))
         self.setMaximumSize(QSize(int(size.width()), int(size.height())))
-        self.resize(QSize(int(size.width()*.9), int(size.height()*.9)))
+        self.resize(QSize(int(size.width()*.98), int(size.height()*.9)))
         self.fullscreen = fullscreen
         self.zoom_level = zoom_level
         self.setFocusPolicy(Qt.ClickFocus)
