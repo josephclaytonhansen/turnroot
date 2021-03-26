@@ -28,7 +28,7 @@ app.setStyle(myStyle)
 screen = app.primaryScreen()
 size = screen.size()
 version = "0.0.0d"
-title = "Turnroot" +version+ "- Level Editor - "
+title = "Turnroot " +version+ "- Level Editor - "
 icon_loc = ""
 
 warning_text = "This software was downloaded from an unverified source, and may be compromised. Please download an official release of Turnroot"
@@ -346,7 +346,6 @@ class main(QMainWindow):
     def closeEvent(self, event):
         c = confirmAction(parent=self, s="quit the level editor")
         c.exec_()
-        print(c.return_confirm)
         if(c.return_confirm):
             event.accept()
             sys.exit()
@@ -497,8 +496,7 @@ class main(QMainWindow):
                 for g in range(1, self.tile_grid.count+1):
                     self.tile_grid.squares[g].clear()
                     if level_data[str(g)] != 'e':
-                        print(level_data[str(g)] )
-                        for x in range(0, len(tile_data) - 1):
+                        for x in range(0, len(tile_data)):
                             for k in range(0, 6):
                                 for y in range(0, 27):
                                     tile = tile_data[x][str(k)][str(y)]

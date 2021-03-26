@@ -133,11 +133,8 @@ class tileGridWorkspace(QWidget):
         global current_tile
         global level_data
         global current_name
-        try:
-            self.sender().setPixmap(current_tile)
-            level_data[self.sender().gridIndex] = current_name
-        except:
-            pass
+        self.sender().setPixmap(current_tile)
+        level_data[self.sender().gridIndex] = current_name
    
     def reset_color(self):
         self.sender().clear()
@@ -235,7 +232,6 @@ class TilesInfo(QTabWidget):
     def text_changed(self, s):
         global playout
         global tile_stack
-        print(tile_stack.index(s))
         playout.setCurrentIndex(tile_stack.index(s))
         pass
             
@@ -274,6 +270,10 @@ class Tiles(QWidget):
         for x in range(0, len(tile_stack)):
             self.stacks[x] = QWidget()
             self.pixmap = QPixmap("tiles/"+tile_stack[x]+".png")
+            with open("tiles/"+tile_stack[x]+".json", "r") as read_file:
+                read_file.seek(0)
+                tile_data = json.load(read_file)
+                read_file.close()
             
             self.label = QLabel()
             self.label.setPixmap(self.pixmap)
