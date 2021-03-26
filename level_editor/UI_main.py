@@ -109,42 +109,42 @@ class main(QMainWindow):
         
         #tools workspace
         self.z_in = ClickableQLabel()
-        self.z_in.setPixmap(QPixmap(("ui_icons/"+icon_string+"zoom_in.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.z_in.setPixmap(QPixmap(("ui_icons/"+icon_string+"zoom-in.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.z_in.setToolTip("Zoom in (I)")
         self.z_out = ClickableQLabel()
         self.z_out.setToolTip("Zoom out (O)")
-        self.z_out.setPixmap(QPixmap(("ui_icons/"+icon_string+"zoom_out.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.z_out.setPixmap(QPixmap(("ui_icons/"+icon_string+"zoom-out.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.goto_00 = ClickableQLabel()
         self.goto_00.setToolTip("Go to top left (L)")
-        self.goto_00.setPixmap(QPixmap(("ui_icons/"+icon_string+"goto_00.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.goto_00.setPixmap(QPixmap(("ui_icons/"+icon_string+"goto-00.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.z_in.clicked.connect(self.zoom_in)
         self.z_out.clicked.connect(self.zoom_out)
         self.goto_00.clicked.connect(self.scrollReset)
         self.goto_fr = ClickableQLabel()
         self.goto_fr.setToolTip("Go to bottom right (.)")
-        self.goto_fr.setPixmap(QPixmap(("ui_icons/"+icon_string+"goto_fr.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
+        self.goto_fr.setPixmap(QPixmap(("ui_icons/"+icon_string+"goto-fr.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
         self.goto_fr.clicked.connect(self.scrollFr)
 
         
         self.remove_above = ClickableQLabel()
         self.remove_above.setToolTip("Remove above (Right Click)")
-        self.remove_above.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove_above.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.remove_above.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove-above.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.remove_above.clicked.connect(self.removeAbove)
 
         
         self.remove_below = ClickableQLabel()
         self.remove_below.setToolTip("Remove below (Shift+Right Click)")
-        self.remove_below.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove_below.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.remove_below.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove-below.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.remove_below.clicked.connect(self.removeBelow)
         
         self.remove_effect = ClickableQLabel()
         self.remove_effect.setToolTip("Remove tile effects (Alt+Right Click)")
-        self.remove_effect.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove_effect.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.remove_effect.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove-effect.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.remove_effect.clicked.connect(self.removeEffect)
         
         self.random_decoration_add = ClickableQLabel()
         self.random_decoration_add.setToolTip("Add random decoration (Shift+Left Click)")
-        self.random_decoration_add.setPixmap(QPixmap(("ui_icons/"+icon_string+"random_decoration_add.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
+        self.random_decoration_add.setPixmap(QPixmap(("ui_icons/"+icon_string+"random-decoration-add.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
         self.random_decoration_add.clicked.connect(self.randomDecorationAdd)
         
         self.tools = toolsWorkspace("tools", data["active_layout"], [self.z_in, self.z_out, self.goto_00, self.goto_fr, self.remove_above, self.remove_below, self.remove_effect, self.random_decoration_add])
