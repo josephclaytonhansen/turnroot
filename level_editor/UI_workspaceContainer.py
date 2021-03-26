@@ -29,6 +29,9 @@ current_stack = tile_set
 playout = None
 level_data = {}
 current_name = None
+highlighted_tile = None
+ht = None
+lpt = None
 
 class LevelData():
     def __init__(self):
@@ -103,6 +106,7 @@ class tileGridWorkspace(QWidget):
         self.layout.setContentsMargins(0,0,0,0)
         self.width = self.geometry().width()
         self.height = self.geometry().height()
+        
         self.setMinimumWidth(self.width)
         self.setMaximumHeight(self.height)
         self.ratio = self.width/self.height
@@ -114,7 +118,8 @@ class tileGridWorkspace(QWidget):
                 self.count = self.count + 1
                 level_data[self.count] = 'e'
                 self.checker = self.checker + 1
-                self.squares[self.count] = ClickableQLabel()
+                self.squares[self.count] = ClickableQLabel_t()
+                self.squares[self.count].setMouseTracking(True)
                 self.squares[self.count].gridIndex = self.count
                 self.squares[self.count].setScaledContents( True )
                 self.squares[self.count].clicked.connect(self.change_color)
@@ -124,8 +129,8 @@ class tileGridWorkspace(QWidget):
                 if self.checker % 2 == 0:
                     self.squares[self.count].setStyleSheet("color: white; background-color: black;")
                 else:
-                    self.squares[self.count].setStyleSheet("color: white; background-color: #111111;")
-                if x % 5 == 0 and y % 5 == 0:
+                    self.squares[self.count].setStyleSheet("color: white; background-color: #222222;")
+                if x % 3 == 0 and y % 3 == 0:
                     self.squares[self.count].setText(str(self.squares[self.count].gridIndex))
         self.setLayout(self.layout)
     
@@ -138,9 +143,27 @@ class tileGridWorkspace(QWidget):
    
     def reset_color(self):
         self.sender().clear()
-        
+    
+class ClickableQLabel_t(QLabel):
+    clicked=pyqtSignal()
+    global highlighted_tile
+    right_clicked=pyqtSignal()
+    def mousePressEvent(self, ev):
+        if ev.button() == Qt.LeftButton:
+            global ht
+            ht.setText("Current grid space: "+str(highlighted_tile))
+            self.clicked.emit()
+        elif ev.button() == Qt.RightButton:
+            self.right_clicked.emit()
+            
+    def mouseMoveEvent(self, ev):
+        highlighted_tile=self.gridIndex
+        global ht
+        ht.setText("Current grid space: "+str(highlighted_tile))
+
 class ClickableQLabel(QLabel):
     clicked=pyqtSignal()
+    global highlighted_tile
     right_clicked=pyqtSignal()
     QLabel.gridIndex = 0
     def mousePressEvent(self, ev):
@@ -185,17 +208,22 @@ class TilesInfo(QTabWidget):
         global p_ttype_pix
         global ttype_name
         global tile_stack
-        
+        global highlighted_tile
+        global ht
+       
         ttype_label = QLabel(ttype)
         ttype_pix = QLabel()
         p_ttype_label = ClickableQLabel()
         p_ttype_label.clicked.connect(self.assignLastTile)
         pr_label = QLabel("  Previous tile\n  (click to select or press P)  ")
         
+        ht = QLabel()
+       
         p_ttype_label.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
         pr_label.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
         ttype_label.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
         ttype_pix.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+        ht.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
 
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
@@ -204,6 +232,7 @@ class TilesInfo(QTabWidget):
         self.layout.addWidget(ttype_label)
         self.layout.addWidget(pr_label)
         self.layout.addWidget(p_ttype_label)
+        self.layout.addWidget(ht)
         
         ttype_label.setMaximumHeight(40)
         pr_label.setMaximumHeight(40)
@@ -213,6 +242,7 @@ class TilesInfo(QTabWidget):
         ttype_label.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         ttype_pix.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         pr_label.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        ht.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
         self.wi = QWidget()
         self.wi.setLayout(self.layout)
         self.addTab(self.wi, "Selections")
@@ -248,8 +278,6 @@ class TilesInfo(QTabWidget):
         ttype_pix.setPixmap(ttype_img.scaled(int(64), int(64), Qt.KeepAspectRatio))
         current_sender = previous_sender
         current_tile = current_sender.pixmap()
-
-
         
 class Tiles(QWidget):
     def __init__(self):
@@ -288,7 +316,7 @@ class Tiles(QWidget):
             for x in range(0,int(self.pixmap.width()/32)):
                 for y in range(0,int(self.pixmap.height()/32)):
                     self.count +=1
-                    tiles[y][x] = ClickableQLabel()
+                    tiles[y][x] = ClickableQLabel_t()
                     tiles[y][x].count = self.count
                     tiles[y][x].clicked.connect(self.assignCurrentTile)
 
@@ -308,7 +336,6 @@ class Tiles(QWidget):
         playout.setCurrentIndex(0)
     
     def assignCurrentTile(self):
-        
         global current_tile
         global previous_sender
         global current_sender
@@ -318,7 +345,7 @@ class Tiles(QWidget):
         global p_ttype_label
         global level_data
         global current_name
-        
+     
         try:
             previous_sender.setStyleSheet("background-color: black;")
             p_ttype_label.setPixmap(previous_sender.pixmap())
