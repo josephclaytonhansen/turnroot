@@ -33,7 +33,7 @@ current_name = None
 highlighted_tile = None
 ht = None
 lpt = None
-task_categories = ["Tiles", "Tile Effects"]
+task_categories = ["Tiles", "Tile Effects", "Level Events"]
 
 class LevelData():
     def __init__(self):
@@ -393,8 +393,27 @@ class TaskSelection(QWidget):
             self.tb_layout = QGridLayout()
 
             self.tasks = [taskInList("Fill Area with Tile", 0),
-                          taskInList("Replace Tile", 0),
-                          taskInList("Random Decorations Collection", 0)]
+                          taskInList("Replace Tile with Tile", 0),
+                          taskInList("Random Decorations Collection", 0),
+                          taskInList("Blend Water Depth Edges", 0),
+                          taskInList("+ Trap", 1),
+                          taskInList("+ Fire", 1),
+                          taskInList("+ Door", 1),
+                          taskInList("+ Chest", 1),
+                          taskInList("+ Warp", 1),
+                          taskInList("+ Switch", 1),
+                          taskInList("+ Heal", 1),
+                          taskInList("+ Emplacement", 1),
+                          taskInList("Set Start Tiles", 2),
+                          taskInList("Level Turn Options", 2),
+                          taskInList("Win/Lose Conditions", 2),
+                          taskInList("Add Event Trigger", 2),
+                          taskInList("Spawn Point", 2),
+                          taskInList("Reach Point", 2),
+                          taskInList("Defend Point", 2),
+                          taskInList("Seize Point", 2),
+                          taskInList("Fog and Mist", 2),
+                          ]
             
             self.task_strings = []
             self.search = QComboBox()
@@ -418,29 +437,34 @@ class TaskSelection(QWidget):
             
             self.sh_0 = QCheckBox(task_categories[0])
             self.sh_1 = QCheckBox(task_categories[1])
+            self.sh_2 = QCheckBox(task_categories[2])
             
             self.sh_0.setCheckState(Qt.Checked)
             self.sh_1.setCheckState(Qt.Checked)
+            self.sh_2.setCheckState(Qt.Checked)
             
             self.sh_0.stateChanged.connect(self.toggleCategoryTiles)
             self.sh_1.stateChanged.connect(self.toggleCategoryTilesEffects)
+            self.sh_2.stateChanged.connect(self.toggleCategoryLevelEvents)
             
             self.search.setMinimumHeight(data["font_size"] * 2.5)
-            self.search.setStyleSheet("background-color: "+self.active_theme.list_background_color)
+            self.search.setStyleSheet("background-color: "+self.active_theme.list_background_color+"; selection-background-color:"+self.active_theme.window_background_color)
             self.search_label.setMaximumHeight(data["font_size"] * 1.5)
             self.filter.setMaximumHeight(data["font_size"] * 1.5)
             self.sh_0.setMaximumHeight(data["font_size"] * 1.2)
             self.sh_1.setMaximumHeight(data["font_size"] * 1.2)
 
-            self.tb_layout.addWidget(self.search_label, 0, 0)
-            self.tb_layout.addWidget(self.search, 1, 0,1,0)
-            self.tb_layout.addWidget(self.filter, 2,0)
-            self.tb_layout.addWidget(self.sh_0, 3,0)
-            self.tb_layout.addWidget(self.sh_1, 3,1)
+            self.rows = 0
+            self.tb_layout.addWidget(self.search_label, self.rows, 0)
+            self.tb_layout.addWidget(self.search, self.rows+1, 0,1,0)
+            self.tb_layout.addWidget(self.filter, self.rows+2,0)
+            self.tb_layout.addWidget(self.sh_0, self.rows+3,0)
+            self.tb_layout.addWidget(self.sh_1, self.rows+3,1)
+            self.tb_layout.addWidget(self.sh_2, self.rows+4,0)
                     
             self.task_buttons = {}
             self.ccolumn = 1
-            self.crow = 4
+            self.crow = self.rows+5
             for x in range(0, len(self.tasks)):
                 self.task_buttons[x] = QPushButton(self.tasks[x].name)
                 self.tb_layout.addWidget(self.task_buttons[x], x+self.crow, self.ccolumn)
@@ -448,7 +472,7 @@ class TaskSelection(QWidget):
                 if self.ccolumn == 2:
                     self.ccolumn = 0
                     self.crow -=1
-                if self.crow % 2 == 0:
+                if task_categories.index(self.tasks[x].category) % 2 == 0:
                     self.task_buttons[x].setStyleSheet("background-color:"+self.active_theme.button_alt_color+"; color:"+self.active_theme.button_alt_text_color)
 
             self.tasks_box.setLayout(self.tb_layout)
@@ -474,5 +498,16 @@ class TaskSelection(QWidget):
             for x in range(0, len(self.tasks)):
                 if self.tasks[x].category == "Tile Effects":
                     self.task_buttons[x].show()
+    
+    def toggleCategoryLevelEvents(self, s):
+        if s==0:
+            for x in range(0, len(self.tasks)):
+                if self.tasks[x].category == "Level Events":
+                    self.task_buttons[x].hide()
+        else:
+            for x in range(0, len(self.tasks)):
+                if self.tasks[x].category == "Level Events":
+                    self.task_buttons[x].show()
+        
                 
                 

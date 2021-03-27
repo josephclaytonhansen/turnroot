@@ -397,13 +397,19 @@ class main(QMainWindow):
         
     def show_tasks(self):
         self.tasks_scroll.setVisible(True)
+        self.task_settings.setVisible(True)
         self.tasks_hide.setVisible(True)
         self.tasks_show.setVisible(False)
+        self.tasks_settings_hide.setVisible(True)
+        self.tasks_settings_show.setVisible(False)
     
     def hide_tasks(self):
         self.tasks_scroll.setVisible(False)
+        self.task_settings.setVisible(False)
         self.tasks_hide.setVisible(False)
         self.tasks_show.setVisible(True)
+        self.tasks_settings_hide.setVisible(False)
+        self.tasks_settings_show.setVisible(True)
         
     def show_tasks_settings(self):
         self.task_settings.setVisible(True)
