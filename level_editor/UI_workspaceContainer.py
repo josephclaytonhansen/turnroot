@@ -33,6 +33,7 @@ current_name = None
 highlighted_tile = None
 ht = None
 lpt = None
+task_categories = ["Tiles", "Tile Effects"]
 
 class LevelData():
     def __init__(self):
@@ -371,7 +372,8 @@ class Tiles(QWidget):
 
 class taskInList(object):
     def __init__(self, name, category):
-        self.task_categories = ["Tiles", "Tile Effects"]
+        global task_categories
+        self.task_categories = task_categories
         self.name = name
         self.category = self.task_categories[category]
         
@@ -382,7 +384,7 @@ class TaskSelection(QWidget):
             data = updateJSON()
             self.active_theme = getattr(UI_colorTheme, data["active_theme"])
             self.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
-            
+   
             self.layout = QVBoxLayout()
             self.layout.setContentsMargins(0,0,0,0)
             self.layout.setSpacing(0)
@@ -412,13 +414,20 @@ class TaskSelection(QWidget):
                 
             self.filter = QLabel("Filter tasks:")
             self.search_label = QLabel("Choose task from dropdown")
-            self.sh_0 = QCheckBox("Tiles")
-            self.sh_1 = QCheckBox("Tile Effects")
+            
+            global task_categories
+            
+            self.sh_0 = QCheckBox(task_categories[0])
+            self.sh_1 = QCheckBox(task_categories[1])
             
             self.sh_0.setCheckState(Qt.Checked)
             self.sh_1.setCheckState(Qt.Checked)
             
+            self.sh_0.stateChanged.connect(self.toggleCategoryTiles)
+            self.sh_1.stateChanged.connect(self.toggleCategoryTilesEffects)
+            
             self.search.setMinimumHeight(data["font_size"] * 2.5)
+            self.search.setStyleSheet("background-color: "+self.active_theme.list_background_color)
             self.search_label.setMaximumHeight(data["font_size"] * 1.5)
             self.filter.setMaximumHeight(data["font_size"] * 1.5)
             self.sh_0.setMaximumHeight(data["font_size"] * 1.2)
@@ -436,12 +445,35 @@ class TaskSelection(QWidget):
             for x in range(0, len(self.tasks)):
                 self.task_buttons[x] = QPushButton(self.tasks[x].name)
                 self.tb_layout.addWidget(self.task_buttons[x], x+self.crow, self.ccolumn)
-                print(x+self.crow,self.ccolumn)
                 self.ccolumn += 1
                 if self.ccolumn == 2:
                     self.ccolumn = 0
                     self.crow -=1
+                if self.crow % 2 == 0:
+                    self.task_buttons[x].setStyleSheet("background-color:"+self.active_theme.button_alt_color+"; color:"+self.active_theme.button_alt_text_color)
 
             self.tasks_box.setLayout(self.tb_layout)
             self.layout.addWidget(self.tasks_box)
             self.setLayout(self.layout)
+        
+    def toggleCategoryTiles(self, s):
+        if s==0:
+            for x in range(0, len(self.tasks)):
+                if self.tasks[x].category == "Tiles":
+                    self.task_buttons[x].hide()
+        else:
+            for x in range(0, len(self.tasks)):
+                if self.tasks[x].category == "Tiles":
+                    self.task_buttons[x].show()
+    
+    def toggleCategoryTilesEffects(self, s):
+        if s==0:
+            for x in range(0, len(self.tasks)):
+                if self.tasks[x].category == "Tile Effects":
+                    self.task_buttons[x].hide()
+        else:
+            for x in range(0, len(self.tasks)):
+                if self.tasks[x].category == "Tile Effects":
+                    self.task_buttons[x].show()
+                
+                
