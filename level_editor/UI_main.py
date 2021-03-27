@@ -11,7 +11,17 @@ from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose
 from UI_updateJSON import updateJSON
-from UI_workspaceContainer import workspaceContainer, showWorkspace, hideWorkspace, tileGridWorkspace, ClickableQLabel, toolsWorkspace, Tiles, TilesInfo, LevelData, TileSets
+from UI_workspaceContainer import (workspaceContainer,
+                                   showWorkspace,
+                                   hideWorkspace,
+                                   tileGridWorkspace,
+                                   ClickableQLabel,
+                                   toolsWorkspace,
+                                   Tiles,
+                                   TilesInfo,
+                                   LevelData,
+                                   TileSets,
+                                   TaskSelection)
 from UI_WebViewer import webView
 
 data = updateJSON()
@@ -82,6 +92,7 @@ class main(QMainWindow):
         
         #add workspaces
         self.rte = workspaceContainer("rte", data["active_layout"])
+        self.rte.setMinimumWidth(size.width()/4)
         
         self.tiles = Tiles()
         self.tiles_info = TilesInfo()
@@ -92,7 +103,13 @@ class main(QMainWindow):
         self.tscroll.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOn )
         self.tscroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOn )
         
-        self.tasks = workspaceContainer("tasks", data["active_layout"])
+        self.tasks = TaskSelection()
+        self.tasks_scroll = QScrollArea()
+        self.tasks_scroll.setMaximumWidth((size.width()/3))
+        self.tasks_scroll.setWidget(self.tasks)
+        self.tasks_scroll.setWidgetResizable(True)
+        self.tasks_scroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOn )
+        
         self.task_settings = workspaceContainer("task_settings", data["active_layout"])
         
         self.tile_grid = tileGridWorkspace()
@@ -125,13 +142,11 @@ class main(QMainWindow):
         self.goto_fr.setPixmap(QPixmap(("ui_icons/"+icon_string+"goto-fr.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
         self.goto_fr.clicked.connect(self.scrollFr)
 
-        
         self.remove_above = ClickableQLabel()
         self.remove_above.setToolTip("Remove above (Right Click)")
         self.remove_above.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove-above.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.remove_above.clicked.connect(self.removeAbove)
 
-        
         self.remove_below = ClickableQLabel()
         self.remove_below.setToolTip("Remove below (Shift+Right Click)")
         self.remove_below.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove-below.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
@@ -154,7 +169,7 @@ class main(QMainWindow):
         self.layout.addWidget(self.rte, 17, 0, 9, 14)
         self.layout.addWidget(self.tscroll, 20, 14, 6, 23)
         self.layout.addWidget(self.tiles_info, 20, 37, 6, 3)
-        self.layout.addWidget(self.tasks, 14, 40, 12, 8)
+        self.layout.addWidget(self.tasks_scroll, 14, 40, 12, 8)
         self.layout.addWidget(self.task_settings, 4, 40, 10, 8)
         self.layout.addWidget(self.tools, 2, 0, 13, 1)
         
@@ -381,12 +396,12 @@ class main(QMainWindow):
         self.tiles_show.setVisible(True)
         
     def show_tasks(self):
-        self.tasks.setVisible(True)
+        self.tasks_scroll.setVisible(True)
         self.tasks_hide.setVisible(True)
         self.tasks_show.setVisible(False)
     
     def hide_tasks(self):
-        self.tasks.setVisible(False)
+        self.tasks_scroll.setVisible(False)
         self.tasks_hide.setVisible(False)
         self.tasks_show.setVisible(True)
         

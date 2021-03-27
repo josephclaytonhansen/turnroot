@@ -12,6 +12,7 @@ import UI_colorTheme
 from UI_color_test_widget import Color
 import json
 import math
+import re
 
 current_tile = None
 previous_sender = None
@@ -218,7 +219,7 @@ class TilesInfo(QTabWidget):
         ttype_pix = QLabel()
         p_ttype_label = ClickableQLabel()
         p_ttype_label.clicked.connect(self.assignLastTile)
-        pr_label = QLabel("  Previous tile (click to select or press P)  ")
+        pr_label = QLabel("  Previous tile (click to select)  ")
         
         ht = QLabel()
        
@@ -368,4 +369,79 @@ class Tiles(QWidget):
         ttype_pix.setPixmap(ttype_img.scaled(int(64), int(64), Qt.KeepAspectRatio))
         self.sender().setStyleSheet("background-color: "+self.active_theme.window_background_color+";")
 
+class taskInList(object):
+    def __init__(self, name, category):
+        self.task_categories = ["Tiles", "Tile Effects"]
+        self.name = name
+        self.category = self.task_categories[category]
         
+class TaskSelection(QWidget):
+    def __init__(self):
+            super().__init__()
+            self.setAutoFillBackground(True)
+            data = updateJSON()
+            self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+            self.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+            
+            self.layout = QVBoxLayout()
+            self.layout.setContentsMargins(0,0,0,0)
+            self.layout.setSpacing(0)
+            
+            self.tasks_box = QWidget()
+            self.tb_layout = QGridLayout()
+
+            self.tasks = [taskInList("Fill Area with Tile", 0), taskInList("Replace Tile", 0), taskInList("Random Decorations Collection", 0),
+                          taskInList("Random Decorations Collection", 0), taskInList("Random Decorations Collection", 0), taskInList("Random Decorations Collection", 0),
+                          taskInList("Random Decorations Collection", 0), taskInList("Random Decorations Collection", 0), taskInList("Random Decorations Collection", 0),
+                          taskInList("Random Decorations Collection", 0), taskInList("Random Decorations Collection", 0), taskInList("Random Decorations Collection", 0)]
+            
+            self.task_strings = []
+            self.search = QComboBox()
+
+            for x in range(0, len(self.tasks)):
+                if len(self.tasks[x].name) > 16:
+                    self.space_count = 0
+                    self.s = self.tasks[x].name
+                    for m in re.finditer(' ', self.tasks[x].name):
+                        self.space_count += 1
+                        if self.space_count % 2 == 0:
+                            self.s = self.s[:m.start()] + "\n" + self.s[m.start() + 1:]
+                            self.tasks[x].name = self.s
+                self.task_strings.append(self.tasks[x].name)
+            self.search.addItems(self.task_strings)
+                
+            self.filter = QLabel("Filter tasks:")
+            self.search_label = QLabel("Choose task from dropdown")
+            self.sh_0 = QCheckBox("Tiles")
+            self.sh_1 = QCheckBox("Tile Effects")
+            
+            self.sh_0.setCheckState(Qt.Checked)
+            self.sh_1.setCheckState(Qt.Checked)
+            
+            self.search.setMinimumHeight(data["font_size"] * 2.5)
+            self.search_label.setMaximumHeight(data["font_size"] * 1.5)
+            self.filter.setMaximumHeight(data["font_size"] * 1.5)
+            self.sh_0.setMaximumHeight(data["font_size"] * 1.2)
+            self.sh_1.setMaximumHeight(data["font_size"] * 1.2)
+
+            self.tb_layout.addWidget(self.search_label, 0, 0)
+            self.tb_layout.addWidget(self.search, 1, 0,1,0)
+            self.tb_layout.addWidget(self.filter, 2,0)
+            self.tb_layout.addWidget(self.sh_0, 3,0)
+            self.tb_layout.addWidget(self.sh_1, 3,1)
+                    
+            self.task_buttons = {}
+            self.ccolumn = 1
+            self.crow = 4
+            for x in range(0, len(self.tasks)):
+                self.task_buttons[x] = QPushButton(self.tasks[x].name)
+                self.tb_layout.addWidget(self.task_buttons[x], x+self.crow, self.ccolumn)
+                print(x+self.crow,self.ccolumn)
+                self.ccolumn += 1
+                if self.ccolumn == 2:
+                    self.ccolumn = 0
+                    self.crow -=1
+
+            self.tasks_box.setLayout(self.tb_layout)
+            self.layout.addWidget(self.tasks_box)
+            self.setLayout(self.layout)
