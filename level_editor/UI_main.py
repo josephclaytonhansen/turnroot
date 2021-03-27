@@ -522,9 +522,7 @@ class main(QMainWindow):
                                         with open(self.path, "w") as write_file:
                                             json.dump(self.level_data, write_file)
                                             write_file.close()
-                                        
-
-    
+   
     def saveFileDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog

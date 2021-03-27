@@ -216,7 +216,7 @@ class TilesInfo(QTabWidget):
         global highlighted_tile
         global ht
        
-        ttype_label = QLabel(ttype)
+        ttype_label = QLabel("tile type")
         ttype_pix = QLabel()
         p_ttype_label = ClickableQLabel()
         p_ttype_label.clicked.connect(self.assignLastTile)
@@ -392,10 +392,9 @@ class TaskSelection(QWidget):
             self.tasks_box = QWidget()
             self.tb_layout = QGridLayout()
 
-            self.tasks = [taskInList("Fill Area with Tile", 0), taskInList("Replace Tile", 0), taskInList("Random Decorations Collection", 0),
-                          taskInList("Random Decorations Collection", 0), taskInList("Random Decorations Collection", 0), taskInList("Random Decorations Collection", 0),
-                          taskInList("Random Decorations Collection", 0), taskInList("Random Decorations Collection", 0), taskInList("Random Decorations Collection", 0),
-                          taskInList("Random Decorations Collection", 0), taskInList("Random Decorations Collection", 0), taskInList("Random Decorations Collection", 0)]
+            self.tasks = [taskInList("Fill Area with Tile", 0),
+                          taskInList("Replace Tile", 0),
+                          taskInList("Random Decorations Collection", 0)]
             
             self.task_strings = []
             self.search = QComboBox()
