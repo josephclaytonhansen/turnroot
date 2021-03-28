@@ -1,13 +1,10 @@
-import sys
-import os
+import sys, os, json
 from PyQt5.QtCore import QSize, Qt, pyqtSignal
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
 import qtmodern.styles
 import qtmodern.windows
-import json
 from UI_preferencesDialog import PreferencesDialog
-from tasks_backend import getFillSquares
 from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose, addObject

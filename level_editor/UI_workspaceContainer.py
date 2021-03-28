@@ -1,5 +1,3 @@
-import sys
-import os
 from PyQt5.QtCore import QSize, Qt, pyqtSignal, QObject
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor
@@ -10,9 +8,8 @@ from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction
 import UI_colorTheme
 from UI_color_test_widget import Color
-import json
-import math
-import re
+from tasks_backend import getFillSquares
+import json, math, re, sys, os
 
 current_tile = None
 previous_sender = None
