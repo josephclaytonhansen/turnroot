@@ -530,9 +530,4 @@ class TaskSelection(QWidget):
         self.context.addAction(QAction(task_history[0], self))
         self.context.addAction(QAction(task_history[1], self))
         self.context.addAction(QAction(task_history[2], self))
-        self.context.exec_(self.mapToGlobal(pos))
-
-
-        
-                
-                
+        self.context.exec_(self.mapToGlobal(pos))         
