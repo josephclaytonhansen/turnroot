@@ -11,13 +11,19 @@ from UI_color_test_widget import Color
 from tasks_backend import getFillSquares
 import json, math, re, sys, os
 
+#don't edit these
 current_tile = None
 previous_sender = None
 current_sender = None
 tiles = {0:{}, 1:{}, 2:{}, 3:{}, 4:{}, 5:{}, 6:{}}
 ttype = ""
-tile_set = "simple_grasslands_jungle"
+
+#these can be edited
 tile_stack = ["simple_grasslands_jungle", "simple_grasslands", "simple_grasslands_jungle_walls"]
+task_categories = ["Tiles", "Tile Effects", "Level Events"]
+
+#don't edit these
+tile_set = tile_stack[0]
 ttype_label = None
 ttype_pix = None
 ttype_img = None
@@ -30,7 +36,6 @@ current_name = None
 highlighted_tile = None
 ht = None
 lpt = None
-task_categories = ["Tiles", "Tile Effects", "Level Events"]
 task_history = [None,None,None,None]
 current_task = None
 tile_preview_fwt = None
@@ -569,11 +574,9 @@ class TaskSettings(QWidget):
             data = updateJSON()
             self.active_theme = getattr(UI_colorTheme, data["active_theme"])
             self.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
-            
             self.stacks = []
             
             #task: Fill Area with Tiles
-            
             self.fill_with_tiles_widget = QWidget()
             self.fill_with_tiles_widget.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
             self.fill_with_tiles_widget_layout = QVBoxLayout()
@@ -615,6 +618,7 @@ class TaskSettings(QWidget):
             #task: Replace Tile With Tile
             self.replace_tile_with_tile_widget = QWidget()
             
+            #add stacks
             self.fill_with_tiles_widget.setLayout(self.fill_with_tiles_widget_layout)
             self.stacks.append(self.fill_with_tiles_widget)
             self.stacks.append(self.replace_tile_with_tile_widget)
