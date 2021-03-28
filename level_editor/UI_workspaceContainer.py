@@ -485,7 +485,6 @@ class TaskSelection(QWidget):
                 if task_categories.index(self.tasks[x].category) % 2 == 0:
                     self.task_buttons[x].setStyleSheet("background-color:"+self.active_theme.button_alt_color+"; color:"+self.active_theme.button_alt_text_color)
             
-            #task handlers
             self.search.currentTextChanged.connect(self.TaskFromComboBox)
             
             self.tasks_box.setLayout(self.tb_layout)
@@ -533,22 +532,16 @@ class TaskSelection(QWidget):
         self.context.addAction(QAction(task_history[1], self))
         self.context.addAction(QAction(task_history[2], self))
         self.context.exec_(self.mapToGlobal(pos))
-    
-    def FillAreaWithTile(self):
-        global current_task
-        current_task = self.tasks[0]
-    
+
     def TaskFromButton(self):
         global current_task
         s = self.sender().text()
         for task in range(0, len(self.tasks)):
             if s == self.tasks[task].name:
                 current_task = self.tasks[task].name
-        print(current_task)
     
     def TaskFromComboBox(self,s):
         global current_task
         for task in range(0, len(self.tasks)):
             if s == self.tasks[task].name:
                 current_task = self.tasks[task].name
-        print(current_task)
