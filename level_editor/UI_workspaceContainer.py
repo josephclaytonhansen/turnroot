@@ -396,14 +396,14 @@ class TaskSelection(QWidget):
                           taskInList("Replace Tile with Tile", 0),
                           taskInList("Random Decorations Collection", 0),
                           taskInList("Blend Water Depth Edges", 0),
-                          taskInList("+ Trap", 1),
-                          taskInList("+ Fire", 1),
-                          taskInList("+ Door", 1),
-                          taskInList("+ Chest", 1),
-                          taskInList("+ Warp", 1),
-                          taskInList("+ Switch", 1),
-                          taskInList("+ Heal", 1),
-                          taskInList("+ Emplacement", 1),
+                          taskInList("Add Trap", 1),
+                          taskInList("Add Fire", 1),
+                          taskInList("Add Door", 1),
+                          taskInList("Add Chest", 1),
+                          taskInList("Add Warp", 1),
+                          taskInList("Add Switch", 1),
+                          taskInList("Add Heal", 1),
+                          taskInList("Add Emplacement", 1),
                           taskInList("Set Start Tiles", 2),
                           taskInList("Level Turn Options", 2),
                           taskInList("Win/Lose Conditions", 2),
@@ -432,6 +432,7 @@ class TaskSelection(QWidget):
                 
             self.filter = QLabel("Filter tasks:")
             self.search_label = QLabel("Choose task from dropdown")
+            
             
             global task_categories
             

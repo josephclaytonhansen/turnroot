@@ -9,7 +9,7 @@ import json
 from UI_preferencesDialog import PreferencesDialog
 from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
-from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose
+from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose, addObject
 from UI_updateJSON import updateJSON
 from UI_workspaceContainer import (workspaceContainer,
                                    showWorkspace,
@@ -143,12 +143,12 @@ class main(QMainWindow):
         self.goto_fr.clicked.connect(self.scrollFr)
 
         self.remove_above = ClickableQLabel()
-        self.remove_above.setToolTip("Remove above (Right Click)")
+        self.remove_above.setToolTip("Remove tile (Right Click)")
         self.remove_above.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove-above.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.remove_above.clicked.connect(self.removeAbove)
 
         self.remove_below = ClickableQLabel()
-        self.remove_below.setToolTip("Remove below (Shift+Right Click)")
+        self.remove_below.setToolTip("Remove decoration (Shift+Right Click)")
         self.remove_below.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove-below.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.remove_below.clicked.connect(self.removeBelow)
         
@@ -324,6 +324,9 @@ class main(QMainWindow):
             self.scrollFr()
         elif e.key() == Qt.Key_P:
             self.tiles_info.assignLastTile()
+        elif e.key() == Qt.Key_T:
+            t = addObject(parent=self)
+            t.exec_()
 
         if modifiers == Qt.ControlModifier:
             if e.key() == Qt.Key_Q:

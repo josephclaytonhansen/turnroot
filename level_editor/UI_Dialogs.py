@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
+from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor
 import json
 from UI_updateJSON import updateJSON
 import UI_colorTheme
@@ -106,5 +106,37 @@ class infoClose(QDialog):
         self.return_confirm = True
         self.close()
      
+class addObject(QDialog):
+    def __init__(self, parent=None):
+        data = updateJSON()
+        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        
+        self.setWindowFlags(Qt.Popup)
+        
+        self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QHBoxLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.addWidget(QLabel("Add object: "))
+        
+        self.add_options = ["Enemy Unit", "Ally Unit", "Door", "Breakable Wall", "Chest", "Emplacement", "Switch", "Trap", "Heal", "Warp", "Fortress"]
+        self.add_dd = QComboBox()
+        self.add_dd.setStyleSheet("background-color: "+self.active_theme.list_background_color+"; selection-background-color:"+self.active_theme.window_background_color)
 
+        self.add_dd.addItems(self.add_options)
+        self.layout.addWidget(self.add_dd)
+        self.setLayout(self.layout)
+        
+        self.show()
+        
+    def showEvent(self, event):
+        geom = self.frameGeometry()
+        geom.moveCenter(QCursor.pos())
+        self.setGeometry(geom)
+        self.position = self.pos()
+        self.move(self.position.x()+0,self.position.y()+48)
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+        super().showEvent(event)
+        
         
