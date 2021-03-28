@@ -36,6 +36,7 @@ current_task = None
 tile_preview_fwt = None
 tile_ratio = 0
 global_squares = {}
+global_open_settings = 0
 
 class LevelData():
     def __init__(self):
@@ -545,17 +546,21 @@ class TaskSelection(QWidget):
         self.context.exec_(self.mapToGlobal(pos))
 
     def TaskFromButton(self):
-        global current_task
+        global current_task, global_open_settings
         s = self.sender().text()
         for task in range(0, len(self.tasks)):
             if s == self.tasks[task].name:
                 current_task = self.tasks[task]
+                current_task = self.tasks.index(current_task)
+                global_open_settings.setCurrentIndex(current_task)
     
     def TaskFromComboBox(self,s):
-        global current_task
+        global current_task, global_open_settings
         for task in range(0, len(self.tasks)):
             if s == self.tasks[task].name:
                 current_task = self.tasks[task]
+                current_task = self.tasks.index(current_task)
+                global_open_settings.setCurrentIndex(current_task)
 
 class TaskSettings(QWidget):
     def __init__(self):
@@ -573,9 +578,8 @@ class TaskSettings(QWidget):
             self.fill_with_tiles_widget.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
             self.fill_with_tiles_widget_layout = QVBoxLayout()
             
-            global current_sender
-            global tile_preview_fwt
-            
+            global current_sender, global_open_settings, tile_preview_fwt
+             
             tile_preview_fwt = QLabel()
             tile_preview_fwt.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
             self.fwt_label = QLabel("Fill Area With Tile")
@@ -607,24 +611,25 @@ class TaskSettings(QWidget):
             self.fill_with_tiles_widget_layout.addWidget(self.fwt_corners_labels)
             self.fill_with_tiles_widget_layout.addWidget(self.fwt_corners)
             self.fill_with_tiles_widget_layout.addWidget(self.go_button)
+            #end stack
+            #task: Replace Tile With Tile
+            self.replace_tile_with_tile_widget = QWidget()
             
             self.fill_with_tiles_widget.setLayout(self.fill_with_tiles_widget_layout)
             self.stacks.append(self.fill_with_tiles_widget)
+            self.stacks.append(self.replace_tile_with_tile_widget)
             
             #finalize layout
-            self.layout = QStackedLayout()
-            self.setLayout(self.layout)
+            global_open_settings = QStackedLayout()
+            self.setLayout(global_open_settings)
             
             for x in self.stacks:
-                self.layout.addWidget(self.stacks[self.stacks.index(x)])
+                global_open_settings.addWidget(self.stacks[self.stacks.index(x)])
     
     def fwt_fill(self):
-        global tile_ratio
-        global global_squares
-        global current_tile
+        global tile_ratio, global_squares, current_tile 
         if current_tile != None:
             k = getFillSquares(self.fwt_tl_corner.value(), self.fwt_br_corner.value(), tile_ratio)
-            print(k)
             for x in k:
                 global_squares[x].setPixmap(current_tile)
                 level_data[global_squares[x]] = current_name
