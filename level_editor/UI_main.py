@@ -19,7 +19,8 @@ from UI_workspaceContainer import (workspaceContainer,
                                    TilesInfo,
                                    LevelData,
                                    TileSets,
-                                   TaskSelection)
+                                   TaskSelection,
+                                   TaskSettings)
 from UI_WebViewer import webView
 
 data = updateJSON()
@@ -108,7 +109,10 @@ class main(QMainWindow):
         self.tasks_scroll.setWidgetResizable(True)
         self.tasks_scroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOn )
         
-        self.task_settings = workspaceContainer("task_settings", data["active_layout"])
+        self.task_setting = TaskSettings()
+        self.task_settings = QScrollArea()
+        self.task_settings.setWidget(self.task_setting)
+        self.task_settings.setWidgetResizable(True)
         
         self.tile_grid = tileGridWorkspace()
         self.tile_grid.setMinimumWidth(size.width())

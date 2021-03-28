@@ -538,10 +538,36 @@ class TaskSelection(QWidget):
         s = self.sender().text()
         for task in range(0, len(self.tasks)):
             if s == self.tasks[task].name:
-                current_task = self.tasks[task].name
+                current_task = self.tasks[task]
     
     def TaskFromComboBox(self,s):
         global current_task
         for task in range(0, len(self.tasks)):
             if s == self.tasks[task].name:
-                current_task = self.tasks[task].name
+                current_task = self.tasks[task]
+
+class TaskSettings(QWidget):
+    def __init__(self):
+            super().__init__()
+            self.setAutoFillBackground(True)
+            data = updateJSON()
+            self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+            self.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+            
+            self.stacks = []
+            
+            #task handler
+            self.fill_with_tiles_widget = QWidget()
+            self.fill_with_tiles_widget.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+            self.fill_with_tiles_widget_layout = QGridLayout()
+            #task performance here...
+            self.fill_with_tiles_widget.setLayout(self.fill_with_tiles_widget_layout)
+            self.stacks.append(self.fill_with_tiles_widget)
+            
+            #finalize layout
+            self.layout = QStackedLayout()
+            self.setLayout(self.layout)
+            
+            for x in self.stacks:
+                self.layout.addWidget(self.stacks[self.stacks.index(x)])
+
