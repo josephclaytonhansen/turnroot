@@ -2,7 +2,7 @@ import sys
 import os
 from PyQt5.QtCore import QSize, Qt, pyqtSignal, QObject
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
+from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor
 import qtmodern.styles
 import qtmodern.windows
 from UI_updateJSON import updateJSON
@@ -34,6 +34,7 @@ highlighted_tile = None
 ht = None
 lpt = None
 task_categories = ["Tiles", "Tile Effects", "Level Events"]
+task_history = [None,None,None,None]
 
 class LevelData():
     def __init__(self):
@@ -462,7 +463,10 @@ class TaskSelection(QWidget):
             self.tb_layout.addWidget(self.sh_0, self.rows+3,0)
             self.tb_layout.addWidget(self.sh_1, self.rows+3,1)
             self.tb_layout.addWidget(self.sh_2, self.rows+4,0)
-                    
+            
+            self.setContextMenuPolicy(Qt.CustomContextMenu)
+            self.customContextMenuRequested.connect(self.context_menu)
+            
             self.task_buttons = {}
             self.ccolumn = 1
             self.crow = self.rows+5
@@ -509,6 +513,16 @@ class TaskSelection(QWidget):
             for x in range(0, len(self.tasks)):
                 if self.tasks[x].category == "Level Events":
                     self.task_buttons[x].show()
+                    
+    def context_menu(self, pos):
+        global task_history
+        self.context = QMenu(self)
+        self.context.addAction(QAction(task_history[0], self))
+        self.context.addAction(QAction(task_history[1], self))
+        self.context.addAction(QAction(task_history[2], self))
+        self.context.exec_(self.mapToGlobal(pos))
+
+
         
                 
                 

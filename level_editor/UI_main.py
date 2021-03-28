@@ -551,7 +551,7 @@ class main(QMainWindow):
             with open(self.path, "w") as write_file:
                 json.dump(self.level_data, write_file)
                 write_file.close()
-            
+                
 window = main()
 window.show()
 a = app.exec_()
