@@ -433,7 +433,7 @@ class TaskSelection(QWidget):
                 
             self.filter = QLabel("Filter tasks:")
             self.search_label = QLabel("Choose task from dropdown")
-            
+            self.buttons_label = QLabel("Choose from all tasks")
             
             global task_categories
             
@@ -449,27 +449,33 @@ class TaskSelection(QWidget):
             self.sh_1.stateChanged.connect(self.toggleCategoryTilesEffects)
             self.sh_2.stateChanged.connect(self.toggleCategoryLevelEvents)
             
-            self.search.setMinimumHeight(data["font_size"] * 2.5)
+            self.search.setMinimumHeight(data["font_size"] * 3.5)
+            self.buttons_label.setMinimumHeight(data["font_size"] * 2.5)
+            self.buttons_label.setMaximumHeight(data["font_size"] * 2.5)
             self.search.setStyleSheet("background-color: "+self.active_theme.list_background_color+"; selection-background-color:"+self.active_theme.window_background_color)
-            self.search_label.setMaximumHeight(data["font_size"] * 1.5)
-            self.filter.setMaximumHeight(data["font_size"] * 1.5)
-            self.sh_0.setMaximumHeight(data["font_size"] * 1.2)
-            self.sh_1.setMaximumHeight(data["font_size"] * 1.2)
+            self.search_label.setMaximumHeight(data["font_size"] * 3.5)
+            self.search_label.setMinimumHeight(data["font_size"] * 3.5)
+            self.filter.setMaximumHeight(data["font_size"] * 3.5)
+            self.filter.setMinimumHeight(data["font_size"] * 3.5)
+            self.sh_0.setMaximumHeight(data["font_size"] * 1.4)
+            self.sh_1.setMaximumHeight(data["font_size"] * 1.4)
+            self.sh_2.setMaximumHeight(data["font_size"] * 1.4)
 
             self.rows = 0
             self.tb_layout.addWidget(self.search_label, self.rows, 0)
-            self.tb_layout.addWidget(self.search, self.rows+1, 0,1,0)
+            self.tb_layout.addWidget(self.search, self.rows+1, 0)
             self.tb_layout.addWidget(self.filter, self.rows+2,0)
             self.tb_layout.addWidget(self.sh_0, self.rows+3,0)
             self.tb_layout.addWidget(self.sh_1, self.rows+3,1)
             self.tb_layout.addWidget(self.sh_2, self.rows+4,0)
+            self.tb_layout.addWidget(self.buttons_label, self.rows+5,0)
             
             self.setContextMenuPolicy(Qt.CustomContextMenu)
             self.customContextMenuRequested.connect(self.context_menu)
             
             self.task_buttons = {}
             self.ccolumn = 1
-            self.crow = self.rows+5
+            self.crow = self.rows+6
             for x in range(0, len(self.tasks)):
                 self.task_buttons[x] = QPushButton(self.tasks[x].name)
                 self.tb_layout.addWidget(self.task_buttons[x], x+self.crow, self.ccolumn)
@@ -482,6 +488,10 @@ class TaskSelection(QWidget):
 
             self.tasks_box.setLayout(self.tb_layout)
             self.layout.addWidget(self.tasks_box)
+            
+            self.tb_layout.setSpacing(8)
+            self.tb_layout.setContentsMargins(2,2,2,2)
+            
             self.setLayout(self.layout)
         
     def toggleCategoryTiles(self, s):
