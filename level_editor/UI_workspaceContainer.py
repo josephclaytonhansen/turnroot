@@ -32,6 +32,7 @@ ht = None
 lpt = None
 task_categories = ["Tiles", "Tile Effects", "Level Events"]
 task_history = [None,None,None,None]
+current_task = None
 
 class LevelData():
     def __init__(self):
@@ -475,6 +476,7 @@ class TaskSelection(QWidget):
             self.crow = self.rows+6
             for x in range(0, len(self.tasks)):
                 self.task_buttons[x] = QPushButton(self.tasks[x].name)
+                self.task_buttons[x].clicked.connect(self.TaskFromButton)
                 self.tb_layout.addWidget(self.task_buttons[x], x+self.crow, self.ccolumn)
                 self.ccolumn += 1
                 if self.ccolumn == 2:
@@ -482,7 +484,10 @@ class TaskSelection(QWidget):
                     self.crow -=1
                 if task_categories.index(self.tasks[x].category) % 2 == 0:
                     self.task_buttons[x].setStyleSheet("background-color:"+self.active_theme.button_alt_color+"; color:"+self.active_theme.button_alt_text_color)
-
+            
+            #task handlers
+            self.search.currentTextChanged.connect(self.TaskFromComboBox)
+            
             self.tasks_box.setLayout(self.tb_layout)
             self.layout.addWidget(self.tasks_box)
             
@@ -527,4 +532,23 @@ class TaskSelection(QWidget):
         self.context.addAction(QAction(task_history[0], self))
         self.context.addAction(QAction(task_history[1], self))
         self.context.addAction(QAction(task_history[2], self))
-        self.context.exec_(self.mapToGlobal(pos))         
+        self.context.exec_(self.mapToGlobal(pos))
+    
+    def FillAreaWithTile(self):
+        global current_task
+        current_task = self.tasks[0]
+    
+    def TaskFromButton(self):
+        global current_task
+        s = self.sender().text()
+        for task in range(0, len(self.tasks)):
+            if s == self.tasks[task].name:
+                current_task = self.tasks[task].name
+        print(current_task)
+    
+    def TaskFromComboBox(self,s):
+        global current_task
+        for task in range(0, len(self.tasks)):
+            if s == self.tasks[task].name:
+                current_task = self.tasks[task].name
+        print(current_task)
