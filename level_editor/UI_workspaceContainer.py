@@ -358,17 +358,9 @@ class Tiles(QWidget):
         playout.setCurrentIndex(0)
     
     def assignCurrentTile(self):
-        global current_tile
-        global previous_sender
-        global current_sender
+        global current_tile, previous_sender, current_sender
         previous_sender = current_sender
-        global tiles
-        global ttype_pix
-        global p_ttype_label
-        global level_data
-        global current_name
-        global tile_preview_rwt_to
-        global tile_preview_rwt_from
+        global tiles, ttype_pix, p_ttype_label, level_data, current_name, tile_preview_rwt_to, tile_preview_rwt_from
      
         try:
             previous_sender.setStyleSheet("background-color: black;")
