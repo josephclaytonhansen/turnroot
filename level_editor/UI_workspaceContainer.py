@@ -161,9 +161,7 @@ class tileGridWorkspace(QWidget):
         self.setLayout(self.layout)
     
     def change_color(self):
-        global current_tile
-        global level_data
-        global current_name
+        global current_tile, level_data, current_name
         try:
             self.sender().setPixmap(current_tile)
             level_data[self.sender().gridIndex] = current_name
@@ -229,16 +227,7 @@ class TilesInfo(QTabWidget):
         self.setAutoFillBackground(True)
         data = updateJSON()
         self.setTabPosition(QTabWidget.South)
-        global tiles
-        global ttype
-        global ttype_label
-        global ttype_pix
-        global p_ttype_label
-        global p_ttype_pix
-        global ttype_name
-        global tile_stack
-        global highlighted_tile
-        global ht
+        global tiles, ttype, ttype_label, ttype_pix, p_ttype_label, p_ttype_pix, ttype_name, tile_stack, highlighted_tile, ht
        
         ttype_label = QLabel("tile type")
         ttype_pix = QLabel()
@@ -289,18 +278,12 @@ class TilesInfo(QTabWidget):
         self.addTab(self.twi, "Sheets")
         
     def text_changed(self, s):
-        global playout
-        global tile_stack
+        global playout, tile_stack
         playout.setCurrentIndex(tile_stack.index(s))
         pass
             
     def assignLastTile(self):
-        global current_tile
-        global previous_sender
-        global current_sender
-        global p_ttype_label
-        global ttype_pix
-        global ttype
+        global current_tile, previous_sender, current_sender, p_ttype_label, ttype_pix, ttype
         try:
             ttype = previous_sender.ttype
             ttype_img = previous_sender.pixmap()
@@ -495,10 +478,7 @@ class TaskSelection(QWidget):
             self.tb_layout.addWidget(self.sh_1, self.rows+3,1)
             self.tb_layout.addWidget(self.sh_2, self.rows+4,0)
             self.tb_layout.addWidget(self.buttons_label, self.rows+5,0)
-            
-            self.setContextMenuPolicy(Qt.CustomContextMenu)
-            self.customContextMenuRequested.connect(self.context_menu)
-            
+
             self.task_buttons = {}
             self.ccolumn = 1
             self.crow = self.rows+6
@@ -552,14 +532,6 @@ class TaskSelection(QWidget):
             for x in range(0, len(self.tasks)):
                 if self.tasks[x].category == "Level Events":
                     self.task_buttons[x].show()
-                    
-    def context_menu(self, pos):
-        global task_history
-        self.context = QMenu(self)
-        self.context.addAction(QAction(task_history[0], self))
-        self.context.addAction(QAction(task_history[1], self))
-        self.context.addAction(QAction(task_history[2], self))
-        self.context.exec_(self.mapToGlobal(pos))
 
     def TaskFromButton(self):
         global current_task, global_open_settings
@@ -735,8 +707,3 @@ class TaskSettings(QWidget):
         else:
             self.rwt_reset_br_corner.setText("Set bottom right to 1")
             self.rwt_br_corner.setValue(1560)
-                
-
-
-        
-
