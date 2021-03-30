@@ -42,6 +42,8 @@ tile_preview_fwt = None
 tile_ratio = 0
 global_squares = {}
 global_open_settings = 0
+tile_preview_rwt_to = None
+tile_preview_rwt_from = None
 
 class LevelData():
     def __init__(self):
@@ -365,6 +367,8 @@ class Tiles(QWidget):
         global p_ttype_label
         global level_data
         global current_name
+        global tile_preview_rwt_to
+        global tile_preview_rwt_from
      
         try:
             previous_sender.setStyleSheet("background-color: black;")
@@ -381,8 +385,13 @@ class Tiles(QWidget):
         ttype_label.setText(ttype)
         ttype_pix.setPixmap(ttype_img.scaled(int(64), int(64), Qt.KeepAspectRatio))
         
-        #connect to fwt task
+        #connect to fwt task, rwt task
         tile_preview_fwt.setPixmap(ttype_img.scaled(int(64), int(64), Qt.KeepAspectRatio))
+        try:
+            tile_preview_rwt_from.setPixmap(previous_sender.pixmap().scaled(int(64), int(64), Qt.KeepAspectRatio))
+            tile_preview_rwt_to.setPixmap(ttype_img.scaled(int(64), int(64), Qt.KeepAspectRatio))
+        except:
+            pass
         
         self.sender().setStyleSheet("background-color: "+self.active_theme.window_background_color+";")
 
@@ -616,7 +625,38 @@ class TaskSettings(QWidget):
             self.fill_with_tiles_widget_layout.addWidget(self.go_button)
             #end stack
             #task: Replace Tile With Tile
+            global tile_preview_rwt_to, tile_preview_rwt_from
+
             self.replace_tile_with_tile_widget = QWidget()
+            self.replace_tile_with_tile_widget.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+            self.replace_tile_with_tile_widget_layout = QVBoxLayout()
+            self.replace_tile_with_tile_widget.setLayout(self.replace_tile_with_tile_widget_layout)
+            
+            self.rwt_label = QLabel("Replace Tile With Tile")
+            self.rwt_label.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+            
+            self.rwt_boxes_layout = QHBoxLayout()
+            self.rwt_boxes = QWidget()
+            tile_preview_rwt_from = QLabel()
+            tile_preview_rwt_to = QLabel()
+
+            self.rwt_boxes_labels = QWidget()
+            self.rwt_boxes_labels_layout = QHBoxLayout()
+            self.rwt_boxes_labels_layout.addWidget(QLabel("Change from"))
+            self.rwt_boxes_labels_layout.addWidget(QLabel("Change to"))
+            self.rwt_boxes_labels.setLayout(self.rwt_boxes_labels_layout)
+            
+            self.rwt_boxes_layout.addWidget(tile_preview_rwt_from)
+            self.rwt_boxes_layout.addWidget(tile_preview_rwt_to)
+            self.rwt_boxes.setLayout(self.rwt_boxes_layout)
+            
+            self.rwt_go_button = QPushButton("Replace")
+            self.rwt_go_button.clicked.connect(self.rwt_replace)
+
+            self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_label)
+            self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_boxes_labels)
+            self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_boxes)
+            self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_go_button)
             
             #add stacks
             self.fill_with_tiles_widget.setLayout(self.fill_with_tiles_widget_layout)
@@ -631,10 +671,21 @@ class TaskSettings(QWidget):
                 global_open_settings.addWidget(self.stacks[self.stacks.index(x)])
     
     def fwt_fill(self):
-        global tile_ratio, global_squares, current_tile 
+        global tile_ratio, global_squares, current_tile, level_data 
         if current_tile != None:
             k = getFillSquares(self.fwt_tl_corner.value(), self.fwt_br_corner.value(), tile_ratio)
             for x in k:
                 global_squares[x].setPixmap(current_tile)
-                level_data[global_squares[x]] = current_name
+                level_data[x] = current_name
+
+    def rwt_replace(self):
+        global level_data, previous_sender, global_squares
+        for x in range(1, len(level_data)):
+            if level_data[x] == previous_sender.ttype_name_s:
+                global_squares[x].setPixmap(current_tile)
+                level_data[x] = current_name
+                
+
+
+        
 
