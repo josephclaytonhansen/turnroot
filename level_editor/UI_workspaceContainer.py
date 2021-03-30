@@ -582,7 +582,7 @@ class TaskSettings(QWidget):
             self.fill_with_tiles_widget.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
             self.fill_with_tiles_widget_layout = QVBoxLayout()
             
-            global current_sender, global_open_settings, tile_preview_fwt
+            global current_sender, global_open_settings, tile_preview_fwt, tile_ratio
              
             tile_preview_fwt = QLabel()
             tile_preview_fwt.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
@@ -593,7 +593,6 @@ class TaskSettings(QWidget):
             self.fwt_corners = QWidget()
             self.fwt_tl_corner = QSpinBox()
             self.fwt_br_corner = QSpinBox()
-            global tile_ratio
             self.fwt_tl_corner.setRange(1,2560)
             self.fwt_br_corner.setRange(1,2560)
             
@@ -653,11 +652,34 @@ class TaskSettings(QWidget):
             
             self.rwt_go_button = QPushButton("Replace")
             self.rwt_go_button.clicked.connect(self.rwt_replace)
-
+            
+            self.rwt_tl_corner = QSpinBox()
+            self.rwt_br_corner = QSpinBox()
+            self.rwt_tl_corner.setRange(1,2560)
+            self.rwt_br_corner.setRange(1,2560)
+            self.rwt_br_corner.setValue(1560)
+            self.rwt_corners_layout = QHBoxLayout()
+            self.rwt_corners_layout.addWidget(self.rwt_tl_corner)
+            self.rwt_corners_layout.addWidget(self.rwt_br_corner)
+            self.rwt_aoe = QWidget()
+            self.rwt_aoe.setLayout(self.rwt_corners_layout)
+            
+            self.rwt_aoe_labels = QWidget()
+            self.rwt_aoe_label_header = QLabel("Area of effect")
+            self.rwt_aoe_label_header.setAlignment(Qt.AlignHCenter)
+            
+            self.rwt_aoe_labels_layout = QHBoxLayout()
+            self.rwt_aoe_labels_layout.addWidget(QLabel("Top left corner"))
+            self.rwt_aoe_labels_layout.addWidget(QLabel("Bottom right corner"))
+            self.rwt_aoe_labels.setLayout(self.rwt_aoe_labels_layout)
+            
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_label)
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_boxes_labels)
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_boxes)
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_go_button)
+            self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_aoe_label_header)
+            self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_aoe_labels)
+            self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_aoe)
             
             #add stacks
             self.fill_with_tiles_widget.setLayout(self.fill_with_tiles_widget_layout)
@@ -680,8 +702,9 @@ class TaskSettings(QWidget):
                 level_data[x] = current_name
 
     def rwt_replace(self):
-        global level_data, previous_sender, global_squares
-        for x in range(1, len(level_data)):
+        global level_data, previous_sender, global_squares, tile_ratio
+        k = getFillSquares(self.rwt_tl_corner.value(), self.rwt_br_corner.value(), tile_ratio)
+        for x in k:
             if level_data[x] == previous_sender.ttype_name_s:
                 global_squares[x].setPixmap(current_tile)
                 level_data[x] = current_name
