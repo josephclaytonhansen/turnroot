@@ -143,28 +143,8 @@ class main(QMainWindow):
         self.goto_fr.setToolTip("Go to bottom right (.)")
         self.goto_fr.setPixmap(QPixmap(("ui_icons/"+icon_string+"goto-fr.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
         self.goto_fr.clicked.connect(self.scrollFr)
-
-        self.remove_above = ClickableQLabel()
-        self.remove_above.setToolTip("Remove tile (Right Click)")
-        self.remove_above.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove-above.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
-        self.remove_above.clicked.connect(self.removeAbove)
-
-        self.remove_below = ClickableQLabel()
-        self.remove_below.setToolTip("Remove decoration (Shift+Right Click)")
-        self.remove_below.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove-below.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
-        self.remove_below.clicked.connect(self.removeBelow)
-        
-        self.remove_effect = ClickableQLabel()
-        self.remove_effect.setToolTip("Remove tile effects (Alt+Right Click)")
-        self.remove_effect.setPixmap(QPixmap(("ui_icons/"+icon_string+"remove-effect.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
-        self.remove_effect.clicked.connect(self.removeEffect)
-        
-        self.random_decoration_add = ClickableQLabel()
-        self.random_decoration_add.setToolTip("Add random decoration (Shift+Left Click)")
-        self.random_decoration_add.setPixmap(QPixmap(("ui_icons/"+icon_string+"random-decoration-add.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio))
-        self.random_decoration_add.clicked.connect(self.randomDecorationAdd)
-        
-        self.tools = toolsWorkspace("tools", data["active_layout"], [self.z_in, self.z_out, self.goto_00, self.goto_fr, self.remove_above, self.remove_below, self.remove_effect, self.random_decoration_add])
+     
+        self.tools = toolsWorkspace("tools", data["active_layout"], [self.z_in, self.z_out, self.goto_00, self.goto_fr])
 
         #add workspaces to main layout
         self.layout.addWidget(self.scroll, 0, 0, 26, 48)
@@ -173,7 +153,7 @@ class main(QMainWindow):
         self.layout.addWidget(self.tiles_info, 20, 37, 6, 3)
         self.layout.addWidget(self.tasks_scroll, 14, 40, 12, 8)
         self.layout.addWidget(self.task_settings, 4, 40, 10, 8)
-        self.layout.addWidget(self.tools, 2, 0, 13, 1)
+        self.layout.addWidget(self.tools, 2, 0, 7, 1)
         
         #add show workspace buttons
         self.tiles_show = showWorkspace("tiles", data["active_layout"])
@@ -250,8 +230,6 @@ class main(QMainWindow):
         self.optionsButton = QAction(QIcon("ui_icons/"+icon_string+"settings-17-32.png"),"Options (S)", self)
         self.helpButton = QAction(QIcon("ui_icons/"+icon_string+"question-mark-4-32.png"),"Read docs (H)", self)
         self.backButton = QAction(QIcon("ui_icons/"+icon_string+"grid-three-up-32.png"),"Return to editor selection (Esc)", self)
-        self.playAnimationButton = QAction(QIcon("ui_icons/"+icon_string+"play-2-32.png"),"Play animations (Spacebar)", self)
-        self.playSoundButton = QAction(QIcon("ui_icons/"+icon_string+"mute-2-32.png"),"Play sounds (Shift+Spacebar)", self)
         self.justTilesButton = QAction(QIcon("ui_icons/"+icon_string+"fit-to-width-32.png"),"Show just tiles (F)", self)
         self.forumButton = QAction(QIcon("ui_icons/"+icon_string+"speech-bubble-2-32.png"),"Access forum (Q)", self)
         
@@ -264,8 +242,6 @@ class main(QMainWindow):
         self.toolbar.addAction(self.backButton)
         self.toolbar.addAction(self.optionsButton)
         self.toolbar.addAction(self.resourcesButton)
-        self.toolbar.addAction(self.playSoundButton)
-        self.toolbar.addAction(self.playAnimationButton)
         self.toolbar.addAction(self.justTilesButton)
         self.toolbar.addAction(self.helpButton)
         self.toolbar.addAction(self.forumButton)
@@ -490,19 +466,7 @@ class main(QMainWindow):
     def scrollFr(self):
         self.scroll.horizontalScrollBar().setValue(2200)
         self.scroll.verticalScrollBar().setValue(2200)
-    
-    def removeAbove(self):
-        pass
-       
-    def removeBelow(self):
-        pass
-    
-    def randomDecorationAdd(self):
-        pass
-    
-    def removeEffect(self):
-        pass
-    
+   
     #thanks to pythonspot for these functions
     def openFileDialog(self):
         options = QFileDialog.Options()

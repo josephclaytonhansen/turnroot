@@ -59,7 +59,7 @@ with open("tiles/"+tile_set+".json", "r") as read_file:
     tile_data = json.load(read_file)
     read_file.close()
 
-def overlayImage(image, overlay, label):
+def overlayTile(image, overlay, label):
     images = [image, overlay]
     image = QImage(images[0])
     overlay = QImage(images[1])
@@ -67,7 +67,7 @@ def overlayImage(image, overlay, label):
     painter.begin(image)
     painter.drawImage(0, 0, overlay)
     painter.end()
-    label.setPixmap(QPixmap.fromImage(image))
+    label.setPixmap(QPixmap.fromImage(image).scaled(int(64), int(64), Qt.KeepAspectRatio))
 
 class workspaceContainer(QWidget):
         def __init__(self, workspace, layout):
