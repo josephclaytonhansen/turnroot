@@ -658,6 +658,14 @@ class TaskSettings(QWidget):
             self.rwt_tl_corner.setRange(1,2560)
             self.rwt_br_corner.setRange(1,2560)
             self.rwt_br_corner.setValue(1560)
+            
+            self.rwt_reset_br_corner = QPushButton("Set bottom right to 1")
+            self.rwt_reset_br_corner.clicked.connect(self.rwt_reset)
+            self.rwt_reset = QWidget()
+            self.rwt_reset_layout = QHBoxLayout()
+            self.rwt_reset_layout.addWidget(self.rwt_reset_br_corner, 1)
+            self.rwt_reset.setLayout(self.rwt_reset_layout)
+            
             self.rwt_corners_layout = QHBoxLayout()
             self.rwt_corners_layout.addWidget(self.rwt_tl_corner)
             self.rwt_corners_layout.addWidget(self.rwt_br_corner)
@@ -680,6 +688,7 @@ class TaskSettings(QWidget):
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_aoe_label_header)
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_aoe_labels)
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_aoe)
+            self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_reset)
             
             #add stacks
             self.fill_with_tiles_widget.setLayout(self.fill_with_tiles_widget_layout)
@@ -708,6 +717,14 @@ class TaskSettings(QWidget):
             if level_data[x] == previous_sender.ttype_name_s:
                 global_squares[x].setPixmap(current_tile)
                 level_data[x] = current_name
+    
+    def rwt_reset(self):
+        if self.rwt_reset_br_corner.text() == "Set bottom right to 1":
+            self.rwt_reset_br_corner.setText("Set bottom right to 1560")
+            self.rwt_br_corner.setValue(1)
+        else:
+            self.rwt_reset_br_corner.setText("Set bottom right to 1")
+            self.rwt_br_corner.setValue(1560)
                 
 
 
