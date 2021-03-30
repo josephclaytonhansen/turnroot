@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QSize, Qt, pyqtSignal, QObject
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor
+from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QImage, QPainter
 import qtmodern.styles
 import qtmodern.windows
 from UI_updateJSON import updateJSON
@@ -60,15 +60,16 @@ with open("tiles/"+tile_set+".json", "r") as read_file:
     tile_data = json.load(read_file)
     read_file.close()
 
-def overlayTile(image, overlay, label):
-    images = [image, overlay]
-    image = QImage(images[0])
-    overlay = QImage(images[1])
+def overlayTile(image, overlay):
+    overlay = QPixmap(overlay)
     painter = QPainter()
-    painter.begin(image)
-    painter.drawImage(0, 0, overlay)
+    result = QPixmap(64, 64)
+    result.fill(Qt.transparent)
+    painter.begin(result)
+    painter.drawPixmap(0, 0, image)
+    painter.drawPixmap(0, 0, overlay)
     painter.end()
-    label.setPixmap(QPixmap.fromImage(image).scaled(int(64), int(64), Qt.KeepAspectRatio))
+    return result
 
 #TODO delete this class when RTE is done
 class workspaceContainer(QWidget):
@@ -697,6 +698,7 @@ class TaskSettings(QWidget):
             self.setLayout(global_open_settings)
             for x in self.stacks:
                 global_open_settings.addWidget(self.stacks[self.stacks.index(x)])
+            global_open_settings.setCurrentIndex(1)
     
     def fwt_fill(self):
         global tile_ratio, global_squares, current_tile, level_data 
@@ -713,7 +715,7 @@ class TaskSettings(QWidget):
             if level_data[x] == previous_sender.ttype_name_s:
                 global_squares[x].setPixmap(current_tile)
                 level_data[x] = current_name
-    
+  
     def rwt_reset(self):
         if self.rwt_reset_br_corner.text() == "Set bottom right to 1":
             self.rwt_reset_br_corner.setText("Set bottom right to 1560")
