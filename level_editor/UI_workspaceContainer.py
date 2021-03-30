@@ -7,22 +7,21 @@ from UI_updateJSON import updateJSON
 from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction
 import UI_colorTheme
+#once RTE is done delete line 11
 from UI_color_test_widget import Color
 from tasks_backend import getFillSquares
 import json, math, re, sys, os
 
-#don't edit these
+#these can be edited (TODO pull from JSON)
+tile_stack = ["simple_grasslands_jungle", "simple_grasslands", "simple_grasslands_jungle_walls"]
+task_categories = ["Tiles", "Tile Effects", "Level Events"]
+
+#don't edit these!
 current_tile = None
 previous_sender = None
 current_sender = None
 tiles = {0:{}, 1:{}, 2:{}, 3:{}, 4:{}, 5:{}, 6:{}}
 ttype = ""
-
-#these can be edited
-tile_stack = ["simple_grasslands_jungle", "simple_grasslands", "simple_grasslands_jungle_walls"]
-task_categories = ["Tiles", "Tile Effects", "Level Events"]
-
-#don't edit these
 tile_set = tile_stack[0]
 ttype_label = None
 ttype_pix = None
@@ -45,6 +44,7 @@ global_open_settings = 0
 tile_preview_rwt_to = None
 tile_preview_rwt_from = None
 
+#passing global variables to UI_main
 class LevelData():
     def __init__(self):
         global level_data
@@ -54,6 +54,7 @@ class TileSets():
     def __init__(self):
         self.tile_stack = tile_stack
 
+#default tile set init
 with open("tiles/"+tile_set+".json", "r") as read_file:
     read_file.seek(0)
     tile_data = json.load(read_file)
@@ -69,6 +70,7 @@ def overlayTile(image, overlay, label):
     painter.end()
     label.setPixmap(QPixmap.fromImage(image).scaled(int(64), int(64), Qt.KeepAspectRatio))
 
+#TODO delete this class when RTE is done
 class workspaceContainer(QWidget):
         def __init__(self, workspace, layout):
             super().__init__()
@@ -94,6 +96,7 @@ class workspaceContainer(QWidget):
             self.layout.addWidget(Color(self.active_theme.list_background_color))
             self.setLayout(self.layout)
 
+#show and hide workspace buttons
 class showWorkspace(QPushButton):
     def __init__(self, workspace, layout):
         super().__init__()
@@ -116,6 +119,7 @@ class hideWorkspace(QPushButton):
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.setFixedSize((int(data["icon_size"])-3), (int(data["icon_size"])-3))
 
+#tile grid
 class tileGridWorkspace(QWidget):
     def __init__(self):
         super().__init__()
@@ -133,11 +137,12 @@ class tileGridWorkspace(QWidget):
         self.setMaximumHeight(self.height)
         self.ratio = self.width/self.height
         #each square is ratio width/1 height
-        global tile_ratio
+        
+        global tile_ratio,global_squares
+        
         for x in range(0,int(int(self.height/(50*self.ratio))*4.4)):
             self.checker = self.checker + 1
             for y in range(0,int(int(self.width/50)*4.4)):
-                
                 self.count = self.count + 1
                 level_data[self.count] = 'e'
                 self.checker = self.checker + 1
@@ -149,14 +154,16 @@ class tileGridWorkspace(QWidget):
                 self.squares[self.count].right_clicked.connect(self.reset_color)
                 self.squares[self.count].setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                 self.layout.addWidget(self.squares[self.count], x, y)
+                
                 if self.checker % 2 == 0:
                     self.squares[self.count].setStyleSheet("color: white; background-color: black;")
                 else:
                     self.squares[self.count].setStyleSheet("color: white; background-color: #222222;")
                 if x % 3 == 0 and y % 3 == 0:
                     self.squares[self.count].setText(str(self.squares[self.count].gridIndex))
+                    
         tile_ratio = y + 1
-        global global_squares
+
         global_squares = self.squares
         self.setLayout(self.layout)
     
@@ -170,7 +177,8 @@ class tileGridWorkspace(QWidget):
    
     def reset_color(self):
         self.sender().clear()
-    
+
+#this class is specifically for the tile grid
 class ClickableQLabel_t(QLabel):
     clicked=pyqtSignal()
     global highlighted_tile
@@ -188,6 +196,7 @@ class ClickableQLabel_t(QLabel):
         global ht
         ht.setText("Current grid space: "+str(highlighted_tile))
 
+#this class is for general clickable labels
 class ClickableQLabel(QLabel):
     clicked=pyqtSignal()
     global highlighted_tile
@@ -214,6 +223,7 @@ class toolsWorkspace(QWidget):
             self.k.setMinimumHeight(0)
             self.k.setMinimumWidth(int(data["icon_size"])+6)
             self.layout.addWidget(self.k)
+            
             for x in range(0, len(labels)):
                 self.layout.addWidget(labels[x])
                 labels[x].setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
@@ -380,6 +390,7 @@ class Tiles(QWidget):
         
         self.sender().setStyleSheet("background-color: "+self.active_theme.window_background_color+";")
 
+#create task object
 class taskInList(object):
     def __init__(self, name, category):
         global task_categories
@@ -445,7 +456,7 @@ class TaskSelection(QWidget):
             self.buttons_label = QLabel("Choose from all tasks")
             
             global task_categories
-            
+        
             self.sh_0 = QCheckBox(task_categories[0])
             self.sh_1 = QCheckBox(task_categories[1])
             self.sh_2 = QCheckBox(task_categories[2])
@@ -558,6 +569,9 @@ class TaskSettings(QWidget):
             self.active_theme = getattr(UI_colorTheme, data["active_theme"])
             self.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
             self.stacks = []
+            #Table of Contents
+            #Fill Area with Tiles: 575 - 613
+            #Replace Tile With Tile: 614 - 688
             
             #task: Fill Area with Tiles
             self.fill_with_tiles_widget = QWidget()
@@ -671,6 +685,7 @@ class TaskSettings(QWidget):
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_aoe_labels)
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_aoe)
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_reset)
+            #end stack
             
             #add stacks
             self.fill_with_tiles_widget.setLayout(self.fill_with_tiles_widget_layout)
@@ -680,7 +695,6 @@ class TaskSettings(QWidget):
             #finalize layout
             global_open_settings = QStackedLayout()
             self.setLayout(global_open_settings)
-            
             for x in self.stacks:
                 global_open_settings.addWidget(self.stacks[self.stacks.index(x)])
     
