@@ -13,7 +13,7 @@ from tasks_backend import getFillSquares, getDoorTiles
 import json, math, re, sys, os
 
 #these can be edited (TODO pull from JSON)
-tile_stack = ["simple_grasslands_jungle", "simple_grasslands", "simple_grasslands_jungle_walls"]
+tile_stack = ["simple_grasslands_jungle", "simple_grasslands", "simple_grasslands_jungle_walls", "simple_grasslands_jungle_extras"]
 task_categories = ["Tiles", "Tile Effects", "Level Events"]
 
 #don't edit these!
@@ -177,7 +177,10 @@ class tileGridWorkspace(QWidget):
             if add_on_click == "tile":
                 self.sender().setPixmap(current_tile)
                 level_data[self.sender().gridIndex] = current_name
-                
+            
+            if add_on_click == "deco":
+                self.sender().setPixmap(overlayTile(self.sender().pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio), current_tile.scaled(int(32), int(32), Qt.KeepAspectRatio)))
+            
             elif add_on_click == "Door":
                 self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
                 self.door_tiles = ["tiles/door0.png", "tiles/door1.png", "tiles/door2.png", "tiles/door3.png"]
@@ -223,7 +226,8 @@ class tileGridWorkspace(QWidget):
                 most_recent_chest = global_squares[self.working_tiles]
                 global_open_settings.setCurrentIndex(3)
 
-            add_on_click = "tile"
+            if add_on_click != "deco":
+                add_on_click = "tile"
         except:
             add_on_click = "tile"
    
@@ -419,8 +423,8 @@ class Tiles(QWidget):
     def assignCurrentTile(self):
         global current_tile, previous_sender, current_sender
         previous_sender = current_sender
-        global tiles, ttype_pix, p_ttype_label, level_data, current_name, tile_preview_rwt_to, tile_preview_rwt_from
-     
+        global tiles, ttype_pix, p_ttype_label, level_data, current_name, tile_preview_rwt_to, tile_preview_rwt_from, add_on_click
+    
         try:
             previous_sender.setStyleSheet("background-color: black;")
             p_ttype_label.setPixmap(previous_sender.pixmap())
@@ -430,6 +434,12 @@ class Tiles(QWidget):
         current_sender = self.sender()
         current_tile = self.sender().pixmap()
         current_name = current_sender.ttype_name_s
+        
+        print(current_name)
+        if int(current_name) != current_name:
+            add_on_click = "deco"
+        else:
+            add_on_click = "tile"
 
         ttype = current_sender.ttype
         ttype_img = current_sender.pixmap()
