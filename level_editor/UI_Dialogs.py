@@ -6,6 +6,7 @@ import json
 from UI_updateJSON import updateJSON
 import UI_colorTheme
 return_confirm = False
+chosen_object = None
 
 class confirmAction(QDialog):
     def __init__(self, s, parent=None):
@@ -108,6 +109,8 @@ class infoClose(QDialog):
      
 class addObject(QDialog):
     def __init__(self, parent=None):
+        global chosen_object
+        self.chosen_object = chosen_object
         data = updateJSON()
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
         super().__init__(parent)
@@ -121,6 +124,7 @@ class addObject(QDialog):
         
         self.add_options = ["Enemy Unit", "Ally Unit", "Door", "Breakable Wall", "Chest", "Emplacement", "Switch", "Trap", "Heal", "Warp", "Fortress"]
         self.add_dd = QComboBox()
+        self.add_dd.currentTextChanged.connect(self.add_dd_changed)
         self.add_dd.setStyleSheet("background-color: "+self.active_theme.list_background_color+"; selection-background-color:"+self.active_theme.window_background_color)
 
         self.add_dd.addItems(self.add_options)
@@ -128,6 +132,11 @@ class addObject(QDialog):
         self.setLayout(self.layout)
         
         self.show()
+    
+    def add_dd_changed(self, s):
+        global chosen_object
+        chosen_object = s
+        self.chosen_object = chosen_object
         
     def showEvent(self, event):
         geom = self.frameGeometry()

@@ -305,6 +305,7 @@ class main(QMainWindow):
         elif e.key() == Qt.Key_T:
             t = addObject(parent=self)
             t.exec_()
+            self.tile_grid.addObjectToGrid(t.chosen_object)
 
         if modifiers == Qt.ControlModifier:
             if e.key() == Qt.Key_Q:

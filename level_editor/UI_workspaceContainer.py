@@ -178,6 +178,10 @@ class tileGridWorkspace(QWidget):
    
     def reset_color(self):
         self.sender().clear()
+        print(self.add_object_from_popup)
+    
+    def addObjectToGrid(self, s):
+        print(s)
 
 #this class is specifically for the tile grid
 class ClickableQLabel_t(QLabel):
@@ -390,7 +394,7 @@ class Tiles(QWidget):
             pass
         
         self.sender().setStyleSheet("background-color: "+self.active_theme.window_background_color+";")
-
+    
 #create task object
 class taskInList(object):
     def __init__(self, name, category):

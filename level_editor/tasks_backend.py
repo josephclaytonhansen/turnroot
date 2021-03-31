@@ -13,3 +13,10 @@ def getFillSquares(tl_corner, br_corner, ratio):
     squares.sort()
     return squares
 
+def getDoorTiles(tl_corner, ratio):
+    tiles = [tl_corner]
+    ratio = ratio - 1
+    tiles.append(tl_corner+1)
+    tiles.append(tl_corner+1+ratio)
+    tiles.append(tl_corner+1+ratio+1)
+    return[tiles]
