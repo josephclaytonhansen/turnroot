@@ -191,6 +191,22 @@ class tileGridWorkspace(QWidget):
                 global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
                 global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
                 global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
+            
+            elif add_on_click == "Barred Gate":
+                self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
+                self.door_tiles = ["tiles/bars0.png", "tiles/bars1.png", "tiles/bars2.png", "tiles/bars3.png"]
+                self.zero_tile = overlayTile(global_squares[self.working_tiles[0][0]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                             self.door_tiles[0])
+                self.one_tile = overlayTile(global_squares[self.working_tiles[0][1]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                             self.door_tiles[1])
+                self.two_tile = overlayTile(global_squares[self.working_tiles[0][2]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                             self.door_tiles[2])
+                self.three_tile = overlayTile(global_squares[self.working_tiles[0][3]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                             self.door_tiles[3])
+                global_squares[self.working_tiles[0][0]].setPixmap(self.zero_tile)
+                global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
+                global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
+                global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
 
             add_on_click = "tile"
         except:
