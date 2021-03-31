@@ -460,8 +460,6 @@ class TaskSelection(QWidget):
                           taskInList("Blend Water Depth Edges", 0),
                           taskInList("Add Trap", 1),
                           taskInList("Add Fire", 1),
-                          taskInList("Add Door", 1),
-                          taskInList("Add Chest", 1),
                           taskInList("Add Warp", 1),
                           taskInList("Add Switch", 1),
                           taskInList("Add Heal", 1),
