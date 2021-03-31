@@ -1,2 +1,2 @@
-py -m pip install PyQt5
-py -m pip install qtmodern
+pip install PyQt5
+pip install qtmodern
