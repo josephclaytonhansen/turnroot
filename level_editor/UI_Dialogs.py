@@ -122,7 +122,7 @@ class addObject(QDialog):
         self.layout.setContentsMargins(8,8,8,8)
         self.layout.addWidget(QLabel("Add object: "))
         
-        self.add_options = ["Enemy Unit", "Ally Unit", "Door", "Breakable Wall", "Chest", "Emplacement", "Switch", "Trap", "Heal", "Warp", "Fortress"]
+        self.add_options = ["Enemy Unit", "Ally Unit", "Door", "Barred Gate", "Breakable Wall", "Chest", "Emplacement", "Switch", "Trap", "Heal", "Warp", "Fortress"]
         self.add_dd = QComboBox()
         self.add_dd.currentTextChanged.connect(self.add_dd_changed)
         self.add_dd.setStyleSheet("background-color: "+self.active_theme.list_background_color+"; selection-background-color:"+self.active_theme.window_background_color)
