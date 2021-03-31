@@ -44,6 +44,8 @@ global_open_settings = 0
 tile_preview_rwt_to = None
 tile_preview_rwt_from = None
 add_on_click = "tile"
+most_recent_door = None
+most_recent_chest = None
 
 #passing global variables to UI_main
 class LevelData():
@@ -170,7 +172,7 @@ class tileGridWorkspace(QWidget):
         self.setLayout(self.layout)
     
     def change_color(self):
-        global current_tile, level_data, current_name, add_on_click, tile_ratio
+        global current_tile, level_data, current_name, add_on_click, tile_ratio, most_recent_door, most_recent_chest
         try:
             if add_on_click == "tile":
                 self.sender().setPixmap(current_tile)
@@ -191,6 +193,8 @@ class tileGridWorkspace(QWidget):
                 global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
                 global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
                 global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
+                most_recent_door = global_squares[self.working_tiles[0][0]]
+                global_open_settings.setCurrentIndex(2)
             
             elif add_on_click == "Barred Gate":
                 self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
@@ -207,6 +211,17 @@ class tileGridWorkspace(QWidget):
                 global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
                 global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
                 global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
+                most_recent_door = global_squares[self.working_tiles[0][0]]
+                global_open_settings.setCurrentIndex(2)
+            
+            elif add_on_click == "Chest":
+                self.working_tiles =self.sender().gridIndex
+                self.chest_tile = "tiles/chest0.png"
+                self.zero_tile = overlayTile(global_squares[self.working_tiles].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                             self.chest_tile)
+                global_squares[self.working_tiles].setPixmap(self.zero_tile)
+                most_recent_chest = global_squares[self.working_tiles]
+                global_open_settings.setCurrentIndex(3)
 
             add_on_click = "tile"
         except:
@@ -725,11 +740,27 @@ class TaskSettings(QWidget):
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_aoe)
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_reset)
             #end stack
+            #task: Edit Door
+            self.edit_door_widget = QWidget()
+            self.edit_door_layout = QVBoxLayout()
+            self.edit_door_label = QLabel("Edit Door")
+            self.edit_door_layout.addWidget(self.edit_door_label)
+            self.edit_door_widget.setLayout(self.edit_door_layout)
+            #end task
+            #task: Edit Chest
+            self.edit_chest_widget = QWidget()
+            self.edit_chest_layout = QVBoxLayout()
+            self.edit_chest_label = QLabel("Edit Chest")
+            self.edit_chest_layout.addWidget(self.edit_chest_label)
+            self.edit_chest_widget.setLayout(self.edit_chest_layout)
+            #end task
             
             #add stacks
             self.fill_with_tiles_widget.setLayout(self.fill_with_tiles_widget_layout)
             self.stacks.append(self.fill_with_tiles_widget)
             self.stacks.append(self.replace_tile_with_tile_widget)
+            self.stacks.append(self.edit_door_widget)
+            self.stacks.append(self.edit_chest_widget)
             
             #finalize layout
             global_open_settings = QStackedLayout()
