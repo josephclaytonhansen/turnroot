@@ -13,7 +13,7 @@ from tasks_backend import getFillSquares, getDoorTiles
 import json, math, re, sys, os
 
 #these can be edited (TODO pull from JSON)
-tile_stack = ["simple_grasslands_jungle", "simple_grasslands", "simple_grasslands_jungle_walls", "simple_grasslands_jungle_extras"]
+tile_stack = ["verdant_grass", "verdant_grass_walls", "verdant_grass_decor"]
 task_categories = ["Tiles", "Tile Effects", "Level Events"]
 
 #don't edit these!
