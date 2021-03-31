@@ -9,7 +9,7 @@ from UI_Dialogs import confirmAction
 import UI_colorTheme
 #once RTE is done delete line 11
 from UI_color_test_widget import Color
-from tasks_backend import getFillSquares
+from tasks_backend import getFillSquares, getDoorTiles
 import json, math, re, sys, os
 
 #these can be edited (TODO pull from JSON)
@@ -43,6 +43,7 @@ global_squares = {}
 global_open_settings = 0
 tile_preview_rwt_to = None
 tile_preview_rwt_from = None
+add_on_click = "tile"
 
 #passing global variables to UI_main
 class LevelData():
@@ -63,7 +64,7 @@ with open("tiles/"+tile_set+".json", "r") as read_file:
 def overlayTile(image, overlay):
     overlay = QPixmap(overlay)
     painter = QPainter()
-    result = QPixmap(64, 64)
+    result = QPixmap(32, 32)
     result.fill(Qt.transparent)
     painter.begin(result)
     painter.drawPixmap(0, 0, image)
@@ -169,20 +170,39 @@ class tileGridWorkspace(QWidget):
         self.setLayout(self.layout)
     
     def change_color(self):
-        global current_tile, level_data, current_name
+        global current_tile, level_data, current_name, add_on_click, tile_ratio
         try:
-            self.sender().setPixmap(current_tile)
-            level_data[self.sender().gridIndex] = current_name
+            if add_on_click == "tile":
+                self.sender().setPixmap(current_tile)
+                level_data[self.sender().gridIndex] = current_name
+                
+            elif add_on_click == "Door":
+                self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
+                self.door_tiles = ["tiles/door0.png", "tiles/door1.png", "tiles/door2.png", "tiles/door3.png"]
+                self.zero_tile = overlayTile(global_squares[self.working_tiles[0][0]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                             self.door_tiles[0])
+                self.one_tile = overlayTile(global_squares[self.working_tiles[0][1]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                             self.door_tiles[1])
+                self.two_tile = overlayTile(global_squares[self.working_tiles[0][2]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                             self.door_tiles[2])
+                self.three_tile = overlayTile(global_squares[self.working_tiles[0][3]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                             self.door_tiles[3])
+                global_squares[self.working_tiles[0][0]].setPixmap(self.zero_tile)
+                global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
+                global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
+                global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
+
+            add_on_click = "tile"
         except:
-            pass
+            add_on_click = "tile"
    
     def reset_color(self):
         self.sender().clear()
-        print(self.add_object_from_popup)
     
     def addObjectToGrid(self, s):
-        print(s)
-
+        global add_on_click
+        add_on_click = s
+            
 #this class is specifically for the tile grid
 class ClickableQLabel_t(QLabel):
     clicked=pyqtSignal()
