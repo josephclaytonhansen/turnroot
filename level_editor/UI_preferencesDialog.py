@@ -139,11 +139,6 @@ class PreferencesDialog(QDialog):
         self.ah = QLabel("Auto-hide")
         self.ah.setAlignment(Qt.AlignVCenter)
         self.aes_layout.addWidget(self.ah,5,0,3,0)
-        self.ah_rte = QCheckBox("Rules/text editor")
-        if(data["ah_rte"]):
-            self.ah_rte.setCheckState(Qt.Checked)
-        self.ah_rte.stateChanged.connect(self.ah_rte_changed)
-        self.aes_layout.addWidget(self.ah_rte,5,1)
         self.ah_tasks = QCheckBox("Task selector")
         if(data["ah_tasks"]):
             self.ah_tasks.setCheckState(Qt.Checked)
