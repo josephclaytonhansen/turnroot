@@ -90,8 +90,6 @@ class main(QMainWindow):
             self.icon_loc = "ui_icons/logo-white.png"
         
         #add workspaces
-        self.rte = workspaceContainer("rte", data["active_layout"])
-        self.rte.setMinimumWidth(size.width()/4)
         
         self.tiles = Tiles()
         self.tiles_info = TilesInfo()
@@ -148,8 +146,7 @@ class main(QMainWindow):
 
         #add workspaces to main layout
         self.layout.addWidget(self.scroll, 0, 0, 26, 48)
-        self.layout.addWidget(self.rte, 17, 0, 9, 14)
-        self.layout.addWidget(self.tscroll, 20, 14, 6, 23)
+        self.layout.addWidget(self.tscroll, 20, 0, 6, 37)
         self.layout.addWidget(self.tiles_info, 20, 37, 6, 3)
         self.layout.addWidget(self.tasks_scroll, 14, 40, 12, 8)
         self.layout.addWidget(self.task_settings, 4, 40, 10, 8)
@@ -160,15 +157,6 @@ class main(QMainWindow):
         self.tasks_show = showWorkspace("tasks", data["active_layout"])
         self.task_settings_show = showWorkspace("task_settings", data["active_layout"])
         self.tools_show = showWorkspace("tools", data["active_layout"])
-        self.rte_show = showWorkspace("rte", data["active_layout"])
-        
-        #add RTE workspace show/hide toggle to main layout
-        self.layout.addWidget(self.rte_show, 25, 0, 1, 1)
-        self.rte_show.clicked.connect(self.showRTE)
-        self.rte_hide = hideWorkspace("rte", data["active_layout"])
-        self.layout.addWidget(self.rte_hide, 25, 0, 1, 1)
-        self.rte_hide.clicked.connect(self.hideRTE)
-        self.rte_show.setVisible(False)
         
         #add Tiles workspace show/hide toggle to main layout
         self.tiles_show = showWorkspace("tiles", data["active_layout"])
@@ -276,8 +264,6 @@ class main(QMainWindow):
         self.setCentralWidget(widget)
         
         #honor autohide
-        if(data["ah_rte"]):
-            self.hideRTE()
         if(data["ah_tasks"]):
             self.hide_tasks()
         if(data["ah_taskss"]):
@@ -353,16 +339,6 @@ class main(QMainWindow):
         c.exec_()
         if(c.return_confirm):
             sys.exit()
-    
-    def showRTE(self):
-        self.rte.setVisible(True)
-        self.rte_hide.setVisible(True)
-        self.rte_show.setVisible(False)
-    
-    def hideRTE(self):
-        self.rte.setVisible(False)
-        self.rte_hide.setVisible(False)
-        self.rte_show.setVisible(True)
         
     def show_tiles(self):
         self.tscroll.setVisible(True)
@@ -422,13 +398,11 @@ class main(QMainWindow):
             self.hide_tasks()
             self.hide_tools()
             self.hide_tasks_settings()
-            self.hideRTE()
         elif self.fullscreen == False:
             self.show_tiles()
             self.show_tasks()
             self.show_tools()
             self.show_tasks_settings()
-            self.showRTE()
             
     def about(self):
         a = stackedInfoImgDialog(str(self.icon_loc),
