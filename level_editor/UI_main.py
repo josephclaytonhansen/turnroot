@@ -160,10 +160,10 @@ class main(QMainWindow):
         
         #add Tiles workspace show/hide toggle to main layout
         self.tiles_show = showWorkspace("tiles", data["active_layout"])
-        self.layout.addWidget(self.tiles_show, 25, 15, 1, 1)
+        self.layout.addWidget(self.tiles_show, 25, 0, 1, 1)
         self.tiles_show.clicked.connect(self.show_tiles)
         self.tiles_hide = hideWorkspace("tiles", data["active_layout"])
-        self.layout.addWidget(self.tiles_hide, 25, 15, 1, 1)
+        self.layout.addWidget(self.tiles_hide, 25, 0, 1, 1)
         self.tiles_hide.clicked.connect(self.hide_tiles)
         self.tiles_show.setVisible(False)
 
