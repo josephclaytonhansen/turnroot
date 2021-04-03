@@ -7,8 +7,6 @@ from UI_updateJSON import updateJSON
 from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction
 import UI_colorTheme
-#once RTE is done delete line 11
-from UI_color_test_widget import Color
 from tasks_backend import getFillSquares, getDoorTiles
 import json, math, re, sys, os
 
@@ -488,7 +486,7 @@ class TaskSelection(QWidget):
                           taskInList("Add Warp", 1),
                           taskInList("Add Switch", 1),
                           taskInList("Add Heal", 1),
-                          taskInList("Add Emplacement", 1),
+                          taskInList("Add Fortress", 1),
                           taskInList("Set Start Tiles", 2),
                           taskInList("Level Turn Options", 2),
                           taskInList("Win/Lose Conditions", 2),
