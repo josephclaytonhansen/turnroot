@@ -777,7 +777,7 @@ class TaskSettings(QWidget):
             self.setLayout(global_open_settings)
             for x in self.stacks:
                 global_open_settings.addWidget(self.stacks[self.stacks.index(x)])
-            global_open_settings.setCurrentIndex(1)
+            global_open_settings.setCurrentIndex(0)
     
     def fwt_fill(self):
         global tile_ratio, global_squares, current_tile, level_data 
