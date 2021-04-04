@@ -29,6 +29,7 @@ p_ttype_label = None
 current_stack = tile_set
 playout = None
 level_data = {}
+decor_data = {}
 current_name = None
 highlighted_tile = None
 ht = None
@@ -48,8 +49,9 @@ most_recent_chest = None
 #passing global variables to UI_main
 class LevelData():
     def __init__(self):
-        global level_data
+        global level_data, decor_data
         self.level_data = level_data
+        self.decor_data = decor_data
 
 class TileSets():
     def __init__(self):

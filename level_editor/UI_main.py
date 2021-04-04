@@ -58,6 +58,7 @@ class main(QMainWindow):
         self.zoom_level = zoom_level
         self.setFocusPolicy(Qt.ClickFocus)
         self.level_data = LevelData().level_data
+        self.decor_data = LevelData().decor_data
         
         self.path = None
         self.tilesets = TileSets().tile_stack
@@ -272,29 +273,36 @@ class main(QMainWindow):
     #keyboard events
     def keyPressEvent(self, e):
         modifiers = QApplication.keyboardModifiers()
-        if e.key() == Qt.Key_F:
-            self.full_screen()
-        elif e.key() == Qt.Key_S:
-            self.OptionsMenu()
-        elif e.key() == Qt.Key_H:
-            self.helpView()
-        elif e.key() == Qt.Key_I:
-            self.zoom_in()
-        elif e.key() == Qt.Key_O:
-            self.zoom_out()
-        elif e.key() == Qt.Key_L:
-            self.scrollReset()
-        elif e.key() == Qt.Key_Period:
-            self.scrollFr()
-        elif e.key() == Qt.Key_P:
-            self.tiles_info.assignLastTile()
-        elif e.key() == Qt.Key_T:
-            t = addObject(parent=self)
-            t.exec_()
-            self.tile_grid.addObjectToGrid(t.chosen_object)
+            
         if modifiers == Qt.ControlModifier:
             if e.key() == Qt.Key_Q:
                 self.quitWindow()
+            elif e.key() == Qt.Key_O:
+                self.openFileDialog()
+            elif e.key() == Qt.Key_S:
+                self.Save()
+        
+        else:
+            if e.key() == Qt.Key_F:
+                self.full_screen()
+            elif e.key() == Qt.Key_S:
+                self.OptionsMenu()
+            elif e.key() == Qt.Key_H:
+                self.helpView()
+            elif e.key() == Qt.Key_I:
+                self.zoom_in()
+            elif e.key() == Qt.Key_O:
+                self.zoom_out()
+            elif e.key() == Qt.Key_L:
+                self.scrollReset()
+            elif e.key() == Qt.Key_Period:
+                self.scrollFr()
+            elif e.key() == Qt.Key_P:
+                self.tiles_info.assignLastTile()
+            elif e.key() == Qt.Key_T:
+                t = addObject(parent=self)
+                t.exec_()
+                self.tile_grid.addObjectToGrid(t.chosen_object)
 
     #custom events
     def OptionsMenu(self):
@@ -449,14 +457,21 @@ class main(QMainWindow):
         if fileName:
             self.path = fileName
             self.setWindowTitle(title+self.path)
+            
             with open(self.path, "r") as read_file:
                 level_data = json.load(read_file)
                 read_file.close()
                 tile_data = {}
+                
+            with open(self.path+"d", "r") as read_decor_file:
+                decor_data = json.load(read_decor_file)
+                read_decor_file.close()
+                
                 for x in range(0, len(self.tilesets)):
                     with open("tiles/"+self.tilesets[x]+".json", "r") as read_file:
                         read_file.seek(0)
                         tile_data[x] = json.load(read_file)
+                        
                 for g in range(1, self.tile_grid.count+1):
                     self.tile_grid.squares[g].clear()
                     if level_data[str(g)] != 'e':
@@ -482,6 +497,9 @@ class main(QMainWindow):
             with open(self.path, "w") as write_file:
                 json.dump(self.level_data, write_file)
                 write_file.close()
+            with open(self.path+"d", "w") as write_decor_file:
+                json.dump(self.decor_data, write_decor_file)
+                write_decor_file.close()
     
     
     def Save(self):
@@ -492,6 +510,9 @@ class main(QMainWindow):
             with open(self.path, "w") as write_file:
                 json.dump(self.level_data, write_file)
                 write_file.close()
+            with open(self.path+"d", "w") as write_decor_file:
+                json.dump(self.decor_data, write_decor_file)
+                write_decor_file.close()
                 
 window = main()
 window.show()
