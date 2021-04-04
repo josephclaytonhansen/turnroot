@@ -29,7 +29,7 @@ p_ttype_label = None
 current_stack = tile_set
 playout = None
 level_data = {}
-decor_data = {}
+decor_data = []
 current_name = None
 highlighted_tile = None
 ht = None
@@ -173,13 +173,15 @@ class tileGridWorkspace(QWidget):
         self.setLayout(self.layout)
     
     def change_color(self):
-        global current_tile, level_data, current_name, add_on_click, tile_ratio, most_recent_door, most_recent_chest
+        global current_tile, level_data, current_name, add_on_click, tile_ratio, most_recent_door, most_recent_chest, decor_data
         try:
             if add_on_click == "tile":
                 self.sender().setPixmap(current_tile)
                 level_data[self.sender().gridIndex] = current_name
             
             if add_on_click == "deco":
+                decor_data.append(str(self.sender().gridIndex)+"-"+str(current_name))
+                print(decor_data)
                 self.sender().setPixmap(overlayTile(self.sender().pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio), current_tile.scaled(int(32), int(32), Qt.KeepAspectRatio)))
             
             elif add_on_click == "Door":
