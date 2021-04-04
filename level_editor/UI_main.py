@@ -20,7 +20,8 @@ from UI_workspaceContainer import (workspaceContainer,
                                    LevelData,
                                    TileSets,
                                    TaskSelection,
-                                   TaskSettings)
+                                   TaskSettings,
+                                   overlayTile)
 from UI_WebViewer import webView
 
 data = updateJSON()
@@ -476,17 +477,28 @@ class main(QMainWindow):
                     self.tile_grid.squares[g].clear()
                     if level_data[str(g)] != 'e':
                         for x in range(0, len(tile_data)):
+                            #open tiles
                             for k in range(0, 6):
                                 for y in range(0, 27):
                                     tile = tile_data[x][str(k)][str(y)]
                                     if (level_data[str(g)] ) == tile[0]:
                                         image = QPixmap("tiles/"+self.tilesets[x]+".png")
+                                        self.dims = [y,k]
                                         self.tile_grid.squares[g].setPixmap(image.copy(y*32, k*32, 32, 32).scaled(int(64), int(64), Qt.KeepAspectRatio))
+                                        print("FIRST PAINT",level_data[str(g)],y*32, k*32)
                                         self.level_data[g] = level_data[str(g)]
-                                        with open(self.path, "w") as write_file:
-                                            json.dump(self.level_data, write_file)
-                                            write_file.close()
-   
+                                            
+                                    for l in decor_data:
+                                        self.decor_tile_index = l[:l.index("-")]
+                                        self.decor_index = l[l.index("-")+1:]
+
+                                        if str(tile[0]) == self.decor_index:
+                                            overlay_image = QPixmap("tiles/"+self.tilesets[x]+".png")
+                                            self.tile_grid.squares[int(self.decor_tile_index)].setPixmap(overlayTile(
+                                                image.copy(self.dims[0]*32, self.dims[1]*32, 32, 32).scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                overlay_image.copy(y*32, k*32, 32, 32).scaled(int(32), int(32), Qt.KeepAspectRatio)))
+                                            print("OVERLAY",level_data[str(g)], self.dims[0]*32,self.dims[1]*32)
+                                            
     def saveFileDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog

@@ -236,6 +236,7 @@ class tileGridWorkspace(QWidget):
    
     def reset_color(self):
         self.sender().clear()
+        #TODO: differentiate between "remove decor" and "remove tile"
     
     def addObjectToGrid(self, s):
         global add_on_click
