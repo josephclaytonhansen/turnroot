@@ -70,6 +70,7 @@ def overlayTile(image, overlay):
     painter.drawPixmap(0, 0, image)
     painter.drawPixmap(0, 0, overlay)
     painter.end()
+    result = result.scaled(64, 64, Qt.KeepAspectRatio)
     return result
 
 #TODO delete this class when RTE is done

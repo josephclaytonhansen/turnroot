@@ -483,6 +483,7 @@ class main(QMainWindow):
                 json.dump(self.level_data, write_file)
                 write_file.close()
     
+    
     def Save(self):
         if self.path == None:
             self.saveFileDialog()
