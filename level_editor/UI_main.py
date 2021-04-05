@@ -44,6 +44,7 @@ warning_text = "This software was downloaded from an unverified source, and may 
 
 fullscreen = False
 zoom_level = 1.75
+mode_highlight = 0
 
 class main(QMainWindow):
     def __init__(self):
@@ -143,7 +144,20 @@ class main(QMainWindow):
         self.goto_fr.setPixmap(QPixmap(("ui_icons/"+icon_string+"goto-fr.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
         self.goto_fr.clicked.connect(self.scrollFr)
      
-        self.tools = toolsWorkspace("tools", data["active_layout"], [self.z_in, self.z_out, self.goto_00, self.goto_fr])
+        self.tools = toolsWorkspace("tools", data["active_layout"], [self.z_in, self.z_out, self.goto_00, self.goto_fr], "v")
+        
+        #edit mode workspace
+        self.edit_mode_tile = ClickableQLabel()
+        self.edit_mode_tile.setToolTip("Delete tiles")
+        self.edit_mode_tile.setPixmap(QPixmap(("ui_icons/"+icon_string+"tile_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
+        self.edit_mode_tile.clicked.connect(self.tileEditMode)
+        
+        self.edit_mode_decor = ClickableQLabel()
+        self.edit_mode_decor.setToolTip("Delete decor/objects")
+        self.edit_mode_decor.setPixmap(QPixmap(("ui_icons/"+icon_string+"decor_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
+        self.edit_mode_decor.clicked.connect(self.decorEditMode)
+        
+        self.edit_mode = toolsWorkspace("edit_mode", data["active_layout"], [self.edit_mode_tile], "h")
 
         #add workspaces to main layout
         self.layout.addWidget(self.scroll, 0, 0, 26, 48)
@@ -152,6 +166,7 @@ class main(QMainWindow):
         self.layout.addWidget(self.tasks_scroll, 14, 40, 12, 8)
         self.layout.addWidget(self.task_settings, 4, 40, 10, 8)
         self.layout.addWidget(self.tools, 2, 0, 7, 1)
+        self.layout.addWidget(self.edit_mode, 0, 22, 1, 1)
         
         #add show workspace buttons
         self.tiles_show = showWorkspace("tiles", data["active_layout"])
@@ -448,6 +463,12 @@ class main(QMainWindow):
     def scrollFr(self):
         self.scroll.horizontalScrollBar().setValue(2200)
         self.scroll.verticalScrollBar().setValue(2200)
+    
+    def tileEditMode(self):
+        pass
+    
+    def decorEditMode(self):
+        pass
    
     #thanks to pythonspot for the open / save dialog templates
     def openFileDialog(self):

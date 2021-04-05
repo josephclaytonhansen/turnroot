@@ -253,19 +253,29 @@ class ClickableQLabel(QLabel):
             self.right_clicked.emit()
 
 class toolsWorkspace(QWidget):
-        def __init__(self, workspace, layout, labels):
+        def __init__(self, workspace, layout, labels, direction):
             super().__init__()
             self.setAutoFillBackground(True)
             data = updateJSON()
             self.active_theme = getattr(UI_colorTheme, data["active_theme"])
             self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
             
-            self.layout = QVBoxLayout()
+            self.direction = direction
+            self.k = QWidget()
+            
+            if self.direction.lower() == "v":
+                self.layout = QVBoxLayout()
+                self.k.setMinimumWidth(int(data["icon_size"])+6)
+                self.k.setMinimumHeight(0)
+                
+            else:
+                self.layout = QHBoxLayout()
+                self.k.setMinimumHeight(int(data["icon_size"])+6)
+                
             self.layout.setContentsMargins(0,0,0,0)
             self.layout.setSpacing(0)
-            self.k = QWidget()
-            self.k.setMinimumHeight(0)
-            self.k.setMinimumWidth(int(data["icon_size"])+6)
+            
+
             self.layout.addWidget(self.k)
             
             for x in range(0, len(labels)):
@@ -273,6 +283,7 @@ class toolsWorkspace(QWidget):
                 labels[x].setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                 labels[x].setMinimumHeight(int(data["icon_size"]))
                 labels[x].setMinimumWidth(int(data["icon_size"]))
+                
             self.setLayout(self.layout)
             
 class TilesInfo(QTabWidget):
