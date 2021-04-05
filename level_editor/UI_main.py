@@ -465,11 +465,11 @@ class main(QMainWindow):
         self.scroll.verticalScrollBar().setValue(2200)
     
     def tileEditMode(self):
-        pass
-    
+        self.edit_mode_tile.setPixmap(QPixmap(("ui_icons/"+icon_string+"tile_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
+
     def decorEditMode(self):
-        pass
-   
+        self.edit_mode_tile.setPixmap(QPixmap(("ui_icons/"+icon_string+"decor_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
+
     #thanks to pythonspot for the open / save dialog templates
     def openFileDialog(self):
         options = QFileDialog.Options()
