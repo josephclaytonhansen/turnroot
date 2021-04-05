@@ -482,23 +482,25 @@ class main(QMainWindow):
                                 for y in range(0, 27):
                                     tile = tile_data[x][str(k)][str(y)]
                                     if (level_data[str(g)] ) == tile[0]:
-                                        image = QPixmap("tiles/"+self.tilesets[x]+".png")
-                                        self.dims = [y,k]
-                                        self.tile_grid.squares[g].setPixmap(image.copy(y*32, k*32, 32, 32).scaled(int(64), int(64), Qt.KeepAspectRatio))
-                                        print("FIRST PAINT",level_data[str(g)],y*32, k*32)
+                                        self.image = QPixmap("tiles/"+self.tilesets[x]+".png")
+                                        self.tile_grid.squares[g].setPixmap(self.image.copy(y*32, k*32, 32, 32).scaled(int(64), int(64), Qt.KeepAspectRatio))
                                         self.level_data[g] = level_data[str(g)]
                                             
-                                    for l in decor_data:
-                                        self.decor_tile_index = l[:l.index("-")]
-                                        self.decor_index = l[l.index("-")+1:]
-
-                                        if str(tile[0]) == self.decor_index:
-                                            overlay_image = QPixmap("tiles/"+self.tilesets[x]+".png")
-                                            self.tile_grid.squares[int(self.decor_tile_index)].setPixmap(overlayTile(
-                                                image.copy(self.dims[0]*32, self.dims[1]*32, 32, 32).scaled(int(32), int(32), Qt.KeepAspectRatio),
-                                                overlay_image.copy(y*32, k*32, 32, 32).scaled(int(32), int(32), Qt.KeepAspectRatio)))
-                                            print("OVERLAY",level_data[str(g)], self.dims[0]*32,self.dims[1]*32)
-                                            
+                    for l in decor_data:
+                        self.decor_tile_index = l[:l.index("-")]
+                        self.decor_index = l[l.index("-")+1:]
+                        if level_data[str(g)] != "e":
+                            if str(self.tile_grid.squares[g].gridIndex) == self.decor_tile_index:
+                                for x in range(0, len(tile_data)):
+                                    for k in range(0, 6):
+                                        for y in range(0, 27):
+                                            self.decor_tile = tile_data[x][str(k)][str(y)][0]
+                                            self.decor_image = image = QPixmap("tiles/"+self.tilesets[x]+".png")
+                                            if str(self.decor_tile) == self.decor_index:
+                                                self.tile_grid.squares[g].setPixmap(
+                                                    overlayTile(self.tile_grid.squares[g].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                                self.decor_image.copy(y*32, k*32, 32, 32).scaled(int(32), int(32), Qt.KeepAspectRatio)))
+                                           
     def saveFileDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
