@@ -20,7 +20,8 @@ from UI_workspaceContainer import (showWorkspace,
                                    TileSets,
                                    TaskSelection,
                                    TaskSettings,
-                                   overlayTile)
+                                   overlayTile,
+                                   DeleteMode)
 from UI_WebViewer import webView
 
 data = updateJSON()
@@ -39,6 +40,7 @@ size = screen.size()
 version = "0.0.0d"
 title = "Turnroot " +version+ "- Level Editor - "
 icon_loc = ""
+icon_string = ""
 
 warning_text = "This software was downloaded from an unverified source, and may be compromised. Please download an official release of Turnroot"
 
@@ -60,8 +62,10 @@ class main(QMainWindow):
         self.setFocusPolicy(Qt.ClickFocus)
         self.level_data = LevelData().level_data
         self.decor_data = LevelData().decor_data
+        self.delete_mode = DeleteMode().delete_mode
         
         self.path = None
+        global icon_string
         self.tilesets = TileSets().tile_stack
 
         #set main layout to grid
@@ -151,11 +155,6 @@ class main(QMainWindow):
         self.edit_mode_tile.setToolTip("Delete tiles")
         self.edit_mode_tile.setPixmap(QPixmap(("ui_icons/"+icon_string+"tile_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
         self.edit_mode_tile.clicked.connect(self.tileEditMode)
-        
-        self.edit_mode_decor = ClickableQLabel()
-        self.edit_mode_decor.setToolTip("Delete decor/objects")
-        self.edit_mode_decor.setPixmap(QPixmap(("ui_icons/"+icon_string+"decor_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
-        self.edit_mode_decor.clicked.connect(self.decorEditMode)
         
         self.edit_mode = toolsWorkspace("edit_mode", data["active_layout"], [self.edit_mode_tile], "h")
 
@@ -465,10 +464,15 @@ class main(QMainWindow):
         self.scroll.verticalScrollBar().setValue(2200)
     
     def tileEditMode(self):
-        self.edit_mode_tile.setPixmap(QPixmap(("ui_icons/"+icon_string+"tile_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
+        global icon_string
+        if self.delete_mode == 0:
+            self.sender().setPixmap(QPixmap(("ui_icons/"+icon_string+"decor_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
+            self.delete_mode = 1
+        else:
+            self.sender().setPixmap(QPixmap(("ui_icons/"+icon_string+"tile_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
+            self.delete_mode = 0
 
-    def decorEditMode(self):
-        self.edit_mode_tile.setPixmap(QPixmap(("ui_icons/"+icon_string+"decor_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
+            
 
     #thanks to pythonspot for the open / save dialog templates
     def openFileDialog(self):
