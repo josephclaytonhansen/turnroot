@@ -9,8 +9,7 @@ from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose, addObject
 from UI_updateJSON import updateJSON
-from UI_workspaceContainer import (workspaceContainer,
-                                   showWorkspace,
+from UI_workspaceContainer import (showWorkspace,
                                    hideWorkspace,
                                    tileGridWorkspace,
                                    ClickableQLabel,
@@ -482,7 +481,7 @@ class main(QMainWindow):
                                 for y in range(0, 27):
                                     tile = tile_data[x][str(k)][str(y)]
                                     if (level_data[str(g)] ) == tile[0]:
-                                        self.image = QPixmap("tiles/"+self.tilesets[x]+".png")
+                                        self.image = QPixmap("resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".png")
                                         self.tile_grid.squares[g].setPixmap(self.image.copy(y*32, k*32, 32, 32).scaled(int(64), int(64), Qt.KeepAspectRatio))
                                         self.level_data[g] = level_data[str(g)]
                                             
@@ -495,7 +494,7 @@ class main(QMainWindow):
                                     for k in range(0, 6):
                                         for y in range(0, 27):
                                             self.decor_tile = tile_data[x][str(k)][str(y)][0]
-                                            self.decor_image = image = QPixmap("tiles/"+self.tilesets[x]+".png")
+                                            self.decor_image = image = QPixmap("resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".png")
                                             if str(self.decor_tile) == self.decor_index:
                                                 self.tile_grid.squares[g].setPixmap(
                                                     overlayTile(self.tile_grid.squares[g].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),

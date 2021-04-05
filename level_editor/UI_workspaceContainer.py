@@ -58,7 +58,7 @@ class TileSets():
         self.tile_stack = tile_stack
 
 #default tile set init
-with open("tiles/"+tile_set+".json", "r") as read_file:
+with open("resource_packs/ClassicVerdant/tiles/"+tile_set+".json", "r") as read_file:
     read_file.seek(0)
     tile_data = json.load(read_file)
     read_file.close()
@@ -74,32 +74,6 @@ def overlayTile(image, overlay):
     painter.end()
     result = result.scaled(64, 64, Qt.KeepAspectRatio)
     return result
-
-#TODO delete this class when RTE is done
-class workspaceContainer(QWidget):
-        def __init__(self, workspace, layout):
-            super().__init__()
-            self.setAutoFillBackground(True)
-            data = updateJSON()
-            self.active_theme = getattr(UI_colorTheme, data["active_theme"])
-            self.setStyleSheet("font-size: "+str(data["font_size"])+"px;color: "+self.active_theme.window_text_color)
-            palette = self.palette()
-            self.background_color = QColor(self.active_theme.workspace_background_color)
-            palette.setColor(QPalette.Window, self.background_color)
-            self.setPalette(palette)
-            self.layout = QVBoxLayout()
-            self.layout.setContentsMargins(2,2,2,2)
-            self.layout.setSpacing(4)
-            self.label = QLabel("Label")
-            font = self.label.font()
-            font.setPointSize(int(data["icon_size"])/2)
-            self.label.setFont(font)
-            self.label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-
-            self.layout.addWidget(self.label)
-            self.layout.addWidget(Color(self.active_theme.window_background_color))
-            self.layout.addWidget(Color(self.active_theme.list_background_color))
-            self.setLayout(self.layout)
 
 #show and hide workspace buttons
 class showWorkspace(QPushButton):
@@ -186,7 +160,10 @@ class tileGridWorkspace(QWidget):
             
             elif add_on_click == "Door":
                 self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
-                self.door_tiles = ["tiles/door0.png", "tiles/door1.png", "tiles/door2.png", "tiles/door3.png"]
+                self.door_tiles = ["resource_packs/ClassicVerdant/tiles/door0.png",
+                                   "resource_packs/ClassicVerdant/tiles/door1.png",
+                                   "resource_packs/ClassicVerdant/tiles/door2.png",
+                                   "resource_packs/ClassicVerdant/tiles/door3.png"]
                 self.zero_tile = overlayTile(global_squares[self.working_tiles[0][0]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
                                              self.door_tiles[0])
                 self.one_tile = overlayTile(global_squares[self.working_tiles[0][1]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
@@ -204,7 +181,10 @@ class tileGridWorkspace(QWidget):
             
             elif add_on_click == "Barred Gate":
                 self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
-                self.door_tiles = ["tiles/bars0.png", "tiles/bars1.png", "tiles/bars2.png", "tiles/bars3.png"]
+                self.door_tiles = ["resource_packs/ClassicVerdant/tiles/bars0.png",
+                                   "resource_packs/ClassicVerdant/tiles/bars1.png",
+                                   "resource_packs/ClassicVerdant/tiles/bars2.png",
+                                   "resource_packs/ClassicVerdant/tiles/bars3.png"]
                 self.zero_tile = overlayTile(global_squares[self.working_tiles[0][0]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
                                              self.door_tiles[0])
                 self.one_tile = overlayTile(global_squares[self.working_tiles[0][1]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
@@ -222,7 +202,7 @@ class tileGridWorkspace(QWidget):
             
             elif add_on_click == "Chest":
                 self.working_tiles =self.sender().gridIndex
-                self.chest_tile = "tiles/chest0.png"
+                self.chest_tile = "resource_packs/ClassicVerdant/tiles/chest0.png"
                 self.zero_tile = overlayTile(global_squares[self.working_tiles].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
                                              self.chest_tile)
                 global_squares[self.working_tiles].setPixmap(self.zero_tile)
@@ -374,11 +354,7 @@ class Tiles(QWidget):
         self.setAutoFillBackground(True)
         data = updateJSON()
         
-        global tiles
-        global ttype
-        global p_ttype_label
-        global tile_stack
-        global playout
+        global tiles, ttype, p_ttype_label, tile_stack, playout
         self.w = TilesInfo()
         self.stacks = {}
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
@@ -386,8 +362,8 @@ class Tiles(QWidget):
         
         for x in range(0, len(tile_stack)):
             self.stacks[x] = QWidget()
-            self.pixmap = QPixmap("tiles/"+tile_stack[x]+".png")
-            with open("tiles/"+tile_stack[x]+".json", "r") as read_file:
+            self.pixmap = QPixmap("resource_packs/ClassicVerdant/tiles/"+tile_stack[x]+".png")
+            with open("resource_packs/ClassicVerdant/tiles/"+tile_stack[x]+".json", "r") as read_file:
                 read_file.seek(0)
                 tile_data = json.load(read_file)
                 read_file.close()
