@@ -45,6 +45,7 @@ tile_preview_rwt_from = None
 add_on_click = "tile"
 most_recent_door = None
 most_recent_chest = None
+universal_delete_mode = 0
 
 #passing global variables to UI_main
 class LevelData():
@@ -57,6 +58,10 @@ class TileSets():
     def __init__(self):
         self.tile_stack = tile_stack
 
+class DeleteMode():
+    def __init__(self):
+        self.delete_mode = universal_delete_mode
+        
 #default tile set init
 with open("resource_packs/ClassicVerdant/tiles/"+tile_set+".json", "r") as read_file:
     read_file.seek(0)
