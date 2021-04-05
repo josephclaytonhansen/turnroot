@@ -450,7 +450,7 @@ class main(QMainWindow):
         self.scroll.horizontalScrollBar().setValue(2200)
         self.scroll.verticalScrollBar().setValue(2200)
    
-    #thanks to pythonspot for these functions
+    #thanks to pythonspot for the open / save dialog templates
     def openFileDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
