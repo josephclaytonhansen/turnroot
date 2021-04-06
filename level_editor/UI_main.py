@@ -7,7 +7,7 @@ import qtmodern.windows
 from UI_preferencesDialog import PreferencesDialog
 from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
-from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose, addObject
+from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose, addObject, resourcePackDialog
 from UI_updateJSON import updateJSON
 from UI_workspaceContainer import (showWorkspace,
                                    hideWorkspace,
@@ -235,6 +235,7 @@ class main(QMainWindow):
         self.helpButton.triggered.connect(self.helpView)
         self.edit_mode.triggered.connect(self.tileEditMode)
         self.justTilesButton.triggered.connect(self.full_screen)
+        self.resourcesButton.triggered.connect(self.resourcesDialog)
         
         #add toolbar buttons to toolbar
         self.toolbar.addAction(self.backButton)
@@ -312,7 +313,9 @@ class main(QMainWindow):
             elif e.key() == Qt.Key_T:
                 t = addObject(parent=self)
                 t.exec_()
-                self.tile_grid.addObjectToGrid(t.chosen_object)
+            elif e.key() == Qt.Key_R:
+                r = resourcePackDialog(parent=self)
+                r.exec_()
 
     #custom events
     def OptionsMenu(self):
@@ -434,6 +437,10 @@ class main(QMainWindow):
         #check updates
         u = infoClose("Turnroot is up to date")
         u.exec_()
+    
+    def resourcesDialog(self):
+        r = resourcePackDialog(parent=self)
+        r.exec_()
     
     def zoom_in(self):
         if self.zoom_level < 3.25:
