@@ -31,6 +31,7 @@ current_stack = tile_set
 playout = None
 level_data = {}
 level_data_type = {}
+object_data = {}
 decor_data = []
 current_name = None
 highlighted_tile = None
@@ -52,10 +53,11 @@ universal_delete_mode = 0
 #passing global variables to UI_main
 class LevelData():
     def __init__(self):
-        global level_data, decor_data, level_data_type
+        global level_data, decor_data, level_data_type, object_data
         self.level_data = level_data
         self.decor_data = decor_data
         self.type_data = level_data_type
+        self.object_data = object_data
 
 class TileSets():
     def __init__(self):
@@ -132,6 +134,7 @@ class tileGridWorkspace(QWidget):
             for y in range(0,int(int(self.width/50)*4.4)):
                 self.count = self.count + 1
                 level_data[self.count] = 'e'
+                object_data[self.count] = 'e'
                 level_data_type[self.count] = 0
                 self.checker = self.checker + 1
                 self.squares[self.count] = ClickableQLabel_t()
@@ -186,7 +189,7 @@ class tileGridWorkspace(QWidget):
                     global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
                     global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
                     global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
-                    most_recent_door = global_squares[self.working_tiles[0][0]]
+                    most_recent_door = global_squares[self.working_tiles[0][0]].gridIndex
                     global_open_settings.setCurrentIndex(2)
                 
                 elif add_on_click == "Barred Gate":
@@ -207,7 +210,7 @@ class tileGridWorkspace(QWidget):
                     global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
                     global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
                     global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
-                    most_recent_door = global_squares[self.working_tiles[0][0]]
+                    most_recent_door = global_squares[self.working_tiles[0][0]].gridIndex
                     global_open_settings.setCurrentIndex(2)
                 
                 elif add_on_click == "Chest":
@@ -216,7 +219,7 @@ class tileGridWorkspace(QWidget):
                     self.zero_tile = overlayTile(global_squares[self.working_tiles].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
                                                  self.chest_tile)
                     global_squares[self.working_tiles].setPixmap(self.zero_tile)
-                    most_recent_chest = global_squares[self.working_tiles]
+                    most_recent_chest = global_squares[self.working_tiles].gridIndex
                     global_open_settings.setCurrentIndex(3)
 
                 if add_on_click != "deco":
@@ -225,11 +228,11 @@ class tileGridWorkspace(QWidget):
             add_on_click = "tile"
    
     def reset_color(self):
-        global universal_delete_mode, level_data, decor_data, global_squares, tile_data, tile_set
+        global universal_delete_mode, level_data, decor_data, global_squares, tile_data, tile_set, level_data_type
         if universal_delete_mode == 0:
             self.sender().clear()
             level_data[self.sender().gridIndex] = 'e'
-            level_data[self.sender().gridIndex] = 0
+            level_data_type[self.sender().gridIndex] = 0
         else:
             pass
             #delete objects
@@ -294,7 +297,6 @@ class toolsWorkspace(QWidget):
                 
             self.layout.setContentsMargins(0,0,0,0)
             self.layout.setSpacing(0)
-            
 
             self.layout.addWidget(self.k)
             
@@ -761,6 +763,7 @@ class TaskSettings(QWidget):
             self.replace_tile_with_tile_widget_layout.addWidget(self.rwt_reset)
             #end stack
             #task: Edit Door
+            global most_recent_door
             self.edit_door_widget = QWidget()
             self.edit_door_layout = QVBoxLayout()
             self.edit_door_label = QLabel("Edit Door")
@@ -768,6 +771,7 @@ class TaskSettings(QWidget):
             self.edit_door_widget.setLayout(self.edit_door_layout)
             #end task
             #task: Edit Chest
+            global most_recent_chest
             self.edit_chest_widget = QWidget()
             self.edit_chest_layout = QVBoxLayout()
             self.edit_chest_label = QLabel("Edit Chest")

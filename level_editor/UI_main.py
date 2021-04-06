@@ -63,6 +63,7 @@ class main(QMainWindow):
         self.level_data = LevelData().level_data
         self.decor_data = LevelData().decor_data
         self.type_data = LevelData().type_data
+        self.object_data = LevelData().object_data
         self.delete_mode = DeleteMode().delete_mode
         
         self.path = None
@@ -492,6 +493,10 @@ class main(QMainWindow):
             with open(self.path+"t", "r") as read_type_file:
                 type_data = json.load(read_type_file)
                 read_type_file.close()
+            
+            with open(self.path+"o", "r") as read_object_file:
+                self.type_data = json.load(read_object_file)
+                read_object_file.close()
                 
                 for x in range(0, len(self.tilesets)):
                     with open("resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".json", "r") as read_file:
@@ -542,6 +547,9 @@ class main(QMainWindow):
             with open(self.path+"t", "w") as write_type_file:
                 json.dump(self.type_data, write_type_file)
                 write_type_file.close()
+            with open(self.path+"o", "w") as write_object_file:
+                json.dump(self.object_data, write_object_file)
+                write_object_file.close()
     
     
     def Save(self):
@@ -558,6 +566,9 @@ class main(QMainWindow):
             with open(self.path+"t", "w") as write_type_file:
                 json.dump(self.type_data, write_type_file)
                 write_type_file.close()
+            with open(self.path+"o", "w") as write_object_file:
+                json.dump(self.object_data, write_object_file)
+                write_object_file.close()
                 
 window = main()
 window.show()
