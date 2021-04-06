@@ -165,7 +165,7 @@ class main(QMainWindow):
         self.layout.addWidget(self.tasks_scroll, 14, 40, 12, 8)
         self.layout.addWidget(self.task_settings, 4, 40, 10, 8)
         self.layout.addWidget(self.tools, 2, 0, 7, 1)
-        self.layout.addWidget(self.edit_mode, 0, 22, 1, 1)
+        self.layout.addWidget(self.edit_mode, 0, 0, 1, 1)
         
         #add show workspace buttons
         self.tiles_show = showWorkspace("tiles", data["active_layout"])
@@ -468,9 +468,11 @@ class main(QMainWindow):
         if self.delete_mode == 0:
             self.sender().setPixmap(QPixmap(("ui_icons/"+icon_string+"decor_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
             self.delete_mode = 1
+            self.edit_mode_tile.setToolTip("Delete decor and objects")
         else:
             self.sender().setPixmap(QPixmap(("ui_icons/"+icon_string+"tile_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
             self.delete_mode = 0
+            self.edit_mode_tile.setToolTip("Delete tiles")
 
             
 
