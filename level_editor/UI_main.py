@@ -149,14 +149,6 @@ class main(QMainWindow):
         self.goto_fr.clicked.connect(self.scrollFr)
      
         self.tools = toolsWorkspace("tools", data["active_layout"], [self.z_in, self.z_out, self.goto_00, self.goto_fr], "v")
-        
-        #edit mode workspace
-        self.edit_mode_tile = ClickableQLabel()
-        self.edit_mode_tile.setToolTip("Delete tiles")
-        self.edit_mode_tile.setPixmap(QPixmap(("ui_icons/"+icon_string+"tile_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
-        self.edit_mode_tile.clicked.connect(self.tileEditMode)
-        
-        self.edit_mode = toolsWorkspace("edit_mode", data["active_layout"], [self.edit_mode_tile], "h")
 
         #add workspaces to main layout
         self.layout.addWidget(self.scroll, 0, 0, 26, 48)
@@ -165,7 +157,6 @@ class main(QMainWindow):
         self.layout.addWidget(self.tasks_scroll, 14, 40, 12, 8)
         self.layout.addWidget(self.task_settings, 4, 40, 10, 8)
         self.layout.addWidget(self.tools, 2, 0, 7, 1)
-        self.layout.addWidget(self.edit_mode, 0, 0, 1, 1)
         
         #add show workspace buttons
         self.tiles_show = showWorkspace("tiles", data["active_layout"])
@@ -234,11 +225,13 @@ class main(QMainWindow):
         self.helpButton = QAction(QIcon("ui_icons/"+icon_string+"question-mark-4-32.png"),"Read docs (H)", self)
         self.backButton = QAction(QIcon("ui_icons/"+icon_string+"grid-three-up-32.png"),"Return to editor selection (Esc)", self)
         self.justTilesButton = QAction(QIcon("ui_icons/"+icon_string+"fit-to-width-32.png"),"Show just tiles (F)", self)
+        self.edit_mode = QAction(QIcon("ui_icons/"+icon_string+"tile_edit.png"), "Delete tiles", self)
         self.forumButton = QAction(QIcon("ui_icons/"+icon_string+"speech-bubble-2-32.png"),"Access forum (Q)", self)
         
         #connect toolbar buttons to actions
         self.optionsButton.triggered.connect(self.OptionsMenu)
         self.helpButton.triggered.connect(self.helpView)
+        self.edit_mode.triggered.connect(self.tileEditMode)
         self.justTilesButton.triggered.connect(self.full_screen)
         
         #add toolbar buttons to toolbar
@@ -246,6 +239,7 @@ class main(QMainWindow):
         self.toolbar.addAction(self.optionsButton)
         self.toolbar.addAction(self.resourcesButton)
         self.toolbar.addAction(self.justTilesButton)
+        self.toolbar.addAction(self.edit_mode)
         self.toolbar.addAction(self.helpButton)
         self.toolbar.addAction(self.forumButton)
         
@@ -466,13 +460,13 @@ class main(QMainWindow):
     def tileEditMode(self):
         global icon_string
         if self.delete_mode == 0:
-            self.sender().setPixmap(QPixmap(("ui_icons/"+icon_string+"decor_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
+            self.sender().setIcon(QIcon("ui_icons/"+icon_string+"decor_edit.png"))
             self.delete_mode = 1
-            self.edit_mode_tile.setToolTip("Delete decor and objects")
+            self.edit_mode.setToolTip("Delete decor and objects")
         else:
-            self.sender().setPixmap(QPixmap(("ui_icons/"+icon_string+"tile_edit.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
+            self.sender().setIcon(QIcon("ui_icons/"+icon_string+"tile_edit.png"))
             self.delete_mode = 0
-            self.edit_mode_tile.setToolTip("Delete tiles")
+            self.edit_mode.setToolTip("Delete tiles")
 
             
 
