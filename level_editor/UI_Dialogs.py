@@ -155,8 +155,10 @@ class resourcePackDialog(QDialog):
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        
         self.layout = QGridLayout()
         self.setLayout(self.layout)
+        
         self.show()
         
     

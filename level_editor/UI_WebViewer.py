@@ -8,7 +8,7 @@ import json
 from UI_updateJSON import updateJSON
 
 ind = 0
-entries = ["Keyboard Shortcuts", "Help Topic 2", "Help Topic 3", "Read the Docs"]
+entries = ["Keyboard Shortcuts", "Quickstart", "Creation Checklists", "Turnroot Documentation (Read the Docs)", "Turnroot Forums"]
 data = {"font_size": 15, "rfont_size": 15,
         "active_theme": "midnight_spark_yellow",
         "active_layout": "right_lower", "icon_size": "26",
@@ -23,10 +23,11 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 class webView(QDialog):
     
-    def __init__(self, parent=None):
+    def __init__(self, page, parent=None):
         super().__init__()
         updateJSON()
         self.ind = ind
+        self.page = page
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+active_theme.window_background_color+";color: "+active_theme.window_text_color)
         self.setWindowTitle("Help")
         self.setMinimumHeight(600)
@@ -45,12 +46,13 @@ class webView(QDialog):
         
         #options on the right
         self.help = QWebEngineView()
-        self.help.setMinimumWidth(400)
+        self.help.setMinimumWidth(800)
         
         #options are stacked
         self.help_layout = QStackedLayout()
         self.aes = QWidget()
-
+        
+        self.ind = self.page
         self.loadPage()
         self.help_layout.addWidget(self.help)
         self.aes.setLayout(self.help_layout)
@@ -58,12 +60,14 @@ class webView(QDialog):
         self.show()
 
     def loadPage(self):
-        if (self.ind != 3):
+        if (self.ind < 3):
             with open('help_docs/help_'+str(self.ind)+'.html', 'r') as f:
                 html = f.read()
                 self.help.setHtml(html)
-        else:
-            self.help.setUrl(QUrl("https://turnroot.readthedocs.io/en/latest/")) 
+        elif self.ind == 3:
+            self.help.setUrl(QUrl("https://turnroot.readthedocs.io/en/latest/"))
+        elif self.ind == 4:
+            self.help.setUrl(QUrl("http://forums.turnroot.com/"))
 
     def category_change(self, s):
         for x in range(0, len(entries)):

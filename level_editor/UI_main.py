@@ -233,6 +233,7 @@ class main(QMainWindow):
         #connect toolbar buttons to actions
         self.optionsButton.triggered.connect(self.OptionsMenu)
         self.helpButton.triggered.connect(self.helpView)
+        self.forumButton.triggered.connect(self.forumView)
         self.edit_mode.triggered.connect(self.tileEditMode)
         self.justTilesButton.triggered.connect(self.full_screen)
         self.resourcesButton.triggered.connect(self.resourcesDialog)
@@ -316,6 +317,8 @@ class main(QMainWindow):
             elif e.key() == Qt.Key_R:
                 r = resourcePackDialog(parent=self)
                 r.exec_()
+            elif e.key() == Qt.Key_Q:
+                self.forumView()
 
     #custom events
     def OptionsMenu(self):
@@ -343,7 +346,11 @@ class main(QMainWindow):
                 os.execl(sys.executable, sys.executable, *sys.argv)
             
     def helpView(self):
-        h = webView(parent=self)
+        h = webView(page = 3, parent=self)
+        h.exec_()
+    
+    def forumView(self):
+        h = webView(page = 4, parent=self)
         h.exec_()
     
     def closeEvent(self, event):
