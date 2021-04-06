@@ -134,7 +134,7 @@ class tileGridWorkspace(QWidget):
             for y in range(0,int(int(self.width/50)*4.4)):
                 self.count = self.count + 1
                 level_data[self.count] = 'e'
-                object_data[self.count] = 'e'
+                object_data[self.count] = 'd'
                 level_data_type[self.count] = 0
                 self.checker = self.checker + 1
                 self.squares[self.count] = ClickableQLabel_t()
@@ -159,7 +159,7 @@ class tileGridWorkspace(QWidget):
         self.setLayout(self.layout)
     
     def change_color(self):
-        global current_tile, level_data, current_name, add_on_click, tile_ratio, most_recent_door, most_recent_chest, decor_data, universal_delete_mode, ttype
+        global current_tile, level_data, current_name, add_on_click, tile_ratio, most_recent_door, most_recent_chest, decor_data, universal_delete_mode, ttype, object_data
         try:
             if universal_delete_mode == 0:
                 if add_on_click == "tile":
@@ -189,6 +189,12 @@ class tileGridWorkspace(QWidget):
                     global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
                     global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
                     global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
+                    
+                    object_data[self.working_tiles[0][0]] = "door"
+                    object_data[self.working_tiles[0][1]] = "door"
+                    object_data[self.working_tiles[0][2]] = "door"
+                    object_data[self.working_tiles[0][3]] = "door"
+                    
                     most_recent_door = global_squares[self.working_tiles[0][0]].gridIndex
                     global_open_settings.setCurrentIndex(2)
                 
@@ -210,6 +216,12 @@ class tileGridWorkspace(QWidget):
                     global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
                     global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
                     global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
+                    
+                    object_data[self.working_tiles[0][0]] = "door"
+                    object_data[self.working_tiles[0][1]] = "door"
+                    object_data[self.working_tiles[0][2]] = "door"
+                    object_data[self.working_tiles[0][3]] = "door"
+                    
                     most_recent_door = global_squares[self.working_tiles[0][0]].gridIndex
                     global_open_settings.setCurrentIndex(2)
                 
@@ -219,6 +231,9 @@ class tileGridWorkspace(QWidget):
                     self.zero_tile = overlayTile(global_squares[self.working_tiles].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
                                                  self.chest_tile)
                     global_squares[self.working_tiles].setPixmap(self.zero_tile)
+                    
+                    object_data[self.working_tiles] = "chest"
+                    
                     most_recent_chest = global_squares[self.working_tiles].gridIndex
                     global_open_settings.setCurrentIndex(3)
 
