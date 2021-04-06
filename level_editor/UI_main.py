@@ -7,7 +7,7 @@ import qtmodern.windows
 from UI_preferencesDialog import PreferencesDialog
 from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
-from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose, addObject
+from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose, addObject, resourcePackDialog
 from UI_updateJSON import updateJSON
 from UI_workspaceContainer import (showWorkspace,
                                    hideWorkspace,
@@ -233,8 +233,10 @@ class main(QMainWindow):
         #connect toolbar buttons to actions
         self.optionsButton.triggered.connect(self.OptionsMenu)
         self.helpButton.triggered.connect(self.helpView)
+        self.forumButton.triggered.connect(self.forumView)
         self.edit_mode.triggered.connect(self.tileEditMode)
         self.justTilesButton.triggered.connect(self.full_screen)
+        self.resourcesButton.triggered.connect(self.resourcesDialog)
         
         #add toolbar buttons to toolbar
         self.toolbar.addAction(self.backButton)
@@ -312,7 +314,11 @@ class main(QMainWindow):
             elif e.key() == Qt.Key_T:
                 t = addObject(parent=self)
                 t.exec_()
-                self.tile_grid.addObjectToGrid(t.chosen_object)
+            elif e.key() == Qt.Key_R:
+                r = resourcePackDialog(parent=self)
+                r.exec_()
+            elif e.key() == Qt.Key_Q:
+                self.forumView()
 
     #custom events
     def OptionsMenu(self):
@@ -340,7 +346,11 @@ class main(QMainWindow):
                 os.execl(sys.executable, sys.executable, *sys.argv)
             
     def helpView(self):
-        h = webView(parent=self)
+        h = webView(page = 3, parent=self)
+        h.exec_()
+    
+    def forumView(self):
+        h = webView(page = 4, parent=self)
         h.exec_()
     
     def closeEvent(self, event):
@@ -434,6 +444,10 @@ class main(QMainWindow):
         #check updates
         u = infoClose("Turnroot is up to date")
         u.exec_()
+    
+    def resourcesDialog(self):
+        r = resourcePackDialog(parent=self)
+        r.exec_()
     
     def zoom_in(self):
         if self.zoom_level < 3.25:
