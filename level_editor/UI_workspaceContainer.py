@@ -160,7 +160,6 @@ class tileGridWorkspace(QWidget):
             
             if add_on_click == "deco":
                 decor_data.append(str(self.sender().gridIndex)+"-"+str(current_name))
-                print(decor_data)
                 self.sender().setPixmap(overlayTile(self.sender().pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio), current_tile.scaled(int(32), int(32), Qt.KeepAspectRatio)))
             
             elif add_on_click == "Door":
@@ -220,12 +219,22 @@ class tileGridWorkspace(QWidget):
             add_on_click = "tile"
    
     def reset_color(self):
-        self.sender().clear()
-        #TODO: differentiate between "remove decor" and "remove tile"
+        global universal_delete_mode, level_data, decor_data, global_squares, tile_data, tile_set
+        if universal_delete_mode == 0:
+            self.sender().clear()
+            #delete tile
+            level_data[self.sender().gridIndex] = 'e'
+        else:
+            pass
+            #delete objects
     
     def addObjectToGrid(self, s):
         global add_on_click
         add_on_click = s
+    
+    def setDeleteMode(self, m):
+        global universal_delete_mode
+        universal_delete_mode = m
             
 #this class is specifically for the tile grid
 class ClickableQLabel_t(QLabel):

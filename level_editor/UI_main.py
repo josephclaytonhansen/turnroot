@@ -462,13 +462,13 @@ class main(QMainWindow):
         if self.delete_mode == 0:
             self.sender().setIcon(QIcon("ui_icons/"+icon_string+"decor_edit.png"))
             self.delete_mode = 1
-            self.edit_mode.setToolTip("Delete decor and objects")
+            self.edit_mode.setToolTip("Delete Objects")
         else:
             self.sender().setIcon(QIcon("ui_icons/"+icon_string+"tile_edit.png"))
             self.delete_mode = 0
             self.edit_mode.setToolTip("Delete tiles")
-
             
+        self.tile_grid.setDeleteMode(self.delete_mode)
 
     #thanks to pythonspot for the open / save dialog templates
     def openFileDialog(self):
@@ -489,7 +489,7 @@ class main(QMainWindow):
                 read_decor_file.close()
                 
                 for x in range(0, len(self.tilesets)):
-                    with open("tiles/"+self.tilesets[x]+".json", "r") as read_file:
+                    with open("resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".json", "r") as read_file:
                         read_file.seek(0)
                         tile_data[x] = json.load(read_file)
                         
