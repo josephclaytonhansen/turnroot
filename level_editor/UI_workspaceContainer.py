@@ -21,6 +21,7 @@ current_sender = None
 tiles = {0:{}, 1:{}, 2:{}, 3:{}, 4:{}, 5:{}, 6:{}}
 ttype = ""
 tile_set = tile_stack[0]
+ttype = None
 ttype_label = None
 ttype_pix = None
 ttype_img = None
@@ -29,6 +30,7 @@ p_ttype_label = None
 current_stack = tile_set
 playout = None
 level_data = {}
+level_data_type = {}
 decor_data = []
 current_name = None
 highlighted_tile = None
@@ -50,9 +52,10 @@ universal_delete_mode = 0
 #passing global variables to UI_main
 class LevelData():
     def __init__(self):
-        global level_data, decor_data
+        global level_data, decor_data, level_data_type
         self.level_data = level_data
         self.decor_data = decor_data
+        self.type_data = level_data_type
 
 class TileSets():
     def __init__(self):
@@ -122,13 +125,14 @@ class tileGridWorkspace(QWidget):
         self.ratio = self.width/self.height
         #each square is ratio width/1 height
         
-        global tile_ratio,global_squares
+        global tile_ratio,global_squares,level_data_type
         
         for x in range(0,int(int(self.height/(50*self.ratio))*4.4)):
             self.checker = self.checker + 1
             for y in range(0,int(int(self.width/50)*4.4)):
                 self.count = self.count + 1
                 level_data[self.count] = 'e'
+                level_data_type[self.count] = 0
                 self.checker = self.checker + 1
                 self.squares[self.count] = ClickableQLabel_t()
                 self.squares[self.count].setMouseTracking(True)
@@ -152,69 +156,71 @@ class tileGridWorkspace(QWidget):
         self.setLayout(self.layout)
     
     def change_color(self):
-        global current_tile, level_data, current_name, add_on_click, tile_ratio, most_recent_door, most_recent_chest, decor_data
+        global current_tile, level_data, current_name, add_on_click, tile_ratio, most_recent_door, most_recent_chest, decor_data, universal_delete_mode, ttype
         try:
-            if add_on_click == "tile":
-                self.sender().setPixmap(current_tile)
-                level_data[self.sender().gridIndex] = current_name
-            
-            if add_on_click == "deco":
-                decor_data.append(str(self.sender().gridIndex)+"-"+str(current_name))
-                self.sender().setPixmap(overlayTile(self.sender().pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio), current_tile.scaled(int(32), int(32), Qt.KeepAspectRatio)))
-            
-            elif add_on_click == "Door":
-                self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
-                self.door_tiles = ["resource_packs/ClassicVerdant/tiles/door0.png",
-                                   "resource_packs/ClassicVerdant/tiles/door1.png",
-                                   "resource_packs/ClassicVerdant/tiles/door2.png",
-                                   "resource_packs/ClassicVerdant/tiles/door3.png"]
-                self.zero_tile = overlayTile(global_squares[self.working_tiles[0][0]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
-                                             self.door_tiles[0])
-                self.one_tile = overlayTile(global_squares[self.working_tiles[0][1]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
-                                             self.door_tiles[1])
-                self.two_tile = overlayTile(global_squares[self.working_tiles[0][2]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
-                                             self.door_tiles[2])
-                self.three_tile = overlayTile(global_squares[self.working_tiles[0][3]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
-                                             self.door_tiles[3])
-                global_squares[self.working_tiles[0][0]].setPixmap(self.zero_tile)
-                global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
-                global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
-                global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
-                most_recent_door = global_squares[self.working_tiles[0][0]]
-                global_open_settings.setCurrentIndex(2)
-            
-            elif add_on_click == "Barred Gate":
-                self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
-                self.door_tiles = ["resource_packs/ClassicVerdant/tiles/bars0.png",
-                                   "resource_packs/ClassicVerdant/tiles/bars1.png",
-                                   "resource_packs/ClassicVerdant/tiles/bars2.png",
-                                   "resource_packs/ClassicVerdant/tiles/bars3.png"]
-                self.zero_tile = overlayTile(global_squares[self.working_tiles[0][0]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
-                                             self.door_tiles[0])
-                self.one_tile = overlayTile(global_squares[self.working_tiles[0][1]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
-                                             self.door_tiles[1])
-                self.two_tile = overlayTile(global_squares[self.working_tiles[0][2]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
-                                             self.door_tiles[2])
-                self.three_tile = overlayTile(global_squares[self.working_tiles[0][3]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
-                                             self.door_tiles[3])
-                global_squares[self.working_tiles[0][0]].setPixmap(self.zero_tile)
-                global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
-                global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
-                global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
-                most_recent_door = global_squares[self.working_tiles[0][0]]
-                global_open_settings.setCurrentIndex(2)
-            
-            elif add_on_click == "Chest":
-                self.working_tiles =self.sender().gridIndex
-                self.chest_tile = "resource_packs/ClassicVerdant/tiles/chest0.png"
-                self.zero_tile = overlayTile(global_squares[self.working_tiles].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
-                                             self.chest_tile)
-                global_squares[self.working_tiles].setPixmap(self.zero_tile)
-                most_recent_chest = global_squares[self.working_tiles]
-                global_open_settings.setCurrentIndex(3)
+            if universal_delete_mode == 0:
+                if add_on_click == "tile":
+                    self.sender().setPixmap(current_tile)
+                    level_data[self.sender().gridIndex] = current_name
+                    level_data_type[self.sender().gridIndex] = ttype
+                
+                if add_on_click == "deco":
+                    decor_data.append(str(self.sender().gridIndex)+"-"+str(current_name))
+                    self.sender().setPixmap(overlayTile(self.sender().pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio), current_tile.scaled(int(32), int(32), Qt.KeepAspectRatio)))
+                
+                elif add_on_click == "Door":
+                    self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
+                    self.door_tiles = ["resource_packs/ClassicVerdant/tiles/door0.png",
+                                       "resource_packs/ClassicVerdant/tiles/door1.png",
+                                       "resource_packs/ClassicVerdant/tiles/door2.png",
+                                       "resource_packs/ClassicVerdant/tiles/door3.png"]
+                    self.zero_tile = overlayTile(global_squares[self.working_tiles[0][0]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                 self.door_tiles[0])
+                    self.one_tile = overlayTile(global_squares[self.working_tiles[0][1]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                 self.door_tiles[1])
+                    self.two_tile = overlayTile(global_squares[self.working_tiles[0][2]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                 self.door_tiles[2])
+                    self.three_tile = overlayTile(global_squares[self.working_tiles[0][3]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                 self.door_tiles[3])
+                    global_squares[self.working_tiles[0][0]].setPixmap(self.zero_tile)
+                    global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
+                    global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
+                    global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
+                    most_recent_door = global_squares[self.working_tiles[0][0]]
+                    global_open_settings.setCurrentIndex(2)
+                
+                elif add_on_click == "Barred Gate":
+                    self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
+                    self.door_tiles = ["resource_packs/ClassicVerdant/tiles/bars0.png",
+                                       "resource_packs/ClassicVerdant/tiles/bars1.png",
+                                       "resource_packs/ClassicVerdant/tiles/bars2.png",
+                                       "resource_packs/ClassicVerdant/tiles/bars3.png"]
+                    self.zero_tile = overlayTile(global_squares[self.working_tiles[0][0]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                 self.door_tiles[0])
+                    self.one_tile = overlayTile(global_squares[self.working_tiles[0][1]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                 self.door_tiles[1])
+                    self.two_tile = overlayTile(global_squares[self.working_tiles[0][2]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                 self.door_tiles[2])
+                    self.three_tile = overlayTile(global_squares[self.working_tiles[0][3]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                 self.door_tiles[3])
+                    global_squares[self.working_tiles[0][0]].setPixmap(self.zero_tile)
+                    global_squares[self.working_tiles[0][1]].setPixmap(self.one_tile)
+                    global_squares[self.working_tiles[0][2]].setPixmap(self.two_tile)
+                    global_squares[self.working_tiles[0][3]].setPixmap(self.three_tile)
+                    most_recent_door = global_squares[self.working_tiles[0][0]]
+                    global_open_settings.setCurrentIndex(2)
+                
+                elif add_on_click == "Chest":
+                    self.working_tiles =self.sender().gridIndex
+                    self.chest_tile = "resource_packs/ClassicVerdant/tiles/chest0.png"
+                    self.zero_tile = overlayTile(global_squares[self.working_tiles].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                 self.chest_tile)
+                    global_squares[self.working_tiles].setPixmap(self.zero_tile)
+                    most_recent_chest = global_squares[self.working_tiles]
+                    global_open_settings.setCurrentIndex(3)
 
-            if add_on_click != "deco":
-                add_on_click = "tile"
+                if add_on_click != "deco":
+                    add_on_click = "tile"
         except:
             add_on_click = "tile"
    
@@ -222,8 +228,8 @@ class tileGridWorkspace(QWidget):
         global universal_delete_mode, level_data, decor_data, global_squares, tile_data, tile_set
         if universal_delete_mode == 0:
             self.sender().clear()
-            #delete tile
             level_data[self.sender().gridIndex] = 'e'
+            level_data[self.sender().gridIndex] = 0
         else:
             pass
             #delete objects
@@ -426,7 +432,7 @@ class Tiles(QWidget):
         playout.setCurrentIndex(0)
     
     def assignCurrentTile(self):
-        global current_tile, previous_sender, current_sender
+        global current_tile, previous_sender, current_sender, ttype
         previous_sender = current_sender
         global tiles, ttype_pix, p_ttype_label, level_data, current_name, tile_preview_rwt_to, tile_preview_rwt_from, add_on_click
     
@@ -440,7 +446,6 @@ class Tiles(QWidget):
         current_tile = self.sender().pixmap()
         current_name = current_sender.ttype_name_s
         
-        print(current_name)
         if int(current_name) != current_name:
             add_on_click = "deco"
         else:
