@@ -490,7 +490,7 @@ class main(QMainWindow):
     def openFileDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self,"Open", "","Turnroot Level File (*.trl)", options=options)
+        fileName, _ = QFileDialog.getOpenFileName(self,"Open", "","Turnroot Level File (*.trlf)", options=options)
         if fileName:
             self.path = fileName
             self.setWindowTitle(title+self.path)
@@ -548,11 +548,11 @@ class main(QMainWindow):
     def saveFileDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getSaveFileName(self,"Save","","Turnroot Level File (*.trl)", options=options)
+        fileName, _ = QFileDialog.getSaveFileName(self,"Save","","Turnroot Level File (*.trlf)", options=options)
         if fileName:
             self.path = fileName+".trl"
             self.setWindowTitle(title+self.path)
-            with open(self.path, "w") as write_file:
+            with open(self.path+"f", "w") as write_file:
                 json.dump(self.level_data, write_file)
                 write_file.close()
             with open(self.path+"d", "w") as write_decor_file:
@@ -571,7 +571,7 @@ class main(QMainWindow):
             self.saveFileDialog()
         else:
             self.setWindowTitle(title+self.path)
-            with open(self.path, "w") as write_file:
+            with open(self.path+"f", "w") as write_file:
                 json.dump(self.level_data, write_file)
                 write_file.close()
             with open(self.path+"d", "w") as write_decor_file:
