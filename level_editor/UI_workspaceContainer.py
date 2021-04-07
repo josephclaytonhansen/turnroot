@@ -169,7 +169,8 @@ class tileGridWorkspace(QWidget):
                 
                 if add_on_click == "deco":
                     decor_data.append(str(self.sender().gridIndex)+"-"+str(current_name))
-                    self.sender().setPixmap(overlayTile(self.sender().pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio), current_tile.scaled(int(32), int(32), Qt.KeepAspectRatio)))
+                    self.sender().setPixmap(overlayTile(self.sender().pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                        current_tile.scaled(int(32), int(32), Qt.KeepAspectRatio)))
                 
                 elif add_on_click == "Door":
                     self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
@@ -813,8 +814,13 @@ class TaskSettings(QWidget):
         if current_tile != None:
             k = getFillSquares(self.fwt_tl_corner.value(), self.fwt_br_corner.value(), tile_ratio)
             for x in k:
-                global_squares[x].setPixmap(current_tile)
-                level_data[x] = current_name
+                try:
+                    global_squares[x].setPixmap(overlayTile(global_squares[x].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                            current_tile.scaled(int(32), int(32), Qt.KeepAspectRatio)))
+                    level_data[x] = current_name
+                except:
+                    global_squares[x].setPixmap(current_tile)
+                    level_data[x] = current_name
 
     def rwt_replace(self):
         global level_data, previous_sender, global_squares, tile_ratio
