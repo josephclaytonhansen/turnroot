@@ -1,0 +1,4 @@
+======Classic Verdant - a basic low-tech tileset======
+
+----created by Joseph Hansen (joseph@turnroot.com)----
+-----------------------32x32--------------------------

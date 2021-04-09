@@ -250,7 +250,7 @@ class tileGridWorkspace(QWidget):
             level_data[self.sender().gridIndex] = 'e'
             level_data_type[self.sender().gridIndex] = 0
         else:
-            pass
+            object_data[self.sender().gridIndex] = 'd'
             #delete objects
     
     def addObjectToGrid(self, s):

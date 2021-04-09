@@ -478,8 +478,7 @@ class main(QMainWindow):
         if self.delete_mode == 0:
             self.sender().setIcon(QIcon("ui_icons/"+icon_string+"decor_edit.png"))
             self.delete_mode = 1
-
-self.edit_mode.setToolTip("Delete Objects")
+            self.edit_mode.setToolTip("Delete Objects")
         else:
             self.sender().setIcon(QIcon("ui_icons/"+icon_string+"tile_edit.png"))
             self.delete_mode = 0

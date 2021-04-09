@@ -1,12 +1,14 @@
 import sys
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor
+from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QFont
 import json
 from UI_updateJSON import updateJSON
 import UI_colorTheme
 return_confirm = False
 chosen_object = None
+resource_pack_path = "resource_packs"
+current_resource_pack_path = ""
 
 class confirmAction(QDialog):
     def __init__(self, s, parent=None):
@@ -154,11 +156,82 @@ class resourcePackDialog(QDialog):
         self.return_confirm = return_confirm
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
         super().__init__(parent)
-        self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
         self.layout = QGridLayout()
         self.setLayout(self.layout)
         
-        self.show()
+        global resource_pack_path, current_resource_pack_path
+        self.pack_infos = {}
         
+        with open(resource_pack_path+"/packs.txt", "r") as read_file:
+            r = read_file.read().split("\n")
+            read_file.close()
+        
+        for x in r:
+            with open(resource_pack_path+"/"+x+"/info.txt", "r") as read_file:
+                self.pack_infos[x] = read_file.read()
+                read_file.close()
+                
+            print(self.pack_infos[x])
+        
+        self.folder_select = QLineEdit()
+        
+        self.reset_path_to_default = QPushButton("Reset path to default")
+        self.reset_path_to_default.clicked.connect(self.reset)
+        self.reset_path_to_default.clicked.connect(self.folder_select.clear)
+        
+        self.folder_select_label = QLabel("Pack folder path")
+        self.folder_select.setPlaceholderText("/"+resource_pack_path)
+        self.folder_select.returnPressed.connect(self.return_pressed)
+        
+        self.folder_select_submit = QPushButton("Set path")
+        self.folder_select_submit.clicked.connect(self.return_pressed)
+        
+        self.current_pack_label = QLabel("Current pack")
+        self.switch_pack = QComboBox()
+        self.switch_pack.addItems(r)
+        self.switch_pack.currentTextChanged.connect(self.text_changed)
+        
+        self.install_pack = QPushButton("Install new pack")
+        self.pack_info = QWidget()
+
+        self.font = QFont('Monaco', 6, QFont.Light)
+        self.font.setKerning(False)
+        self.font.setFixedPitch(True)
+        
+        self.pack_info.setFont(self.font)
+        
+        for x in r:
+            self.pack_text_info = QLabel(self.pack_infos[x])
+            self.pack_img_info = QLabel()
+            self.pack_img_info.setPixmap(QPixmap(resource_pack_path+"/"+x+"/pack_img.png"))
+        self.pack_img_info.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        
+        self.pack_info_layout = QVBoxLayout()
+        self.pack_info_layout.addWidget(self.pack_img_info)
+        self.pack_info_layout.addWidget(self.pack_text_info)
+        self.pack_info.setLayout(self.pack_info_layout)
+        
+        self.layout.addWidget(self.folder_select_label,0,0,1,1)
+        self.layout.addWidget(self.reset_path_to_default,0,4,1,1)
+        self.layout.addWidget(self.folder_select,0,1,1,2)
+        self.layout.addWidget(self.folder_select_submit,0,3,1,1)
+        self.layout.addWidget(self.current_pack_label,1,0,1,1)
+        self.layout.addWidget(self.switch_pack,1,2,1,1)
+        self.layout.addWidget(self.install_pack,2,0,1,1)
+        self.layout.addWidget(self.pack_info,1,1,1,1)
+        
+        self.show()
+    
+    def text_changed(self):
+        pass
+    
+    def return_pressed(self):
+        pass
+    
+    def reset(self):
+        global resource_pack_path, current_resource_pack_path
+        resource_pack_path = "resource_packs"
+
     
