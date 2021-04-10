@@ -190,6 +190,7 @@ class resourcePackDialog(QDialog):
         
         self.current_pack_label = QLabel("Current pack")
         self.switch_pack = QComboBox()
+        self.switch_pack.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
         self.switch_pack.addItems(r)
         self.switch_pack.currentTextChanged.connect(self.text_changed)
         
