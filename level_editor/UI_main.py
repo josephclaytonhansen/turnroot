@@ -7,7 +7,12 @@ import qtmodern.windows
 from UI_preferencesDialog import PreferencesDialog
 from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
-from UI_Dialogs import confirmAction, stackedInfoImgDialog, infoClose, addObject, resourcePackDialog
+from UI_Dialogs import (confirmAction,
+                        stackedInfoImgDialog,
+                        infoClose,
+                        addObject,
+                        resourcePackDialog,
+                        activeResourcePack)
 from UI_updateJSON import updateJSON
 from UI_workspaceContainer import (showWorkspace,
                                    hideWorkspace,
@@ -65,6 +70,7 @@ class main(QMainWindow):
         self.type_data = LevelData().type_data
         self.object_data = LevelData().object_data
         self.delete_mode = DeleteMode().delete_mode
+        self.active_pack = activeResourcePack().pack
         
         self.path = None
         global icon_string

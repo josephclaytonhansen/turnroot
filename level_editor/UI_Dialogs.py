@@ -9,6 +9,8 @@ return_confirm = False
 chosen_object = None
 resource_pack_path = "resource_packs"
 current_resource_pack_path = ""
+current_pack = ""
+pack_infos = {}
 
 class confirmAction(QDialog):
     def __init__(self, s, parent=None):
@@ -161,17 +163,11 @@ class resourcePackDialog(QDialog):
         self.layout = QGridLayout()
         self.setLayout(self.layout)
         
-        global resource_pack_path, current_resource_pack_path
-        self.pack_infos = {}
+        global resource_pack_path, current_resource_pack_path, pack_infos
         
         with open(resource_pack_path+"/packs.txt", "r") as read_file:
             r = read_file.read().split("\n")
             read_file.close()
-        
-        for x in r:
-            with open(resource_pack_path+"/"+x+"/info.txt", "r") as read_file:
-                self.pack_infos[x] = read_file.read()
-                read_file.close()
         
         self.folder_select = QLineEdit()
         
@@ -200,11 +196,14 @@ class resourcePackDialog(QDialog):
         self.font.setFixedPitch(True)
         
         self.pack_info.setFont(self.font)
-        
-        for x in r:
-            self.pack_text_info = QLabel(self.pack_infos[x])
-            self.pack_img_info = QLabel()
-            self.pack_img_info.setPixmap(QPixmap(resource_pack_path+"/"+x+"/pack_img.png"))
+        self.pack_img_info = QLabel()
+
+        with open(resource_pack_path+"/"+r[0]+"/info.txt", "r") as read_file:
+                pack_infos[r[0]] = read_file.read()
+                read_file.close()
+                
+        self.pack_text_info = QLabel(pack_infos[r[0]])
+        self.pack_img_info.setPixmap(QPixmap(resource_pack_path+"/"+r[0]+"/pack_img.png"))
         self.pack_img_info.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         
         self.pack_info_layout = QVBoxLayout()
@@ -223,8 +222,14 @@ class resourcePackDialog(QDialog):
         
         self.show()
     
-    def text_changed(self):
-        pass
+    def text_changed(self, s):
+        global current_pack, pack_infos
+        current_pack = s
+        with open(resource_pack_path+"/"+s+"/info.txt", "r") as read_file:
+                self.info = read_file.read()
+                read_file.close()
+        self.pack_text_info.setText(self.info)
+        self.pack_img_info.setPixmap(QPixmap(resource_pack_path+"/"+s+"/pack_img.png"))
     
     def return_pressed(self):
         global resource_pack_path
@@ -241,4 +246,8 @@ class resourcePackDialog(QDialog):
         global resource_pack_path, current_resource_pack_path
         resource_pack_path = "resource_packs"
 
-    
+class activeResourcePack():
+    def __init__(self):
+        global resource_pack_path
+        self.path = resource_pack_path
+        self.pack = ""
