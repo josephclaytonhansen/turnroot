@@ -94,7 +94,7 @@ class infoClose(QDialog):
         layout = QVBoxLayout()
         layout.setContentsMargins( 8,8,8,8)
         layout.setSpacing(0)
-        self.setFixedSize((data["font_size"] * 22)+40, data["font_size"] * 7.4)
+        self.setFixedSize((data["font_size"] * len(info))-60, data["font_size"] * 7.4)
         
         self.label =QLabel(self.info)
         self.label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
@@ -172,8 +172,6 @@ class resourcePackDialog(QDialog):
             with open(resource_pack_path+"/"+x+"/info.txt", "r") as read_file:
                 self.pack_infos[x] = read_file.read()
                 read_file.close()
-                
-            print(self.pack_infos[x])
         
         self.folder_select = QLineEdit()
         
@@ -229,7 +227,15 @@ class resourcePackDialog(QDialog):
         pass
     
     def return_pressed(self):
-        pass
+        global resource_pack_path
+        self.temp_path = resource_pack_path
+        resource_pack_path = self.folder_select.text()
+        try:
+            open(resource_pack_path+"/packs.txt", "r")
+        except:
+            infoClose("Invalid folder path or missing packs.txt file",self)
+            resource_pack_path = self.temp_path
+            self.folder_select.clear()         
     
     def reset(self):
         global resource_pack_path, current_resource_pack_path

@@ -1,5 +1,0 @@
-==========Sample Example - a testing tileset==========
-
---four/five lines, the second blank, up to 55 chars---
-----use "=" for the first line and "-" for the rest---
--the fifth line is optional, for a longer description-
