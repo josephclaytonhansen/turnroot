@@ -230,10 +230,13 @@ class resourcePackDialog(QDialog):
         with open(resource_pack_path+"/"+s+"/info.txt", "r") as read_file:
                 self.info = read_file.read()
                 read_file.close()
-        with open("tmp.tmp", "w") as write_file:
+        self.c = confirmAction("apply changes and restart")
+        self.c.exec_()
+        if self.c.return_confirm:
+            with open("tmp.tmp", "w") as write_file:
                 write_file.write(current_pack)
-        self.pack_text_info.setText(self.info)
-        self.pack_img_info.setPixmap(QPixmap(resource_pack_path+"/"+s+"/pack_img.png"))
+            self.pack_text_info.setText(self.info)
+            self.pack_img_info.setPixmap(QPixmap(resource_pack_path+"/"+s+"/pack_img.png"))
     
     def return_pressed(self):
         global resource_pack_path

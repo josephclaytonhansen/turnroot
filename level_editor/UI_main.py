@@ -53,6 +53,9 @@ fullscreen = False
 zoom_level = 1.75
 mode_highlight = 0
 
+with open("tmp.tmp", "r") as read_file:
+    tmp = read_file.read().strip()
+    
 class main(QMainWindow):
     def __init__(self):
         
@@ -288,6 +291,24 @@ class main(QMainWindow):
         if(data["ah_taskss"]):
             self.hide_tasks_settings()
     
+    def Save(self):
+        if self.path == None:
+            self.saveFileDialog()
+        else:
+            self.setWindowTitle(title+self.path)
+            with open(self.path+"f", "w") as write_file:
+                json.dump(self.level_data, write_file)
+                write_file.close()
+            with open(self.path+"d", "w") as write_decor_file:
+                json.dump(self.decor_data, write_decor_file)
+                write_decor_file.close()
+            with open(self.path+"t", "w") as write_type_file:
+                json.dump(self.type_data, write_type_file)
+                write_type_file.close()
+            with open(self.path+"o", "w") as write_object_file:
+                json.dump(self.object_data, write_object_file)
+                write_object_file.close()
+                
     #keyboard events
     def keyPressEvent(self, e):
         modifiers = QApplication.keyboardModifiers()
@@ -299,7 +320,7 @@ class main(QMainWindow):
                 self.openFileDialog()
             elif e.key() == Qt.Key_S:
                 self.Save()
-        
+                
         else:
             if e.key() == Qt.Key_F:
                 self.full_screen()
@@ -323,6 +344,10 @@ class main(QMainWindow):
             elif e.key() == Qt.Key_R:
                 r = resourcePackDialog(parent=self)
                 r.exec_()
+                global tmp
+                with open("tmp.tmp", "r") as read_file:
+                    if tmp != read_file.read().strip():
+                        os.execl(sys.executable, sys.executable, *sys.argv)
             elif e.key() == Qt.Key_Q:
                 self.forumView()
 
@@ -557,25 +582,6 @@ class main(QMainWindow):
         fileName, _ = QFileDialog.getSaveFileName(self,"Save","","Turnroot Level File (*.trlf)", options=options)
         if fileName:
             self.path = fileName+".trl"
-            self.setWindowTitle(title+self.path)
-            with open(self.path+"f", "w") as write_file:
-                json.dump(self.level_data, write_file)
-                write_file.close()
-            with open(self.path+"d", "w") as write_decor_file:
-                json.dump(self.decor_data, write_decor_file)
-                write_decor_file.close()
-            with open(self.path+"t", "w") as write_type_file:
-                json.dump(self.type_data, write_type_file)
-                write_type_file.close()
-            with open(self.path+"o", "w") as write_object_file:
-                json.dump(self.object_data, write_object_file)
-                write_object_file.close()
-    
-    
-    def Save(self):
-        if self.path == None:
-            self.saveFileDialog()
-        else:
             self.setWindowTitle(title+self.path)
             with open(self.path+"f", "w") as write_file:
                 json.dump(self.level_data, write_file)
