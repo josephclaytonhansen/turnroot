@@ -5,13 +5,13 @@ import qtmodern.styles
 import qtmodern.windows
 from UI_updateJSON import updateJSON
 from UI_ProxyStyle import ProxyStyle
-from UI_Dialogs import confirmAction
+from UI_Dialogs import confirmAction, activeResourcePack
 import UI_colorTheme
 from tasks_backend import getFillSquares, getDoorTiles
 import json, math, re, sys, os
 
 #these can be edited (TODO pull from JSON)
-tile_stack = ["verdant_grass", "verdant_grass_walls", "verdant_grass_decor"]
+tile_stack = ["grass1", "grass2", "grass_d1"]
 task_categories = ["Tiles", "Tile Effects", "Level Events"]
 
 #don't edit these!
@@ -49,6 +49,8 @@ add_on_click = "tile"
 most_recent_door = None
 most_recent_chest = None
 universal_delete_mode = 0
+active_pack = activeResourcePack().pack
+active_pack_path = activeResourcePack().path
 
 #passing global variables to UI_main
 class LevelData():
@@ -68,7 +70,7 @@ class DeleteMode():
         self.delete_mode = universal_delete_mode
         
 #default tile set init
-with open("resource_packs/ClassicVerdant/tiles/"+tile_set+".json", "r") as read_file:
+with open(active_pack_path+"/"+active_pack+"/tiles/"+tile_set+".json", "r") as read_file:
     read_file.seek(0)
     tile_data = json.load(read_file)
     read_file.close()
@@ -160,6 +162,7 @@ class tileGridWorkspace(QWidget):
     
     def change_color(self):
         global current_tile, level_data, current_name, add_on_click, tile_ratio, most_recent_door, most_recent_chest, decor_data, universal_delete_mode, ttype, object_data
+        print(add_on_click)
         try:
             if universal_delete_mode == 0:
                 if add_on_click == "tile":
@@ -174,10 +177,11 @@ class tileGridWorkspace(QWidget):
                 
                 elif add_on_click == "Door":
                     self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
-                    self.door_tiles = ["resource_packs/ClassicVerdant/tiles/door0.png",
-                                       "resource_packs/ClassicVerdant/tiles/door1.png",
-                                       "resource_packs/ClassicVerdant/tiles/door2.png",
-                                       "resource_packs/ClassicVerdant/tiles/door3.png"]
+                    self.door_tiles = [active_pack_path+"/"+active_pack+"/tiles/door0.png",
+                    active_pack_path+"/"+active_pack+"/tiles/door1.png",
+                    active_pack_path+"/"+active_pack+"/tiles/door2.png",
+                    active_pack_path+"/"+active_pack+"/tiles/door3.png"]
+
                     self.zero_tile = overlayTile(global_squares[self.working_tiles[0][0]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
                                                  self.door_tiles[0])
                     self.one_tile = overlayTile(global_squares[self.working_tiles[0][1]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
@@ -411,8 +415,8 @@ class Tiles(QWidget):
         
         for x in range(0, len(tile_stack)):
             self.stacks[x] = QWidget()
-            self.pixmap = QPixmap("resource_packs/ClassicVerdant/tiles/"+tile_stack[x]+".png")
-            with open("resource_packs/ClassicVerdant/tiles/"+tile_stack[x]+".json", "r") as read_file:
+            self.pixmap = QPixmap(active_pack_path+"/"+active_pack+"/tiles/"+tile_stack[x]+".png")
+            with open(active_pack_path+"/"+active_pack+"/tiles/"+tile_stack[x]+".json", "r") as read_file:
                 read_file.seek(0)
                 tile_data = json.load(read_file)
                 read_file.close()

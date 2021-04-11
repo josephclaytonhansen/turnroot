@@ -9,7 +9,8 @@ return_confirm = False
 chosen_object = None
 resource_pack_path = "resource_packs"
 current_resource_pack_path = ""
-current_pack = ""
+with open("tmp.tmp", "r") as read_file:
+    current_pack = read_file.read().strip()
 pack_infos = {}
 
 class confirmAction(QDialog):
@@ -140,6 +141,7 @@ class addObject(QDialog):
     def add_dd_changed(self, s):
         global chosen_object
         chosen_object = s
+        print(chosen_object)
         self.chosen_object = chosen_object
         
     def showEvent(self, event):
@@ -228,6 +230,8 @@ class resourcePackDialog(QDialog):
         with open(resource_pack_path+"/"+s+"/info.txt", "r") as read_file:
                 self.info = read_file.read()
                 read_file.close()
+        with open("tmp.tmp", "w") as write_file:
+                write_file.write(current_pack)
         self.pack_text_info.setText(self.info)
         self.pack_img_info.setPixmap(QPixmap(resource_pack_path+"/"+s+"/pack_img.png"))
     
@@ -248,6 +252,6 @@ class resourcePackDialog(QDialog):
 
 class activeResourcePack():
     def __init__(self):
-        global resource_pack_path
+        global resource_pack_path, current_pack
         self.path = resource_pack_path
-        self.pack = ""
+        self.pack = current_pack
