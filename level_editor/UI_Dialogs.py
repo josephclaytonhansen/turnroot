@@ -5,7 +5,7 @@ from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QFont
 import json
 from UI_updateJSON import updateJSON
 import UI_colorTheme
-import shutil, os
+import shutil, os, pickle
 
 return_confirm = False
 chosen_object = None
@@ -269,8 +269,8 @@ class resourcePackDialog(QDialog):
         self.openFileDialog()
         global installer, resource_pack_path
         if installer != None:
-            with open(installer, "r") as read_file:
-                self.install_directions = read_file.read()
+            with open(installer, "rb") as read_file:
+                self.install_directions = pickle.load()
                 self.orig_path = installer[:installer.find("INSTALLER.trpi")]
                 print(self.orig_path)
                 if "#$c*" in self.install_directions:
