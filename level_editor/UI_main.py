@@ -55,10 +55,9 @@ mode_highlight = 0
 
 with open("tmp.tmp", "r") as read_file:
     tmp = read_file.read().strip()
-    
+
 class main(QMainWindow):
-    def __init__(self):
-        
+    def __init__(self):       
         #create, title, and size mainwindow
         super().__init__()
         self.setWindowTitle(title)
@@ -290,6 +289,36 @@ class main(QMainWindow):
             self.hide_tasks()
         if(data["ah_taskss"]):
             self.hide_tasks_settings()
+            
+        #keyboard shortcuts
+        self.keyboard_shortcuts = {Qt.Key_F:self.full_screen,
+          Qt.Key_S:self.OptionsMenu,
+          Qt.Key_H:self.helpView,
+          Qt.Key_I:self.zoom_in,
+          Qt.Key_O:self.zoom_out,
+          Qt.Key_L:self.scrollReset,
+          Qt.Key_Period:self.scrollFr,
+          Qt.Key_P:self.tiles_info.assignLastTile,
+          Qt.Key_T:self.quickAdd,
+          Qt.Key_R:self.resourcePack,
+          Qt.Key_Q:self.forumView,
+          "A":"",
+          "B":"",
+          "C":"",
+          "D":"",
+          "E":"",
+          "G":"",
+          "J":"",
+          "K":"",
+          "M":"",
+          "N":"",
+          "U":"",
+          "V":"",
+          "W":"",
+          "X":"",
+          "Y":"",
+          "Z":"",
+          }
     
     def Save(self):
         if self.path == None:
@@ -312,42 +341,26 @@ class main(QMainWindow):
     #keyboard events
     def keyPressEvent(self, e):
         modifiers = QApplication.keyboardModifiers()
-            
         if modifiers == Qt.ControlModifier:
             if e.key() == Qt.Key_Q:
                 self.quitWindow()
             elif e.key() == Qt.Key_O:
                 self.openFileDialog()
             elif e.key() == Qt.Key_S:
-                self.Save()
-                
+                self.Save()                
         else:
-            if e.key() == Qt.Key_F:
-                self.full_screen()
-            elif e.key() == Qt.Key_S:
-                self.OptionsMenu()
-            elif e.key() == Qt.Key_H:
-                self.helpView()
-            elif e.key() == Qt.Key_I:
-                self.zoom_in()
-            elif e.key() == Qt.Key_O:
-                self.zoom_out()
-            elif e.key() == Qt.Key_L:
-                self.scrollReset()
-            elif e.key() == Qt.Key_Period:
-                self.scrollFr()
-            elif e.key() == Qt.Key_P:
-                self.tiles_info.assignLastTile()
-            elif e.key() == Qt.Key_T:
-                t = addObject(parent=self)
-                t.exec_()
-            elif e.key() == Qt.Key_R:
-                r = resourcePackDialog(parent=self)
-                r.exec_()
-            elif e.key() == Qt.Key_Q:
-                self.forumView()
+            try:
+                self.keyboard_shortcuts[e.key()]()
+            except:
+                pass
 
     #custom events
+    def quickAdd(self):
+        t = addObject(parent=self)
+        t.exec_()
+    def resourcePack(self):
+        r = resourcePackDialog(parent=self)
+        r.exec_()
     def OptionsMenu(self):
         p = PreferencesDialog(parent=self)
         theme = p.exec_()
@@ -477,10 +490,10 @@ class main(QMainWindow):
         r.exec_()
     
     def zoom_in(self):
-        if self.zoom_level < 3.25:
+        if self.zoom_level < 3:
             self.zoom_level += .1
         else:
-            self.zoom_level = 3.25
+            self.zoom_level = 3
         self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
         self.tile_grid.update()
     
@@ -488,7 +501,7 @@ class main(QMainWindow):
         if self.zoom_level >= 1.76:
             self.zoom_level -= .1
         else:
-            self.zoom_level = 1.75
+            self.zoom_level = 1.7
         self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
         self.tile_grid.update()
     
