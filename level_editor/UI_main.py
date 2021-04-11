@@ -5,7 +5,6 @@ from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
 import qtmodern.styles
 import qtmodern.windows
 from UI_preferencesDialog import PreferencesDialog
-from UI_color_test_widget import Color
 from UI_ProxyStyle import ProxyStyle
 from UI_Dialogs import (confirmAction,
                         stackedInfoImgDialog,
@@ -73,7 +72,7 @@ class main(QMainWindow):
         self.object_data = LevelData().object_data
         self.delete_mode = DeleteMode().delete_mode
         self.active_pack = activeResourcePack().pack
-        
+
         self.path = None
         global icon_string
         self.tilesets = TileSets().tile_stack
@@ -291,7 +290,8 @@ class main(QMainWindow):
             self.hide_tasks_settings()
             
         #keyboard shortcuts
-        self.keyboard_shortcuts = {Qt.Key_F:self.full_screen,
+        self.keyboard_shortcuts = {
+        Qt.Key_F:self.full_screen,
           Qt.Key_S:self.OptionsMenu,
           Qt.Key_H:self.helpView,
           Qt.Key_I:self.zoom_in,
@@ -302,22 +302,22 @@ class main(QMainWindow):
           Qt.Key_T:self.quickAdd,
           Qt.Key_R:self.resourcePack,
           Qt.Key_Q:self.forumView,
-          "A":"",
-          "B":"",
-          "C":"",
-          "D":"",
-          "E":"",
-          "G":"",
-          "J":"",
-          "K":"",
-          "M":"",
-          "N":"",
-          "U":"",
-          "V":"",
-          "W":"",
-          "X":"",
-          "Y":"",
-          "Z":"",
+          Qt.Key_A:None,
+          Qt.Key_B:None,
+          Qt.Key_C:None,
+          Qt.Key_D:None,
+          Qt.Key_E:None,
+          Qt.Key_G:None,
+          Qt.Key_J:None,
+          Qt.Key_K:None,
+          Qt.Key_M:None,
+          Qt.Key_N:None,
+          Qt.Key_U:None,
+          Qt.Key_V:None,
+          Qt.Key_W:None,
+          Qt.Key_X:None,
+          Qt.Key_Y:None,
+          Qt.Key_Z:None,
           }
     
     def Save(self):

@@ -281,5 +281,4 @@ class PreferencesDialog(QDialog):
         #check for updates
         self.c_updates.setText("No updates found")
         self.c_updates.setEnabled(False)
-        
-        
+
