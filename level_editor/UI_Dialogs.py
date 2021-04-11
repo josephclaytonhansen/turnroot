@@ -5,6 +5,8 @@ from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QFont
 import json
 from UI_updateJSON import updateJSON
 import UI_colorTheme
+import shutil, os
+
 return_confirm = False
 chosen_object = None
 resource_pack_path = "resource_packs"
@@ -12,6 +14,7 @@ current_resource_pack_path = ""
 with open("tmp.tmp", "r") as read_file:
     current_pack = read_file.read().strip()
 pack_infos = {}
+installer = None
 
 class confirmAction(QDialog):
     def __init__(self, s, parent=None):
@@ -154,7 +157,15 @@ class addObject(QDialog):
         self.setLayout(self.layout)
         super().showEvent(event)
         
-class resourcePackDialog(QDialog):
+class resourcePackDialog(QDialog): 
+    def openFileDialog(self):
+        global installer
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getOpenFileName(self,"Open", "","Turnroot Resource Pack Install File (*.trpi)", options=options)
+        if fileName:
+            installer = fileName
+            
     def __init__(self, parent=None):
         data = updateJSON()
         self.return_confirm = return_confirm
@@ -191,6 +202,7 @@ class resourcePackDialog(QDialog):
         self.switch_pack.currentTextChanged.connect(self.text_changed)
         
         self.install_pack = QPushButton("Install new pack")
+        self.install_pack.clicked.connect(self.installPack)
         self.pack_info = QWidget()
 
         self.font = QFont('Monaco', 6, QFont.Light)
@@ -230,7 +242,7 @@ class resourcePackDialog(QDialog):
         with open(resource_pack_path+"/"+s+"/info.txt", "r") as read_file:
                 self.info = read_file.read()
                 read_file.close()
-        self.c = confirmAction("apply changes and restart")
+        self.c = infoClose("You'll need to restart the level editor for this change to take effect")
         self.c.exec_()
         if self.c.return_confirm:
             with open("tmp.tmp", "w") as write_file:
@@ -252,6 +264,36 @@ class resourcePackDialog(QDialog):
     def reset(self):
         global resource_pack_path, current_resource_pack_path
         resource_pack_path = "resource_packs"
+    
+    def installPack(self):
+        self.openFileDialog()
+        global installer, resource_pack_path
+        if installer != None:
+            with open(installer, "r") as read_file:
+                self.install_directions = read_file.read()
+                self.orig_path = installer[:installer.find("INSTALLER.trpi")]
+                print(self.orig_path)
+                if "#$c*" in self.install_directions:
+                    self.pack_name = self.install_directions[self.install_directions.find("*$cNAME")+7:self.install_directions.find("*$cVERSION")]
+                    #check
+                    with open(resource_pack_path+"/packs.txt", "r") as read_file:
+                        r = read_file.read().split("\n")
+                        read_file.close()
+                    if self.pack_name not in r:
+                        if "#$i*" in self.install_directions:
+                            self.install_path = resource_pack_path
+                            self.install_directions = self.install_directions[self.install_directions.find("#$i*")+4:]
+                            self.install_directions = self.install_directions.split("*$i")
+                            if self.install_directions[0] == "$i'tiles'":
+                                self.install_path_t = self.install_path+ "/"+self.pack_name+"/tiles"
+                                self.install_path = self.install_path+ "/"+self.pack_name+"/"
+                                os.makedirs(self.install_path_t)
+                                #shutil.move(self.orig_path+"/tiles/", self.install_path+"/tiles/")
+                            shutil.move(self.orig_path+"info.txt", self.install_path+"info.txt")
+                            shutil.move(self.orig_path+"pack_img.png", self.install_path+"pack_img.png")
+                        with open(resource_pack_path+"/packs.txt", "a") as write_file:
+                            write_file.write("\n"+self.pack_name)
+                            write_file.close()
 
 class activeResourcePack():
     def __init__(self):

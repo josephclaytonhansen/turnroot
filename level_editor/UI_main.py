@@ -344,10 +344,6 @@ class main(QMainWindow):
             elif e.key() == Qt.Key_R:
                 r = resourcePackDialog(parent=self)
                 r.exec_()
-                global tmp
-                with open("tmp.tmp", "r") as read_file:
-                    if tmp != read_file.read().strip():
-                        os.execl(sys.executable, sys.executable, *sys.argv)
             elif e.key() == Qt.Key_Q:
                 self.forumView()
 
