@@ -1,6 +1,6 @@
 import json
 def updateJSON():
-    with open("preferences.json", "r") as read_file:
+    with open("tmp/preferences.json", "r") as read_file:
         read_file.seek(0)
         data = json.load(read_file)
         font_size = data["font_size"]
@@ -17,6 +17,6 @@ def updateJSON():
         return data
 
 def dumpJSON(data):
-        with open("preferences.json", "w") as write_file:
+        with open("tmp/preferences.json", "w") as write_file:
             json.dump(data, write_file)
             write_file.close()

@@ -1,2 +1,0 @@
-use tile animation for Builder UI tiles (one class per tile)
-use Graphics View, Graphics Scene, and Graphics Proxy (link to QMovie) for workspace preview

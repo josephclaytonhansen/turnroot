@@ -11,7 +11,7 @@ return_confirm = False
 chosen_object = None
 resource_pack_path = "resource_packs"
 current_resource_pack_path = ""
-with open("tmp.tmp", "r") as read_file:
+with open("tmp/rsp.tmp", "r") as read_file:
     current_pack = read_file.read().strip()
 pack_infos = {}
 installer = None
@@ -245,7 +245,7 @@ class resourcePackDialog(QDialog):
         self.c = infoClose("You'll need to restart the level editor for this change to take effect")
         self.c.exec_()
         if self.c.return_confirm:
-            with open("tmp.tmp", "w") as write_file:
+            with open("tmp/rsp.tmp", "w") as write_file:
                 write_file.write(current_pack)
             self.pack_text_info.setText(self.info)
             self.pack_img_info.setPixmap(QPixmap(resource_pack_path+"/"+s+"/pack_img.png"))

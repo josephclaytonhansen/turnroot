@@ -52,7 +52,7 @@ fullscreen = False
 zoom_level = 1.75
 mode_highlight = 0
 
-with open("tmp.tmp", "r") as read_file:
+with open("tmp/rsp.tmp", "r") as read_file:
     tmp = read_file.read().strip()
 
 def str_to_class(classname):
@@ -295,13 +295,13 @@ class main(QMainWindow):
         #keyboard shortcuts
         self.keyboard_shortcuts = {}
         self.pickle_cuts = {}
-        with open('kybs.trkp', 'rb') as fh:
+        with open('tmp/kybs.trkp', 'rb') as fh:
             self.pickle_cuts = pickle.load(fh)
 
         for x in self.pickle_cuts:
             if self.pickle_cuts[x].startswith("self.") and len(self.pickle_cuts[x]) < 32 and "(" not in self.pickle_cuts[x] and ")" not in self.pickle_cuts[x]:
                 self.keyboard_shortcuts[x] = eval(self.pickle_cuts[x])
-        with open('kybs.trkp', 'wb') as fh:
+        with open('tmp/kybs.trkp', 'wb') as fh:
             pickle.dump(self.pickle_cuts, fh)
     
     def Save(self):
