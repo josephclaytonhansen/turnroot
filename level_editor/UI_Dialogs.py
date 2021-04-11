@@ -100,7 +100,7 @@ class infoClose(QDialog):
         layout = QVBoxLayout()
         layout.setContentsMargins( 8,8,8,8)
         layout.setSpacing(0)
-        self.setFixedSize((data["font_size"] * len(info))-60, data["font_size"] * 7.4)
+        self.setFixedSize((data["font_size"] * len(info)/1.6), data["font_size"] * 7.4)
         
         self.label =QLabel(self.info)
         self.label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
