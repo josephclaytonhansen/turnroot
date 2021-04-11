@@ -1,4 +1,4 @@
-import sys, os, json
+import sys, os, json, pickle
 from PyQt5.QtCore import QSize, Qt, pyqtSignal
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
@@ -54,6 +54,9 @@ mode_highlight = 0
 
 with open("tmp.tmp", "r") as read_file:
     tmp = read_file.read().strip()
+
+def str_to_class(classname):
+    return getattr(sys.modules[__name__], classname)
 
 class main(QMainWindow):
     def __init__(self):       
@@ -290,35 +293,16 @@ class main(QMainWindow):
             self.hide_tasks_settings()
             
         #keyboard shortcuts
-        self.keyboard_shortcuts = {
-        Qt.Key_F:self.full_screen,
-          Qt.Key_S:self.OptionsMenu,
-          Qt.Key_H:self.helpView,
-          Qt.Key_I:self.zoom_in,
-          Qt.Key_O:self.zoom_out,
-          Qt.Key_L:self.scrollReset,
-          Qt.Key_Period:self.scrollFr,
-          Qt.Key_P:self.tiles_info.assignLastTile,
-          Qt.Key_T:self.quickAdd,
-          Qt.Key_R:self.resourcePack,
-          Qt.Key_Q:self.forumView,
-          Qt.Key_A:None,
-          Qt.Key_B:None,
-          Qt.Key_C:None,
-          Qt.Key_D:None,
-          Qt.Key_E:None,
-          Qt.Key_G:None,
-          Qt.Key_J:None,
-          Qt.Key_K:None,
-          Qt.Key_M:None,
-          Qt.Key_N:None,
-          Qt.Key_U:None,
-          Qt.Key_V:None,
-          Qt.Key_W:None,
-          Qt.Key_X:None,
-          Qt.Key_Y:None,
-          Qt.Key_Z:None,
-          }
+        self.keyboard_shortcuts = {}
+        self.pickle_cuts = {}
+        with open('kybs.trkp', 'rb') as fh:
+            self.pickle_cuts = pickle.load(fh)
+
+        for x in self.pickle_cuts:
+            if self.pickle_cuts[x].startswith("self.") and len(self.pickle_cuts[x]) < 32 and "(" not in self.pickle_cuts[x]:
+                self.keyboard_shortcuts[x] = eval(self.pickle_cuts[x])
+        with open('kybs.trkp', 'wb') as fh:
+            pickle.dump(self.pickle_cuts, fh)
     
     def Save(self):
         if self.path == None:

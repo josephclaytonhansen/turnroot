@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
 import json
 from UI_updateJSON import updateJSON, dumpJSON
+import pickle
 
 ind = 0
 entries = ["Appearance", "System", "Keyboard Shortcuts"]
