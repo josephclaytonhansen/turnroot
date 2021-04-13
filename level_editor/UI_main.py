@@ -297,6 +297,7 @@ class main(QMainWindow):
         self.pickle_cuts = {}
         with open('tmp/kybs.trkp', 'rb') as fh:
             self.pickle_cuts = pickle.load(fh)
+            print(self.pickle_cuts)
 
         for x in self.pickle_cuts:
             if self.pickle_cuts[x].startswith("self.") and len(self.pickle_cuts[x]) < 32 and "(" not in self.pickle_cuts[x] and ")" not in self.pickle_cuts[x]:
@@ -335,6 +336,7 @@ class main(QMainWindow):
         else:
             try:
                 self.keyboard_shortcuts[e.key()]()
+                
             except:
                 pass
 
@@ -500,11 +502,11 @@ class main(QMainWindow):
     def tileEditMode(self):
         global icon_string
         if self.delete_mode == 0:
-            self.sender().setIcon(QIcon("ui_icons/"+icon_string+"decor_edit.png"))
+            self.edit_mode.setIcon(QIcon("ui_icons/"+icon_string+"decor_edit.png"))
             self.delete_mode = 1
             self.edit_mode.setToolTip("Delete Objects")
         else:
-            self.sender().setIcon(QIcon("ui_icons/"+icon_string+"tile_edit.png"))
+            self.edit_mode.setIcon(QIcon("ui_icons/"+icon_string+"tile_edit.png"))
             self.delete_mode = 0
             self.edit_mode.setToolTip("Delete tiles")
             

@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
 import json
 from UI_updateJSON import updateJSON, dumpJSON
+from UI_Dialogs import infoClose
 import pickle
 
 ind = 0
@@ -55,12 +56,16 @@ layout_names = []
 for x in range(0, len(layout_dict)):
     layout_names.append(layout_dict[x].name)
 
+with open('tmp/kybs.trkp', 'rb') as fh:
+    pickle_cuts = pickle.load(fh)
+
 class PreferencesDialog(QDialog):
 
     def __init__(self, parent=None):
         data = updateJSON()
         active_theme = getattr(UI_colorTheme, data["active_theme"])
         self.active_theme = active_theme
+        self.pickle_cuts = pickle_cuts
         self.active_layout = right_lower
 
         #sizing options
@@ -195,7 +200,40 @@ class PreferencesDialog(QDialog):
         self.prefs_layout.addWidget(self.sys)
         
         #new stack
-        self.shortcuts = QLabel("blue")
+        self.shortcuts = QWidget()
+        self.shortcuts_layout = QGridLayout()
+        self.shortcuts_layout.setSpacing(5)
+        
+        self.actions = ["Full Screen", "Options Menu", "Help", "Zoom In",
+                        "Zoom Out", "Go to Top Left", "Go to Bottom Right",
+                        "Switch to Previous Tile","Quick Add",
+                        "Resource Packs", "Forums"]
+        self.actions_pcut = ['self.full_screen', 'self.OptionsMenu', 'self.helpView', 'self.zoom_in', 'self.zoom_out',
+                             'self.scrollReset', 'self.scrollFr', 'self.tiles_info.assignLastTile',
+                             'self.quickAdd', 'self.resourcePack', 'self.forumView']
+        
+        self.action_labels = {}
+        self.action_shortcut = {}
+        self.action_row = 0
+        for action in self.actions:
+            self.action_labels[action] = QLabel(action)
+            self.action_row +=1
+            self.shortcuts_layout.addWidget(self.action_labels[action], self.action_row, 1)
+
+            for x in pickle_cuts:
+                if pickle_cuts[x] == self.actions_pcut[self.actions.index(action)]:
+                    self.action_labels[x] = QLineEdit()
+                    self.action_labels[x].setPlaceholderText(str(chr(x)))
+                    self.action_labels[x].returnPressed.connect(self.changeShortcut)
+                    self.shortcuts_layout.addWidget(self.action_labels[x], self.action_row,2)
+                  
+        self.shortcuts_info = QLabel("To change a keyboard shortcut, type a new key and press Enter\n(changes won't save unless Enter is pressed)")
+        self.shortcuts_layout.addWidget(self.shortcuts_info, self.action_row+1, 1, 1, 2)
+        self.reset_shortcuts = QPushButton("Reset to defaults")
+        self.reset_shortcuts.clicked.connect(self.resetShortcuts)
+        self.shortcuts_layout.addWidget(self.reset_shortcuts, self.action_row+2, 1, 1, 2)
+        self.shortcuts.setLayout(self.shortcuts_layout)
+        #finalize layout
         self.prefs_layout.addWidget(self.shortcuts)
         
         self.prefs.setLayout(self.prefs_layout)
@@ -282,4 +320,26 @@ class PreferencesDialog(QDialog):
         #check for updates
         self.c_updates.setText("No updates found")
         self.c_updates.setEnabled(False)
+    
+    def changeShortcut(self):
+        if len(self.sender().text()) > 1:
+            self.sender().setText(self.sender().text()[0])
+        self.sender().setText(self.sender().text().upper())
+        self.active_row = (int(((self.shortcuts_layout.indexOf(self.sender())) - 1) / 2))
+        for x in pickle_cuts:
+            if pickle_cuts[x] == self.actions_pcut[self.active_row]:
+                pickle_cuts[x] = 'None'
+                
+        pickle_cuts[ord(self.sender().text())] = self.actions_pcut[self.active_row]
+        
+        with open('tmp/kybs.trkp', 'wb') as fh:
+            pickle.dump(pickle_cuts, fh)
+    
+    def resetShortcuts(self):
+        global pickle_cuts
+        with open('tmp/kybs_def.trkp', 'rb') as fh:
+            pickle_cuts = pickle.load(fh)
+            with open('tmp/kybs.trkp', 'wb') as fh:
+                pickle.dump(pickle_cuts, fh)
+            infoClose("Keyboard shortcuts have been reset (restart Preferences to see change)",self)
 
