@@ -135,6 +135,7 @@ class PreferencesDialog(QDialog):
         self.ct.setAlignment( Qt.AlignVCenter)
         self.aes_layout.addWidget(self.ct,4,0)
         self.color_theme_list = QListWidget()
+        self.color_theme_list.setStyleSheet("background-color:"+self.active_theme.list_background_color+";")
         self.color_theme_list.addItems(color_themes)
         self.color_theme_list.setCurrentRow(active_index)
         self.current_theme_check = color_themes[active_index]
@@ -164,6 +165,7 @@ class PreferencesDialog(QDialog):
         self.lo = QPushButton("Layout (click for reference)")
         self.aes_layout.addWidget(self.lo,9,0)
         self.lo_list = QListWidget()
+        self.lo_list.setStyleSheet("background-color:"+self.active_theme.list_background_color+";")
         self.lo_list.addItems(layout_names)
         self.lo_list.setCurrentRow(0)
         self.lo_list.currentTextChanged.connect(self.layout_changed)
@@ -202,7 +204,7 @@ class PreferencesDialog(QDialog):
         #new stack
         self.shortcuts = QWidget()
         self.shortcuts_layout = QGridLayout()
-        self.shortcuts_layout.setSpacing(5)
+        self.shortcuts_layout.setSpacing(7)
         
         self.actions = ["Full Screen", "Options Menu", "Help", "Zoom In",
                         "Zoom Out", "Go to Top Left", "Go to Bottom Right",
@@ -223,6 +225,7 @@ class PreferencesDialog(QDialog):
             for x in pickle_cuts:
                 if pickle_cuts[x] == self.actions_pcut[self.actions.index(action)]:
                     self.action_labels[x] = QLineEdit()
+                    self.action_labels[x].setStyleSheet("background-color:"+self.active_theme.list_background_color+"; color:"+self.active_theme.button_alt_color+";")
                     self.action_labels[x].setPlaceholderText(str(chr(x)))
                     self.action_labels[x].returnPressed.connect(self.changeShortcut)
                     self.shortcuts_layout.addWidget(self.action_labels[x], self.action_row,2)

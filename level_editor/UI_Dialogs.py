@@ -231,7 +231,7 @@ class resourcePackDialog(QDialog):
         self.layout.addWidget(self.folder_select_submit,0,3,1,1)
         self.layout.addWidget(self.current_pack_label,1,0,1,1)
         self.layout.addWidget(self.switch_pack,1,2,1,1)
-        self.layout.addWidget(self.install_pack,2,0,1,1)
+        self.layout.addWidget(self.install_pack,2,0,1,3)
         self.layout.addWidget(self.pack_info,1,1,1,1)
         
         self.show()
