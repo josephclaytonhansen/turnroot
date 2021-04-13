@@ -1,4 +1,4 @@
-import sys, json, pickle
+import sys, json, pickle, os, psutil
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
@@ -192,6 +192,44 @@ class PreferencesDialog(QDialog):
         self.c_updates.clicked.connect(self.check_updates)
         self.sys_layout.addWidget(self.c_updates, 0, 1)
         
+        self.check_file_label = QLabel("Check for missing files")
+        self.check_file_label.setAlignment(Qt.AlignVCenter)
+        self.sys_layout.addWidget(self.check_file_label, 1, 0)
+        self.check_files = QPushButton("Run test")
+        self.check_files.clicked.connect(self.checkFiles)
+        self.sys_layout.addWidget(self.check_files, 1, 1)
+        
+        self.undo_history = QSpinBox()
+        self.undo_history.setRange(1,16)
+        #TODO get from TMP
+        self.undo_history.setValue(3)
+        self.undo_history.valueChanged.connect(self.setTempFiles)
+        self.undo_history_label = QLabel("Set number of steps in undo history")
+        self.sys_layout.addWidget(self.undo_history_label, 2, 0)
+        self.sys_layout.addWidget(self.undo_history, 2, 1)
+        
+        self.total_size = 0
+        self.start_path = '.'  # To get size of current directory
+        for path, dirs, files in os.walk(self.start_path):
+            for f in files:
+                fp = os.path.join(path, f)
+                self.total_size += os.path.getsize(fp)
+        
+        self.folder_size = QLabel("Turnroot is using "+str(round(self.total_size / 1000000, 2))+" MB of disk space")
+        self.folder_size.setAlignment(Qt.AlignVCenter)
+        self.sys_layout.addWidget(self.folder_size, 4, 0)
+        
+        self.process = psutil.Process(os.getpid())
+        self.ram_usage = (self.process.memory_info().vms)
+        
+        self.ram_label = QLabel("Turnroot is currently using "+str(round(self.ram_usage / 1000000, 2))+" MB of RAM")
+        self.ram_label.setAlignment(Qt.AlignVCenter)
+        self.sys_layout.addWidget(self.ram_label, 5, 0)
+        
+        self.spacer = QWidget()
+        self.spacer.setMinimumHeight(280)
+        self.sys_layout.addWidget(self.spacer, 3, 0)
+                
         self.sys.setLayout(self.sys_layout)
         self.prefs_layout.addWidget(self.sys)
         
@@ -317,18 +355,19 @@ class PreferencesDialog(QDialog):
         self.c_updates.setEnabled(False)
     
     def changeShortcut(self):
-        if len(self.sender().text()) > 1:
-            self.sender().setText(self.sender().text()[0])
-        self.sender().setText(self.sender().text().upper())
-        self.active_row = (int(((self.shortcuts_layout.indexOf(self.sender())) - 1) / 2))
-        for x in pickle_cuts:
-            if pickle_cuts[x] == self.actions_pcut[self.active_row]:
-                pickle_cuts[x] = 'None'
-                
-        pickle_cuts[ord(self.sender().text())] = self.actions_pcut[self.active_row]
-        
-        with open('tmp/kybs.trkp', 'wb') as fh:
-            pickle.dump(pickle_cuts, fh)
+        if len(self.sender().text()) != 0:
+            if len(self.sender().text()) > 1:
+                self.sender().setText(self.sender().text()[0])
+            self.sender().setText(self.sender().text().upper())
+            self.active_row = (int(((self.shortcuts_layout.indexOf(self.sender())) - 1) / 2))
+            for x in pickle_cuts:
+                if pickle_cuts[x] == self.actions_pcut[self.active_row]:
+                    pickle_cuts[x] = 'None'
+                    
+            pickle_cuts[ord(self.sender().text())] = self.actions_pcut[self.active_row]
+            
+            with open('tmp/kybs.trkp', 'wb') as fh:
+                pickle.dump(pickle_cuts, fh)
     
     def resetShortcuts(self):
         global pickle_cuts
@@ -337,4 +376,23 @@ class PreferencesDialog(QDialog):
             with open('tmp/kybs.trkp', 'wb') as fh:
                 pickle.dump(pickle_cuts, fh)
             infoClose("Keyboard shortcuts have been reset (restart Preferences to see change)",self)
+    
+    def checkFiles(self):
+        self.file_modes = ['rb', 'rb', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r']
+        self.file_count = -1        
+        for file in ['tmp/kybs_def.trkp', 'tmp/kybs.trkp', 'tmp/rsp.tmp', 'tmp/preferences.json',
+                     'UI_preferencesDialog.py', 'UI_Dialogs.py', 'tasks_backend.py', 'help_docs/help_0.html',
+                     'help_docs/help_1.html', 'help_docs/help_2.html']:
+            self.file_count +=1
+            try:
+                open(file, self.file_modes[self.file_count])
+                self.check_files.setText("No missing files")
+            except:
+                self.check_files.setText("Missing "+file+"\n check for updates to re-download")
+                break
+    
+    def setTempFiles(self):
+        pass
+
+                    
 
