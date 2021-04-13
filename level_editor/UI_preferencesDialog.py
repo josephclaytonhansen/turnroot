@@ -1,11 +1,9 @@
-import sys
+import sys, json, pickle
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
-import json
 from UI_updateJSON import updateJSON, dumpJSON
 from UI_Dialogs import infoClose
-import pickle
 
 ind = 0
 entries = ["Appearance", "System", "Keyboard Shortcuts"]
@@ -41,10 +39,8 @@ import UI_colorTheme
 
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
-#update below when importing more layouts!
 from UI_layoutOption import (right_lower,left_lower,left_left,right_right)
 layout_dict = [right_lower,left_lower,left_left,right_right]
-#update portion ends here
 
 color_themes = []
 for x in range(0, len(color_themes_dict)):
@@ -60,7 +56,6 @@ with open('tmp/kybs.trkp', 'rb') as fh:
     pickle_cuts = pickle.load(fh)
 
 class PreferencesDialog(QDialog):
-
     def __init__(self, parent=None):
         data = updateJSON()
         active_theme = getattr(UI_colorTheme, data["active_theme"])
@@ -82,7 +77,6 @@ class PreferencesDialog(QDialog):
         self.buttonBox.clicked.connect(self.accept)
         self.cancelBox = QPushButton("Cancel")
         self.cancelBox.clicked.connect(self.cancel)
-
 
         #the overall layout is a grid
         layout = QGridLayout()
@@ -249,7 +243,6 @@ class PreferencesDialog(QDialog):
         layout.addWidget(self.cancelBox, 12, 2)
         self.setLayout(layout)
 
-    
     def cancel(self):
         self.close()
         
@@ -276,7 +269,6 @@ class PreferencesDialog(QDialog):
         rfont_size = i
         data["rfont_size"] = rfont_size
         dumpJSON(data)
-
 
     def color_theme_changed(self, s):
         data = updateJSON()

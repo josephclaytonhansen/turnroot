@@ -1,11 +1,9 @@
-import sys
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QFont
-import json
 from UI_updateJSON import updateJSON
 import UI_colorTheme
-import shutil, os, pickle
+import shutil, os, pickle, json, sys
 
 return_confirm = False
 chosen_object = None
@@ -144,7 +142,6 @@ class addObject(QDialog):
     def add_dd_changed(self, s):
         global chosen_object
         chosen_object = s
-        print(chosen_object)
         self.chosen_object = chosen_object
         
     def showEvent(self, event):

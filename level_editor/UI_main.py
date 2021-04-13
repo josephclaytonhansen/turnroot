@@ -55,9 +55,6 @@ mode_highlight = 0
 with open("tmp/rsp.tmp", "r") as read_file:
     tmp = read_file.read().strip()
 
-def str_to_class(classname):
-    return getattr(sys.modules[__name__], classname)
-
 class main(QMainWindow):
     def __init__(self):       
         #create, title, and size mainwindow
@@ -66,18 +63,21 @@ class main(QMainWindow):
         self.setMinimumSize(QSize(int(size.width()/3), int(size.height()/2)))
         self.setMaximumSize(QSize(int(size.width()), int(size.height())))
         self.resize(QSize(int(size.width()*.98), int(size.height()*.9)))
+        
+        #set up some variables
         self.fullscreen = fullscreen
         self.zoom_level = zoom_level
+        self.path = None
+        global icon_string
         self.setFocusPolicy(Qt.ClickFocus)
+        
+        #pull data from other files
         self.level_data = LevelData().level_data
         self.decor_data = LevelData().decor_data
         self.type_data = LevelData().type_data
         self.object_data = LevelData().object_data
         self.delete_mode = DeleteMode().delete_mode
         self.active_pack = activeResourcePack().pack
-
-        self.path = None
-        global icon_string
         self.tilesets = TileSets().tile_stack
 
         #set main layout to grid
@@ -108,7 +108,7 @@ class main(QMainWindow):
             self.icon_loc = "ui_icons/logo-white.png"
         
         #add workspaces
-        
+        #tiles (in scroll area)        
         self.tiles = Tiles()
         self.tiles_info = TilesInfo()
         self.tscroll = QScrollArea()
@@ -118,6 +118,7 @@ class main(QMainWindow):
         self.tscroll.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOn )
         self.tscroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOn )
         
+        #tasks (in scroll area)
         self.tasks = TaskSelection()
         self.tasks_scroll = QScrollArea()
         self.tasks_scroll.setMaximumWidth((size.width()/3))
@@ -125,11 +126,13 @@ class main(QMainWindow):
         self.tasks_scroll.setWidgetResizable(True)
         self.tasks_scroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOn )
         
+        #task settings (in scroll area)
         self.task_setting = TaskSettings()
         self.task_settings = QScrollArea()
         self.task_settings.setWidget(self.task_setting)
         self.task_settings.setWidgetResizable(True)
         
+        #tile grid (in scroll area)
         self.tile_grid = tileGridWorkspace()
         self.tile_grid.setMinimumWidth(size.width())
         self.tile_grid.setMaximumHeight(size.height()) 
@@ -273,6 +276,7 @@ class main(QMainWindow):
         self.OpenButton = QAction("Open", self)
         self.OpenButton.triggered.connect(self.openFileDialog)
         
+        #file menu items
         fileMenu.addAction(self.OpenButton)
         fileMenu.addAction(self.SaveButton)
         fileMenu.addAction(self.saveAsButton)
@@ -297,7 +301,6 @@ class main(QMainWindow):
         self.pickle_cuts = {}
         with open('tmp/kybs.trkp', 'rb') as fh:
             self.pickle_cuts = pickle.load(fh)
-            print(self.pickle_cuts)
 
         for x in self.pickle_cuts:
             if self.pickle_cuts[x].startswith("self.") and len(self.pickle_cuts[x]) < 32 and "(" not in self.pickle_cuts[x] and ")" not in self.pickle_cuts[x]:
@@ -305,6 +308,7 @@ class main(QMainWindow):
         with open('tmp/kybs.trkp', 'wb') as fh:
             pickle.dump(self.pickle_cuts, fh)
     
+    #actions- save
     def Save(self):
         if self.path == None:
             self.saveFileDialog()
@@ -336,22 +340,23 @@ class main(QMainWindow):
         else:
             try:
                 self.keyboard_shortcuts[e.key()]()
-                
             except:
                 pass
 
-    #custom events
+    #quick add pop up
     def quickAdd(self):
         t = addObject(parent=self)
         t.exec_()
+    #resource pack dialog
     def resourcePack(self):
         r = resourcePackDialog(parent=self)
         r.exec_()
+    #options menu dialog
     def OptionsMenu(self):
         p = PreferencesDialog(parent=self)
         theme = p.exec_()
         data = updateJSON()
-        
+        #apply data from preferences
         if (theme != 0):
             self.menubar.style().unpolish(self.menubar)
             self.menubar.style().polish(self.menubar)
@@ -371,6 +376,7 @@ class main(QMainWindow):
             if (data["theme_changed"] == True):
                 os.execl(sys.executable, sys.executable, *sys.argv)
             
+    #help/forums view
     def helpView(self):
         h = webView(page = 3, parent=self)
         h.exec_()
@@ -379,6 +385,7 @@ class main(QMainWindow):
         h = webView(page = 4, parent=self)
         h.exec_()
     
+    #close (and confirm)
     def closeEvent(self, event):
         c = confirmAction(parent=self, s="quit the level editor")
         c.exec_()
@@ -387,13 +394,14 @@ class main(QMainWindow):
             sys.exit()
         else:
             event.ignore()
-        
+    #quit    
     def quitWindow(self):
         c = confirmAction(parent=self, s="quit the level editor")
         c.exec_()
         if(c.return_confirm):
             sys.exit()
-        
+            
+    #show and hide workspaces     
     def show_tiles(self):
         self.tscroll.setVisible(True)
         self.tiles_info.setVisible(True)
@@ -442,6 +450,7 @@ class main(QMainWindow):
         self.tools_hide.setVisible(False)
         self.tools_show.setVisible(True)
     
+    #full screen toggles ALL hide/show buttons
     def full_screen(self):
         if self.fullscreen == True:
             self.fullscreen = False
@@ -457,7 +466,8 @@ class main(QMainWindow):
             self.show_tasks()
             self.show_tools()
             self.show_tasks_settings()
-            
+    
+    #about dialog
     def about(self):
         a = stackedInfoImgDialog(str(self.icon_loc),
                                  ["Turnroot "+version,
@@ -466,15 +476,17 @@ class main(QMainWindow):
                                  parent=self)
         a.exec_()
     
+    #check for updates
     def checkUpdates(self):
-        #check updates
         u = infoClose("Turnroot is up to date")
         u.exec_()
     
+    #resources dialog
     def resourcesDialog(self):
         r = resourcePackDialog(parent=self)
         r.exec_()
     
+    #zoom in/out
     def zoom_in(self):
         if self.zoom_level < 3:
             self.zoom_level += .1
@@ -491,6 +503,7 @@ class main(QMainWindow):
         self.tile_grid.setFixedSize(size.width()*self.zoom_level, int(size.height()/size.width()*size.width())*self.zoom_level)
         self.tile_grid.update()
     
+    #goto TL/BR corners of tile grid
     def scrollReset(self):
         self.scroll.horizontalScrollBar().setValue(0)
         self.scroll.verticalScrollBar().setValue(0)
@@ -499,6 +512,7 @@ class main(QMainWindow):
         self.scroll.horizontalScrollBar().setValue(2200)
         self.scroll.verticalScrollBar().setValue(2200)
     
+    #toggle delete mode
     def tileEditMode(self):
         global icon_string
         if self.delete_mode == 0:
@@ -512,7 +526,7 @@ class main(QMainWindow):
             
         self.tile_grid.setDeleteMode(self.delete_mode)
 
-    #thanks to pythonspot for the open / save dialog templates
+    #thanks to pythonspot for the open / save dialog skeletons
     def openFileDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog

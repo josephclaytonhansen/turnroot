@@ -162,7 +162,6 @@ class tileGridWorkspace(QWidget):
     
     def change_color(self):
         global current_tile, level_data, current_name, add_on_click, tile_ratio, most_recent_door, most_recent_chest, decor_data, universal_delete_mode, ttype, object_data
-        print(add_on_click)
         try:
             if universal_delete_mode == 0:
                 if add_on_click == "tile":
