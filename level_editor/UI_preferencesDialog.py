@@ -215,14 +215,14 @@ class PreferencesDialog(QDialog):
                 fp = os.path.join(path, f)
                 self.total_size += os.path.getsize(fp)
         
-        self.folder_size = QLabel("Turnroot is using "+str(round(self.total_size / 1000000, 2))+" MB of disk space")
+        self.folder_size = QLabel("Turnroot Level Editor is using "+str(round(self.total_size / 1000000, 2))+" MB of disk space")
         self.folder_size.setAlignment(Qt.AlignVCenter)
         self.sys_layout.addWidget(self.folder_size, 4, 0)
         
         self.process = psutil.Process(os.getpid())
         self.ram_usage = (self.process.memory_info().vms)
         
-        self.ram_label = QLabel("Turnroot is currently using "+str(round(self.ram_usage / 1000000, 2))+" MB of RAM")
+        self.ram_label = QLabel("Turnroot Level Editor is currently using "+str(round(self.ram_usage / 1000000, 2))+" MB of RAM")
         self.ram_label.setAlignment(Qt.AlignVCenter)
         self.sys_layout.addWidget(self.ram_label, 5, 0)
         
