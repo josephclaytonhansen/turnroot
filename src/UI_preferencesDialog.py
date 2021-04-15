@@ -16,14 +16,14 @@ from UI_colorTheme import (
     rainforest,charcoal,
     system_light,ocean_waves
     ,chocolate,
-    chili_pepper,garden_morning)
+    chili_pepper)
 
 color_themes_dict = [midnight_spark, midnight_spark_yellow,
     coral_reef,sand_dunes,
     rainforest,charcoal,
     system_light,ocean_waves
     ,chocolate,
-    chili_pepper,garden_morning]
+    chili_pepper]
 #update portion ends here
 
 data = {"font_size": 15, "rfont_size": 15,

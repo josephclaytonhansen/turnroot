@@ -98,7 +98,7 @@ class main(QMainWindow):
             self.icon_loc = "ui_icons/logo-white.png"
         elif (active_theme.tag == "rainforest"):
             icon_string = "green/"
-        elif (active_theme.tag == "charcoal" or active_theme.tag == "ocean_waves"  or active_theme.tag == "garden_morning" or  active_theme.tag == "coral_reef"):
+        elif (active_theme.tag == "charcoal" or active_theme.tag == "ocean_waves" or active_theme.tag == "coral_reef"):
             icon_string = "white/"
             self.icon_loc = "ui_icons/logo-white.png"
         elif (active_theme.tag == "system_light"):

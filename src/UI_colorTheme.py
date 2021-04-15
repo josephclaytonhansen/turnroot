@@ -20,6 +20,8 @@ class midnight_spark(colorTheme):
     node_grid_alt_lines_color = "#234f9e"
     list_background_color = "#252C31"
     window_text_color = "#8bdfc7"
+    button_alt_color = "#93edd3"
+    button_alt_text_color = "#30403b"
 
 class midnight_spark_yellow(colorTheme):
     tag = "midnight_spark_yellow"
@@ -56,7 +58,7 @@ class rainforest(colorTheme):
 class charcoal(colorTheme):
     name = "Charcoal"
     tag = "charcoal"
-    window_background_color = "#262626"
+    window_background_color = "#222222"
     list_background_color = "#545454"
     button_alt_color = "#666666"
     button_alt_text_color = "#e6e6e6"
@@ -101,23 +103,6 @@ class chili_pepper(colorTheme):
     list_background_color = "#C0414A"
     window_text_color = "#262523"
     workspace_background_color = "#E8DBC5"
-
-class garden_morning(colorTheme):
-    name = "Garden"
-    tag = "garden_morning"
-    window_background_color = "#354025"
-    list_background_color = "#6C8C3B"
-    window_text_color = "#DBD1C8"
-    workspace_background_color = "#849962"
-
-class clouds(colorTheme):
-    name = "Misty Sunrise"
-    tag = "clouds"
-    window_background_color = "#DDF8E8"
-    list_background_color = "#E94F37"
-    window_text_color = "#111111"
-    workspace_background_color = "#FFB870"
-
-    
+ 
     
     
