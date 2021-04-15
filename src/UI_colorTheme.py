@@ -3,7 +3,6 @@ class colorTheme:
     tag= ""
     window_background_color = ""
     list_background_color = ""
-    workspace_background_color = ""
     search_background_color = ""
     text_entry_background_color = ""
     rows_background_color1 = ""
@@ -15,6 +14,8 @@ class colorTheme:
     editor_windows_text_color = ""
     text_entry_text_color = ""
     text_entry_header_text_color = ""
+    node_grid_background_color = ""
+    node_grid_lines_color = ""
 
 class midnight_spark(colorTheme):
     name = "Midnight Spark"
@@ -61,8 +62,12 @@ class charcoal(colorTheme):
     tag = "charcoal"
     window_background_color = "#262626"
     list_background_color = "#545454"
-    workspace_background_color = "#363636"
+    button_alt_color = "#666666"
+    button_alt_text_color = "#e6e6e6"
+    node_grid_background_color = "#363636"
     window_text_color = "#c4c4c4"
+    node_grid_alt_lines_color = "#292929"
+    node_grid_lines_color = "#2f2f2f"
 
 class system_light(colorTheme):
     name = "System Light"
@@ -80,7 +85,10 @@ class ocean_waves(colorTheme):
     button_alt_text_color = "#7AA6CD"
     list_background_color = "#394159"
     window_text_color = "#DCEEF2"
-    workspace_background_color = "#7AA6CD"
+    node_grid_lines_color = "#7AA6CD"
+    node_grid_alt_lines_color = "#5c8fbd"
+    node_grid_background_color = "#6b9dc9"
+    
 
 class chocolate(colorTheme):
     name = "Chocolate"

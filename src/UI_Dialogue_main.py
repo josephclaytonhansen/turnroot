@@ -11,7 +11,6 @@ data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 app = QApplication([])
-active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 screen = app.primaryScreen()
 size = screen.size()
