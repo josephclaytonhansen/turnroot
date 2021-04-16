@@ -8,7 +8,8 @@ from UI_Dialogs import infoClose, colorThemeEdit
 ind = 0
 entries = ["Appearance", "System", "Keyboard Shortcuts"]
 returnv = False
-
+import UI_colorTheme
+    
 #update below when importing more color themes!
 from UI_colorTheme import (
     midnight_spark, midnight_spark_yellow,
@@ -24,6 +25,30 @@ color_themes_dict = [midnight_spark, midnight_spark_yellow,
     system_light,ocean_waves
     ,chocolate,
     chili_pepper]
+
+with open("tmp/ut.truct", "r") as readfile:
+    user_themes = readfile.read().split()
+    print(user_themes)
+    for t in range(len(user_themes)):
+        theme = UI_colorTheme.colorTheme
+        theme.name = user_themes[t]
+        with open("tmp/ut_"+theme.name+".trutt", "rb") as themefile:
+            theme_pickle = pickle.load(themefile)
+        
+        color_theme_lines = ["class "+theme.name+"(colorTheme):\n"]
+        for attr in ["name","tag","window_background_color","list_background_color","button_alt_color","button_alt_text_color",
+                     "window_text_color","node_grid_background_color","node_grid_lines_color","node_grid_alt_lines_color",
+                     "node_title_color","node_title_background_color","node_background_color","node_text_color",
+                     "node_wire_color","node_socket_trigger_color","node_socket_file_color",
+                     "node_socket_condition_color","node_socket_number_color","node_socket_text_color"]:
+            setattr(theme, attr, getattr(theme_pickle, attr))
+            color_theme_lines.append("\t"+attr+"=\""+str(getattr(theme_pickle, attr))+"\"\n")
+        color_themes_dict.append(theme)
+        with open("UI_colorTheme.py", "a") as color_code:
+            for line in color_theme_lines:
+                color_code.write(line)
+            color_code.close()
+   
 #update portion ends here
 
 data = {"font_size": 15, "rfont_size": 15,
@@ -34,8 +59,6 @@ data = {"font_size": 15, "rfont_size": 15,
 
 data = updateJSON()
 dumpJSON(data)
-    
-import UI_colorTheme
 
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 

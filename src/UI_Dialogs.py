@@ -398,8 +398,12 @@ class colorThemeEdit(QDialog):
         self.c_block.setPixmap(self.c_block_pixmap)
 
     def saveTheme(self):
-        self.name = self.themeName
+        self.name = self.themeName.text()
+        self.new_theme.name = self.themeName.text()
+        
         self.tag = "_".join(self.themeName.text().split(" ")).strip().lower()
+        self.new_theme.tag = self.tag
+        
         with open("tmp/ut_"+self.tag+".trutt", "wb") as writefile:
             pickle.dump(self.new_theme, writefile)
         with open("tmp/ut.truct", "a") as writefile:
