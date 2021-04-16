@@ -311,13 +311,17 @@ class colorThemeEdit(QDialog):
         super().__init__(parent)
         data = updateJSON()
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        
+        self.new_theme = UI_colorTheme.colorTheme()
+        
+        self.values = {}
+        self.color_blocks = {}
 
         self.tabs = QTabWidget()
         self.tabs.setTabPosition(QTabWidget.South)
 
         self.theme_groups = self.active_theme.groups
         for tab in (self.theme_groups):
-            print(tab)
             self.tab_title = tab[0]
             self.c_tab = QWidget()
             self.c_tab_layout = QVBoxLayout()
@@ -333,25 +337,70 @@ class colorThemeEdit(QDialog):
 
                 self.color_label = QLabel(self.c_colors_labels[l])
                 self.color_block_color = ColorBlock(self.c_colors[l])
+                self.color_blocks[self.c_colors_labels[l]] = self.color_block_color
                 self.color_value = QLineEdit()
-                self.color_value.returnPressed.connect(self.updateTheme)
+                self.color_value.color_block_id = self.c_colors_labels[l]
+                self.color_value.returnPressed.connect(self.updateValue)
                 self.color_value.setPlaceholderText(self.c_colors[l])
                 
                 self.color_block_layout.addWidget(self.color_label, 0)
                 self.color_block_layout.addWidget(self.color_block_color, 1)
                 self.color_block_layout.addWidget(self.color_value, 2)
                 
+                self.values[self.c_colors_labels[l]] = self.c_colors[l]
+                
                 self.c_tab_layout.addWidget(self.color_block)
                 
-
             self.tabs.addTab(self.c_tab, self.tab_title)
             
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
-
+        
+        self.layout.addWidget(QLabel("To change, type in hex color and press Enter"))
         self.layout.addWidget(self.tabs)
+        
+        self.newTheme = QWidget()
+        self.newTheme_layout = QHBoxLayout()
+        self.newTheme.setLayout(self.newTheme_layout)
+        
+        self.themeName = QLineEdit()
+        self.themeNameLabel = QLabel("New theme name: ")
+        self.saveThemeAs = QPushButton("Save new theme")
+        self.saveThemeAs.clicked.connect(self.saveTheme)
+        
+        self.newTheme_layout.addWidget(self.themeNameLabel)
+        self.newTheme_layout.addWidget(self.themeName)
+        self.newTheme_layout.addWidget(self.saveThemeAs)
+        
+        self.layout.addWidget(self.newTheme)
+        self.layout.addWidget(QLabel("New theme will be added to list on restart"))
+        
         self.show()
         
-    def updateTheme(self):
-        pass
+    def updateValue(self):
+        self.update_id = self.sender().color_block_id
+        self.c_block = self.color_blocks[self.update_id]
+        self.c_block_pixmap = QPixmap(70,30)
+        
+        self.update_value = self.sender().text()
+        if self.update_value.startswith("#") == False:
+            self.update_value = "#"+self.update_value
+            self.sender().setText(self.update_value)
+            
+        setattr(self.new_theme, self.update_id, self.update_value)
+        self.values[self.update_id] = self.update_value
+        
+        try:
+            self.c_block_pixmap.fill(QColor(self.update_value))
+        except:
+            self.c_block_pixmap.fill(QColor("black"))
+        
+        self.c_block.setPixmap(self.c_block_pixmap)
+
+    def saveTheme(self):
+        self.name = self.themeName
+        self.tag = "_".join(self.themeName.text().split(" ")).strip().lower()
+        with open("tmp/ut_"+self.tag+".json", "w") as writefile:
+            json.dump(self.values, writefile)
+            
         
