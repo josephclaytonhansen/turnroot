@@ -15,8 +15,9 @@ class QDMGraphicsNode(QGraphicsItem):
     
     def initTitle(self):
         self._title_color = Qt.white
-        self._title_font = QFont("Lucida Sans Unicode",25)
-        self._title_font.setHintingPreference(3)
+        self._title_font = QFont("Lucida Sans Unicode")
+        self._title_font.setPointSize(22)
+        self._title_font.setStyleStrategy(QFont.NoAntialias)
         self.title_item = QGraphicsTextItem(self)
         self.title_item.setDefaultTextColor(self._title_color)
         self.title_item.setFont(self._title_font)

@@ -20,8 +20,6 @@ class NodeEditorWnd(QWidget):
         node = Node(self.scene, "Node Graphical Item")
         
         self.view = QDMGraphicsView(self.grScene, self)
-        self.view.setRenderHints(QPainter.Antialiasing | QPainter.HighQualityAntialiasing | QPainter.TextAntialiasing | QPainter.SmoothPixmapTransform )
-        self.view.setOptimizationFlags(QGraphicsView.DontAdjustForAntialiasing)
         self.layout.addWidget(self.view)
         
         self.show()
