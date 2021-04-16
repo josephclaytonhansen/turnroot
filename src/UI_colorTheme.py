@@ -10,6 +10,28 @@ class colorTheme:
     node_grid_background_color = ""
     node_grid_lines_color = ""
     node_grid_alt_lines_color = ""
+    node_title_color = ""
+    node_title_background_color = ""
+    node_background_color = ""
+    node_text_color = ""
+    node_wire_color = ""
+    node_socket_trigger_color = ""
+    node_socket_file_color = ""
+    node_socket_condition_color = ""
+    node_socket_number_color = ""
+    node_socket_text_color = ""
+
+    level_editor = [window_background_color,list_background_color,
+                    window_text_color,text_entry_background_color,
+                    button_alt_color,button_alt_text_color]
+
+    node_grid = [node_grid_background_color, node_grid_lines_color,
+                 node_grid_alt_lines_color, node_title_color,
+                 node_title_background_color, node_background_color,
+                 node_text_color, node_wire_color, node_socket_trigger_color,
+                 node_socket_file_color, node_socket_condition_color,
+                 node_socket_number_color, node_socket_text_color]
+    
 
 class midnight_spark(colorTheme):
     name = "Midnight Spark"
@@ -66,6 +88,7 @@ class charcoal(colorTheme):
     window_text_color = "#c4c4c4"
     node_grid_alt_lines_color = "#292929"
     node_grid_lines_color = "#2f2f2f"
+    node_title_color = "#ffffff"
 
 class system_light(colorTheme):
     name = "System Light"
@@ -86,7 +109,7 @@ class ocean_waves(colorTheme):
     node_grid_lines_color = "#7AA6CD"
     node_grid_alt_lines_color = "#5c8fbd"
     node_grid_background_color = "#6b9dc9"
-    
+    node_title_color = "#ffffff"
 
 class chocolate(colorTheme):
     name = "Chocolate"

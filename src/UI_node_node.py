@@ -1,6 +1,10 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import UI_colorTheme
+from UI_updateJSON import updateJSON
+data = updateJSON()
+
 
 class QDMGraphicsNode(QGraphicsItem):
     def __init__(self, node, title="Node Graphics Item", parent=None):
@@ -14,7 +18,8 @@ class QDMGraphicsNode(QGraphicsItem):
         pass
     
     def initTitle(self):
-        self._title_color = Qt.white
+        active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self._title_color = QColor(active_theme.node_title_color)
         self._title_font = QFont("Lucida Sans Unicode")
         self._title_font.setPointSize(22)
         self._title_font.setStyleStrategy(QFont.NoAntialias)
