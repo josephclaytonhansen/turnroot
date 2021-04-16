@@ -3,7 +3,7 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
 from UI_updateJSON import updateJSON, dumpJSON
-from UI_Dialogs import infoClose
+from UI_Dialogs import infoClose, colorThemeEdit
 
 ind = 0
 entries = ["Appearance", "System", "Keyboard Shortcuts"]
@@ -136,38 +136,41 @@ class PreferencesDialog(QDialog):
         self.current_font = data["font_size"]
         self.color_theme_list.currentTextChanged.connect(self.color_theme_changed)
         self.aes_layout.addWidget(self.color_theme_list,4,1)
+        self.ct_edit = QPushButton("Edit color theme")
+        self.ct_edit.clicked.connect(self.colorThemeDialog)
+        self.aes_layout.addWidget(self.ct_edit,5,1)
         
         self.ah = QLabel("Auto-hide")
         self.ah.setAlignment(Qt.AlignVCenter)
-        self.aes_layout.addWidget(self.ah,5,0,3,0)
+        self.aes_layout.addWidget(self.ah,6,0,3,0)
         self.ah_tasks = QCheckBox("Task selector")
         if(data["ah_tasks"]):
             self.ah_tasks.setCheckState(Qt.Checked)
         self.ah_tasks.stateChanged.connect(self.ah_tasks_changed)
-        self.aes_layout.addWidget(self.ah_tasks,6,1)
+        self.aes_layout.addWidget(self.ah_tasks,7,1)
         self.ah_taskss = QCheckBox("Task settings")
         if(data["ah_taskss"]):
             self.ah_taskss.setCheckState(Qt.Checked)
         self.ah_taskss.stateChanged.connect(self.ah_taskss_changed)
-        self.aes_layout.addWidget(self.ah_taskss,7,1)
+        self.aes_layout.addWidget(self.ah_taskss,8,1)
         self.ah_overlays = QCheckBox("Editor overlay buttons")
         if(data["ah_overlays"]):
             self.ah_overlays.setCheckState(Checked)
         self.ah_overlays.stateChanged.connect(self.ah_overlays_changed)
-        self.aes_layout.addWidget(self.ah_overlays,8,1)
+        self.aes_layout.addWidget(self.ah_overlays,9,1)
         
         self.lo = QPushButton("Layout (click for reference)")
-        self.aes_layout.addWidget(self.lo,9,0)
+        self.aes_layout.addWidget(self.lo,10,0)
         self.lo_list = QListWidget()
         self.lo_list.setStyleSheet("background-color:"+self.active_theme.list_background_color+";")
         self.lo_list.addItems(layout_names)
         self.lo_list.setCurrentRow(0)
         self.lo_list.currentTextChanged.connect(self.layout_changed)
-        self.aes_layout.addWidget(self.lo_list,9,1)
+        self.aes_layout.addWidget(self.lo_list,10,1)
                 
         self.tis = QLabel("Toolbar icon size")
         self.tis.setAlignment(Qt.AlignVCenter)
-        self.aes_layout.addWidget(self.tis,10,0)
+        self.aes_layout.addWidget(self.tis,11,0)
         self.tis_slider = QSlider(Qt.Horizontal)
         self.tis_slider.setTickPosition(3)
         self.tis_slider.setTickInterval(4)
@@ -175,7 +178,7 @@ class PreferencesDialog(QDialog):
         self.tis_slider.setRange(16,48)
         self.tis_slider.setSingleStep(4)
         self.tis_slider.valueChanged.connect(self.tis_size_changed)
-        self.aes_layout.addWidget(self.tis_slider,10,1)
+        self.aes_layout.addWidget(self.tis_slider,11,1)
         
         self.aes.setLayout(self.aes_layout)
         self.prefs_layout.addWidget(self.aes)
@@ -283,6 +286,10 @@ class PreferencesDialog(QDialog):
 
     def cancel(self):
         self.close()
+
+    def colorThemeDialog(self):
+        c = colorThemeEdit(parent=self)
+        c.exec_()
         
     def category_change(self, s):
         data = updateJSON()

@@ -297,3 +297,29 @@ class activeResourcePack():
         global resource_pack_path, current_pack
         self.path = resource_pack_path
         self.pack = current_pack
+        
+class Color(QWidget):
+    def __init__(self, color):
+        super().__init__()
+        self.setAutoFillBackground(True)
+        palette = self.palette()
+        palette.setColor(QPalette.Window, QColor(color))
+        self.setPalette(palette)
+        
+class colorThemeEdit(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        data = updateJSON()
+        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+
+        self.tabs = QTabWidget()
+        self.tabs.setTabPosition(QTabWidget.South)
+
+        self.theme_groups = self.active_theme.groups
+        for tab in (self.theme_groups):
+            self.tabs.addTab(QWidget(), tab[0])
+        
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+
+        self.layout.addWidget(self.tabs)
