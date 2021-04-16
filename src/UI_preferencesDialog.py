@@ -136,7 +136,7 @@ class PreferencesDialog(QDialog):
         self.current_font = data["font_size"]
         self.color_theme_list.currentTextChanged.connect(self.color_theme_changed)
         self.aes_layout.addWidget(self.color_theme_list,4,1)
-        self.ct_edit = QPushButton("Edit color theme")
+        self.ct_edit = QPushButton("Create color theme")
         self.ct_edit.clicked.connect(self.colorThemeDialog)
         self.aes_layout.addWidget(self.ct_edit,5,1)
         

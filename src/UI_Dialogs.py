@@ -400,7 +400,9 @@ class colorThemeEdit(QDialog):
     def saveTheme(self):
         self.name = self.themeName
         self.tag = "_".join(self.themeName.text().split(" ")).strip().lower()
-        with open("tmp/ut_"+self.tag+".json", "w") as writefile:
-            json.dump(self.values, writefile)
+        with open("tmp/ut_"+self.tag+".trutt", "wb") as writefile:
+            pickle.dump(self.new_theme, writefile)
+        with open("tmp/ut.truct", "a") as writefile:
+            writefile.write(self.tag.strip("\"")+"\n")
             
         
