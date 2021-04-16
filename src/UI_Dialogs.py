@@ -298,13 +298,13 @@ class activeResourcePack():
         self.path = resource_pack_path
         self.pack = current_pack
         
-class ColorBlock(QWidget):
-    def __init__(self, color):
-        super().__init__()
-        self.setAutoFillBackground(True)
-        palette = self.palette()
-        palette.setColor(QPalette.Window, QColor(color))
-        self.setPalette(palette)
+class ColorBlock(QLabel):
+    def __init__(self, color, parent=None):
+        super().__init__(parent)
+        self.color = color
+        self.pixmap = QPixmap(70, 30)
+        self.pixmap.fill(QColor(self.color))
+        self.setPixmap(self.pixmap)
         
 class colorThemeEdit(QDialog):
     def __init__(self, parent=None):
@@ -317,6 +317,7 @@ class colorThemeEdit(QDialog):
 
         self.theme_groups = self.active_theme.groups
         for tab in (self.theme_groups):
+            print(tab)
             self.tab_title = tab[0]
             self.c_tab = QWidget()
             self.c_tab_layout = QVBoxLayout()
@@ -325,19 +326,32 @@ class colorThemeEdit(QDialog):
             self.c_colors = getattr(self.active_theme, self.tab_title)
             self.c_colors_labels = getattr(self.active_theme, self.tab_title+"_labels")
 
-            for l in range(len(self.c_colors)):
+            for l in range(1, len(self.c_colors)):
                 self.color_block = QWidget()
                 self.color_block_layout = QHBoxLayout()
                 self.color_block.setLayout(self.color_block_layout)
-                print(self.c_colors[l], self.c_colors_labels[l])
 
-                #self.color_label = QLabel(self.c_colors_label[l])
-                #self.color_block = ColorBlock(self.c_colors[l])
+                self.color_label = QLabel(self.c_colors_labels[l])
+                self.color_block_color = ColorBlock(self.c_colors[l])
+                self.color_value = QLineEdit()
+                self.color_value.returnPressed.connect(self.updateTheme)
+                self.color_value.setPlaceholderText(self.c_colors[l])
+                
+                self.color_block_layout.addWidget(self.color_label, 0)
+                self.color_block_layout.addWidget(self.color_block_color, 1)
+                self.color_block_layout.addWidget(self.color_value, 2)
+                
+                self.c_tab_layout.addWidget(self.color_block)
+                
 
+            self.tabs.addTab(self.c_tab, self.tab_title)
             
-        self.tabs.addTab(self.c_tab, self.tab_title)
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
         self.layout.addWidget(self.tabs)
         self.show()
+        
+    def updateTheme(self):
+        pass
+        
