@@ -1,5 +1,9 @@
 from PyQt5.QtWidgets import *
-from UI_node_graphics_scene import QDMGraphicsScene
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from UI_node_graphics_scene import QDMGraphicsView, QDMGraphicsScene
+from UI_node_node import Node
+from UI_node_scene import Scene
 class NodeEditorWnd(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -10,11 +14,17 @@ class NodeEditorWnd(QWidget):
         self.layout.setContentsMargins(0,0,0,0)
         self.setLayout(self.layout)
         
-        self.grScene = QDMGraphicsScene()
+        self.scene = Scene()
+        self.grScene = self.scene.grScene
         
-        self.view = QGraphicsView(self)
-        self.view.setScene(self.grScene)
+        node = Node(self.scene, "Node Graphical Item")
+        
+        self.view = QDMGraphicsView(self.grScene, self)
+        self.view.setRenderHints(QPainter.Antialiasing | QPainter.HighQualityAntialiasing | QPainter.TextAntialiasing | QPainter.SmoothPixmapTransform )
+        self.view.setOptimizationFlags(QGraphicsView.DontAdjustForAntialiasing)
         self.layout.addWidget(self.view)
         
         self.show()
+
+            
         
