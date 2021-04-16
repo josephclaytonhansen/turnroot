@@ -26,7 +26,7 @@ class confirmAction(QDialog):
         layout = QVBoxLayout()
         layout.setContentsMargins( 8,8,8,8)
         layout.setSpacing(0)
-        self.setFixedSize((data["font_size"] * 22)+40, data["font_size"] * 7.4)
+        self.setFixedSize((data["font_size"] * 22)+40, data["font_size"] * 7.7)
         
         self.label =QLabel("Do you want to "+str(s)+"?")
         self.label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)

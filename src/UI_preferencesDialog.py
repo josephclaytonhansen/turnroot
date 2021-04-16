@@ -3,7 +3,7 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
 from UI_updateJSON import updateJSON, dumpJSON
-from UI_Dialogs import infoClose, colorThemeEdit
+from UI_Dialogs import infoClose, colorThemeEdit, confirmAction
 
 ind = 0
 entries = ["Appearance", "System", "Keyboard Shortcuts"]
@@ -28,7 +28,6 @@ color_themes_dict = [midnight_spark, midnight_spark_yellow,
 
 with open("tmp/ut.truct", "r") as readfile:
     user_themes = readfile.read().split()
-    print(user_themes)
     for t in range(len(user_themes)):
         theme = UI_colorTheme.colorTheme
         theme.name = user_themes[t]
@@ -70,6 +69,8 @@ for x in range(0, len(color_themes_dict)):
     color_themes.append(color_themes_dict[x].name)
 if(active_theme.name in color_themes):
     active_index = color_themes.index(active_theme.name)
+else:
+    active_index = 0
 
 layout_names = []
 for x in range(0, len(layout_dict)):
@@ -81,7 +82,10 @@ with open('tmp/kybs.trkp', 'rb') as fh:
 class PreferencesDialog(QDialog):
     def __init__(self, parent=None):
         data = updateJSON()
-        active_theme = getattr(UI_colorTheme, data["active_theme"])
+        try:
+            active_theme = getattr(UI_colorTheme, data["active_theme"])
+        except:
+            active_theme = getattr(UI_colorTheme, "ocean_waves")
         self.active_theme = active_theme
         self.pickle_cuts = pickle_cuts
         self.active_layout = right_lower
@@ -311,8 +315,12 @@ class PreferencesDialog(QDialog):
         self.close()
 
     def colorThemeDialog(self):
-        c = colorThemeEdit(parent=self)
+        c = confirmAction(parent=self, s="proceed?\n This is buggy and may break Turnroot")
         c.exec_()
+        if(c.return_confirm):
+            d= colorThemeEdit(parent=self)
+            d.exec_()
+
         
     def category_change(self, s):
         data = updateJSON()
