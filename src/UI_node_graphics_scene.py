@@ -15,7 +15,8 @@ class QDMGraphicsView(QGraphicsView):
         
         self.zoomInFactor = 1.25
         self.zoomClamp = False
-        self.zoom = 10
+        self.zoom = .4
+        self.scale(self.zoom, self.zoom)
         self.zoomStep = 1
         self.zoomRange = [-10,5]
     
@@ -90,7 +91,7 @@ class QDMGraphicsScene(QGraphicsScene):
         self.scene = scene
         
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
-        self.gridSize = 20
+        self.gridSize = 30
         
         self.scene_width = 64000
         self.scene_height = 64000
@@ -125,13 +126,13 @@ class QDMGraphicsScene(QGraphicsScene):
         
         lines_light, lines_dark = [], []
         for x in range(first_left, right, self.gridSize):
-            if x % 100 == 0:
+            if x % 150 == 0:
                 lines_dark.append(QLine(x,top,x,bottom))
             else:
                 lines_light.append(QLine(x,top,x,bottom))
         
         for y in range(first_top, bottom, self.gridSize):
-            if y % 100 == 0:
+            if y % 150 == 0:
                 lines_dark.append(QLine(left,y,right,y))
             else:
                 lines_light.append(QLine(left,y,right,y))
