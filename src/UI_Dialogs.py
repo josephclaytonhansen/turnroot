@@ -298,7 +298,7 @@ class activeResourcePack():
         self.path = resource_pack_path
         self.pack = current_pack
         
-class Color(QWidget):
+class ColorBlock(QWidget):
     def __init__(self, color):
         super().__init__()
         self.setAutoFillBackground(True)
@@ -317,9 +317,30 @@ class colorThemeEdit(QDialog):
 
         self.theme_groups = self.active_theme.groups
         for tab in (self.theme_groups):
-            self.tabs.addTab(QWidget(), tab[0])
-        
+            self.tab_title = tab[0]
+            self.c_tab = QWidget()
+            self.c_tab_layout = QVBoxLayout()
+            self.c_tab.setLayout(self.c_tab_layout)
+
+            self.c_colors = getattr(self.active_theme, self.tab_title)
+            self.c_colors_labels = getattr(self.active_theme, self.tab_title+"_labels")
+
+            for l in range(len(self.c_colors)):
+                self.color_block = QWidget()
+                self.color_block_layout = QHBoxLayout()
+                self.color_block.setLayout(self.color_block_layout)
+                print(self.c_colors[l], self.c_colors_labels[l])
+
+                #self.color_label = QLabel(self.c_colors_label[l])
+                #self.color_block = ColorBlock(self.c_colors[l])
+
+                #self.color_block_layout.addWidget(QLabel(self.c_colors_labels[l]), 0,0)
+                #self.color_block_layout.addWidget(Color(self.c_colors[l]), 0,1)
+
+            
+            self.tabs.addTab(self.c_tab, self.tab_title)
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
         self.layout.addWidget(self.tabs)
+        self.show()
