@@ -334,11 +334,8 @@ class colorThemeEdit(QDialog):
                 #self.color_label = QLabel(self.c_colors_label[l])
                 #self.color_block = ColorBlock(self.c_colors[l])
 
-                #self.color_block_layout.addWidget(QLabel(self.c_colors_labels[l]), 0,0)
-                #self.color_block_layout.addWidget(Color(self.c_colors[l]), 0,1)
-
             
-            self.tabs.addTab(self.c_tab, self.tab_title)
+        self.tabs.addTab(self.c_tab, self.tab_title)
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
