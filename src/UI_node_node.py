@@ -9,18 +9,23 @@ data = updateJSON()
 class QDMGraphicsNode(QGraphicsItem):
     def __init__(self, node, parent=None):
         super().__init__(parent)
+        
+        self.width = 180*2.5
+        self.height = 240*2.5
+        self.title_height = 24 * 2.5
+        self.padding = 14
+        self.edge_size = 10.0
+        
         self.initTitle()
         self.initUI()
         active_theme = getattr(UI_colorTheme, data["active_theme"])
         self.node = node
         self.title = self.node.title
         
-        self.width = 180*2.5
-        self.height = 240*2.5
-        self.edge_size = 10.0
-        
         self.pen_default = QPen(QColor("#7f000000"))
         self.pen_selected = QPen(QColor(active_theme.node_selected_color))
+        self.brush_title = QBrush(QColor(active_theme.node_title_background_color))
+        self.brush_background = QBrush(QColor(active_theme.node_background_color))
         self.pen_selected.setWidth(3)
         
     def boundingRect(self):
@@ -40,6 +45,8 @@ class QDMGraphicsNode(QGraphicsItem):
         self.title_item = QGraphicsTextItem(self)
         self.title_item.setDefaultTextColor(self._title_color)
         self.title_item.setFont(self._title_font)
+        self.title_item.setPos(self.padding, 10)
+        self.title_item.setTextWidth(self.width-3*self.padding)
         
     @property
     def title(self): return self._title
@@ -50,6 +57,28 @@ class QDMGraphicsNode(QGraphicsItem):
     
     def paint(self, QPainter, QStyleOptionGraphicsItem, widget=None):
         painter = QPainter
+        
+        path_title = QPainterPath()
+        path_title.setFillRule(Qt.WindingFill)
+        path_title.addRoundedRect(0,0,self.width,self.title_height, self.edge_size,self.edge_size)
+        
+        path_title.addRect(0,self.title_height-self.edge_size, self.edge_size, self.edge_size)
+        path_title.addRect(self.width-self.edge_size,self.title_height-self.edge_size, self.edge_size, self.edge_size)
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(self.brush_title)
+        painter.drawPath(path_title.simplified())
+        
+        path_content = QPainterPath()
+        path_content.setFillRule(Qt.WindingFill)
+        path_content.addRoundedRect(0,self.title_height, self.width,
+                                    self.height-self.title_height,self.edge_size, self.edge_size)
+        path_content.addRect(0,self.title_height,self.edge_size,self.edge_size)
+        path_content.addRect(self.width-self.edge_size,self.title_height,self.edge_size,self.edge_size)
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(self.brush_background)
+        painter.drawPath(path_content.simplified())
+        
+        
         path_outline = QPainterPath()
         path_outline.addRoundedRect(0,0,self.width,self.height,self.edge_size, self.edge_size)
         painter.setPen(self.pen_default if not self.isSelected() else self.pen_selected)
