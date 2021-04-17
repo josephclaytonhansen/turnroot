@@ -5,11 +5,26 @@ import UI_colorTheme
 from UI_updateJSON import updateJSON
 data = updateJSON()
 
+class QDMNodeContentWidget(QWidget):
+    def __init__(self, parent = None):
+        super().__init__(parent)
+        self.initUI()
+        
+    def initUI(self):
+        active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(0,0,0,0)
+        self.setLayout(self.layout)
+        self.w_label = QLabel("<font color='"+active_theme.node_text_color+"'>Some text</font>")
+        self.layout.addWidget(self.w_label)
+        self.layout.addWidget(QTextEdit())
+
 
 class QDMGraphicsNode(QGraphicsItem):
     def __init__(self, node, parent=None):
         super().__init__(parent)
-        
+        self.node = node
+        self.content = self.node.content
         self.width = 180*2.5
         self.height = 240*2.5
         self.title_height = 24 * 2.5
@@ -18,10 +33,12 @@ class QDMGraphicsNode(QGraphicsItem):
         
         self.initTitle()
         self.initUI()
-        active_theme = getattr(UI_colorTheme, data["active_theme"])
-        self.node = node
         self.title = self.node.title
         
+        self.initContent()
+        
+        active_theme = getattr(UI_colorTheme, data["active_theme"])
+
         self.pen_default = QPen(QColor("#7f000000"))
         self.pen_selected = QPen(QColor(active_theme.node_selected_color))
         self.brush_title = QBrush(QColor(active_theme.node_title_background_color))
@@ -54,6 +71,13 @@ class QDMGraphicsNode(QGraphicsItem):
     def title(self, value):
         self._title = value
         self.title_item.setPlainText(self._title)
+    
+    def initContent(self):
+        self.grContent = QGraphicsProxyWidget(self)
+        self.content.setGeometry(self.edge_size, self.title_height+self.edge_size,
+                                 self.width - 2*self.edge_size,
+                                 self.height - 2*self.edge_size-self.title_height)
+        self.grContent.setWidget(self.content)
     
     def paint(self, QPainter, QStyleOptionGraphicsItem, widget=None):
         painter = QPainter
@@ -88,9 +112,9 @@ class QDMGraphicsNode(QGraphicsItem):
 class Node():
     def __init__(self, scene, title="undefined node"):
         self.scene = scene
-        
         self.title = title
         
+        self.content = QDMNodeContentWidget()
         self.grNode = QDMGraphicsNode(self)
         
         self.scene.addNode(self)
