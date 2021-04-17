@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import UI_colorTheme
 from UI_updateJSON import updateJSON
+from UI_node_socket import Socket
 data = updateJSON()
 
 class QDMNodeContentWidget(QWidget):
@@ -36,6 +37,7 @@ class QDMGraphicsNode(QGraphicsItem):
         self.title = self.node.title
         
         self.initContent()
+        self.initSockets()
         
         active_theme = getattr(UI_colorTheme, data["active_theme"])
 
@@ -79,6 +81,9 @@ class QDMGraphicsNode(QGraphicsItem):
                                  self.height - 2*self.edge_size-self.title_height)
         self.grContent.setWidget(self.content)
     
+    def initSockets(self):
+        pass
+    
     def paint(self, QPainter, QStyleOptionGraphicsItem, widget=None):
         painter = QPainter
         
@@ -110,7 +115,7 @@ class QDMGraphicsNode(QGraphicsItem):
         painter.drawPath(path_outline.simplified())
               
 class Node():
-    def __init__(self, scene, title="undefined node"):
+    def __init__(self, scene, title="undefined node", inputs = [], outputs=[]):
         self.scene = scene
         self.title = title
         
@@ -121,5 +126,10 @@ class Node():
         self.scene.grScene.addItem(self.grNode)
         self.inputs = []
         self.outputs = []
+        for item in inputs:
+            self.inputs.append(Socket(node=self,t=item))
+        for item in outputs:
+            self.outputs.append(Socket(node=self,t=item))
+
         
         
