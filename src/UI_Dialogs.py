@@ -299,10 +299,10 @@ class activeResourcePack():
         self.pack = current_pack
         
 class ColorBlock(QLabel):
-    def __init__(self, color, parent=None):
+    def __init__(self, color, w, h, parent=None):
         super().__init__(parent)
         self.color = color
-        self.pixmap = QPixmap(70, 30)
+        self.pixmap = QPixmap(w,h)
         self.pixmap.fill(QColor(self.color))
         self.setPixmap(self.pixmap)
         
@@ -336,7 +336,7 @@ class colorThemeEdit(QDialog):
                 self.color_block.setLayout(self.color_block_layout)
 
                 self.color_label = QLabel(self.c_colors_labels[l])
-                self.color_block_color = ColorBlock(self.c_colors[l])
+                self.color_block_color = ColorBlock(self.c_colors[l],70,20)
                 self.color_blocks[self.c_colors_labels[l]] = self.color_block_color
                 self.color_value = QLineEdit()
                 self.color_value.color_block_id = self.c_colors_labels[l]

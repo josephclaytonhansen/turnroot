@@ -119,7 +119,7 @@ class charcoal(colorTheme):
     node_socket_number_color = "#FF57A2"
     node_socket_text_color = "#FFE099"
     node_socket_event_color = "#2f3aa3"
-    node_socket_boolean_color = "#535353"
+    node_socket_boolean_color = "#808080"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                 window_text_color,

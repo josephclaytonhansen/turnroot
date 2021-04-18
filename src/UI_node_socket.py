@@ -23,19 +23,25 @@ socket_types_colors = [active_theme.node_socket_trigger_color,
 class QDMGraphicsSocket(QGraphicsItem):
     def __init__(self, parent = None, t=0):
         super().__init__(parent)
-        print("socket")
         self.radius = 12.0
         self.color_background = QColor(socket_types_colors[t])
         self.color_outline = QColor("#000000")
+        self.outline_width = 2.5
         
         self.pen = QPen(self.color_outline)
-        self.pen.setWidth(2.5)
+        self.pen.setWidth(self.outline_width)
         self.brush = QBrush(self.color_background)
     
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
         painter.setBrush(self.brush)
         painter.setPen(self.pen)
         painter.drawEllipse(-self.radius, -self.radius, 2 * self.radius, 2* self.radius)
+    
+    def boundingRect(self):
+        return QRectF(-self.radius - self.outline_width,
+                      -self.radius - self.outline_width,
+                      2 * (self.radius+self.outline_width),
+                      2* (self.radius * self.outline_width))
 
 LEFT_TOP = 1
 LEFT_BOTTOM = 2
