@@ -20,6 +20,8 @@ class colorTheme:
     node_socket_object_color = ""
     node_socket_number_color = ""
     node_socket_text_color = ""
+    node_socket_event_color = "#000B73"
+    node_socket_boolean_color = "#535353"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -30,7 +32,8 @@ class colorTheme:
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color]
+                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_boolean_color]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -43,7 +46,8 @@ class colorTheme:
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color"]
+                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_boolean_color"]
 
     groups = [level_editor, node_grid]
     
@@ -108,12 +112,14 @@ class charcoal(colorTheme):
     node_title_background_color = "#FF313131"
     node_background_color = "#e3212121"
     node_text_color = "#d0d0d0"
-    node_wire_color = ""
+    node_wire_color = "#ACACAC"
     node_socket_trigger_color = "#00FF77"
     node_socket_file_color = "#009EFF"
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#FF57A2"
     node_socket_text_color = "#FFE099"
+    node_socket_event_color = "#2f3aa3"
+    node_socket_boolean_color = "#535353"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                 window_text_color,
@@ -124,7 +130,8 @@ class charcoal(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color]
+                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_boolean_color]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -137,7 +144,8 @@ class charcoal(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color"]
+                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_boolean_color"]
 
     groups = [level_editor, node_grid]
 
@@ -165,12 +173,14 @@ class ocean_waves(colorTheme):
     node_title_background_color = "#ff202e3b"
     node_background_color = "#dd273d52"
     node_text_color = "#7AA6CD"
-    node_wire_color = ""
-    node_socket_trigger_color = ""
-    node_socket_file_color = ""
-    node_socket_object_color = ""
-    node_socket_number_color = ""
-    node_socket_text_color = ""
+    node_wire_color = "#394159"
+    node_socket_trigger_color = "#00FF77"
+    node_socket_file_color = "#009EFF"
+    node_socket_object_color = "#FF7700"
+    node_socket_number_color = "#FF57A2"
+    node_socket_text_color = "#FFE099"
+    node_socket_event_color = "#FFFFFF"
+    node_socket_boolean_color = "#535353"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                 window_text_color,
@@ -181,7 +191,8 @@ class ocean_waves(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color]
+                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_boolean_color]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -194,7 +205,8 @@ class ocean_waves(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color"]
+                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_boolean_color"]
 
     groups = [level_editor, node_grid]
 

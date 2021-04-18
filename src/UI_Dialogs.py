@@ -359,22 +359,6 @@ class colorThemeEdit(QDialog):
         self.layout.addWidget(QLabel("To change, type in hex color and press Enter"))
         self.layout.addWidget(self.tabs)
         
-        self.newTheme = QWidget()
-        self.newTheme_layout = QHBoxLayout()
-        self.newTheme.setLayout(self.newTheme_layout)
-        
-        self.themeName = QLineEdit()
-        self.themeNameLabel = QLabel("New theme name: ")
-        self.saveThemeAs = QPushButton("Save new theme")
-        self.saveThemeAs.clicked.connect(self.saveTheme)
-        
-        self.newTheme_layout.addWidget(self.themeNameLabel)
-        self.newTheme_layout.addWidget(self.themeName)
-        self.newTheme_layout.addWidget(self.saveThemeAs)
-        
-        self.layout.addWidget(self.newTheme)
-        self.layout.addWidget(QLabel("New theme will be added to list on restart"))
-        
         self.show()
         
     def updateValue(self):
@@ -396,17 +380,3 @@ class colorThemeEdit(QDialog):
             self.c_block_pixmap.fill(QColor("black"))
         
         self.c_block.setPixmap(self.c_block_pixmap)
-
-    def saveTheme(self):
-        self.name = self.themeName.text()
-        self.new_theme.name = self.themeName.text()
-        
-        self.tag = "_".join(self.themeName.text().split(" ")).strip().lower()
-        self.new_theme.tag = self.tag
-        
-        with open("tmp/ut_"+self.tag+".trutt", "wb") as writefile:
-            pickle.dump(self.new_theme, writefile)
-        with open("tmp/ut.truct", "a") as writefile:
-            writefile.write(self.tag.strip("\"")+"\n")
-            
-        

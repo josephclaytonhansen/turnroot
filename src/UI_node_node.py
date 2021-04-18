@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import UI_colorTheme
 from UI_updateJSON import updateJSON
-from UI_node_socket import Socket
+from UI_node_socket import *
 data = updateJSON()
 
 class QDMNodeContentWidget(QWidget):
@@ -66,7 +66,11 @@ class QDMGraphicsNode(QGraphicsItem):
         self.title_item.setFont(self._title_font)
         self.title_item.setPos(self.padding, 10)
         self.title_item.setTextWidth(self.width-3*self.padding)
-        
+    
+    def mouseMoveEvent(self,event):
+        super().mouseMoveEvent(event)
+        self.node.updateConnectedEdges()
+    
     @property
     def title(self): return self._title
     @title.setter
@@ -76,16 +80,15 @@ class QDMGraphicsNode(QGraphicsItem):
     
     def initContent(self):
         self.grContent = QGraphicsProxyWidget(self)
-        self.content.setGeometry(self.edge_size, self.title_height+self.edge_size,
-                                 self.width - 2*self.edge_size,
+        self.content.setGeometry(self.edge_size+20, self.title_height+self.edge_size,
+                                 self.width - 2*self.edge_size-40,
                                  self.height - 2*self.edge_size-self.title_height)
         self.grContent.setWidget(self.content)
     
     def initSockets(self):
         pass
     
-    def paint(self, QPainter, QStyleOptionGraphicsItem, widget=None):
-        painter = QPainter
+    def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
         
         path_title = QPainterPath()
         path_title.setFillRule(Qt.WindingFill)
@@ -126,10 +129,34 @@ class Node():
         self.scene.grScene.addItem(self.grNode)
         self.inputs = []
         self.outputs = []
+        counter = 0
         for item in inputs:
-            self.inputs.append(Socket(node=self,t=item))
+            self.inputs.append(Socket(node=self,t=item,index=counter, position = LEFT_TOP))
+            counter += 1
+        counter = 0
         for item in outputs:
-            self.outputs.append(Socket(node=self,t=item))
+            self.outputs.append(Socket(node=self,t=item, index=counter, position = RIGHT_TOP))
+            counter += 1
+    @property
+    def pos(self):
+        return self.grNode.pos()
+    
+    def setPos(self,x,y):
+        self.grNode.setPos(x,y)
+    
+    def getSocketPosition(self, index, position):
+        if position in (LEFT_TOP, LEFT_BOTTOM):
+            x = 0
+        else:
+            x = self.grNode.width
+        
+        y = self.grNode.title_height + self.grNode.padding + (1.5*self.grNode.edge_size) + (index * 20 * 2.0)
+        return [x, y]
+    
+    def updateConnectedEdges(self):
+        for socket in self.inputs + self.outputs:
+            if socket.hasEdge():
+                socket.edge.updatePositions()
 
         
         
