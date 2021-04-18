@@ -1,15 +1,15 @@
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QFont
-from UI_updateJSON import updateJSON
-import UI_colorTheme
+from src.UI_updateJSON import updateJSON
+import src.UI_colorTheme
 import shutil, os, pickle, json, sys
 
 return_confirm = False
 chosen_object = None
-resource_pack_path = "resource_packs"
+resource_pack_path = "src/resource_packs"
 current_resource_pack_path = ""
-with open("tmp/rsp.tmp", "r") as read_file:
+with open("src/tmp/rsp.tmp", "r") as read_file:
     current_pack = read_file.read().strip()
 pack_infos = {}
 installer = None
@@ -19,7 +19,7 @@ class confirmAction(QDialog):
         data = updateJSON()
         self.s = s
         self.return_confirm = return_confirm
-        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
@@ -62,7 +62,7 @@ class stackedInfoImgDialog(QDialog):
         self.info = info
         self.rows = len(info)
         self.row_styles = row_styles
-        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
@@ -91,7 +91,7 @@ class infoClose(QDialog):
         data = updateJSON()
         self.return_confirm = return_confirm
         self.info = info
-        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
@@ -118,7 +118,7 @@ class addObject(QDialog):
         global chosen_object
         self.chosen_object = chosen_object
         data = updateJSON()
-        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         
         self.setWindowFlags(Qt.Popup)
@@ -166,7 +166,7 @@ class resourcePackDialog(QDialog):
     def __init__(self, parent=None):
         data = updateJSON()
         self.return_confirm = return_confirm
-        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
@@ -186,7 +186,7 @@ class resourcePackDialog(QDialog):
         self.reset_path_to_default.clicked.connect(self.folder_select.clear)
         
         self.folder_select_label = QLabel("Pack folder path")
-        self.folder_select.setPlaceholderText("/"+resource_pack_path)
+        self.folder_select.setPlaceholderText("src/"+resource_pack_path)
         self.folder_select.returnPressed.connect(self.return_pressed)
         
         self.folder_select_submit = QPushButton("Set path")
@@ -242,7 +242,7 @@ class resourcePackDialog(QDialog):
         self.c = infoClose("You'll need to restart the level editor for this change to take effect")
         self.c.exec_()
         if self.c.return_confirm:
-            with open("tmp/rsp.tmp", "w") as write_file:
+            with open("src/tmp/rsp.tmp", "w") as write_file:
                 write_file.write(current_pack)
             self.pack_text_info.setText(self.info)
             self.pack_img_info.setPixmap(QPixmap(resource_pack_path+"/"+s+"/pack_img.png"))

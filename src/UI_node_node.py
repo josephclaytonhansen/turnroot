@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-import UI_colorTheme
-from UI_updateJSON import updateJSON
-from UI_node_socket import *
+import src.UI_colorTheme as UI_colorTheme
+from src.UI_updateJSON import updateJSON
+from src.UI_node_socket import *
 data = updateJSON()
 
 class QDMNodeContentWidget(QWidget):

@@ -1,4 +1,4 @@
-from UI_node_graphics_scene import QDMGraphicsScene
+from src.UI_node_graphics_scene import QDMGraphicsScene
 class Scene():
     def __init__(self):
         self.nodes = []

@@ -1,11 +1,11 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from UI_node_graphics_scene import QDMGraphicsView, QDMGraphicsScene
-from UI_node_node import Node
-from UI_node_scene import Scene
-from UI_node_socket import (Socket,S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN)
-from UI_node_edge import Edge, EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT
+from src.UI_node_graphics_scene import QDMGraphicsView, QDMGraphicsScene
+from src.UI_node_node import Node
+from src.UI_node_scene import Scene
+from src.UI_node_socket import (Socket,S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN)
+from src.UI_node_edge import Edge, EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT
 class NodeEditorWnd(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -29,8 +29,8 @@ class NodeEditorWnd(QWidget):
         self.show()
         
     def addNodes(self):
-        node1 = Node(self.scene, "Node Graphical Item", inputs = [S_TRIGGER], outputs = [S_TRIGGER])
-        node2 = Node(self.scene, "Node Graphical Item", inputs = [S_TRIGGER,S_TEXT,S_FILE],
+        node1 = Node(self.scene, "Node - 1 in 1 out", inputs = [S_TRIGGER], outputs = [S_TRIGGER])
+        node2 = Node(self.scene, "Node - 3 in 3 out", inputs = [S_TRIGGER,S_TEXT,S_FILE],
                      outputs = [S_TRIGGER,S_EVENT,S_FILE])
         node3 = Node(self.scene, "All Sockets",
                      inputs = [S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN],

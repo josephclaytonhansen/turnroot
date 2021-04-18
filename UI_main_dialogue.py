@@ -1,11 +1,9 @@
-import sys, json, os, UI_colorTheme
+import sys, json, os
+import src.UI_colorTheme as UI_colorTheme
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QSize
-from UI_Dialogs import (confirmAction,
-                        stackedInfoImgDialog,
-                        infoClose)
-from UI_updateJSON import updateJSON
-from UI_node_editor_wnd import NodeEditorWnd
+from src.UI_updateJSON import updateJSON
+from src.UI_node_editor_wnd import NodeEditorWnd
 
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])

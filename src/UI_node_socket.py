@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-import UI_colorTheme
-from UI_updateJSON import updateJSON
+import src.UI_colorTheme as UI_colorTheme
+from src.UI_updateJSON import updateJSON
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 

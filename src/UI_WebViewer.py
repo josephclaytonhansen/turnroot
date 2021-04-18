@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QFile, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import json
-from UI_updateJSON import updateJSON
+from src.UI_updateJSON import updateJSON
 
 ind = 0
 entries = ["Keyboard Shortcuts", "Quickstart", "Creation Checklists", "Turnroot Documentation (Read the Docs)", "Turnroot Forums"]
@@ -16,9 +16,9 @@ data = {"font_size": 15, "rfont_size": 15,
         "ah_overlays": False, "theme_changed": False}
 
 data = updateJSON()
-import UI_colorTheme
+import src.UI_colorTheme
 
-active_theme = getattr(UI_colorTheme, data["active_theme"])
+active_theme = getattr(src.UI_colorTheme, data["active_theme"])
 
 
 class webView(QDialog):

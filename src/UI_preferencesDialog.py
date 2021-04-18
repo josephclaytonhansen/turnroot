@@ -2,16 +2,16 @@ import sys, json, pickle, os, psutil
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
-from UI_updateJSON import updateJSON, dumpJSON
-from UI_Dialogs import infoClose, colorThemeEdit, confirmAction
+from src.UI_updateJSON import updateJSON, dumpJSON
+from src.UI_Dialogs import infoClose, colorThemeEdit, confirmAction
 
 ind = 0
 entries = ["Appearance", "System", "Keyboard Shortcuts"]
 returnv = False
-import UI_colorTheme
+import src.UI_colorTheme
     
 #update below when importing more color themes!
-from UI_colorTheme import (
+from src.UI_colorTheme import (
     midnight_spark, midnight_spark_yellow,
     coral_reef,sand_dunes,
     rainforest,charcoal,
@@ -37,9 +37,9 @@ data = {"font_size": 15, "rfont_size": 15,
 data = updateJSON()
 dumpJSON(data)
 
-active_theme = getattr(UI_colorTheme, data["active_theme"])
+active_theme = getattr(src.UI_colorTheme, data["active_theme"])
 
-from UI_layoutOption import (right_lower,left_lower,left_left,right_right)
+from src.UI_layoutOption import (right_lower,left_lower,left_left,right_right)
 layout_dict = [right_lower,left_lower,left_left,right_right]
 
 color_themes = []
@@ -54,16 +54,16 @@ layout_names = []
 for x in range(0, len(layout_dict)):
     layout_names.append(layout_dict[x].name)
 
-with open('tmp/kybs.trkp', 'rb') as fh:
+with open('src/tmp/kybs.trkp', 'rb') as fh:
     pickle_cuts = pickle.load(fh)
 
 class PreferencesDialog(QDialog):
     def __init__(self, parent=None):
         data = updateJSON()
         try:
-            active_theme = getattr(UI_colorTheme, data["active_theme"])
+            active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         except:
-            active_theme = getattr(UI_colorTheme, "ocean_waves")
+            active_theme = getattr(src.UI_colorTheme, "ocean_waves")
         self.active_theme = active_theme
         self.pickle_cuts = pickle_cuts
         self.active_layout = right_lower
@@ -382,23 +382,23 @@ class PreferencesDialog(QDialog):
                     
             pickle_cuts[ord(self.sender().text())] = self.actions_pcut[self.active_row]
             
-            with open('tmp/kybs.trkp', 'wb') as fh:
+            with open('src/tmp/kybs.trkp', 'wb') as fh:
                 pickle.dump(pickle_cuts, fh)
     
     def resetShortcuts(self):
         global pickle_cuts
-        with open('tmp/kybs_def.trkp', 'rb') as fh:
+        with open('src/tmp/kybs_def.trkp', 'rb') as fh:
             pickle_cuts = pickle.load(fh)
-            with open('tmp/kybs.trkp', 'wb') as fh:
+            with open('src/tmp/kybs.trkp', 'wb') as fh:
                 pickle.dump(pickle_cuts, fh)
             infoClose("Keyboard shortcuts have been reset (restart Preferences to see change)",self)
     
     def checkFiles(self):
         self.file_modes = ['rb', 'rb', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r']
         self.file_count = -1        
-        for file in ['tmp/kybs_def.trkp', 'tmp/kybs.trkp', 'tmp/rsp.tmp', 'tmp/preferences.json',
-                     'UI_preferencesDialog.py', 'UI_Dialogs.py', 'tasks_backend.py', 'help_docs/help_0.html',
-                     'help_docs/help_1.html', 'help_docs/help_2.html']:
+        for file in ['src/tmp/kybs_def.trkp', 'src/tmp/kybs.trkp', 'src/tmp/rsp.tmp', 'src/tmp/preferences.json',
+                     'src/UI_preferencesDialog.py', 'src/UI_Dialogs.py', 'src/tasks_backend.py', 'src/help_docs/help_0.html',
+                     'src/help_docs/help_1.html', 'src/help_docs/help_2.html']:
             self.file_count +=1
             try:
                 open(file, self.file_modes[self.file_count])

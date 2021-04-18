@@ -4,16 +4,16 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
 import qtmodern.styles
 import qtmodern.windows
-from UI_preferencesDialog import PreferencesDialog
-from UI_ProxyStyle import ProxyStyle
-from UI_Dialogs import (confirmAction,
+from src.UI_preferencesDialog import PreferencesDialog
+from src.UI_ProxyStyle import ProxyStyle
+from src.UI_Dialogs import (confirmAction,
                         stackedInfoImgDialog,
                         infoClose,
                         addObject,
                         resourcePackDialog,
                         activeResourcePack)
-from UI_updateJSON import updateJSON
-from UI_workspaceContainer import (showWorkspace,
+from src.UI_updateJSON import updateJSON
+from src.UI_workspaceContainer import (showWorkspace,
                                    hideWorkspace,
                                    tileGridWorkspace,
                                    ClickableQLabel,
@@ -26,13 +26,13 @@ from UI_workspaceContainer import (showWorkspace,
                                    TaskSettings,
                                    overlayTile,
                                    DeleteMode)
-from UI_WebViewer import webView
+from src.UI_WebViewer import webView
 
 data = updateJSON()
             
-import UI_colorTheme
+import src.UI_colorTheme
 
-active_theme = getattr(UI_colorTheme, data["active_theme"])
+active_theme = getattr(src.UI_colorTheme, data["active_theme"])
 
 app = QApplication([])
 
@@ -52,7 +52,7 @@ fullscreen = False
 zoom_level = 1.75
 mode_highlight = 0
 
-with open("tmp/rsp.tmp", "r") as read_file:
+with open("src/tmp/rsp.tmp", "r") as read_file:
     tmp = read_file.read().strip()
 
 class main(QMainWindow):
@@ -88,7 +88,7 @@ class main(QMainWindow):
         #color toolbar icons based on theme
         icon_string = ""
         self.icon_loc = icon_loc
-        self.icon_loc = "ui_icons/logo-color.png"
+        self.icon_loc = "src/ui_icons/logo-color.png"
         if (active_theme.tag == "midnight_spark"):
             icon_string = "teal/"
         elif (active_theme.tag == "midnight_spark_yellow"):
@@ -147,20 +147,20 @@ class main(QMainWindow):
         
         #tools workspace
         self.z_in = ClickableQLabel()
-        self.z_in.setPixmap(QPixmap(("ui_icons/"+icon_string+"zoom-in.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.z_in.setPixmap(QPixmap(("src/ui_icons/"+icon_string+"zoom-in.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.z_in.setToolTip("Zoom in (I)")
         self.z_out = ClickableQLabel()
         self.z_out.setToolTip("Zoom out (O)")
-        self.z_out.setPixmap(QPixmap(("ui_icons/"+icon_string+"zoom-out.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.z_out.setPixmap(QPixmap(("src/ui_icons/"+icon_string+"zoom-out.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.goto_00 = ClickableQLabel()
         self.goto_00.setToolTip("Go to top left (L)")
-        self.goto_00.setPixmap(QPixmap(("ui_icons/"+icon_string+"goto-00.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        self.goto_00.setPixmap(QPixmap(("src/ui_icons/"+icon_string+"goto-00.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.z_in.clicked.connect(self.zoom_in)
         self.z_out.clicked.connect(self.zoom_out)
         self.goto_00.clicked.connect(self.scrollReset)
         self.goto_fr = ClickableQLabel()
         self.goto_fr.setToolTip("Go to bottom right (.)")
-        self.goto_fr.setPixmap(QPixmap(("ui_icons/"+icon_string+"goto-fr.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
+        self.goto_fr.setPixmap(QPixmap(("src/ui_icons/"+icon_string+"goto-fr.png")).scaled(int(data["icon_size"]), int(data["icon_size"]), Qt.KeepAspectRatio,Qt.SmoothTransformation))
         self.goto_fr.clicked.connect(self.scrollFr)
      
         self.tools = toolsWorkspace("tools", data["active_layout"], [self.z_in, self.z_out, self.goto_00, self.goto_fr], "v")
@@ -235,13 +235,13 @@ class main(QMainWindow):
         self.toolbar.setToolButtonStyle(Qt.ToolButtonIconOnly)
 
         #add actions for toolbar
-        self.resourcesButton = QAction(QIcon("ui_icons/"+icon_string+"package-2-32.png"), "Resources (R)", self)
-        self.optionsButton = QAction(QIcon("ui_icons/"+icon_string+"settings-17-32.png"),"Options (S)", self)
-        self.helpButton = QAction(QIcon("ui_icons/"+icon_string+"question-mark-4-32.png"),"Read docs (H)", self)
-        self.backButton = QAction(QIcon("ui_icons/"+icon_string+"grid-three-up-32.png"),"Return to editor selection (Esc)", self)
-        self.justTilesButton = QAction(QIcon("ui_icons/"+icon_string+"fit-to-width-32.png"),"Show just tiles (F)", self)
-        self.edit_mode = QAction(QIcon("ui_icons/"+icon_string+"tile_edit.png"), "Delete tiles", self)
-        self.forumButton = QAction(QIcon("ui_icons/"+icon_string+"speech-bubble-2-32.png"),"Access forum (Q)", self)
+        self.resourcesButton = QAction(QIcon("src/ui_icons/"+icon_string+"package-2-32.png"), "Resources (R)", self)
+        self.optionsButton = QAction(QIcon("src/ui_icons/"+icon_string+"settings-17-32.png"),"Options (S)", self)
+        self.helpButton = QAction(QIcon("src/ui_icons/"+icon_string+"question-mark-4-32.png"),"Read docs (H)", self)
+        self.backButton = QAction(QIcon("src/ui_icons/"+icon_string+"grid-three-up-32.png"),"Return to editor selection (Esc)", self)
+        self.justTilesButton = QAction(QIcon("src/ui_icons/"+icon_string+"fit-to-width-32.png"),"Show just tiles (F)", self)
+        self.edit_mode = QAction(QIcon("src/ui_icons/"+icon_string+"tile_edit.png"), "Delete tiles", self)
+        self.forumButton = QAction(QIcon("src/ui_icons/"+icon_string+"speech-bubble-2-32.png"),"Access forum (Q)", self)
         
         #connect toolbar buttons to actions
         self.optionsButton.triggered.connect(self.OptionsMenu)
@@ -299,13 +299,13 @@ class main(QMainWindow):
         #keyboard shortcuts
         self.keyboard_shortcuts = {}
         self.pickle_cuts = {}
-        with open('tmp/kybs.trkp', 'rb') as fh:
+        with open('src/tmp/kybs.trkp', 'rb') as fh:
             self.pickle_cuts = pickle.load(fh)
 
         for x in self.pickle_cuts:
             if self.pickle_cuts[x].startswith("self.") and len(self.pickle_cuts[x]) < 32 and "(" not in self.pickle_cuts[x] and ")" not in self.pickle_cuts[x]:
                 self.keyboard_shortcuts[x] = eval(self.pickle_cuts[x])
-        with open('tmp/kybs.trkp', 'wb') as fh:
+        with open('src/tmp/kybs.trkp', 'wb') as fh:
             pickle.dump(self.pickle_cuts, fh)
     
     #actions- save
@@ -516,9 +516,9 @@ class main(QMainWindow):
     def tileEditMode(self):
         global icon_string
         if self.delete_mode == 0:
-            self.edit_mode.setIcon(QIcon("ui_icons/"+icon_string+"decor_edit.png"))
+            self.edit_mode.setIcon(QIcon("src/ui_icons/"+icon_string+"decor_edit.png"))
             self.delete_mode = 1
-            self.edit_mode.setToolTip("Delete Objects")
+            self.edit_mode.setToolTip("src/Delete Objects")
         else:
             self.edit_mode.setIcon(QIcon("ui_icons/"+icon_string+"tile_edit.png"))
             self.delete_mode = 0
@@ -553,7 +553,7 @@ class main(QMainWindow):
                 read_object_file.close()
                 
                 for x in range(0, len(self.tilesets)):
-                    with open("resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".json", "r") as read_file:
+                    with open("src/resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".json", "r") as read_file:
                         read_file.seek(0)
                         tile_data[x] = json.load(read_file)
                         
@@ -566,7 +566,7 @@ class main(QMainWindow):
                                 for y in range(0, 27):
                                     tile = tile_data[x][str(k)][str(y)]
                                     if (level_data[str(g)] ) == tile[0]:
-                                        self.image = QPixmap("resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".png")
+                                        self.image = QPixmap("src/resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".png")
                                         self.tile_grid.squares[g].setPixmap(self.image.copy(y*32, k*32, 32, 32).scaled(int(64), int(64), Qt.KeepAspectRatio))
                                         self.level_data[g] = level_data[str(g)]
                                             
@@ -579,7 +579,7 @@ class main(QMainWindow):
                                     for k in range(0, 6):
                                         for y in range(0, 27):
                                             self.decor_tile = tile_data[x][str(k)][str(y)][0]
-                                            self.decor_image = image = QPixmap("resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".png")
+                                            self.decor_image = image = QPixmap("src/resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".png")
                                             if str(self.decor_tile) == self.decor_index:
                                                 self.tile_grid.squares[g].setPixmap(
                                                     overlayTile(self.tile_grid.squares[g].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),

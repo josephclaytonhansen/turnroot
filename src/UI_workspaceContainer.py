@@ -3,11 +3,11 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QImage, QPainter
 import qtmodern.styles
 import qtmodern.windows
-from UI_updateJSON import updateJSON
-from UI_ProxyStyle import ProxyStyle
-from UI_Dialogs import confirmAction, activeResourcePack
-import UI_colorTheme
-from tasks_backend import getFillSquares, getDoorTiles
+from src.UI_updateJSON import updateJSON
+from src.UI_ProxyStyle import ProxyStyle
+from src.UI_Dialogs import confirmAction, activeResourcePack
+import src.UI_colorTheme
+from src.tasks_backend import getFillSquares, getDoorTiles
 import json, math, re, sys, os
 
 #these can be edited (TODO pull from JSON)
@@ -94,7 +94,7 @@ class showWorkspace(QPushButton):
         data = updateJSON()
         self.workspace = workspace
         self.layout = layout
-        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         self.setText("+")
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.setFixedSize((int(data["icon_size"]) -3), (int(data["icon_size"]) -3))
@@ -105,7 +105,7 @@ class hideWorkspace(QPushButton):
         data = updateJSON()
         self.workspace = workspace
         self.layout = layout
-        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         self.setText("—")
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.setFixedSize((int(data["icon_size"])-3), (int(data["icon_size"])-3))
@@ -204,10 +204,10 @@ class tileGridWorkspace(QWidget):
                 
                 elif add_on_click == "Barred Gate":
                     self.working_tiles = getDoorTiles(self.sender().gridIndex, tile_ratio)
-                    self.door_tiles = ["resource_packs/ClassicVerdant/tiles/bars0.png",
-                                       "resource_packs/ClassicVerdant/tiles/bars1.png",
-                                       "resource_packs/ClassicVerdant/tiles/bars2.png",
-                                       "resource_packs/ClassicVerdant/tiles/bars3.png"]
+                    self.door_tiles = ["src/resource_packs/ClassicVerdant/tiles/bars0.png",
+                                       "src/resource_packs/ClassicVerdant/tiles/bars1.png",
+                                       "src/resource_packs/ClassicVerdant/tiles/bars2.png",
+                                       "src/resource_packs/ClassicVerdant/tiles/bars3.png"]
                     self.zero_tile = overlayTile(global_squares[self.working_tiles[0][0]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
                                                  self.door_tiles[0])
                     self.one_tile = overlayTile(global_squares[self.working_tiles[0][1]].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
@@ -231,7 +231,7 @@ class tileGridWorkspace(QWidget):
                 
                 elif add_on_click == "Chest":
                     self.working_tiles =self.sender().gridIndex
-                    self.chest_tile = "resource_packs/ClassicVerdant/tiles/chest0.png"
+                    self.chest_tile = "src/resource_packs/ClassicVerdant/tiles/chest0.png"
                     self.zero_tile = overlayTile(global_squares[self.working_tiles].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
                                                  self.chest_tile)
                     global_squares[self.working_tiles].setPixmap(self.zero_tile)
@@ -299,7 +299,7 @@ class toolsWorkspace(QWidget):
             super().__init__()
             self.setAutoFillBackground(True)
             data = updateJSON()
-            self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+            self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
             self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
             
             self.direction = direction
@@ -361,7 +361,7 @@ class TilesInfo(QTabWidget):
         ttype_label.setMaximumHeight(40)
         pr_label.setMaximumHeight(40)
         
-        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         p_ttype_label.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
         ttype_label.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         ttype_pix.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
@@ -409,7 +409,7 @@ class Tiles(QWidget):
         global tiles, ttype, p_ttype_label, tile_stack, playout
         self.w = TilesInfo()
         self.stacks = {}
-        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: black;color: "+self.active_theme.window_text_color)
         
         for x in range(0, len(tile_stack)):
@@ -500,7 +500,7 @@ class TaskSelection(QWidget):
             super().__init__()
             self.setAutoFillBackground(True)
             data = updateJSON()
-            self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+            self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
             self.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
    
             self.layout = QVBoxLayout()
@@ -661,7 +661,7 @@ class TaskSettings(QWidget):
             super().__init__()
             self.setAutoFillBackground(True)
             data = updateJSON()
-            self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+            self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
             self.setStyleSheet("font-size: "+str(data["font_size"]-2)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
             self.stacks = []
             #Table of Contents
