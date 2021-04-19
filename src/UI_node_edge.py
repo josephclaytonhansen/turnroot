@@ -3,9 +3,16 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
+import json
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
+with open("src/tmp/neec.json", "r") as readfile:
+    const = json.load(readfile)
+    
+WIDTH = const[0]
+SELECTED_WIDTH = const[1]
+    
 class QDMGraphicsEdge(QGraphicsPathItem):
     def __init__(self, edge, parent= None):
         super().__init__(parent)
@@ -15,14 +22,14 @@ class QDMGraphicsEdge(QGraphicsPathItem):
         self.color = QColor(active_theme.node_wire_color)
         self.color_selected = QColor(active_theme.node_selected_color)
         self.pen = QPen(self.color)
-        self.pen.setWidthF(7.0)
+        self.pen.setWidthF(WIDTH)
         self.pen_selected = QPen(self.color_selected)
-        self.pen_selected.setWidthF(10.0)
+        self.pen_selected.setWidthF(SELECTED_WIDTH)
         
         self.setFlag(QGraphicsItem.ItemIsSelectable)
         self.setZValue(-1)
         self.posSource = [0,0]
-        self.posDestination = [200,100]
+        self.posDestination = [0,0]
         
     def setSource(self, x, y):
         self.posSource = [x,y]
@@ -59,6 +66,7 @@ class QDMGraphicsEdgeBezier(QDMGraphicsEdge):
         
 EDGE_TYPE_DIRECT = 1
 EDGE_TYPE_BEZIER = 2
+
 class Edge():
     def __init__(self,scene,start_socket,end_socket, type = 2):
         self.scene = scene

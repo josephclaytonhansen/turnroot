@@ -20,3 +20,4 @@ def dumpJSON(data):
         with open("src/tmp/preferences.json", "w") as write_file:
             json.dump(data, write_file)
             write_file.close()
+
