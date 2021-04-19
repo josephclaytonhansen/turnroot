@@ -20,13 +20,16 @@ socket_types_colors = [active_theme.node_socket_trigger_color,
                active_theme.node_socket_number_color, active_theme.node_socket_text_color,
                active_theme.node_socket_event_color, active_theme.node_socket_boolean_color]
 
+RADIUS = 12.0
+OUTLINE_WIDTH = 2.5
+
 class QDMGraphicsSocket(QGraphicsItem):
     def __init__(self, parent = None, t=0):
         super().__init__(parent)
-        self.radius = 12.0
+        self.radius = RADIUS
         self.color_background = QColor(socket_types_colors[t])
         self.color_outline = QColor("#000000")
-        self.outline_width = 2.5
+        self.outline_width = OUTLINE_WIDTH
         
         self.pen = QPen(self.color_outline)
         self.pen.setWidth(self.outline_width)

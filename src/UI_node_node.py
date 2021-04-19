@@ -6,6 +6,14 @@ from src.UI_updateJSON import updateJSON
 from src.UI_node_socket import *
 data = updateJSON()
 
+NODE_WIDTH = 450
+NODE_HEIGHT = 600
+NODE_TITLE_HEIGHT = 60
+NODE_PADDING = 14
+EDGE_SIZE = 10.0
+NODE_FONT = "Lucida Sans Unicode"
+FONT_SIZE = 22
+
 class QDMNodeContentWidget(QWidget):
     def __init__(self, parent = None):
         super().__init__(parent)
@@ -26,11 +34,11 @@ class QDMGraphicsNode(QGraphicsItem):
         super().__init__(parent)
         self.node = node
         self.content = self.node.content
-        self.width = 180*2.5
-        self.height = 240*2.5
-        self.title_height = 24 * 2.5
-        self.padding = 14
-        self.edge_size = 10.0
+        self.width = NODE_WIDTH
+        self.height = NODE_HEIGHT
+        self.title_height = NODE_TITLE_HEIGHT
+        self.padding = NODE_PADDING
+        self.edge_size = EDGE_SIZE
         
         self.initTitle()
         self.initUI()
@@ -58,8 +66,8 @@ class QDMGraphicsNode(QGraphicsItem):
     def initTitle(self):
         active_theme = getattr(UI_colorTheme, data["active_theme"])
         self._title_color = QColor(active_theme.node_title_color)
-        self._title_font = QFont("Lucida Sans Unicode")
-        self._title_font.setPointSize(22)
+        self._title_font = QFont(NODE_FONT)
+        self._title_font.setPointSize(FONT_SIZE)
         self._title_font.setStyleStrategy(QFont.NoAntialias)
         self.title_item = QGraphicsTextItem(self)
         self.title_item.setDefaultTextColor(self._title_color)

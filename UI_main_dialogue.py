@@ -16,6 +16,8 @@ app = QApplication([])
 screen = app.primaryScreen()
 size = screen.size()
 
+RESIZE_F = .6
+
 title = "Turnroot Game Dialogue Editor" 
 class mainN(NodeEditorWnd):
     def __init__(self):
@@ -23,7 +25,7 @@ class mainN(NodeEditorWnd):
         self.setWindowTitle(title)
         self.setMinimumSize(QSize(int(size.width()/3), int(size.height()/3)))
         self.setMaximumSize(QSize(int(size.width()), int(size.height())))
-        self.resize(QSize(int(size.width()*.6), int(size.height()*.6)))
+        self.resize(QSize(int(size.width()*RESIZE_F), int(size.height()*RESIZE_F)))
 
 class main(QMainWindow):
     def __init__(self):

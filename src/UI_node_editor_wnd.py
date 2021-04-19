@@ -31,7 +31,6 @@ class NodeEditorWnd(QWidget):
         self.addNodes()
                 
         self.view = QDMGraphicsView(self.grScene, self)
-        #self.view.setVerticalStretch(2)
         self.layout.addWidget(self.view, 75)
         
         self.lower_half = QWidget()
