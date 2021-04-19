@@ -4,15 +4,19 @@ from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
 from src.UI_node_socket import *
+import json
 data = updateJSON()
 
-NODE_WIDTH = 450
-NODE_HEIGHT = 600
-NODE_TITLE_HEIGHT = 60
-NODE_PADDING = 14
-EDGE_SIZE = 10.0
-NODE_FONT = "Lucida Sans Unicode"
-FONT_SIZE = 22
+with open("src/tmp/nenc.json", "r") as readfile:
+    const = json.load(readfile)
+    
+NODE_WIDTH = const[0]
+NODE_HEIGHT = const[1]
+NODE_TITLE_HEIGHT = const[2]
+NODE_PADDING = const[3]
+EDGE_SIZE = const[4]
+NODE_FONT = const[5]
+FONT_SIZE = const[6]
 
 class QDMNodeContentWidget(QWidget):
     def __init__(self, parent = None):
