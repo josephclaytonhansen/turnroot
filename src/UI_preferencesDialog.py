@@ -394,11 +394,13 @@ class PreferencesDialog(QDialog):
             infoClose("Keyboard shortcuts have been reset (restart Preferences to see change)",self)
     
     def checkFiles(self):
-        self.file_modes = ['rb', 'rb', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r']
+        self.file_modes = ['rb', 'rb', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r',
+                           'rb']
         self.file_count = -1        
         for file in ['src/tmp/kybs_def.trkp', 'src/tmp/kybs.trkp', 'src/tmp/rsp.tmp', 'src/tmp/preferences.json',
                      'src/UI_preferencesDialog.py', 'src/UI_Dialogs.py', 'src/tasks_backend.py', 'src/help_docs/help_0.html',
-                     'src/help_docs/help_1.html', 'src/help_docs/help_2.html']:
+                     'src/help_docs/help_1.html', 'src/help_docs/help_2.html',
+                     "src/tmp/nsp.trnes"]:
             self.file_count +=1
             try:
                 open(file, self.file_modes[self.file_count])

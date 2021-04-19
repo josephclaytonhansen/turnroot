@@ -3,16 +3,21 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
+import pickle
+
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
-S_TRIGGER = 0
-S_FILE = 1
-S_OBJECT = 2
-S_NUMBER = 3
-S_TEXT = 4
-S_EVENT = 5
-S_BOOLEAN = 6
+with open("src/tmp/nsp.trnes", "rb") as readfile:
+    socket_data = pickle.load(readfile)
+    
+S_TRIGGER = socket_data[0][0]
+S_FILE = socket_data[0][1]
+S_OBJECT = socket_data[0][2]
+S_NUMBER = socket_data[0][3]
+S_TEXT = socket_data[0][4]
+S_EVENT = socket_data[0][5]
+S_BOOLEAN = socket_data[0][6]
 socket_types = [S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN]
 
 socket_types_colors = [active_theme.node_socket_trigger_color,
@@ -20,8 +25,9 @@ socket_types_colors = [active_theme.node_socket_trigger_color,
                active_theme.node_socket_number_color, active_theme.node_socket_text_color,
                active_theme.node_socket_event_color, active_theme.node_socket_boolean_color]
 
-RADIUS = 12.0
-OUTLINE_WIDTH = 2.5
+RADIUS = socket_data[2]
+OUTLINE_WIDTH = socket_data[3]
+storage = (socket_types, socket_types_colors, RADIUS, OUTLINE_WIDTH)
 
 class QDMGraphicsSocket(QGraphicsItem):
     def __init__(self, parent = None, t=0):
