@@ -61,7 +61,7 @@ class webView(QDialog):
 
     def loadPage(self):
         if (self.ind < 3):
-            with open('help_docs/help_'+str(self.ind)+'.html', 'r') as f:
+            with open('src/help_docs/help_'+str(self.ind)+'.html', 'r') as f:
                 html = f.read()
                 self.help.setHtml(html)
         elif self.ind == 3:
