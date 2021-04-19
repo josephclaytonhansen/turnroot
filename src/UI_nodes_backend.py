@@ -1,26 +1,19 @@
 import os
 GET_FILES = 1
 GET_FOLDERS = 0
+NODE_FILE_EXTENSION = ".trnep"
 
 class File(object):
     def __init__(self, path):
         self.path = path
-        self.getDepth()
-        self.getExt()
-        self.getName()
-        self.getDir()
-
-    def getDepth(self):
         self.depth = self.path.count("/")
-
-    def getExt(self):
         self.ext = self.path[self.path.rfind("."):]
-
-    def getName(self):
         self.name = self.path[self.path.rfind("/")+1:self.path.rfind(".")]
-
-    def getDir(self):
         self.dir = self.path[:self.path.rfind("/")]+"/"
+        if self.ext == NODE_FILE_EXTENSION:
+            self.outliner = True
+        else:
+            self.outliner = False
         
 def getFiles(path):
     folders = []
