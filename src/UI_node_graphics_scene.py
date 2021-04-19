@@ -3,7 +3,17 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
-import math
+import math, json
+
+with open("src/tmp/nesc.json", "r") as readfile:
+    const = json.load(readfile)
+    
+ZOOM_IN = const[0]
+ZOOM = const[1]
+ZOOM_STEP = const[2]
+ZOOM_RANGE = const[3]
+GRID_SIZE = const[4]
+GRID_ALT = const[5]
 
 data = updateJSON()
 class QDMGraphicsView(QGraphicsView):
@@ -13,12 +23,12 @@ class QDMGraphicsView(QGraphicsView):
         self.initUI()
         self.setScene(self.grScene)
         
-        self.zoomInFactor = 1.25
+        self.zoomInFactor = ZOOM_IN
         self.zoomClamp = False
-        self.zoom = .4
+        self.zoom = ZOOM
         self.scale(self.zoom, self.zoom)
-        self.zoomStep = 1
-        self.zoomRange = [-10,5]
+        self.zoomStep = ZOOM_STEP
+        self.zoomRange = ZOOM_RANGE
     
     def initUI(self):
         self.setRenderHints(QPainter.Antialiasing | QPainter.HighQualityAntialiasing | QPainter.TextAntialiasing | QPainter.SmoothPixmapTransform )
@@ -91,7 +101,7 @@ class QDMGraphicsScene(QGraphicsScene):
         self.scene = scene
         
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
-        self.gridSize = 30
+        self.gridSize = GRID_SIZE
         
         self.scene_width = 64000
         self.scene_height = 64000
@@ -126,13 +136,13 @@ class QDMGraphicsScene(QGraphicsScene):
         
         lines_light, lines_dark = [], []
         for x in range(first_left, right, self.gridSize):
-            if x % 150 == 0:
+            if x % int(GRID_ALT*self.gridSize) == 0:
                 lines_dark.append(QLine(x,top,x,bottom))
             else:
                 lines_light.append(QLine(x,top,x,bottom))
         
         for y in range(first_top, bottom, self.gridSize):
-            if y % 150 == 0:
+            if y % int(GRID_ALT*self.gridSize) == 0:
                 lines_dark.append(QLine(left,y,right,y))
             else:
                 lines_light.append(QLine(left,y,right,y))
