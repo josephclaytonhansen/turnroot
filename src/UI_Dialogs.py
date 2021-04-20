@@ -310,9 +310,9 @@ class colorThemeEdit(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         data = updateJSON()
-        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         
-        self.new_theme = UI_colorTheme.colorTheme()
+        self.new_theme = src.UI_colorTheme.colorTheme()
         
         self.values = {}
         self.color_blocks = {}
