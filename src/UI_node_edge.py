@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
-import json
+import json, math
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
@@ -63,15 +63,39 @@ class QDMGraphicsEdgeBezier(QDMGraphicsEdge):
         s = self.posSource
         d = self.posDestination
         dist = (d[0] - s[0]) * 0.5
-        if s[0] > d[0]: dist *= -1
-        
+
+        cpx_s = +dist
+        cpx_d = -dist
+        cpy_s = 0
+        cpy_d = 0
+
+        sspos = self.edge.start_socket.position
+
+        if (s[0] > d[0] and sspos in (3,3)) or (s[0] < d[0] and sspos in (1,1)):
+            cpx_d *= -1
+            cpx_s *= -1
+
+            cpy_d = (
+                (s[1] - d[1]) / math.fabs(
+                    (s[1] - d[1]) if (s[1] - d[1]) != 0 else 0.00001
+                )
+            ) * EDGE_CP_ROUNDNESS
+            cpy_s = (
+                (d[1] - s[1]) / math.fabs(
+                    (d[1] - s[1]) if (d[1] - s[1]) != 0 else 0.00001
+                )
+            ) * EDGE_CP_ROUNDNESS
+
+
+
         path = QPainterPath(QPointF(self.posSource[0], self.posSource[1]))
-        path.cubicTo(s[0]+dist, s[1], d[0] - dist, d[1],
-                     self.posDestination[0], self.posDestination[1])
+        path.cubicTo( s[0] + cpx_s, s[1] + cpy_s, d[0] + cpx_d, d[1] + cpy_d, self.posDestination[0], self.posDestination[1])
+
         self.setPath(path)
         
 EDGE_TYPE_DIRECT = 1
 EDGE_TYPE_BEZIER = 2
+EDGE_CP_ROUNDNESS = 100
 
 class Edge():
     def __init__(self,scene,start_socket,end_socket, type = 2):
