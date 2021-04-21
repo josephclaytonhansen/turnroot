@@ -20,11 +20,16 @@ class QDMGraphicsEdge(QGraphicsPathItem):
         self.edge = edge
         
         self.color = QColor(active_theme.node_wire_color)
+        self.error_color = QColor("#ff3333")
         self.color_selected = QColor(active_theme.node_selected_color)
         self.pen = QPen(self.color)
-        self.pen.setWidthF(WIDTH)
+        
         self.pen_selected = QPen(self.color_selected)
         self.pen_dragging = QPen(self.color)
+        self.pen_error = QPen(self.error_color)
+        
+        self.pen.setWidthF(WIDTH)
+        self.pen_error.setWidth(WIDTH)
         self.pen_dragging.setWidth(WIDTH)
         self.pen_selected.setWidthF(SELECTED_WIDTH)
         
@@ -41,12 +46,23 @@ class QDMGraphicsEdge(QGraphicsPathItem):
     
     def paint(self, painter, QStyleOptionsGraphicsItem, widget=None):
         self.updatePath()
-        
+
         if self.edge.end_socket == None:
             painter.setPen(self.pen_dragging)
         else:
-        
-            painter.setPen(self.pen if not self.isSelected() else self.pen_selected)
+            #numbers and booleans can convert, so they don't change the pen to error
+            end_type = self.edge.end_socket.type
+            start_type = self.edge.start_socket.type
+            if end_type == 3 or end_type == 6:
+                end_type = 3
+            if start_type == 3 or start_type == 6:
+                start_type = 3
+            
+            #any other mismatch changes pen to error
+            if start_type != end_type:
+                painter.setPen(self.pen_error)
+            else:
+                painter.setPen(self.pen if not self.isSelected() else self.pen_selected)
         painter.setBrush(Qt.NoBrush)
         painter.drawPath(self.path())
     

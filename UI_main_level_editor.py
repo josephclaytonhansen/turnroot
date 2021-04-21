@@ -356,6 +356,7 @@ class main(QMainWindow):
         p = PreferencesDialog(parent=self)
         theme = p.exec_()
         data = updateJSON()
+        
         #apply data from preferences
         if (theme != 0):
             self.menubar.style().unpolish(self.menubar)
@@ -365,14 +366,14 @@ class main(QMainWindow):
             self.toolbar.style().polish(self.toolbar)
             self.toolbar.update()
             
-            active_theme = getattr(UI_colorTheme, data["active_theme"])
+            active_theme = getattr(src.UI_colorTheme, data["active_theme"])
             self.menubar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold; font-size: "+str(data["font_size"]))
             self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color: #ffffff; font-size: "+str(data["font_size"]))
             self.setStyleSheet("font: bold; font-size: "+str(data["font_size"]))
             font = self.menubar.font()
             font.setPointSize(data["font_size"])
             self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
-            
+
             if (data["theme_changed"] == True):
                 os.execl(sys.executable, sys.executable, *sys.argv)
             
