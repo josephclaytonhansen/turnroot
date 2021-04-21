@@ -88,24 +88,9 @@ class main(QMainWindow):
         #color toolbar icons based on theme
         icon_string = ""
         self.icon_loc = icon_loc
-        self.icon_loc = "src/ui_icons/logo-color.png"
-        if (active_theme.tag == "midnight_spark"):
-            icon_string = "teal/"
-        elif (active_theme.tag == "midnight_spark_yellow"):
-            icon_string = "yellow/"
-        elif (active_theme.tag == "sand_dunes" or active_theme.tag == "chocolate"):
-            icon_string = "brown/"
-            self.icon_loc = "ui_icons/logo-white.png"
-        elif (active_theme.tag == "rainforest"):
-            icon_string = "green/"
-        elif (active_theme.tag == "charcoal" or active_theme.tag == "ocean_waves" or active_theme.tag == "coral_reef"):
-            icon_string = "white/"
-            self.icon_loc = "ui_icons/logo-white.png"
-        elif (active_theme.tag == "system_light"):
-            icon_string = "blue/"
-        elif (active_theme.tag == "chili_pepper"):
-            icon_string = "red/"
-            self.icon_loc = "ui_icons/logo-white.png"
+        icon_string = "white/"
+        self.icon_loc = "ui_icons/logo-white.png"
+
         
         #add workspaces
         #tiles (in scroll area)        

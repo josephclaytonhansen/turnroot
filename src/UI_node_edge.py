@@ -20,13 +20,15 @@ class QDMGraphicsEdge(QGraphicsPathItem):
         self.edge = edge
         
         self.color = QColor(active_theme.node_wire_color)
-        self.error_color = QColor("#ff3333")
+        self.error_color = QColor(active_theme.node_wire_error_color)
         self.color_selected = QColor(active_theme.node_selected_color)
         self.pen = QPen(self.color)
         
         self.pen_selected = QPen(self.color_selected)
         self.pen_dragging = QPen(self.color)
         self.pen_error = QPen(self.error_color)
+        self.pen_error.setStyle(Qt.DotLine)
+        
         
         self.pen.setWidthF(WIDTH)
         self.pen_error.setWidth(WIDTH)

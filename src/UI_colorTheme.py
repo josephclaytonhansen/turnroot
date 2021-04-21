@@ -22,6 +22,7 @@ class colorTheme:
     node_socket_text_color = ""
     node_socket_event_color = "#000B73"
     node_socket_boolean_color = "#535353"
+    node_wire_error_color = ""
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -33,7 +34,7 @@ class colorTheme:
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
                  node_socket_number_color, node_socket_text_color, node_socket_event_color,
-                 node_socket_boolean_color]
+                 node_socket_boolean_color, node_wire_error_color]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -47,7 +48,7 @@ class colorTheme:
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
                  "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
-                 "node_socket_boolean_color"]
+                 "node_socket_boolean_color", "node_wire_error_color"]
 
     groups = [level_editor, node_grid]
     
@@ -72,19 +73,11 @@ class midnight_spark_yellow(colorTheme):
     window_text_color = "#efef8f"
     workspace_background_color = "#95A3B3"
 
-class coral_reef(colorTheme):
-    name = "Coral Reef"
-    tag = "coral_reef"
-    window_background_color = "#FF7094"
-    list_background_color = "#C0414A"
-    window_text_color = "#F2E6CE"
-    workspace_background_color = "#F76F8E"
-
 class sand_dunes(colorTheme):
     name = "Sand Dunes"
     tag = "sand_dunes"
-    window_background_color = "#F2E6D8"
-    list_background_color = "#F2B66D"
+    window_background_color = "#F2B66D"
+    list_background_color = "#F2E6D8"
     window_text_color = "#734C36"
     workspace_background_color = "#64b5c1"
 
@@ -114,12 +107,13 @@ class charcoal(colorTheme):
     node_text_color = "#d0d0d0"
     node_wire_color = "#ACACAC"
     node_socket_trigger_color = "#00FF77"
-    node_socket_file_color = "#009EFF"
+    node_socket_file_color = "#FF57A2"
     node_socket_object_color = "#FF7700"
-    node_socket_number_color = "#FF57A2"
+    node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#2f3aa3"
-    node_socket_boolean_color = "#808080"
+    node_socket_event_color = "#808080"
+    node_socket_boolean_color = "#2f3aa3"
+    node_wire_error_color = "#FF3333"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                 window_text_color,
@@ -131,7 +125,7 @@ class charcoal(colorTheme):
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
                  node_socket_number_color, node_socket_text_color, node_socket_event_color,
-                 node_socket_boolean_color]
+                 node_socket_boolean_color,node_wire_error_color]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -145,17 +139,9 @@ class charcoal(colorTheme):
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
                  "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
-                 "node_socket_boolean_color"]
+                 "node_socket_boolean_color","node_wire_error_color"]
 
     groups = [level_editor, node_grid]
-
-class system_light(colorTheme):
-    name = "System Light"
-    tag = "system_light"
-    list_background_color = "#dddddd"
-    workspace_background_color = "#f3f3f3"
-    window_background_color = "#eeeeee"
-    window_text_color = "#020202"
 
 class ocean_waves(colorTheme):
     name = "Ocean Waves"
@@ -175,12 +161,13 @@ class ocean_waves(colorTheme):
     node_text_color = "#7AA6CD"
     node_wire_color = "#394159"
     node_socket_trigger_color = "#00FF77"
-    node_socket_file_color = "#009EFF"
+    node_socket_file_color = "#FF57A2"
     node_socket_object_color = "#FF7700"
-    node_socket_number_color = "#FF57A2"
+    node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
     node_socket_event_color = "#FFFFFF"
-    node_socket_boolean_color = "#535353"
+    node_socket_boolean_color = "#2f3aa3"
+    node_wire_error_color = "#C02D0C"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                 window_text_color,
@@ -192,7 +179,7 @@ class ocean_waves(colorTheme):
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
                  node_socket_number_color, node_socket_text_color, node_socket_event_color,
-                 node_socket_boolean_color]
+                 node_socket_boolean_color, node_wire_error_color]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -206,7 +193,7 @@ class ocean_waves(colorTheme):
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
                  "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
-                 "node_socket_boolean_color"]
+                 "node_socket_boolean_color", "node_wire_error_color"]
 
     groups = [level_editor, node_grid]
 
@@ -221,7 +208,7 @@ class chocolate(colorTheme):
 class chili_pepper(colorTheme):
     name = "Chili Pepper"
     tag = "chili_pepper"
-    window_background_color = "#f2eae4"
-    list_background_color = "#C0414A"
+    window_background_color = "#C0414A"
+    list_background_color = "#f2eae4"
     window_text_color = "#262523"
     workspace_background_color = "#E8DBC5"
