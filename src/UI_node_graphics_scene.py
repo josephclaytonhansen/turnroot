@@ -7,7 +7,7 @@ from src.UI_updateJSON import updateJSON
 from src.UI_node_socket import QDMGraphicsSocket
 from src.UI_node_edge import QDMGraphicsEdge, Edge, EDGE_TYPE_BEZIER
 
-import math, json
+import math, json, pickle
 
 with open("src/tmp/nesc.json", "r") as readfile:
     const = json.load(readfile)
@@ -25,6 +25,21 @@ MODE_EDGE_DRAG = 2
 EDGE_DRAG_THRESHOLD = 20
 
 data = updateJSON()
+
+with open("src/tmp/nsp.trnes", "rb") as readfile:
+    socket_data = pickle.load(readfile)
+    
+S_TRIGGER = socket_data[0][0]
+S_FILE = socket_data[0][1]
+S_OBJECT = socket_data[0][2]
+S_NUMBER = socket_data[0][3]
+S_TEXT = socket_data[0][4]
+S_EVENT = socket_data[0][5]
+S_BOOLEAN = socket_data[0][6]
+socket_types = [S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN]
+
+socket_names = ["S_TRIGGER", "S_FILE", "S_OBJECT", "S_NUMBER", "S_TEXT", "S_EVENT", "S_BOOLEAN"]
+
 class QDMGraphicsView(QGraphicsView):
     def __init__(self, scene, parent=None):
         super().__init__(parent)
@@ -117,6 +132,8 @@ class QDMGraphicsView(QGraphicsView):
             self.dragEdge.start_socket.setConnectedEdge(self.dragEdge)
             self.dragEdge.end_socket.setConnectedEdge(self.dragEdge)
             self.dragEdge.updatePositions()
+            print(socket_names[self.dragEdge.start_socket.type],
+                  socket_names[self.dragEdge.end_socket.type])
             return True
 
         self.dragEdge.remove()

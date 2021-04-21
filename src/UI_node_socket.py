@@ -55,7 +55,6 @@ class QDMGraphicsSocket(QGraphicsItem):
                       2 * (self.radius+self.outline_width),
                       2* (self.radius * self.outline_width))
 
-
 LEFT_TOP = 1
 LEFT_BOTTOM = 2
 RIGHT_TOP = 3
@@ -79,6 +78,7 @@ class Socket():
         self.type = t
         self.grSocket = QDMGraphicsSocket(self, self.type)
         self.grSocket.direction = self.direction
+        self.type = self.type
         self.grSocket.setPos(*self.node.getSocketPosition(index,position))
         
         self.edge = None
