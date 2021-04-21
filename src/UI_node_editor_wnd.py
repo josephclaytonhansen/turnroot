@@ -65,9 +65,7 @@ class NodeEditorWnd(QWidget):
         node1.setPos(-350*2,-250*2)
         node2.setPos(-75*2, 0)
         node3.setPos(200*2, -150*2)
-        
-        edge1 = Edge(self.scene,node1.outputs[0], node2.inputs[0])
-        edge2 = Edge(self.scene,node2.outputs[1], node3.inputs[5])
+
         
     def loadStyleSheet(self, filename):
         file = QFile(filename)

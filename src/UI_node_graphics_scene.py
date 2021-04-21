@@ -3,6 +3,10 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
+
+from src.UI_node_socket import QDMGraphicsSocket
+from src.UI_node_edge import QDMGraphicsEdge, Edge, EDGE_TYPE_BEZIER
+
 import math, json
 
 with open("src/tmp/nesc.json", "r") as readfile:
@@ -15,6 +19,11 @@ ZOOM_RANGE = const[3]
 GRID_SIZE = const[4]
 GRID_ALT = const[5]
 
+MODE_NOOP = 1
+MODE_EDGE_DRAG = 2
+
+EDGE_DRAG_THRESHOLD = 20
+
 data = updateJSON()
 class QDMGraphicsView(QGraphicsView):
     def __init__(self, scene, parent=None):
@@ -22,6 +31,8 @@ class QDMGraphicsView(QGraphicsView):
         self.grScene = scene
         self.initUI()
         self.setScene(self.grScene)
+        
+        self.mode = MODE_NOOP
         
         self.zoomInFactor = ZOOM_IN
         self.zoomClamp = False
@@ -68,16 +79,89 @@ class QDMGraphicsView(QGraphicsView):
         self.setDragMode(QGraphicsView.NoDrag)
     
     def leftMouseButtonPress(self, event):
-        return super().mousePressEvent(event)
+        
+        item = self.getItemAtClick(event)
+        self.last_lmb_click_scene_pos = self.mapToScene(event.pos())
+        
+        if type(item) is QDMGraphicsSocket:
+            if self.mode == MODE_NOOP:
+                self.mode = MODE_EDGE_DRAG
+                print("start dragging edge")
+                print("\tassign start socket to ", item.socket)
+                self.previousEdge = item.socket.edge
+                self.last_start_socket = item.socket
+                self.dragEdge = Edge(self.grScene.scene,item.socket, None)
+                
+                return
+        
+        if self.mode == MODE_EDGE_DRAG:
+            res = self.edgeDragEnd(item)
+            if res: return
+            
+        super().mousePressEvent(event)
+    
+    def edgeDragEnd(self, item):
+        """ return True if skip the rest of the code """
+        self.mode = MODE_NOOP
+
+        if type(item) is QDMGraphicsSocket:
+            if item.socket.hasEdge():
+                item.socket.edge.remove()
+            if self.previousEdge is not None: self.previousEdge.remove()
+            self.dragEdge.start_socket = self.last_start_socket
+            self.dragEdge.end_socket = item.socket
+            self.dragEdge.start_socket.setConnectedEdge(self.dragEdge)
+            self.dragEdge.end_socket.setConnectedEdge(self.dragEdge)
+            self.dragEdge.updatePositions()
+            return True
+
+        if DEBUG: print('View::edgeDragEnd ~ End dragging edge')
+        self.dragEdge.remove()
+        self.dragEdge = None
+        if DEBUG: print('View::edgeDragEnd ~ about to set socket to previous edge:', self.previousEdge)
+        if self.previousEdge is not None:
+            self.previousEdge.start_socket.edge = self.previousEdge
+        if DEBUG: print('View::edgeDragEnd ~ everything done.')
+
+        return False
+
+        
     
     def leftMouseButtonRelease(self, event):
-        return super().mouseReleaseEvent(event)
+        item = self.getItemAtClick(event)
+        if self.mode == MODE_EDGE_DRAG:
+            
+            new_lmb_release_scene_pos = self.mapToScene(event.pos())
+            dist_scene = new_lmb_release_scene_pos -self.last_lmb_click_scene_pos
+            
+            EDGE_DRAG_THRESHOLD = 20
+             
+            if dist_scene.x()*dist_scene.x()+dist_scene.y()*dist_scene.y() > EDGE_DRAG_THRESHOLD * EDGE_DRAG_THRESHOLD:
+                res = self.edgeDragEnd(item)
+                if res: return
+            
+        super().mouseReleaseEvent(event)
     
     def rightMouseButtonPress(self, event):
-        return super().mousePressEvent(event)
+        super().mousePressEvent(event)
     
     def rightMouseButtonRelease(self, event):
-        return super().mouseReleaseEvent(event)
+        super().mouseReleaseEvent(event)
+    
+    def mouseMoveEvent(self,event):
+        
+        if self.mode == MODE_EDGE_DRAG:
+            self.dragEdge.updatePositions()
+            pos = self.mapToScene(event.pos())
+            self.dragEdge.grEdge.setDestination(pos.x(), pos.y())
+            self.dragEdge.grEdge.update()
+            
+        super().mouseMoveEvent(event)
+
+    def getItemAtClick(self,event):
+        pos = event.pos()
+        obj = self.itemAt(pos)
+        return obj
     
     def wheelEvent(self, event):
         zoomOutFactor = 1 / self.zoomInFactor

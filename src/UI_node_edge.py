@@ -24,6 +24,8 @@ class QDMGraphicsEdge(QGraphicsPathItem):
         self.pen = QPen(self.color)
         self.pen.setWidthF(WIDTH)
         self.pen_selected = QPen(self.color_selected)
+        self.pen_dragging = QPen(self.color)
+        self.pen_dragging.setWidth(WIDTH)
         self.pen_selected.setWidthF(SELECTED_WIDTH)
         
         self.setFlag(QGraphicsItem.ItemIsSelectable)
@@ -40,7 +42,11 @@ class QDMGraphicsEdge(QGraphicsPathItem):
     def paint(self, painter, QStyleOptionsGraphicsItem, widget=None):
         self.updatePath()
         
-        painter.setPen(self.pen if not self.isSelected() else self.pen_selected)
+        if self.edge.end_socket == None:
+            painter.setPen(self.pen_dragging)
+        else:
+        
+            painter.setPen(self.pen if not self.isSelected() else self.pen_selected)
         painter.setBrush(Qt.NoBrush)
         painter.drawPath(self.path())
     
@@ -78,6 +84,7 @@ class Edge():
         self.grEdge = QDMGraphicsEdgeDirect(self) if type == EDGE_TYPE_DIRECT else QDMGraphicsEdgeBezier(self)
         self.updatePositions()
         self.scene.grScene.addItem(self.grEdge)
+        self.scene.addEdge(self)
    
     def updatePositions(self):
         source_pos = self.start_socket.getSocketPosition()
@@ -89,6 +96,8 @@ class Edge():
             end_pos[0] += self.end_socket.node.grNode.pos().x()
             end_pos[1] += self.end_socket.node.grNode.pos().y()
             self.grEdge.setDestination(*end_pos)
+        else:
+            self.grEdge.setDestination(*source_pos)
         self.grEdge.update()
    
     def remove_from_sockets(self):
