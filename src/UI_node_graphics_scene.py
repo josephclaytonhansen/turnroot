@@ -86,8 +86,6 @@ class QDMGraphicsView(QGraphicsView):
         if type(item) is QDMGraphicsSocket:
             if self.mode == MODE_NOOP:
                 self.mode = MODE_EDGE_DRAG
-                print("start dragging edge")
-                print("\tassign start socket to ", item.socket)
                 self.previousEdge = item.socket.edge
                 self.last_start_socket = item.socket
                 self.dragEdge = Edge(self.grScene.scene,item.socket, None)
@@ -127,9 +125,24 @@ class QDMGraphicsView(QGraphicsView):
             self.previousEdge.start_socket.edge = self.previousEdge
 
         return False
-   
+    
+    INPUT = 1
+    OUTPUT = 3
+    
     def leftMouseButtonRelease(self, event):
         item = self.getItemAtClick(event)
+        
+        if type(item) is QDMGraphicsSocket:
+            last_direction = self.last_start_socket.direction
+            active_direction = item.direction
+        
+            if last_direction == active_direction:
+                self.dragEdge.remove()
+                self.dragEdge = None
+                if self.previousEdge is not None:
+                    self.previousEdge.start_socket.edge = self.previousEdge
+                self.mode = MODE_NOOP
+            
         if self.mode == MODE_EDGE_DRAG:
             
             new_lmb_release_scene_pos = self.mapToScene(event.pos())

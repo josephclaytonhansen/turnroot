@@ -58,6 +58,7 @@ class QDMGraphicsEdgeDirect(QDMGraphicsEdge):
         path = QPainterPath(QPointF(self.posSource[0], self.posSource[1]))
         path.lineTo(self.posDestination[0], self.posDestination[1])
         self.setPath(path)
+        
 class QDMGraphicsEdgeBezier(QDMGraphicsEdge):
     def updatePath(self):
         s = self.posSource
@@ -85,8 +86,6 @@ class QDMGraphicsEdgeBezier(QDMGraphicsEdge):
                     (d[1] - s[1]) if (d[1] - s[1]) != 0 else 0.00001
                 )
             ) * EDGE_CP_ROUNDNESS
-
-
 
         path = QPainterPath(QPointF(self.posSource[0], self.posSource[1]))
         path.cubicTo( s[0] + cpx_s, s[1] + cpy_s, d[0] + cpx_d, d[1] + cpy_d, self.posDestination[0], self.posDestination[1])

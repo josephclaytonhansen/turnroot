@@ -34,7 +34,7 @@ class QDMGraphicsSocket(QGraphicsItem):
         super().__init__(socket.node.grNode)
         
         self.socket = socket
-        
+        self.direction = None
         self.radius = RADIUS
         self.color_background = QColor(socket_types_colors[t])
         self.color_outline = QColor("#000000")
@@ -61,15 +61,24 @@ LEFT_BOTTOM = 2
 RIGHT_TOP = 3
 RIGHT_BOTTOM = 4
 
+INPUT = 1
+OUTPUT = 3
+
 class Socket():
     def __init__(self, node, index=0, position=LEFT_TOP, t=0):
         
         self.node = node
         self.index = index
         self.position = position
+        
+        if self.position == LEFT_TOP:
+            self.direction = INPUT
+        else:
+            self.direction = OUTPUT
+            
         self.type = t
         self.grSocket = QDMGraphicsSocket(self, self.type)
-        
+        self.grSocket.direction = self.direction
         self.grSocket.setPos(*self.node.getSocketPosition(index,position))
         
         self.edge = None
