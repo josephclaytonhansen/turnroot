@@ -115,18 +115,13 @@ class QDMGraphicsView(QGraphicsView):
             self.dragEdge.updatePositions()
             return True
 
-        if DEBUG: print('View::edgeDragEnd ~ End dragging edge')
         self.dragEdge.remove()
         self.dragEdge = None
-        if DEBUG: print('View::edgeDragEnd ~ about to set socket to previous edge:', self.previousEdge)
         if self.previousEdge is not None:
             self.previousEdge.start_socket.edge = self.previousEdge
-        if DEBUG: print('View::edgeDragEnd ~ everything done.')
 
         return False
-
-        
-    
+   
     def leftMouseButtonRelease(self, event):
         item = self.getItemAtClick(event)
         if self.mode == MODE_EDGE_DRAG:
