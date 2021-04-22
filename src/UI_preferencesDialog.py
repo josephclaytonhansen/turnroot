@@ -13,16 +13,16 @@ import src.UI_colorTheme
 #update below when importing more color themes!
 from src.UI_colorTheme import (
     midnight_spark, midnight_spark_yellow,
-    coral_reef,sand_dunes,
+    sand_dunes,
     rainforest,charcoal,
-    system_light,ocean_waves
+    ocean_waves
     ,chocolate,
     chili_pepper)
 
 color_themes_dict = [midnight_spark, midnight_spark_yellow,
-    coral_reef,sand_dunes,
+    sand_dunes,
     rainforest,charcoal,
-    system_light,ocean_waves
+    ocean_waves
     ,chocolate,
     chili_pepper]
   

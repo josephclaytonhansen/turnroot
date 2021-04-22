@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
-import json
+import json, math
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
@@ -20,10 +20,19 @@ class QDMGraphicsEdge(QGraphicsPathItem):
         self.edge = edge
         
         self.color = QColor(active_theme.node_wire_color)
+        self.error_color = QColor(active_theme.node_wire_error_color)
         self.color_selected = QColor(active_theme.node_selected_color)
         self.pen = QPen(self.color)
-        self.pen.setWidthF(WIDTH)
+        
         self.pen_selected = QPen(self.color_selected)
+        self.pen_dragging = QPen(self.color)
+        self.pen_error = QPen(self.error_color)
+        self.pen_error.setStyle(Qt.DotLine)
+        
+        
+        self.pen.setWidthF(WIDTH)
+        self.pen_error.setWidth(WIDTH)
+        self.pen_dragging.setWidth(WIDTH)
         self.pen_selected.setWidthF(SELECTED_WIDTH)
         
         self.setFlag(QGraphicsItem.ItemIsSelectable)
@@ -39,8 +48,23 @@ class QDMGraphicsEdge(QGraphicsPathItem):
     
     def paint(self, painter, QStyleOptionsGraphicsItem, widget=None):
         self.updatePath()
-        
-        painter.setPen(self.pen if not self.isSelected() else self.pen_selected)
+
+        if self.edge.end_socket == None:
+            painter.setPen(self.pen_dragging)
+        else:
+            #numbers and booleans can convert, so they don't change the pen to error
+            end_type = self.edge.end_socket.type
+            start_type = self.edge.start_socket.type
+            if end_type == 3 or end_type == 6:
+                end_type = 3
+            if start_type == 3 or start_type == 6:
+                start_type = 3
+            
+            #any other mismatch changes pen to error
+            if start_type != end_type:
+                painter.setPen(self.pen_error)
+            else:
+                painter.setPen(self.pen if not self.isSelected() else self.pen_selected)
         painter.setBrush(Qt.NoBrush)
         painter.drawPath(self.path())
     
@@ -52,20 +76,43 @@ class QDMGraphicsEdgeDirect(QDMGraphicsEdge):
         path = QPainterPath(QPointF(self.posSource[0], self.posSource[1]))
         path.lineTo(self.posDestination[0], self.posDestination[1])
         self.setPath(path)
+        
 class QDMGraphicsEdgeBezier(QDMGraphicsEdge):
     def updatePath(self):
         s = self.posSource
         d = self.posDestination
         dist = (d[0] - s[0]) * 0.5
-        if s[0] > d[0]: dist *= -1
-        
+
+        cpx_s = +dist
+        cpx_d = -dist
+        cpy_s = 0
+        cpy_d = 0
+
+        sspos = self.edge.start_socket.position
+
+        if (s[0] > d[0] and sspos in (3,3)) or (s[0] < d[0] and sspos in (1,1)):
+            cpx_d *= -1
+            cpx_s *= -1
+
+            cpy_d = (
+                (s[1] - d[1]) / math.fabs(
+                    (s[1] - d[1]) if (s[1] - d[1]) != 0 else 0.00001
+                )
+            ) * EDGE_CP_ROUNDNESS
+            cpy_s = (
+                (d[1] - s[1]) / math.fabs(
+                    (d[1] - s[1]) if (d[1] - s[1]) != 0 else 0.00001
+                )
+            ) * EDGE_CP_ROUNDNESS
+
         path = QPainterPath(QPointF(self.posSource[0], self.posSource[1]))
-        path.cubicTo(s[0]+dist, s[1], d[0] - dist, d[1],
-                     self.posDestination[0], self.posDestination[1])
+        path.cubicTo( s[0] + cpx_s, s[1] + cpy_s, d[0] + cpx_d, d[1] + cpy_d, self.posDestination[0], self.posDestination[1])
+
         self.setPath(path)
         
 EDGE_TYPE_DIRECT = 1
 EDGE_TYPE_BEZIER = 2
+EDGE_CP_ROUNDNESS = 100
 
 class Edge():
     def __init__(self,scene,start_socket,end_socket, type = 2):
@@ -78,6 +125,7 @@ class Edge():
         self.grEdge = QDMGraphicsEdgeDirect(self) if type == EDGE_TYPE_DIRECT else QDMGraphicsEdgeBezier(self)
         self.updatePositions()
         self.scene.grScene.addItem(self.grEdge)
+        self.scene.addEdge(self)
    
     def updatePositions(self):
         source_pos = self.start_socket.getSocketPosition()
@@ -89,6 +137,8 @@ class Edge():
             end_pos[0] += self.end_socket.node.grNode.pos().x()
             end_pos[1] += self.end_socket.node.grNode.pos().y()
             self.grEdge.setDestination(*end_pos)
+        else:
+            self.grEdge.setDestination(*source_pos)
         self.grEdge.update()
    
     def remove_from_sockets(self):

@@ -30,8 +30,11 @@ OUTLINE_WIDTH = socket_data[3]
 storage = (socket_types, socket_types_colors, RADIUS, OUTLINE_WIDTH)
 
 class QDMGraphicsSocket(QGraphicsItem):
-    def __init__(self, parent = None, t=0):
-        super().__init__(parent)
+    def __init__(self, socket, t=0):
+        super().__init__(socket.node.grNode)
+        
+        self.socket = socket
+        self.direction = None
         self.radius = RADIUS
         self.color_background = QColor(socket_types_colors[t])
         self.color_outline = QColor("#000000")
@@ -57,15 +60,25 @@ LEFT_BOTTOM = 2
 RIGHT_TOP = 3
 RIGHT_BOTTOM = 4
 
+INPUT = 1
+OUTPUT = 3
+
 class Socket():
     def __init__(self, node, index=0, position=LEFT_TOP, t=0):
         
         self.node = node
         self.index = index
         self.position = position
-        self.type = t
-        self.grSocket = QDMGraphicsSocket(self.node.grNode, self.type)
         
+        if self.position == LEFT_TOP:
+            self.direction = INPUT
+        else:
+            self.direction = OUTPUT
+            
+        self.type = t
+        self.grSocket = QDMGraphicsSocket(self, self.type)
+        self.grSocket.direction = self.direction
+        self.type = self.type
         self.grSocket.setPos(*self.node.getSocketPosition(index,position))
         
         self.edge = None
@@ -78,3 +91,4 @@ class Socket():
     
     def hasEdge(self):
         return self.edge is not None
+
