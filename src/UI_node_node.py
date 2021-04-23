@@ -19,8 +19,9 @@ NODE_FONT = const[5]
 FONT_SIZE = const[6]
 
 class QDMNodeContentWidget(QWidget):
-    def __init__(self, parent = None):
+    def __init__(self, node, parent = None):
         super().__init__(parent)
+        self.node = node
         self.initUI()
         
     def initUI(self):
@@ -30,7 +31,26 @@ class QDMNodeContentWidget(QWidget):
         self.setLayout(self.layout)
         self.w_label = QLabel("<font color='"+active_theme.node_text_color+"'>Some text</font>")
         self.layout.addWidget(self.w_label)
-        self.layout.addWidget(QTextEdit())
+        self.layout.addWidget(QDMTextEdit())
+    
+    def setEditingFlag(self,value):
+        self.node.scene.grScene.views()[0].editingFlag = value
+
+class QDMTextEdit(QTextEdit):
+    def __init__(self,parent=None):
+        super().__init__(parent)
+        self.font = QFont(NODE_FONT)
+        self.font.setPointSize(FONT_SIZE)
+        self.setFont(self.font)
+    def keyPressEvent(self,event):
+        super().keyPressEvent(event)
+    
+    def focusInEvent(self, event):
+        super().focusInEvent(event)
+        self.parentWidget().setEditingFlag(True)
+    def focusOutEvent(self, event):
+        super().focusOutEvent(event)
+        self.parentWidget().setEditingFlag(False)
 
 
 class QDMGraphicsNode(QGraphicsItem):
@@ -74,6 +94,7 @@ class QDMGraphicsNode(QGraphicsItem):
         self._title_font.setPointSize(FONT_SIZE)
         self._title_font.setStyleStrategy(QFont.NoAntialias)
         self.title_item = QGraphicsTextItem(self)
+        self.title_item.node = self.node
         self.title_item.setDefaultTextColor(self._title_color)
         self.title_item.setFont(self._title_font)
         self.title_item.setPos(self.padding, 10)
@@ -82,6 +103,10 @@ class QDMGraphicsNode(QGraphicsItem):
     def mouseMoveEvent(self,event):
         super().mouseMoveEvent(event)
         self.node.updateConnectedEdges()
+        
+        for node in self.scene().scene.nodes:
+            if node.grNode.isSelected():
+                node.updateConnectedEdges()
     
     @property
     def title(self): return self._title
@@ -134,7 +159,7 @@ class Node():
         self.scene = scene
         self.title = title
         
-        self.content = QDMNodeContentWidget()
+        self.content = QDMNodeContentWidget(self)
         self.grNode = QDMGraphicsNode(self)
         
         self.scene.addNode(self)
@@ -172,6 +197,14 @@ class Node():
                     socket.edge.updatePositions()
                 except:
                     pass
+    
+    def remove(self):
+        for socket in (self.inputs + self.outputs):
+            if socket.hasEdge():
+                socket.edge.remove()
+        self.scene.grScene.removeItem(self.grNode)
+        self.grNode = None
+        self.scene.removeNode(self)
 
         
         

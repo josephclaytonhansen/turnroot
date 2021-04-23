@@ -28,12 +28,15 @@ class QDMGraphicsEdge(QGraphicsPathItem):
         self.pen_dragging = QPen(self.color)
         self.pen_error = QPen(self.error_color)
         self.pen_error.setStyle(Qt.DotLine)
+        self.pen_selected_error = QPen(self.color_selected)
+        self.pen_selected_error.setStyle(Qt.DotLine)
         
         
         self.pen.setWidthF(WIDTH)
         self.pen_error.setWidth(WIDTH)
         self.pen_dragging.setWidth(WIDTH)
         self.pen_selected.setWidthF(SELECTED_WIDTH)
+        self.pen_selected_error.setWidthF(SELECTED_WIDTH)
         
         self.setFlag(QGraphicsItem.ItemIsSelectable)
         self.setZValue(-1)
@@ -47,7 +50,7 @@ class QDMGraphicsEdge(QGraphicsPathItem):
         self.posDestination = [x,y]
     
     def paint(self, painter, QStyleOptionsGraphicsItem, widget=None):
-        self.updatePath()
+        self.setPath(self.updatePath())
 
         if self.edge.end_socket == None:
             painter.setPen(self.pen_dragging)
@@ -62,11 +65,18 @@ class QDMGraphicsEdge(QGraphicsPathItem):
             
             #any other mismatch changes pen to error
             if start_type != end_type:
-                painter.setPen(self.pen_error)
+                painter.setPen(self.pen_error if not self.isSelected() else self.pen_selected_error)
             else:
                 painter.setPen(self.pen if not self.isSelected() else self.pen_selected)
         painter.setBrush(Qt.NoBrush)
         painter.drawPath(self.path())
+    
+    def intersectsWith(self, p1, p2):
+        cutpath = QPainterPath(p1)
+        cutpath.lineTo(p2)
+        path = self.updatePath()
+        return cutpath.intersects(path)
+
     
     def updatePath(self):
         raise NotImplemented("This method has to be overriden in a child class")
@@ -75,7 +85,7 @@ class QDMGraphicsEdgeDirect(QDMGraphicsEdge):
     def updatePath(self):
         path = QPainterPath(QPointF(self.posSource[0], self.posSource[1]))
         path.lineTo(self.posDestination[0], self.posDestination[1])
-        self.setPath(path)
+        return path
         
 class QDMGraphicsEdgeBezier(QDMGraphicsEdge):
     def updatePath(self):
@@ -108,7 +118,7 @@ class QDMGraphicsEdgeBezier(QDMGraphicsEdge):
         path = QPainterPath(QPointF(self.posSource[0], self.posSource[1]))
         path.cubicTo( s[0] + cpx_s, s[1] + cpy_s, d[0] + cpx_d, d[1] + cpy_d, self.posDestination[0], self.posDestination[1])
 
-        self.setPath(path)
+        return path
         
 EDGE_TYPE_DIRECT = 1
 EDGE_TYPE_BEZIER = 2
@@ -153,5 +163,8 @@ class Edge():
         self.remove_from_sockets()
         self.scene.grScene.removeItem(self.grEdge)
         self.grEdge = None
-        self.scene.removeEdge(self)
+        try:
+            self.scene.removeEdge(self)
+        except ValueError:
+            pass
         
