@@ -373,6 +373,24 @@ class colorThemeEdit(QDialog):
             
         setattr(self.new_theme, self.update_id, self.update_value)
         self.values[self.update_id] = self.update_value
+
+        print(self.active_theme.tag)
+        
+        with open("src/UI_ColorTheme.py", "r") as readfile:
+            color_theme_file = readfile.read()
+            color_theme_file = color_theme_file.split("\n")
+
+            color_theme_start = None
+            counter = 0
+            while color_theme_start == None:
+                counter += 1
+                line = color_theme_file[counter]
+                if "tag" in line and self.active_theme.tag in line:
+                    color_theme_start = line
+                    print(line, color_theme_file.index(line))
+                    
+            if color_theme_start is not None:
+                color_theme_file = color_theme_file[color_theme_start:color_theme_start+51]
         
         try:
             self.c_block_pixmap.fill(QColor(self.update_value))
