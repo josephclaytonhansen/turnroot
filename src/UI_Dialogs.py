@@ -373,12 +373,12 @@ class colorThemeEdit(QDialog):
             
         setattr(self.new_theme, self.update_id, self.update_value)
         self.values[self.update_id] = self.update_value
-
-        print(self.active_theme.tag)
         
         with open("src/UI_ColorTheme.py", "r") as readfile:
             color_theme_file = readfile.read()
             color_theme_file = color_theme_file.split("\n")
+            color_theme_file_hold = color_theme_file
+            readfile.close()
 
             color_theme_start = None
             counter = 0
@@ -386,11 +386,35 @@ class colorThemeEdit(QDialog):
                 counter += 1
                 line = color_theme_file[counter]
                 if "tag" in line and self.active_theme.tag in line:
-                    color_theme_start = line
-                    print(line, color_theme_file.index(line))
+                    color_theme_start = color_theme_file.index(line)
                     
             if color_theme_start is not None:
                 color_theme_file = color_theme_file[color_theme_start:color_theme_start+51]
+                
+                counter = -1
+                edit_line = None
+                while edit_line == None:
+                    counter +=1
+                    if self.update_id in color_theme_file[counter]:
+                        edit_line = counter + color_theme_start
+            
+            print(self.update_id, self.update_value)
+            
+            with open("src/tmp/uctp.tmp", "w") as tmp_color_file:
+                theme_edit_line = color_theme_file_hold[edit_line]
+                theme_edit_line_start = theme_edit_line.find("#")
+                theme_edit_line_portion = theme_edit_line[theme_edit_line_start:len(theme_edit_line)-1]
+                new_line = theme_edit_line[:theme_edit_line_start] + self.update_value + "\""
+                color_theme_file_hold[edit_line] = new_line
+                
+                for x in color_theme_file_hold:
+                    tmp_color_file.write(x)
+                    tmp_color_file.write("\n")
+                
+            with open("src/UI_ColorTheme.py", "w") as final_write:
+                for x in color_theme_file_hold:
+                    final_write.write(x)
+                    final_write.write("\n")
         
         try:
             self.c_block_pixmap.fill(QColor(self.update_value))
