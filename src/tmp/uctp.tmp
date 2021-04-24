@@ -76,12 +76,12 @@ class midnight_spark_yellow(colorTheme):
 class sand_dunes(colorTheme):
     name = "Sand Dunes"
     tag = "sand_dunes"
-    window_background_color = "#F2B66D"
+    window_background_color = "#"
     list_background_color = "#F2E6D8"
     window_text_color = "#734C36"
     workspace_background_color = "#64b5c1"
     button_alt_color = "#c2ae95"
-    button_alt_text_color = "#363431"
+    button_alt_text_color = "#"
     
     node_grid_background_color = "#f5ca95"
     node_selected_color = "#64b5c1"
@@ -94,7 +94,7 @@ class sand_dunes(colorTheme):
     node_text_color = "#F2E6D8"
     node_wire_color = "#F2E6D8"
     
-    node_socket_trigger_color = "#00FF66"
+    node_socket_trigger_color = "#00ff77"
     node_socket_file_color = "#FF57A2"
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
@@ -262,6 +262,70 @@ class chili_pepper(colorTheme):
     list_background_color = "#f2eae4"
     window_text_color = "#262523"
     workspace_background_color = "#E8DBC5"
+
+class custom(colorTheme):
+    name = "Custom"
+    tag= "custom"
+    window_background_color = "#F0F0F0"
+    list_background_color = "#F0F0F0"
+    button_alt_color = "#F0F0F0"
+    button_alt_text_color = "#F0F0F0"
+    window_text_color = "#F0F0F0"
+    node_grid_background_color = "#F0F0F0"
+    node_grid_lines_color = "#F0F0F0"
+    node_grid_alt_lines_color = "#F0F0F0"
+    node_selected_color = "#F0F0F0"
+    node_title_color = "#F0F0F0"
+    node_title_background_color = "#F0F0F0"
+    node_background_color = "#F0F0F0"
+    node_text_color = "#F0F0F0"
+    node_wire_color = "#F0F0F0"
+    node_socket_trigger_color = "#F0F0F0"
+    node_socket_file_color = "#F0F0F0"
+    node_socket_object_color = "#F0F0F0"
+    node_socket_number_color = "#F0F0F0"
+    node_socket_text_color = "#F0F0F0"
+    node_socket_event_color = "#F0F0F0"
+    node_socket_boolean_color = "#F0F0F0"
+    node_wire_error_color = "#F0F0F0"
+
+    level_editor = ["level_editor", window_background_color,list_background_color,
+                    window_text_color,
+                    button_alt_color,button_alt_text_color]
+
+    node_grid = ["node_grid",node_grid_background_color, node_grid_lines_color,
+                 node_grid_alt_lines_color, node_selected_color, node_title_color,
+                 node_title_background_color, node_background_color,
+                 node_text_color, node_wire_color, node_socket_trigger_color,
+                 node_socket_file_color, node_socket_object_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_boolean_color, node_wire_error_color]
+
+    level_editor_labels = ["level_editor", "window_background_color",
+                           "list_background_color",
+                    "window_text_color",
+                    "button_alt_color","button_alt_text_color"]
+
+    node_grid_labels = ["node_grid","node_grid_background_color",
+                        "node_grid_lines_color",
+                 "node_grid_alt_lines_color", "node_selected_color","node_title_color",
+                 "node_title_background_color", "node_background_color",
+                 "node_text_color", "node_wire_color", "node_socket_trigger_color",
+                 "node_socket_file_color", "node_socket_object_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_boolean_color", "node_wire_error_color"]
+
+    groups = [level_editor, node_grid]
+
+
+
+
+
+
+
+
+
+
 
 
 

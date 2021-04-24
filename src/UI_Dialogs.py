@@ -18,6 +18,7 @@ class confirmAction(QDialog):
     def __init__(self, s, parent=None):
         data = updateJSON()
         self.s = s
+
         self.return_confirm = return_confirm
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
@@ -47,6 +48,7 @@ class confirmAction(QDialog):
         self.no.clicked.connect(self.no_clicked)
         self.setLayout(layout)
         self.show()
+        
     
     def yes_clicked(self):
         self.return_confirm = True
@@ -310,6 +312,7 @@ class colorThemeEdit(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         data = updateJSON()
+
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         
         self.new_theme = src.UI_colorTheme.colorTheme()
@@ -358,25 +361,24 @@ class colorThemeEdit(QDialog):
         
         self.in_ok = QWidget()
         self.in_ok_layout = QHBoxLayout()
-        self.in_ok_layout.addWidget(QLabel("To change, type in hex color and press Enter\n(must restart to see changes)"))
-        self.in_ok_ok = QPushButton("Ok")
-        self.in_ok_ok.clicked.connect(self.close)
-        self.in_ok_layout.addWidget(self.in_ok_ok)
+        self.in_ok_layout.addWidget(QLabel("To change, type in hex color and press Enter\n(changes save automatically)"))
         self.in_ok.setLayout(self.in_ok_layout)
         
         self.layout.addWidget(self.in_ok)
         self.layout.addWidget(self.tabs)
         
         self.show()
-        
+    
     def updateValue(self):
         self.update_id = self.sender().color_block_id
         self.c_block = self.color_blocks[self.update_id]
-        self.c_block_pixmap = QPixmap(70,30)
+        self.c_block_pixmap = QPixmap(70,20)
         
         self.update_value = self.sender().text()
         if self.update_value.startswith("#") == False:
             self.update_value = "#"+self.update_value
+            if self.update_value.endswith("#"):
+                self.update_value = "#000000"
             self.sender().setText(self.update_value)
             
         setattr(self.new_theme, self.update_id, self.update_value)
@@ -405,8 +407,6 @@ class colorThemeEdit(QDialog):
                     counter +=1
                     if self.update_id in color_theme_file[counter]:
                         edit_line = counter + color_theme_start
-            
-            print(self.update_id, self.update_value)
             
             with open("src/tmp/uctp.tmp", "w") as tmp_color_file:
                 theme_edit_line = color_theme_file_hold[edit_line]

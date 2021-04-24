@@ -263,6 +263,57 @@ class chili_pepper(colorTheme):
     window_text_color = "#262523"
     workspace_background_color = "#E8DBC5"
 
+class custom(colorTheme):
+    name = "Custom"
+    tag = "custom"
+    window_background_color = "#000000"
+    button_alt_color = "#000000"
+    button_alt_text_color = "#FFFFFF"
+    list_background_color = "#000000"
+    window_text_color = "#FFFFFF"
+    node_grid_lines_color = "#000000"
+    node_grid_alt_lines_color = "#000000"
+    node_grid_background_color = "#000000"
+    node_selected_color = "#000000"
+    node_title_color = "#000000"
+    node_title_background_color = "#000000"
+    node_background_color = "#000000"
+    node_text_color = "#FFFFFF"
+    node_wire_color = "#000000"
+    node_socket_trigger_color = "#000000"
+    node_socket_file_color = "#000000"
+    node_socket_object_color = "#000000"
+    node_socket_number_color = "#000000"
+    node_socket_text_color = "#000000"
+    node_socket_event_color = "#000000"
+    node_socket_boolean_color = "#000000"
+    node_wire_error_color = "#000000"
 
+    level_editor = ["level_editor", window_background_color,list_background_color,
+                window_text_color,
+                button_alt_color,button_alt_text_color]
 
+    node_grid = ["node_grid",node_grid_background_color, node_grid_lines_color,
+                 node_grid_alt_lines_color, node_selected_color, node_title_color,
+                 node_title_background_color, node_background_color,
+                 node_text_color, node_wire_color, node_socket_trigger_color,
+                 node_socket_file_color, node_socket_object_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_boolean_color, node_wire_error_color]
+
+    level_editor_labels = ["level_editor", "window_background_color",
+                           "list_background_color",
+                    "window_text_color",
+                    "button_alt_color","button_alt_text_color"]
+
+    node_grid_labels = ["node_grid","node_grid_background_color",
+                        "node_grid_lines_color",
+                 "node_grid_alt_lines_color", "node_selected_color","node_title_color",
+                 "node_title_background_color", "node_background_color",
+                 "node_text_color", "node_wire_color", "node_socket_trigger_color",
+                 "node_socket_file_color", "node_socket_object_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_boolean_color", "node_wire_error_color"]
+
+    groups = [level_editor, node_grid]
 
