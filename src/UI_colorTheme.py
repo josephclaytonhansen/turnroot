@@ -80,7 +80,7 @@ class sand_dunes(colorTheme):
     list_background_color = "#F2E6D8"
     window_text_color = "#734C36"
     workspace_background_color = "#64b5c1"
-    button_alt_color = "#c2ae95"
+    button_alt_color = "#D4AC7B"
     button_alt_text_color = "#363431"
     
     node_grid_background_color = "#f5ca95"
@@ -92,14 +92,14 @@ class sand_dunes(colorTheme):
     node_title_background_color = "#402d17"
     node_background_color = "#4d371d"
     node_text_color = "#F2E6D8"
-    node_wire_color = "#F2E6D8"
+    node_wire_color = "#fBedBA"
     
-    node_socket_trigger_color = "#00FF66"
+    node_socket_trigger_color = "#00EE88"
     node_socket_file_color = "#FF57A2"
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#808080"
+    node_socket_event_color = "#968080"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#f74b20"
 
@@ -316,4 +316,12 @@ class custom(colorTheme):
                  "node_socket_boolean_color", "node_wire_error_color"]
 
     groups = [level_editor, node_grid]
+
+
+
+
+
+
+
+
 

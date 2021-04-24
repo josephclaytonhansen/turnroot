@@ -52,6 +52,9 @@ fullscreen = False
 zoom_level = 1.75
 mode_highlight = 0
 
+OPEN_LAST_FILE = "0x4f4c46"
+OPEN_NEW_FILE = "0x434e46"
+
 with open("src/tmp/rsp.tmp", "r") as read_file:
     tmp = read_file.read().strip()
 
@@ -60,6 +63,7 @@ class main(QMainWindow):
         #create, title, and size mainwindow
         super().__init__()
         self.setWindowTitle(title)
+         
         self.setMinimumSize(QSize(int(size.width()/3), int(size.height()/2)))
         self.setMaximumSize(QSize(int(size.width()), int(size.height())))
         self.resize(QSize(int(size.width()*.98), int(size.height()*.9)))
@@ -260,11 +264,14 @@ class main(QMainWindow):
         self.SaveButton.triggered.connect(self.Save)
         self.OpenButton = QAction("Open", self)
         self.OpenButton.triggered.connect(self.openFileDialog)
+        self.newFileButton = QAction("New file", self)
+        self.newFileButton.triggered.connect(self.newFile)
         
         #file menu items
         fileMenu.addAction(self.OpenButton)
         fileMenu.addAction(self.SaveButton)
         fileMenu.addAction(self.saveAsButton)
+        fileMenu.addAction(self.newFileButton)
         fileMenu.addAction(self.aboutButton)
         fileMenu.addAction(self.checkUpdatesButton)
         fileMenu.addAction(self.quitButton)
@@ -292,6 +299,16 @@ class main(QMainWindow):
                 self.keyboard_shortcuts[x] = eval(self.pickle_cuts[x])
         with open('src/tmp/kybs.trkp', 'wb') as fh:
             pickle.dump(self.pickle_cuts, fh)
+        
+        with open("src/tmp/wer.taic", "r") as tmp_reason:
+            if tmp_reason.read() == OPEN_LAST_FILE:
+                with open("src/tmp/lsf.taic", "r") as open_file:
+                    try:
+                        self.path = open_file.read()
+                        self.openFile(self.path)
+                    except:
+                        c = infoClose("Last saved file not found\n(opening new file)")
+                        c.exec_()
     
     #actions- save
     def Save(self):
@@ -321,7 +338,9 @@ class main(QMainWindow):
             elif e.key() == Qt.Key_O:
                 self.openFileDialog()
             elif e.key() == Qt.Key_S:
-                self.Save()                
+                self.Save()
+            elif e.key() == Qt.Key_N:
+                self.newFile()
         else:
             try:
                 self.keyboard_shortcuts[e.key()]()
@@ -360,6 +379,13 @@ class main(QMainWindow):
             self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
 
             if (data["theme_changed"] == True):
+                self.Save()
+                
+                with open("src/tmp/wer.taic", "w") as tmp_reason:
+                    tmp_reason.write(OPEN_LAST_FILE)
+                with open("src/tmp/lsf.taic", "w") as next_open_file:
+                    next_open_file.write(self.path)
+                    
                 os.execl(sys.executable, sys.executable, *sys.argv)
             
     #help/forums view
@@ -385,7 +411,14 @@ class main(QMainWindow):
         c = confirmAction(parent=self, s="quit the level editor")
         c.exec_()
         if(c.return_confirm):
+            with open("src/tmp/wer.taic", "w") as tmp_reason:
+                    tmp_reason.write(OPEN_NEW_FILE)
             sys.exit()
+    
+    def newFile(self):
+        with open("src/tmp/wer.taic", "w") as tmp_reason:
+            tmp_reason.write(OPEN_NEW_FILE)
+        os.execl(sys.executable, sys.executable, *sys.argv)
             
     #show and hide workspaces     
     def show_tiles(self):
@@ -520,65 +553,70 @@ class main(QMainWindow):
         if fileName:
             self.path = fileName
             self.setWindowTitle(title+self.path)
+            self.openFile(fileName)
+    
+    def openFile(self,fileName):
+        self.path = fileName
+        self.setWindowTitle(title+self.path)
+        
+        with open(self.path, "r") as read_file:
+            level_data = json.load(read_file)
+            read_file.close()
+            tile_data = {}
             
-            with open(self.path, "r") as read_file:
-                level_data = json.load(read_file)
-                read_file.close()
-                tile_data = {}
-                
-            with open(self.path+"d", "r") as read_decor_file:
-                decor_data = json.load(read_decor_file)
-                read_decor_file.close()
+        with open(self.path+"d", "r") as read_decor_file:
+            decor_data = json.load(read_decor_file)
+            read_decor_file.close()
+        
+        with open(self.path+"t", "r") as read_type_file:
+            type_data = json.load(read_type_file)
+            read_type_file.close()
+        
+        with open(self.path+"o", "r") as read_object_file:
+            self.type_data = json.load(read_object_file)
+            read_object_file.close()
             
-            with open(self.path+"t", "r") as read_type_file:
-                type_data = json.load(read_type_file)
-                read_type_file.close()
-            
-            with open(self.path+"o", "r") as read_object_file:
-                self.type_data = json.load(read_object_file)
-                read_object_file.close()
-                
-                for x in range(0, len(self.tilesets)):
-                    with open("src/resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".json", "r") as read_file:
-                        read_file.seek(0)
-                        tile_data[x] = json.load(read_file)
-                        
-                for g in range(1, self.tile_grid.count+1):
-                    self.tile_grid.squares[g].clear()
-                    if level_data[str(g)] != 'e':
-                        for x in range(0, len(tile_data)):
-                            #open tiles
-                            for k in range(0, 6):
-                                for y in range(0, 27):
-                                    tile = tile_data[x][str(k)][str(y)]
-                                    if (level_data[str(g)] ) == tile[0]:
-                                        self.image = QPixmap("src/resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".png")
-                                        self.tile_grid.squares[g].setPixmap(self.image.copy(y*32, k*32, 32, 32).scaled(int(64), int(64), Qt.KeepAspectRatio))
-                                        self.level_data[g] = level_data[str(g)]
-                                            
-                    for l in decor_data:
-                        self.decor_tile_index = l[:l.index("-")]
-                        self.decor_index = l[l.index("-")+1:]
-                        if level_data[str(g)] != "e":
-                            if str(self.tile_grid.squares[g].gridIndex) == self.decor_tile_index:
-                                for x in range(0, len(tile_data)):
-                                    for k in range(0, 6):
-                                        for y in range(0, 27):
-                                            self.decor_tile = tile_data[x][str(k)][str(y)][0]
-                                            self.decor_image = image = QPixmap("src/resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".png")
-                                            if str(self.decor_tile) == self.decor_index:
-                                                self.tile_grid.squares[g].setPixmap(
-                                                    overlayTile(self.tile_grid.squares[g].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
-                                                                self.decor_image.copy(y*32, k*32, 32, 32).scaled(int(32), int(32), Qt.KeepAspectRatio)))
+            for x in range(0, len(self.tilesets)):
+                with open("src/resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".json", "r") as read_file:
+                    read_file.seek(0)
+                    tile_data[x] = json.load(read_file)
+                    
+            for g in range(1, self.tile_grid.count+1):
+                self.tile_grid.squares[g].clear()
+                if level_data[str(g)] != 'e':
+                    for x in range(0, len(tile_data)):
+                        #open tiles
+                        for k in range(0, 6):
+                            for y in range(0, 27):
+                                tile = tile_data[x][str(k)][str(y)]
+                                if (level_data[str(g)] ) == tile[0]:
+                                    self.image = QPixmap("src/resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".png")
+                                    self.tile_grid.squares[g].setPixmap(self.image.copy(y*32, k*32, 32, 32).scaled(int(64), int(64), Qt.KeepAspectRatio))
+                                    self.level_data[g] = level_data[str(g)]
+                                        
+                for l in decor_data:
+                    self.decor_tile_index = l[:l.index("-")]
+                    self.decor_index = l[l.index("-")+1:]
+                    if level_data[str(g)] != "e":
+                        if str(self.tile_grid.squares[g].gridIndex) == self.decor_tile_index:
+                            for x in range(0, len(tile_data)):
+                                for k in range(0, 6):
+                                    for y in range(0, 27):
+                                        self.decor_tile = tile_data[x][str(k)][str(y)][0]
+                                        self.decor_image = image = QPixmap("src/resource_packs/ClassicVerdant/tiles/"+self.tilesets[x]+".png")
+                                        if str(self.decor_tile) == self.decor_index:
+                                            self.tile_grid.squares[g].setPixmap(
+                                                overlayTile(self.tile_grid.squares[g].pixmap().scaled(int(32), int(32), Qt.KeepAspectRatio),
+                                                            self.decor_image.copy(y*32, k*32, 32, 32).scaled(int(32), int(32), Qt.KeepAspectRatio)))
                                            
     def saveFileDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getSaveFileName(self,"Save","","Turnroot Level File (*.trlf)", options=options)
         if fileName:
-            self.path = fileName+".trl"
+            self.path = fileName+".trlf"
             self.setWindowTitle(title+self.path)
-            with open(self.path+"f", "w") as write_file:
+            with open(self.path, "w") as write_file:
                 json.dump(self.level_data, write_file)
                 write_file.close()
             with open(self.path+"d", "w") as write_decor_file:
