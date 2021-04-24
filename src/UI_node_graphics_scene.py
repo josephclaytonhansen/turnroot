@@ -251,8 +251,9 @@ class QDMGraphicsView(QGraphicsView):
                 self.deleteSelected()
             else:
                 super().keyPressEvent(event)
-        else:
-            super().keyPressEvent(event)
+        elif event.key() == Qt.Key_S:
+            if event.modifiers() == Qt.ControlModifier:
+                self.grScene.scene.saveToFile()
             
     def cutIntersectingEdges(self):
         for ix in range(len(self.cutline.line_points) - 1):

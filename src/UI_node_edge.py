@@ -3,6 +3,10 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
+
+from collections import OrderedDict
+from src.UI_node_serializable import Serializable
+
 import json, math
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
@@ -124,8 +128,9 @@ EDGE_TYPE_DIRECT = 1
 EDGE_TYPE_BEZIER = 2
 EDGE_CP_ROUNDNESS = 100
 
-class Edge():
+class Edge(Serializable):
     def __init__(self,scene,start_socket,end_socket, type = 2):
+        super().__init__()
         self.scene = scene
         self.start_socket = start_socket
         self.end_socket = end_socket
@@ -168,3 +173,14 @@ class Edge():
         except ValueError:
             pass
         
+    def serialize(self):
+        return OrderedDict([
+            ('id', self.id),
+            ('edge_type', self.edge_type),
+            ('start', self.start_socket.id),
+            ('end', self.end_socket.id),
+        ])
+
+    def deserialize(self, data, hashmap={}):
+        return False
+

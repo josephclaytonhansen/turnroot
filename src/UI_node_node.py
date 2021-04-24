@@ -4,6 +4,9 @@ from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
 from src.UI_node_socket import *
+from collections import OrderedDict
+from src.UI_node_serializable import Serializable
+
 import json
 data = updateJSON()
 
@@ -18,7 +21,7 @@ EDGE_SIZE = const[4]
 NODE_FONT = const[5]
 FONT_SIZE = const[6]
 
-class QDMNodeContentWidget(QWidget):
+class QDMNodeContentWidget(QWidget, Serializable):
     def __init__(self, node, parent = None):
         super().__init__(parent)
         self.node = node
@@ -35,6 +38,15 @@ class QDMNodeContentWidget(QWidget):
     
     def setEditingFlag(self,value):
         self.node.scene.grScene.views()[0].editingFlag = value
+    
+    def serialize(self):
+        return OrderedDict([
+
+        ])
+
+    def deserialize(self, data, hashmap={}):
+        return False
+
 
 class QDMTextEdit(QTextEdit):
     def __init__(self,parent=None):
@@ -154,8 +166,9 @@ class QDMGraphicsNode(QGraphicsItem):
         painter.setBrush(Qt.NoBrush)
         painter.drawPath(path_outline.simplified())
               
-class Node():
+class Node(Serializable):
     def __init__(self, scene, title="undefined node", inputs = [], outputs=[]):
+        super().__init__()
         self.scene = scene
         self.title = title
         
@@ -205,6 +218,24 @@ class Node():
         self.scene.grScene.removeItem(self.grNode)
         self.grNode = None
         self.scene.removeNode(self)
+        
+    def serialize(self):
+        inputs, outputs = [], []
+        for socket in self.inputs: inputs.append(socket.serialize())
+        for socket in self.outputs: outputs.append(socket.serialize())
+        return OrderedDict([
+            ('id', self.id),
+            ('title', self.title),
+            ('pos_x', self.grNode.scenePos().x()),
+            ('pos_y', self.grNode.scenePos().y()),
+            ('inputs', inputs),
+            ('outputs', outputs),
+            ('content', self.content.serialize()),
+        ])
+
+    def deserialize(self, data, hashmap={}):
+        return False
+
 
         
         
