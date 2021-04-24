@@ -94,7 +94,7 @@ class sand_dunes(colorTheme):
     node_text_color = "#F2E6D8"
     node_wire_color = "#F2E6D8"
     
-    node_socket_trigger_color = "#00EE66"
+    node_socket_trigger_color = "#00FF77"
     node_socket_file_color = "#FF57A2"
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
@@ -262,5 +262,6 @@ class chili_pepper(colorTheme):
     list_background_color = "#f2eae4"
     window_text_color = "#262523"
     workspace_background_color = "#E8DBC5"
+
 
 

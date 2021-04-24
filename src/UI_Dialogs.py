@@ -356,7 +356,15 @@ class colorThemeEdit(QDialog):
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
         
-        self.layout.addWidget(QLabel("To change, type in hex color and press Enter"))
+        self.in_ok = QWidget()
+        self.in_ok_layout = QHBoxLayout()
+        self.in_ok_layout.addWidget(QLabel("To change, type in hex color and press Enter"))
+        self.in_ok_ok = QPushButton("Ok")
+        self.in_ok_ok.clicked.connect(self.close)
+        self.in_ok_layout.addWidget(self.in_ok_ok)
+        self.in_ok.setLayout(self.in_ok_layout)
+        
+        self.layout.addWidget(self.in_ok)
         self.layout.addWidget(self.tabs)
         
         self.show()
