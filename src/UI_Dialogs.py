@@ -358,7 +358,7 @@ class colorThemeEdit(QDialog):
         
         self.in_ok = QWidget()
         self.in_ok_layout = QHBoxLayout()
-        self.in_ok_layout.addWidget(QLabel("To change, type in hex color and press Enter"))
+        self.in_ok_layout.addWidget(QLabel("To change, type in hex color and press Enter\n(must restart to see changes)"))
         self.in_ok_ok = QPushButton("Ok")
         self.in_ok_ok.clicked.connect(self.close)
         self.in_ok_layout.addWidget(self.in_ok_ok)
@@ -419,10 +419,7 @@ class colorThemeEdit(QDialog):
                     tmp_color_file.write(x)
                     tmp_color_file.write("\n")
                 
-            with open("src/UI_ColorTheme.py", "w") as final_write:
-                for x in color_theme_file_hold:
-                    final_write.write(x)
-                    final_write.write("\n")
+            shutil.copyfile("src/tmp/uctp.tmp", "src/UI_ColorTheme.py")
         
         try:
             self.c_block_pixmap.fill(QColor(self.update_value))
