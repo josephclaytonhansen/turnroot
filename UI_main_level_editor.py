@@ -52,8 +52,11 @@ fullscreen = False
 zoom_level = 1.75
 mode_highlight = 0
 
-OPEN_LAST_FILE = "0x4f4c46"
-OPEN_NEW_FILE = "0x434e46"
+with open("src/tmp/aic.json", "r") as cons:
+    const = json.load(cons)
+    
+OPEN_LAST_FILE = const[0]
+OPEN_NEW_FILE = const[1]
 
 with open("src/tmp/rsp.tmp", "r") as read_file:
     tmp = read_file.read().strip()
