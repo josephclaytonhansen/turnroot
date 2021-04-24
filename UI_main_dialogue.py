@@ -7,11 +7,17 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
 from src.UI_updateJSON import updateJSON
 from src.UI_node_editor_wnd import NodeEditorWnd
+from src.UI_ProxyStyle import ProxyStyle
+import qtmodern.styles
+import qtmodern.windows
 
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 app = QApplication([])
+
+myStyle = ProxyStyle('Fusion')    
+app.setStyle(myStyle)
 
 screen = app.primaryScreen()
 size = screen.size()

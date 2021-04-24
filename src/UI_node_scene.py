@@ -1,8 +1,11 @@
 from src.UI_node_graphics_scene import QDMGraphicsScene
 from PyQt5.QtWidgets import *
 import json
+import qtmodern.styles
+import qtmodern.windows
 from collections import OrderedDict
 from src.UI_node_serializable import Serializable
+from src.UI_Dialogs import infoClose
 
 class Scene(Serializable):
     def __init__(self):
@@ -36,8 +39,12 @@ class Scene(Serializable):
         print(self.path)
         if self.path == None:
             self.saveFileDialog()
-            with open(self.path, "w") as file:
-                file.write( json.dumps( self.serialize(), indent=4 ) )
+            if self.path == None:
+                c = infoClose("No file selected")
+                c.exec_()
+            else:
+                with open(self.path, "w") as file:
+                    file.write( json.dumps( self.serialize(), indent=4 ) )
         else:
             with open(self.path, "w") as file:
                 file.write( json.dumps( self.serialize(), indent=4 ) )
@@ -49,9 +56,10 @@ class Scene(Serializable):
             self.deserialize(data)
     
     def saveFileDialog(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getSaveFileName(None,"Save","","Turnroot Node File (*.trnep)", options=options)
+        q = QFileDialog()
+        options = q.Options()
+        options |= q.DontUseNativeDialog
+        fileName, _ = q.getSaveFileName(None,"Save","","Turnroot Node File (*.trnep)", options=options)
         if fileName:
             self.path = fileName+".trnep"
 
