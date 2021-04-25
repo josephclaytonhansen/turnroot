@@ -212,11 +212,11 @@ class NodePreferencesDialog(QDialog):
         self.wire_width_label = QLabel("Normal")
         self.wire_width_label_selected = QLabel("Selected")
         self.wire_width = QSpinBox()
-        self.wire_width.setRange(1,10)
+        self.wire_width.setRange(1,20)
         self.wire_width.setValue(WIDTH)
         self.wire_width.valueChanged.connect(self.wireWidthChanged)
         self.wire_width_selected = QSpinBox()
-        self.wire_width_selected.setRange(2,20)
+        self.wire_width_selected.setRange(2,30)
         self.wire_width_selected.setValue(SELECTED_WIDTH)
         self.wire_width_selected.valueChanged.connect(self.wireSelectedWidthChanged)
         
