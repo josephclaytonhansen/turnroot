@@ -14,6 +14,12 @@ import math, json, pickle, sys
 
 with open("src/tmp/nesc.json", "r") as readfile:
     const = json.load(readfile)
+
+with open("src/tmp/aic.json", "r") as cons:
+    q_const = json.load(cons)
+    
+OPEN_LAST_FILE = q_const[0]
+OPEN_NEW_FILE = q_const[1]
     
 ZOOM_IN = const[0]
 ZOOM = const[1]
@@ -328,6 +334,8 @@ class QDMGraphicsView(QGraphicsView):
     def quitWindow(self):
         c = confirmAction(parent=self, s="quit the level editor")
         c.exec_()
+        with open("src/tmp/wer.taic", "w") as quit_reason:
+            quit_reason.write(OPEN_NEW_FILE)
         if(c.return_confirm):
             sys.exit()
             

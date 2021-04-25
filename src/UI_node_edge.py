@@ -128,8 +128,12 @@ EDGE_TYPE_DIRECT = 1
 EDGE_TYPE_BEZIER = 2
 EDGE_CP_ROUNDNESS = 100
 
+with open("src/tmp/node_preferences.json", "r") as r:
+    node_data = json.load(r)
+    default_edge = node_data["edge_type"]
+
 class Edge(Serializable):
-    def __init__(self, scene, start_socket=None, end_socket=None, edge_type=EDGE_TYPE_BEZIER):
+    def __init__(self, scene, start_socket=None, end_socket=None, edge_type=default_edge):
         super().__init__()
         self.scene = scene
 

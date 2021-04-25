@@ -9,7 +9,10 @@ ind = 0
 entries = ["Appearance", "System"]
 returnv = False
 import src.UI_colorTheme
-    
+
+EDGE_TYPE_DIRECT = 1
+EDGE_TYPE_BEZIER = 2
+
 #update below when importing more color themes!
 from src.UI_colorTheme import (
     midnight_spark, midnight_spark_yellow,
@@ -32,8 +35,20 @@ data = {"font_size": 15, "rfont_size": 15,
         "ah_rte": True, "ah_tasks": True, "ah_taskss": True,
         "ah_overlays": False, "theme_changed": False}
 
+node_data = {"edge_type": EDGE_TYPE_BEZIER}
+
 data = updateJSON()
 dumpJSON(data)
+   
+with open("src/tmp/nesc.json", "r") as readfile:
+    grid_const = json.load(readfile)
+    GRID_SIZE = grid_const[4]
+    GRID_ALT = grid_const[5]
+
+with open("src/tmp/neec.json", "r") as readfile:
+    edge_const = json.load(readfile)
+    WIDTH = edge_const[0]
+    SELECTED_WIDTH = edge_const[1]
 
 active_theme = getattr(src.UI_colorTheme, data["active_theme"])
 
@@ -47,7 +62,12 @@ else:
 
 class NodePreferencesDialog(QDialog):
     def __init__(self, parent=None):
+        global node_data
         data = updateJSON()
+        
+        with open("src/tmp/node_preferences.json", "r") as r:
+            node_data = json.load(r)
+
         try:
             active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         except:
@@ -92,6 +112,121 @@ class NodePreferencesDialog(QDialog):
         self.aes_layout = QGridLayout()
         self.aes_layout.setSpacing(25)
         
+        self.mfs = QLabel("Label font size")
+        self.mfs.setAlignment(Qt.AlignVCenter)
+        self.aes_layout.addWidget(self.mfs,0,0)
+        self.font_slider = QSlider(Qt.Horizontal)
+        self.font_slider.setTickPosition(3)
+        self.font_slider.setTickInterval(2)
+        self.font_slider.setValue(data["font_size"])
+        self.font_slider.setRange(8,30)
+        self.font_slider.setSingleStep(1)
+        self.font_slider.valueChanged.connect(self.font_size_changed)
+        self.aes_layout.addWidget(self.font_slider,0,1)
+        
+        self.rfs = QLabel("Text editor font size")
+        self.rfs.setAlignment( Qt.AlignVCenter)
+        self.aes_layout.addWidget(self.rfs,2,0)
+        self.rfont_slider = QSlider(Qt.Horizontal)
+        self.rfont_slider.setTickPosition(3)
+        self.rfont_slider.setTickInterval(2)
+        self.rfont_slider.setValue(data["rfont_size"])
+        self.rfont_slider.setRange(8,30)
+        self.rfont_slider.setSingleStep(1)
+        self.rfont_slider.valueChanged.connect(self.rfont_size_changed)
+        self.aes_layout.addWidget(self.rfont_slider,2,1)
+        
+        self.ct = QLabel("Color theme\n (will automatically restart)")
+        self.ct.setAlignment( Qt.AlignVCenter)
+        self.aes_layout.addWidget(self.ct,4,0)
+        self.color_theme_list = QListWidget()
+        self.color_theme_list.setStyleSheet("background-color:"+self.active_theme.list_background_color+";")
+        self.color_theme_list.addItems(color_themes)
+        self.color_theme_list.setCurrentRow(active_index)
+        self.current_theme_check = color_themes[active_index]
+        self.current_font = data["font_size"]
+        self.color_theme_list.currentTextChanged.connect(self.color_theme_changed)
+        self.aes_layout.addWidget(self.color_theme_list,4,1)
+        self.ct_edit = QPushButton("Edit color theme")
+        self.ct_edit.clicked.connect(self.colorThemeDialog)
+        self.aes_layout.addWidget(self.ct_edit,5,1)
+        
+        self.ls = QLabel("Node wire style")
+        self.ls.setAlignment( Qt.AlignVCenter)
+        self.aes_layout.addWidget(self.ls,6,0)
+        
+        self.radioGroup = QWidget()
+        self.radioGroup_layout = QHBoxLayout()
+        self.radioGroup.setLayout(self.radioGroup_layout)
+        
+        self.ls_radio_straight = QRadioButton("Straight")
+        if node_data["edge_type"] == EDGE_TYPE_BEZIER:
+            self.ls_radio_straight.setChecked(False)
+        else:
+            self.ls_radio_straight.setChecked(True)
+        self.ls_radio_straight.edge_type = EDGE_TYPE_DIRECT
+        self.ls_radio_straight.toggled.connect(self.changeWireType)
+        self.radioGroup_layout.addWidget(self.ls_radio_straight)
+        
+        self.ls_radio_curved = QRadioButton("Curved")
+        if node_data["edge_type"] == EDGE_TYPE_BEZIER:
+            self.ls_radio_curved.setChecked(True)
+        else:
+            self.ls_radio_curved.setChecked(False)
+        self.ls_radio_curved.edge_type = EDGE_TYPE_BEZIER
+        self.ls_radio_curved.toggled.connect(self.changeWireType)
+        self.radioGroup_layout.addWidget(self.ls_radio_curved)
+        self.aes_layout.addWidget(self.radioGroup,6,1)
+        
+        self.gs = QLabel("Grid spacing")
+        self.ls.setAlignment( Qt.AlignVCenter)
+        self.aes_layout.addWidget(self.gs,7,0)
+        self.gs_boxes = QWidget()
+        self.gs_boxes_layout = QHBoxLayout()
+        self.gs_boxes.setLayout(self.gs_boxes_layout)
+        
+        self.grid_size_box_label = QLabel("Small")
+        self.grid_size_alt_box_label = QLabel("Large")
+        self.grid_size_box = QSpinBox()
+        self.grid_size_box.setRange(10,60)
+        self.grid_size_box.setValue(GRID_SIZE)
+        self.grid_size_box.valueChanged.connect(self.gridSmallChanged)
+        self.grid_size_alt_box = QSpinBox()
+        self.grid_size_alt_box.setRange(2,10)
+        self.grid_size_alt_box.setValue(GRID_ALT)
+        self.grid_size_alt_box.valueChanged.connect(self.gridLargeChanged)
+        
+        self.gs_boxes_layout.addWidget(self.grid_size_box_label)
+        self.gs_boxes_layout.addWidget(self.grid_size_box)
+        self.gs_boxes_layout.addWidget(self.grid_size_alt_box_label)
+        self.gs_boxes_layout.addWidget(self.grid_size_alt_box)
+        self.aes_layout.addWidget(self.gs_boxes, 7,1)
+        
+        self.ww = QLabel("Wire width")
+        self.ls.setAlignment( Qt.AlignVCenter)
+        self.aes_layout.addWidget(self.ww,8,0)
+        self.ww_boxes = QWidget()
+        self.ww_boxes_layout = QHBoxLayout()
+        self.ww_boxes.setLayout(self.ww_boxes_layout)
+        
+        self.wire_width_label = QLabel("Normal")
+        self.wire_width_label_selected = QLabel("Selected")
+        self.wire_width = QSpinBox()
+        self.wire_width.setRange(1,10)
+        self.wire_width.setValue(WIDTH)
+        self.wire_width.valueChanged.connect(self.wireWidthChanged)
+        self.wire_width_selected = QSpinBox()
+        self.wire_width_selected.setRange(2,20)
+        self.wire_width_selected.setValue(SELECTED_WIDTH)
+        self.wire_width_selected.valueChanged.connect(self.wireSelectedWidthChanged)
+        
+        self.ww_boxes_layout.addWidget(self.wire_width_label)
+        self.ww_boxes_layout.addWidget(self.wire_width)
+        self.ww_boxes_layout.addWidget(self.wire_width_label_selected)
+        self.ww_boxes_layout.addWidget(self.wire_width_selected)
+        self.aes_layout.addWidget(self.ww_boxes, 8,1)
+
+        
         self.aes.setLayout(self.aes_layout)
         self.prefs_layout.addWidget(self.aes)
         
@@ -110,9 +245,42 @@ class NodePreferencesDialog(QDialog):
         layout.addWidget(self.cancelBox, 12, 2)
         
         self.setLayout(layout)
+    
+    def gridLargeChanged(self):
+        with open("src/tmp/nesc.json", "w") as write:
+            grid_const[5] = self.sender().value()
+            json.dump(grid_const, write)
+    
+    def gridSmallChanged(self):
+        with open("src/tmp/nesc.json", "w") as write:
+            grid_const[4] = self.sender().value()
+            json.dump(grid_const, write)
+    
+    def wireWidthChanged(self):
+        with open("src/tmp/neec.json", "w") as write:
+            edge_const[0] = self.sender().value()
+            json.dump(edge_const, write)
+    
+    def wireSelectedWidthChanged(self):
+        with open("src/tmp/neec.json", "w") as write:
+            edge_const[1] = self.sender().value()
+            json.dump(edge_const, write)
         
     def cancel(self):
         self.close()
+    
+    def changeWireType(self):
+        print(self.sender().edge_type)
+        node_data["edge_type"] = self.sender().edge_type
+        with open("src/tmp/node_preferences.json", "w") as wf:
+            json.dump(node_data, wf)
+        
+    def colorThemeDialog(self):
+        c = confirmAction(parent=self, s="edit this color theme")
+        c.exec_()
+        if(c.return_confirm):
+            d= colorThemeEdit(parent=self)
+            d.exec_()
         
     def category_change(self, s):
         data = updateJSON()
