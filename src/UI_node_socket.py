@@ -81,7 +81,7 @@ class Socket(Serializable):
         self.type = t
         self.grSocket = QDMGraphicsSocket(self, self.type)
         self.grSocket.direction = self.direction
-        self.type = self.type
+        self.socket_type = self.type
         self.grSocket.setPos(*self.node.getSocketPosition(index,position))
         
         self.edge = None
@@ -104,6 +104,8 @@ class Socket(Serializable):
         ])
 
     def deserialize(self, data, hashmap={}):
-        return False
+        self.id = data['id']
+        hashmap[data['id']] = self
+        return True
 
 

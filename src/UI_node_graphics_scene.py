@@ -8,7 +8,9 @@ from src.UI_node_socket import QDMGraphicsSocket
 from src.UI_node_edge import QDMGraphicsEdge, Edge, EDGE_TYPE_BEZIER
 from src.UI_node_graphics_cutline import QDMCutLine
 
-import math, json, pickle
+from src.UI_Dialogs import confirmAction
+
+import math, json, pickle, sys
 
 with open("src/tmp/nesc.json", "r") as readfile:
     const = json.load(readfile)
@@ -247,13 +249,44 @@ class QDMGraphicsView(QGraphicsView):
     
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Delete or event.key() == Qt.Key_X:
-            if not self.editingFlag:
-                self.deleteSelected()
+            if event.modifiers() == Qt.ShiftModifier and not self.editingFlag:
+                self.grScene.scene.clear()
             else:
-                super().keyPressEvent(event)
+                if not self.editingFlag:
+                    self.deleteSelected()
+                else:
+                    super().keyPressEvent(event)
         elif event.key() == Qt.Key_S:
             if event.modifiers() == Qt.ControlModifier:
                 self.grScene.scene.saveToFile()
+                
+            elif event.modifiers() == Qt.ControlModifier | Qt.ShiftModifier:
+                self.grScene.scene.path = None
+                self.grScene.scene.saveToFile()
+            else:
+                super().keyPressEvent(event)
+        elif event.key() == Qt.Key_O:
+            if event.modifiers() == Qt.ControlModifier:
+                self.grScene.scene.loadFromFile()
+            else:
+                super().keyPressEvent(event)
+        elif event.key() == Qt.Key_N:
+            if event.modifiers() == Qt.ControlModifier:
+                self.grScene.scene.path = None
+                self.grScene.scene.clear()
+            else:
+                super().keyPressEvent(event)
+        elif event.key() == Qt.Key_Q:
+            if event.modifiers() == Qt.ControlModifier:
+                self.quitWindow()
+            else:
+                super().keyPressEvent(event)
+    
+    def quitWindow(self):
+        c = confirmAction(parent=self, s="quit the level editor")
+        c.exec_()
+        if(c.return_confirm):
+            sys.exit()
             
     def cutIntersectingEdges(self):
         for ix in range(len(self.cutline.line_points) - 1):

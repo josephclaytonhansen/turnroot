@@ -129,19 +129,57 @@ EDGE_TYPE_BEZIER = 2
 EDGE_CP_ROUNDNESS = 100
 
 class Edge(Serializable):
-    def __init__(self,scene,start_socket,end_socket, type = 2):
+    def __init__(self, scene, start_socket=None, end_socket=None, edge_type=EDGE_TYPE_BEZIER):
         super().__init__()
         self.scene = scene
+
         self.start_socket = start_socket
         self.end_socket = end_socket
-        self.start_socket.edge = self
+        self.edge_type = edge_type
+
+        self.scene.addEdge(self)
+
+
+    @property
+    def start_socket(self): return self._start_socket
+
+    @start_socket.setter
+    def start_socket(self, value):
+        self._start_socket = value
+        if self.start_socket is not None:
+            self.start_socket.edge = self
+
+    @property
+    def end_socket(self): return self._end_socket
+
+    @end_socket.setter
+    def end_socket(self, value):
+        self._end_socket= value
         if self.end_socket is not None:
             self.end_socket.edge = self
-        self.grEdge = QDMGraphicsEdgeDirect(self) if type == EDGE_TYPE_DIRECT else QDMGraphicsEdgeBezier(self)
-        self.updatePositions()
+
+    @property
+    def edge_type(self): return self._edge_type
+
+    @edge_type.setter
+    def edge_type(self, value):
+        if hasattr(self, 'grEdge') and self.grEdge is not None:
+            self.scene.grScene.removeItem(self.grEdge)
+
+        self._edge_type = value
+        if self.edge_type == EDGE_TYPE_DIRECT:
+            self.grEdge = QDMGraphicsEdgeDirect(self)
+        elif self.edge_type == EDGE_TYPE_BEZIER:
+            self.grEdge = QDMGraphicsEdgeBezier(self)
+        else:
+            self.grEdge = QDMGraphicsEdgeBezier(self)
+
         self.scene.grScene.addItem(self.grEdge)
-        self.scene.addEdge(self)
-   
+
+        if self.start_socket is not None:
+            self.updatePositions()
+
+
     def updatePositions(self):
         source_pos = self.start_socket.getSocketPosition()
         source_pos[0] += self.start_socket.node.grNode.pos().x()
@@ -155,15 +193,17 @@ class Edge(Serializable):
         else:
             self.grEdge.setDestination(*source_pos)
         self.grEdge.update()
-   
+
+
     def remove_from_sockets(self):
         if self.start_socket is not None:
             self.start_socket.edge = None
         if self.end_socket is not None:
-            self.end_socket = None
+            self.end_socket.edge = None
         self.end_socket = None
-        self.end_socket = None
-    
+        self.start_socket = None
+
+
     def remove(self):
         self.remove_from_sockets()
         self.scene.grScene.removeItem(self.grEdge)
@@ -172,7 +212,8 @@ class Edge(Serializable):
             self.scene.removeEdge(self)
         except ValueError:
             pass
-        
+
+
     def serialize(self):
         return OrderedDict([
             ('id', self.id),
@@ -182,5 +223,7 @@ class Edge(Serializable):
         ])
 
     def deserialize(self, data, hashmap={}):
-        return False
-
+        self.id = data['id']
+        self.start_socket = hashmap[data['start']]
+        self.end_socket = hashmap[data['end']]
+        self.edge_type = data['edge_type']

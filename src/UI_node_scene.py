@@ -6,6 +6,9 @@ import qtmodern.windows
 from collections import OrderedDict
 from src.UI_node_serializable import Serializable
 from src.UI_Dialogs import infoClose
+from src.UI_node_node import Node
+from src.UI_node_edge import Edge
+
 
 class Scene(Serializable):
     def __init__(self):
@@ -49,11 +52,29 @@ class Scene(Serializable):
             with open(self.path, "w") as file:
                 file.write( json.dumps( self.serialize(), indent=4 ) )
 
-    def loadFromFile(self, filename):
-        with open(filename, "r") as file:
-            raw_data = file.read()
-            data = json.loads(raw_data, encoding='utf-8')
-            self.deserialize(data)
+    def openFileDialog(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getOpenFileName(None,"Open", "","Turnroot Node File (*.trnep)", options=options)
+        if fileName:
+            self.path = fileName
+
+    def loadFromFile(self):
+        if self.path == None:
+            self.openFileDialog()
+            if self.path == None:
+                c = infoClose("No file selected")
+                c.exec_()
+            else:
+                with open(self.path, "r") as file:
+                    raw_data = file.read()
+                    data = json.loads(raw_data)
+                    self.deserialize(data)
+        else:
+            with open(self.path, "r") as file:
+                raw_data = file.read()
+                data = json.loads(raw_data)
+                self.deserialize(data)
     
     def saveFileDialog(self):
         q = QFileDialog()
@@ -62,6 +83,10 @@ class Scene(Serializable):
         fileName, _ = q.getSaveFileName(None,"Save","","Turnroot Node File (*.trnep)", options=options)
         if fileName:
             self.path = fileName+".trnep"
+    
+    def clear(self):
+        while len(self.nodes) > 0:
+            self.nodes[0].remove()
 
     def serialize(self):
         nodes, edges = [], []
@@ -77,4 +102,16 @@ class Scene(Serializable):
 
     def deserialize(self, data, hashmap={}):
         print("deserializating data", data)
-        return False
+        self.clear()
+        hashmap = {}
+
+        # create nodes
+        for node_data in data['nodes']:
+            Node(self).deserialize(node_data, hashmap)
+
+        # create edges
+        for edge_data in data['edges']:
+            Edge(self).deserialize(edge_data, hashmap)
+
+        return True
+

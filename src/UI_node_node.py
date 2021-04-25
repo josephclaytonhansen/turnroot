@@ -170,6 +170,7 @@ class Node(Serializable):
     def __init__(self, scene, title="undefined node", inputs = [], outputs=[]):
         super().__init__()
         self.scene = scene
+        self._title = title
         self.title = title
         
         self.content = QDMNodeContentWidget(self)
@@ -179,6 +180,7 @@ class Node(Serializable):
         self.scene.grScene.addItem(self.grNode)
         self.inputs = []
         self.outputs = []
+        
         counter = 0
         for item in inputs:
             self.inputs.append(Socket(node=self,t=item,index=counter, position = LEFT_TOP))
@@ -187,12 +189,22 @@ class Node(Serializable):
         for item in outputs:
             self.outputs.append(Socket(node=self,t=item, index=counter, position = RIGHT_TOP))
             counter += 1
+
     @property
     def pos(self):
         return self.grNode.pos()
     
     def setPos(self,x,y):
         self.grNode.setPos(x,y)
+    
+    @property
+    def title(self):
+        return self._title
+    
+    @title.setter
+    def title(self, value):
+        self._title = value
+        #self.grNode.title = self._title
     
     def getSocketPosition(self, index, position):
         if position in (LEFT_TOP, LEFT_BOTTOM):
@@ -234,8 +246,27 @@ class Node(Serializable):
         ])
 
     def deserialize(self, data, hashmap={}):
-        return False
+        self.id = data['id']
+        hashmap[data['id']] = self
 
+        self.setPos(data['pos_x'], data['pos_y'])
+        self.title = data['title']
 
-        
-        
+        data['inputs'].sort(key=lambda socket: socket['index'] + socket['position'] * 10000 )
+        data['outputs'].sort(key=lambda socket: socket['index'] + socket['position'] * 10000 )
+
+        self.inputs = []
+        for socket_data in data['inputs']:
+            new_socket = Socket(node=self, index=socket_data['index'], position=socket_data['position'],
+                                t=socket_data['socket_type'])
+            new_socket.deserialize(socket_data, hashmap)
+            self.inputs.append(new_socket)
+
+        self.outputs = []
+        for socket_data in data['outputs']:
+            new_socket = Socket(node=self, index=socket_data['index'], position=socket_data['position'],
+                                t=socket_data['socket_type'])
+            new_socket.deserialize(socket_data, hashmap)
+            self.outputs.append(new_socket)
+
+        return True

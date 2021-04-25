@@ -255,7 +255,7 @@ class main(QMainWindow):
         self.addToolBar(self.toolbar)
         
         #add menu actions
-        self.quitButton = QAction("Quit", self)
+        self.quitButton = QAction("&Quit\tCrtl+Q", self)
         self.quitButton.triggered.connect(self.quitWindow)
         self.aboutButton = QAction("About", self)
         self.aboutButton.triggered.connect(self.about)
@@ -263,11 +263,11 @@ class main(QMainWindow):
         self.checkUpdatesButton.triggered.connect(self.checkUpdates)
         self.saveAsButton = QAction("Save As", self)
         self.saveAsButton.triggered.connect(self.saveFileDialog)
-        self.SaveButton = QAction("Save", self)
+        self.SaveButton = QAction("&Save\tCrtl+S", self)
         self.SaveButton.triggered.connect(self.Save)
-        self.OpenButton = QAction("Open", self)
+        self.OpenButton = QAction("&Open\tCrtl+O", self)
         self.OpenButton.triggered.connect(self.openFileDialog)
-        self.newFileButton = QAction("New file", self)
+        self.newFileButton = QAction("&New\tCrtl+N", self)
         self.newFileButton.triggered.connect(self.newFile)
         
         #file menu items
