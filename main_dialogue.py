@@ -102,6 +102,14 @@ class main(QMainWindow):
         self.clearButton.triggered.connect(self.m.scene.clear)
         editMenu.addAction(self.clearButton)
         
+        self.undoButton = QAction("Undo\tCrtl+Z", self)
+        self.undoButton.triggered.connect(self.m.scene.history.undo)
+        editMenu.addAction(self.undoButton)
+        
+        self.redoButton = QAction("Redo\tCrtl+Y", self)
+        self.redoButton.triggered.connect(self.m.scene.history.redo)
+        editMenu.addAction(self.redoButton)
+        
         with open("src/tmp/wer.taic", "r") as tmp_reason:
             if tmp_reason.read() == OPEN_LAST_FILE:
                 with open("src/tmp/lsf.taic", "r") as open_file:

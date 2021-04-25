@@ -131,6 +131,10 @@ class QDMGraphicsView(QGraphicsView):
             res = self.edgeDragEnd(item)
             if res: return
         
+        if self.dragMode() == QGraphicsView.RubberBandDrag:
+            self.grScene.scene.history.storeHistory("Selection changed")
+
+        
         if item is None:
             if event.modifiers() == Qt.ControlModifier:
                 self.mode = MODE_EDGE_CUT
@@ -165,6 +169,7 @@ class QDMGraphicsView(QGraphicsView):
             self.dragEdge.start_socket.setConnectedEdge(self.dragEdge)
             self.dragEdge.end_socket.setConnectedEdge(self.dragEdge)
             self.dragEdge.updatePositions()
+            self.grScene.scene.history.storeHistory("Created new edge by dragging")
             print(socket_names[self.dragEdge.start_socket.type],
                   socket_names[self.dragEdge.end_socket.type])
             return True
@@ -310,7 +315,13 @@ class QDMGraphicsView(QGraphicsView):
                 #help
             else:
                 super().keyPressEvent(event)
-
+                
+        elif event.key() == Qt.Key_Z and event.modifiers() == Qt.ControlModifier and self.editingFlag == False:
+            self.grScene.scene.history.undo()
+            
+        elif event.key() == Qt.Key_Y and event.modifiers() == Qt.ControlModifier and self.editingFlag == False:
+            self.grScene.scene.history.redo()
+            
         else:
             super().keyPressEvent(event)
     
@@ -328,6 +339,7 @@ class QDMGraphicsView(QGraphicsView):
             for edge in self.grScene.scene.edges:
                 if edge.grEdge.intersectsWith(p1, p2):
                     edge.remove()
+        self.grScene.scene.history.storeHistory("Delete cutted edges")
             
     def deleteSelected(self):
         for item in self.grScene.selectedItems():
@@ -335,6 +347,7 @@ class QDMGraphicsView(QGraphicsView):
                 item.edge.remove()
             elif hasattr(item, 'node'):
                 item.node.remove()
+        self.grScene.scene.history.storeHistory("Delete selected")
         
 
     def getItemAtClick(self,event):

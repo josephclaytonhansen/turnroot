@@ -8,7 +8,7 @@ from src.UI_node_serializable import Serializable
 from src.UI_Dialogs import infoClose
 from src.UI_node_node import Node
 from src.UI_node_edge import Edge
-
+from src.UI_node_scene_history import SceneHistory
 
 class Scene(Serializable):
     def __init__(self):
@@ -21,6 +21,7 @@ class Scene(Serializable):
         self.scene_height = 64000
         
         self.initUI()
+        self.history = SceneHistory(self)
     
     def initUI(self):
         self.grScene = QDMGraphicsScene(self)
@@ -101,7 +102,6 @@ class Scene(Serializable):
         ])
 
     def deserialize(self, data, hashmap={}):
-        print("deserializating data", data)
         self.clear()
         hashmap = {}
 
