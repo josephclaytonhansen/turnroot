@@ -245,7 +245,7 @@ class QDMGraphicsView(QGraphicsView):
         super().mouseReleaseEvent(event)
     
     def mouseMoveEvent(self,event):
-        
+        self.last_scene_mouse_position = self.mapToScene(event.pos())
         if self.mode == MODE_EDGE_DRAG:
             self.dragEdge.updatePositions()
             pos = self.mapToScene(event.pos())
@@ -329,9 +329,36 @@ class QDMGraphicsView(QGraphicsView):
         elif event.key() == Qt.Key_Y and event.modifiers() == Qt.ControlModifier and self.editingFlag == False:
             self.grScene.scene.history.redo()
             
+        elif event.key() == Qt.Key_C and event.modifiers() == Qt.ControlModifier and self.editingFlag == False:
+            self.onEditCopy()
+        
+        elif event.key() == Qt.Key_V and event.modifiers() == Qt.ControlModifier and self.editingFlag == False:
+            self.onEditPaste()
+            
         else:
             super().keyPressEvent(event)
             
+    def onEditCopy(self):
+        clip_data = self.grScene.scene.clipboard.serializeSelected(delete=False)
+        str_data = json.dumps(clip_data, indent=4)
+        QApplication.instance().clipboard().setText(str_data)
+
+    def onEditPaste(self):
+        raw_data = QApplication.instance().clipboard().text()
+
+        try:
+            clip_data = json.loads(raw_data)
+        except ValueError as e:
+            print("Pasting of not valid json data!", e)
+            return
+
+        # check if the json data are correct
+        if 'nodes' not in clip_data:
+            print("JSON does not contain any nodes!")
+            return
+
+        self.grScene.scene.clipboard.deserializeFromClipboard(clip_data)
+        
     def OptionsMenu(self):
         p = NodePreferencesDialog(parent=self)
         theme = p.exec_()

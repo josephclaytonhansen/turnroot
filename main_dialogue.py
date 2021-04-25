@@ -97,6 +97,14 @@ class main(QMainWindow):
         self.quitButton.triggered.connect(self.quitWindow)
         fileMenu.addAction(self.quitButton)
         
+        self.copyButton = QAction("Copy\tCrtl+C", self)
+        self.copyButton.triggered.connect(self.onEditCopy)
+        editMenu.addAction(self.copyButton)
+        
+        self.pasteButton = QAction("Paste\tCrtl+V", self)
+        self.pasteButton.triggered.connect(self.onEditPaste)
+        editMenu.addAction(self.pasteButton)
+        
         self.deleteButton = QAction("Delete\tDel or X", self)
         self.deleteButton.triggered.connect(self.m.view.deleteSelected)
         editMenu.addAction(self.deleteButton)
@@ -122,7 +130,28 @@ class main(QMainWindow):
                     except:
                         c = infoClose("Last saved file not found\n(opening new file)")
                         c.exec_()
-    
+
+    def onEditCopy(self):
+        clip_data = self.m.scene.clipboard.serializeSelected(delete=False)
+        str_data = json.dumps(clip_data, indent=4)
+        app.instance().clipboard().setText(str_data)
+
+    def onEditPaste(self):
+        raw_data = app.instance().clipboard().text()
+
+        try:
+            clip_data = json.loads(raw_data)
+        except ValueError as e:
+            print("Pasting of not valid json data!", e)
+            return
+
+        # check if the json data are correct
+        if 'nodes' not in clip_data:
+            print("JSON does not contain any nodes!")
+            return
+
+        self.m.scene.clipboard.deserializeFromClipboard(clip_data)
+
     def New(self):
         self.m.scene.clear()
         self.m.scene.path = None
