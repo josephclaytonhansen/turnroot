@@ -9,6 +9,7 @@ from src.UI_node_edge import QDMGraphicsEdge, Edge, EDGE_TYPE_BEZIER
 from src.UI_node_graphics_cutline import QDMCutLine
 
 from src.UI_Dialogs import confirmAction
+from src.UI_node_preferences_dialog import NodePreferencesDialog
 
 import math, json, pickle, sys
 
@@ -277,7 +278,7 @@ class QDMGraphicsView(QGraphicsView):
                 self.grScene.scene.saveToFile()
             else:
                 if not self.editingFlag:
-                    pass
+                    self.OptionsMenu()
                     #open preferences
                 else:
                     super().keyPressEvent(event)
@@ -287,7 +288,7 @@ class QDMGraphicsView(QGraphicsView):
                 self.grScene.scene.loadFromFile()
             else:
                 if not self.editingFlag:
-                    pass
+                    self.OptionsMenu()
                 else:
                     super().keyPressEvent(event)
                     
@@ -330,7 +331,29 @@ class QDMGraphicsView(QGraphicsView):
             
         else:
             super().keyPressEvent(event)
-    
+            
+    def OptionsMenu(self):
+        p = NodePreferencesDialog(parent=self)
+        theme = p.exec_()
+        data = updateJSON()
+        
+        #apply data from preferences
+        if (theme != 0):
+            active_theme = getattr(UI_colorTheme, data["active_theme"])
+            if (data["theme_changed"] == True):
+                self.m.scene.saveToFile()
+                    
+                with open("src/tmp/wer.taic", "w") as tmp_reason:
+                    tmp_reason.write(OPEN_LAST_FILE)
+                with open("src/tmp/lsf.taic", "w") as next_open_file:
+                    try:
+                        next_open_file.write(self.m.scene.path)
+                    except:
+                        c = infoClose("Invalid path")
+                        c.exec_()
+                    
+                os.execl(sys.executable, sys.executable, *sys.argv)
+                
     def quitWindow(self):
         c = confirmAction(parent=self, s="quit the level editor")
         c.exec_()

@@ -24,7 +24,7 @@ app.setStyle(myStyle)
 screen = app.primaryScreen()
 size = screen.size()
 
-title = "Turnroot Game Dialogue Editor"
+title = "Turnroot Node Editor"
 
 with open("src/tmp/aic.json", "r") as cons:
     const = json.load(cons)
@@ -35,14 +35,13 @@ OPEN_NEW_FILE = const[1]
 class mainN(NodeEditorWnd):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle(title)
         self.setMinimumSize(QSize(int(size.width()/3), int(size.height()/3)))
         self.setMaximumSize(QSize(int(size.width()), int(size.height())))
 
 class main(QMainWindow):
     def __init__(self):
         super().__init__()
-        
+        self.setWindowTitle(title)
         self.toolbar = QToolBar("")
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
@@ -98,6 +97,10 @@ class main(QMainWindow):
         self.quitButton.triggered.connect(self.quitWindow)
         fileMenu.addAction(self.quitButton)
         
+        self.deleteButton = QAction("Delete\tDel or X", self)
+        self.deleteButton.triggered.connect(self.m.view.deleteSelected)
+        editMenu.addAction(self.deleteButton)
+        
         self.clearButton = QAction("Clear\tShift+X", self)
         self.clearButton.triggered.connect(self.m.scene.clear)
         editMenu.addAction(self.clearButton)
@@ -131,6 +134,8 @@ class main(QMainWindow):
     def quitWindow(self):
         c = confirmAction(parent=self, s="quit the level editor")
         c.exec_()
+        with open("src/tmp/wer.taic", "w") as quit_reason:
+            quit_reason.write(OPEN_NEW_FILE)
         if(c.return_confirm):
             sys.exit()
     
