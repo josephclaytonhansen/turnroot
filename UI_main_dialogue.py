@@ -23,8 +23,6 @@ app.setStyle(myStyle)
 screen = app.primaryScreen()
 size = screen.size()
 
-RESIZE_F = .6
-
 title = "Turnroot Game Dialogue Editor" 
 class mainN(NodeEditorWnd):
     def __init__(self):
@@ -32,15 +30,27 @@ class mainN(NodeEditorWnd):
         self.setWindowTitle(title)
         self.setMinimumSize(QSize(int(size.width()/3), int(size.height()/3)))
         self.setMaximumSize(QSize(int(size.width()), int(size.height())))
-        self.resize(QSize(int(size.width()*RESIZE_F), int(size.height()*RESIZE_F)))
 
 class main(QMainWindow):
     def __init__(self):
         super().__init__()
+        
         self.toolbar = QToolBar("")
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
         self.toolbar.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        
+        self.optionsButton = QAction(QIcon("src/ui_icons/white/settings-17-32.png"),"Options (S)", self)
+        self.helpButton = QAction(QIcon("src/ui_icons/white/question-mark-4-32.png"),"Read docs (H)", self)
+        self.backButton = QAction(QIcon("src/ui_icons/white/grid-three-up-32.png"),"Return to editor selection (Esc)", self)
+        self.forumButton = QAction(QIcon("src/ui_icons/white/speech-bubble-2-32.png"),"Access forum (Q)", self)
+        
+        self.toolbar.addAction(self.backButton)
+        self.toolbar.addAction(self.optionsButton)
+        self.toolbar.addAction(self.helpButton)
+        self.toolbar.addAction(self.forumButton)
+        
+        self.addToolBar(self.toolbar)
         
         #add Menu, File
         self.menubar = self.menuBar()

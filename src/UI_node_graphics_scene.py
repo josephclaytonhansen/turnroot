@@ -256,6 +256,7 @@ class QDMGraphicsView(QGraphicsView):
                     self.deleteSelected()
                 else:
                     super().keyPressEvent(event)
+                    
         elif event.key() == Qt.Key_S:
             if event.modifiers() == Qt.ControlModifier:
                 self.grScene.scene.saveToFile()
@@ -264,23 +265,54 @@ class QDMGraphicsView(QGraphicsView):
                 self.grScene.scene.path = None
                 self.grScene.scene.saveToFile()
             else:
-                super().keyPressEvent(event)
+                if not self.editingFlag:
+                    pass
+                    #open preferences
+                else:
+                    super().keyPressEvent(event)
+                    
         elif event.key() == Qt.Key_O:
             if event.modifiers() == Qt.ControlModifier:
                 self.grScene.scene.loadFromFile()
             else:
-                super().keyPressEvent(event)
+                if not self.editingFlag:
+                    pass
+                else:
+                    super().keyPressEvent(event)
+                    
         elif event.key() == Qt.Key_N:
             if event.modifiers() == Qt.ControlModifier:
                 self.grScene.scene.path = None
                 self.grScene.scene.clear()
             else:
                 super().keyPressEvent(event)
+                
         elif event.key() == Qt.Key_Q:
             if event.modifiers() == Qt.ControlModifier:
                 self.quitWindow()
             else:
+                if not self.editingFlag:
+                    pass
+                    #open forums
+                else:
+                    super().keyPressEvent(event)
+        
+        elif event.key() == Qt.Key_Escape:
+            if not self.editingFlag:
+                pass
+                #back
+            else:
                 super().keyPressEvent(event)
+        
+        elif event.key() == Qt.Key_H:
+            if not self.editingFlag:
+                pass
+                #help
+            else:
+                super().keyPressEvent(event)
+
+        else:
+            super().keyPressEvent(event)
     
     def quitWindow(self):
         c = confirmAction(parent=self, s="quit the level editor")
