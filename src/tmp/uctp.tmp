@@ -89,8 +89,8 @@ class sand_dunes(colorTheme):
     node_grid_lines_color = "#d4ac7b"
     
     node_title_color = "#f5e3ce"
-    node_title_background_color = "#402d17"
-    node_background_color = "#4d371d"
+    node_title_background_color = "#4f391f"
+    node_background_color = "#6f593f"
     node_text_color = "#F2E6D8"
     node_wire_color = "#fBedBA"
     
@@ -316,6 +316,12 @@ class custom(colorTheme):
                  "node_socket_boolean_color", "node_wire_error_color"]
 
     groups = [level_editor, node_grid]
+
+
+
+
+
+
 
 
 

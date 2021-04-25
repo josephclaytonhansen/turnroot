@@ -112,31 +112,7 @@ class NodePreferencesDialog(QDialog):
         self.aes_layout = QGridLayout()
         self.aes_layout.setSpacing(25)
         
-        self.mfs = QLabel("Label font size")
-        self.mfs.setAlignment(Qt.AlignVCenter)
-        self.aes_layout.addWidget(self.mfs,0,0)
-        self.font_slider = QSlider(Qt.Horizontal)
-        self.font_slider.setTickPosition(3)
-        self.font_slider.setTickInterval(2)
-        self.font_slider.setValue(data["font_size"])
-        self.font_slider.setRange(8,30)
-        self.font_slider.setSingleStep(1)
-        self.font_slider.valueChanged.connect(self.font_size_changed)
-        self.aes_layout.addWidget(self.font_slider,0,1)
-        
-        self.rfs = QLabel("Text editor font size")
-        self.rfs.setAlignment( Qt.AlignVCenter)
-        self.aes_layout.addWidget(self.rfs,2,0)
-        self.rfont_slider = QSlider(Qt.Horizontal)
-        self.rfont_slider.setTickPosition(3)
-        self.rfont_slider.setTickInterval(2)
-        self.rfont_slider.setValue(data["rfont_size"])
-        self.rfont_slider.setRange(8,30)
-        self.rfont_slider.setSingleStep(1)
-        self.rfont_slider.valueChanged.connect(self.rfont_size_changed)
-        self.aes_layout.addWidget(self.rfont_slider,2,1)
-        
-        self.ct = QLabel("Color theme\n (will automatically restart)")
+        self.ct = QLabel("Color theme")
         self.ct.setAlignment( Qt.AlignVCenter)
         self.aes_layout.addWidget(self.ct,4,0)
         self.color_theme_list = QListWidget()
@@ -188,10 +164,12 @@ class NodePreferencesDialog(QDialog):
         self.grid_size_box_label = QLabel("Small")
         self.grid_size_alt_box_label = QLabel("Large")
         self.grid_size_box = QSpinBox()
+        self.grid_size_box.setStyleSheet("background-color:"+self.active_theme.list_background_color+";")
         self.grid_size_box.setRange(10,60)
         self.grid_size_box.setValue(GRID_SIZE)
         self.grid_size_box.valueChanged.connect(self.gridSmallChanged)
         self.grid_size_alt_box = QSpinBox()
+        self.grid_size_alt_box.setStyleSheet("background-color:"+self.active_theme.list_background_color+";")
         self.grid_size_alt_box.setRange(2,10)
         self.grid_size_alt_box.setValue(GRID_ALT)
         self.grid_size_alt_box.valueChanged.connect(self.gridLargeChanged)
@@ -212,10 +190,12 @@ class NodePreferencesDialog(QDialog):
         self.wire_width_label = QLabel("Normal")
         self.wire_width_label_selected = QLabel("Selected")
         self.wire_width = QSpinBox()
+        self.wire_width.setStyleSheet("background-color:"+self.active_theme.list_background_color+";")
         self.wire_width.setRange(1,20)
         self.wire_width.setValue(WIDTH)
         self.wire_width.valueChanged.connect(self.wireWidthChanged)
         self.wire_width_selected = QSpinBox()
+        self.wire_width_selected.setStyleSheet("background-color:"+self.active_theme.list_background_color+";")
         self.wire_width_selected.setRange(2,30)
         self.wire_width_selected.setValue(SELECTED_WIDTH)
         self.wire_width_selected.valueChanged.connect(self.wireSelectedWidthChanged)
@@ -289,23 +269,6 @@ class NodePreferencesDialog(QDialog):
                 ind = x
                 self.prefs_layout.setCurrentIndex(ind)
     
-    def font_size_changed(self, i):
-        data = updateJSON()
-        font_size = i
-        if (self.current_font != i):
-            data["theme_changed"] = True
-            self.buttonBox.setText("Apply changes and restart")
-        self.pref_categories.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.list_background_color)
-        self.setStyleSheet("font-size: "+str(font_size)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
-        data["font_size"] = font_size
-        dumpJSON(data)
-    
-    def rfont_size_changed(self, i):
-        data = updateJSON()
-        rfont_size = i
-        data["rfont_size"] = rfont_size
-        dumpJSON(data)
-
     def color_theme_changed(self, s):
         data = updateJSON()
         for x in range(0, len(color_themes_dict)):
