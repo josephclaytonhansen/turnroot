@@ -167,7 +167,7 @@ class QDMGraphicsNode(QGraphicsItem):
         painter.drawPath(path_outline.simplified())
               
 class Node(Serializable):
-    def __init__(self, scene, title="undefined node", inputs = [], outputs=[]):
+    def __init__(self, scene, title="node item", inputs = [], outputs=[]):
         super().__init__()
         self.scene = scene
         self._title = title
@@ -189,6 +189,8 @@ class Node(Serializable):
         for item in outputs:
             self.outputs.append(Socket(node=self,t=item, index=counter, position = RIGHT_TOP))
             counter += 1
+            
+        self.grNode.title = self._title
 
     @property
     def pos(self):
