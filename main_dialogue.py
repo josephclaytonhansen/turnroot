@@ -132,7 +132,7 @@ class main(QMainWindow):
         self.m.scene.saveToFile()
     
     def quitWindow(self):
-        c = confirmAction(parent=self, s="quit the level editor")
+        c = confirmAction(parent=self, s="quit the node editor")
         c.exec_()
         with open("src/tmp/wer.taic", "w") as quit_reason:
             quit_reason.write(OPEN_NEW_FILE)
