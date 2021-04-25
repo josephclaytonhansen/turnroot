@@ -6,9 +6,10 @@ from PyQt5.QtCore import QSize, Qt, pyqtSignal
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
 from src.UI_updateJSON import updateJSON
-from src.UI_Dialogs import confirmAction
+from src.UI_Dialogs import confirmAction, infoClose
 from src.UI_node_editor_wnd import NodeEditorWnd
 from src.UI_ProxyStyle import ProxyStyle
+from src.UI_node_preferences_dialog import NodePreferencesDialog
 import qtmodern.styles
 import qtmodern.windows
 
@@ -23,7 +24,14 @@ app.setStyle(myStyle)
 screen = app.primaryScreen()
 size = screen.size()
 
-title = "Turnroot Game Dialogue Editor" 
+title = "Turnroot Game Dialogue Editor"
+
+with open("src/tmp/aic.json", "r") as cons:
+    const = json.load(cons)
+    
+OPEN_LAST_FILE = const[0]
+OPEN_NEW_FILE = const[1]
+
 class mainN(NodeEditorWnd):
     def __init__(self):
         super().__init__()
@@ -49,6 +57,8 @@ class main(QMainWindow):
         self.toolbar.addAction(self.optionsButton)
         self.toolbar.addAction(self.helpButton)
         self.toolbar.addAction(self.forumButton)
+        
+        self.optionsButton.triggered.connect(self.OptionsMenu)
         
         self.addToolBar(self.toolbar)
         
@@ -91,6 +101,16 @@ class main(QMainWindow):
         self.clearButton = QAction("Clear\tShift+X", self)
         self.clearButton.triggered.connect(self.m.scene.clear)
         editMenu.addAction(self.clearButton)
+        
+        with open("src/tmp/wer.taic", "r") as tmp_reason:
+            if tmp_reason.read() == OPEN_LAST_FILE:
+                with open("src/tmp/lsf.taic", "r") as open_file:
+                    try:
+                        self.m.scene.path = open_file.read()
+                        self.m.scene.loadFromFile()
+                    except:
+                        c = infoClose("Last saved file not found\n(opening new file)")
+                        c.exec_()
     
     def New(self):
         self.m.scene.clear()
@@ -105,6 +125,28 @@ class main(QMainWindow):
         c.exec_()
         if(c.return_confirm):
             sys.exit()
+    
+    def OptionsMenu(self):
+        p = NodePreferencesDialog(parent=self)
+        theme = p.exec_()
+        data = updateJSON()
+        
+        #apply data from preferences
+        if (theme != 0):
+            active_theme = getattr(UI_colorTheme, data["active_theme"])
+            if (data["theme_changed"] == True):
+                self.m.scene.saveToFile()
+                    
+                with open("src/tmp/wer.taic", "w") as tmp_reason:
+                    tmp_reason.write(OPEN_LAST_FILE)
+                with open("src/tmp/lsf.taic", "w") as next_open_file:
+                    try:
+                        next_open_file.write(self.m.scene.path)
+                    except:
+                        c = infoClose("Invalid path")
+                        c.exec_()
+                    
+                os.execl(sys.executable, sys.executable, *sys.argv)
         
 window = main()
 window.show()

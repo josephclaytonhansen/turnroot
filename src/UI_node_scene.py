@@ -40,9 +40,9 @@ class Scene(Serializable):
     
     def saveToFile(self):
         print(self.path)
-        if self.path == None:
+        if self.path == None or self.path == '':
             self.saveFileDialog()
-            if self.path == None:
+            if self.path == None or self.path == '':
                 c = infoClose("No file selected")
                 c.exec_()
             else:
