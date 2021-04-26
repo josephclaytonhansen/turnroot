@@ -21,9 +21,33 @@ class Scene(Serializable):
         self.scene_width = 64000
         self.scene_height = 64000
         
+        self._has_been_modified = False
+        self._has_been_modified_listeners = []
+        
         self.initUI()
         self.history = SceneHistory(self)
         self.clipboard = SceneClipboard(self)
+    
+    @property
+    def has_been_modified(self):
+        return False
+        return self._has_been_modified
+
+    @has_been_modified.setter
+    def has_been_modified(self, value):
+        if not self._has_been_modified and value:
+            self._has_been_modified = value
+
+            # call all registered listeners
+            for callback in self._has_been_modified_listeners:
+                callback()
+
+        self._has_been_modified = value
+
+
+    def addHasBeenModifiedListener(self, callback):
+        self._has_been_modified_listeners.append(callback)
+
     
     def initUI(self):
         self.grScene = QDMGraphicsScene(self)
@@ -63,21 +87,18 @@ class Scene(Serializable):
             self.path = fileName
 
     def loadFromFile(self):
+        print("loading")
+        
+        self.openFileDialog()
         if self.path == None:
-            self.openFileDialog()
-            if self.path == None:
-                c = infoClose("No file selected")
-                c.exec_()
-            else:
-                with open(self.path, "r") as file:
-                    raw_data = file.read()
-                    data = json.loads(raw_data)
-                    self.deserialize(data)
+            c = infoClose("No file selected")
+            c.exec_()
         else:
             with open(self.path, "r") as file:
                 raw_data = file.read()
                 data = json.loads(raw_data)
                 self.deserialize(data)
+        
     
     def saveFileDialog(self):
         q = QFileDialog()

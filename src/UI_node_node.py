@@ -179,27 +179,28 @@ class Node(Serializable):
     def __init__(self, scene, title="node item", inputs = [], outputs=[]):
         super().__init__()
         self.scene = scene
-        self._title = title
-        self.title = title
         
         self.content = QDMNodeContentWidget(self)
         self.grNode = QDMGraphicsNode(self)
+        
+        self._title = title
+        self.title = title
         
         self.scene.addNode(self)
         self.scene.grScene.addItem(self.grNode)
         self.inputs = []
         self.outputs = []
-        
         counter = 0
         for item in inputs:
-            self.inputs.append(Socket(node=self,t=item,index=counter, position = LEFT_TOP))
+            socket = Socket(node=self, index=counter, position=LEFT_BOTTOM, t=item, multi_edges=False)
             counter += 1
+            self.inputs.append(socket)
+
         counter = 0
         for item in outputs:
-            self.outputs.append(Socket(node=self,t=item, index=counter, position = RIGHT_TOP))
+            socket = Socket(node=self, index=counter, position=RIGHT_TOP, t=item, multi_edges=True)
             counter += 1
-            
-        self.grNode.title = self._title
+            self.outputs.append(socket)
 
     @property
     def pos(self):
@@ -210,12 +211,15 @@ class Node(Serializable):
     
     @property
     def title(self):
-        return self._title
+        try:
+            return self._title
+        except:
+            pass
     
     @title.setter
     def title(self, value):
         self._title = value
-        #self.grNode.title = self._title
+        self.grNode.title = self._title
     
     def getSocketPosition(self, index, position):
         if position in (LEFT_TOP, LEFT_BOTTOM):
@@ -228,20 +232,20 @@ class Node(Serializable):
     
     def updateConnectedEdges(self):
         for socket in self.inputs + self.outputs:
-            if socket.hasEdge():
-                try:
-                    socket.edge.updatePositions()
-                except:
-                    pass
-    
+            # if socket.hasEdge():
+            for edge in socket.edges:
+                edge.updatePositions()
+
+
     def remove(self):
-        for socket in (self.inputs + self.outputs):
-            if socket.hasEdge():
-                socket.edge.remove()
+        for socket in (self.inputs+self.outputs):
+            # if socket.hasEdge():
+            for edge in socket.edges:
+                edge.remove()
         self.scene.grScene.removeItem(self.grNode)
         self.grNode = None
         self.scene.removeNode(self)
-        
+
     def serialize(self):
         inputs, outputs = [], []
         for socket in self.inputs: inputs.append(socket.serialize())
@@ -282,3 +286,5 @@ class Node(Serializable):
 
 
         return True
+
+    

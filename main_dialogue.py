@@ -24,7 +24,7 @@ app.setStyle(myStyle)
 screen = app.primaryScreen()
 size = screen.size()
 
-title = "Turnroot Node Editor"
+title = "Turnroot Node Editor" 
 
 with open("src/tmp/aic.json", "r") as cons:
     const = json.load(cons)
@@ -87,6 +87,7 @@ class main(QMainWindow):
         
         self.openButton = QAction("&Open\tCrtl+O", self)
         self.openButton.triggered.connect(self.m.scene.loadFromFile)
+        self.openButton.triggered.connect(self.nameChange)
         fileMenu.addAction(self.openButton)
         
         self.newButton = QAction("&New\tCrtl+N", self)
@@ -126,6 +127,7 @@ class main(QMainWindow):
                 with open("src/tmp/lsf.taic", "r") as open_file:
                     try:
                         self.m.scene.path = open_file.read()
+                        #print(self.m.grScene.file_name)
                         self.m.scene.loadFromFile()
                     except:
                         c = infoClose("Last saved file not found\n(opening new file)")
@@ -155,10 +157,16 @@ class main(QMainWindow):
     def New(self):
         self.m.scene.clear()
         self.m.scene.path = None
+    
+    def nameChange(self):
+        if self.m.scene.path is not None:
+            self.setWindowTitle(title + " - "+self.m.scene.path)
         
     def saveAs(self):
         self.m.scene.path = None
         self.m.scene.saveToFile()
+        if self.m.scene.path is not None:
+            self.setWindowTitle(title + " - "+self.m.scene.path)
     
     def quitWindow(self):
         c = confirmAction(parent=self, s="quit the node editor")

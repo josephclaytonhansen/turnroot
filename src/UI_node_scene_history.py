@@ -1,5 +1,9 @@
 from src.UI_node_edge import QDMGraphicsEdge
-DEBUG=False
+
+
+DEBUG = False
+
+
 class SceneHistory():
     def __init__(self, scene):
         self.scene = scene
@@ -9,11 +13,14 @@ class SceneHistory():
         self.history_limit = 32
 
     def undo(self):
+        if DEBUG: print("UNDO")
+
         if self.history_current_step > 0:
             self.history_current_step -= 1
             self.restoreHistory()
 
     def redo(self):
+        if DEBUG: print("REDO")
         if self.history_current_step + 1 < len(self.history_stack):
             self.history_current_step += 1
             self.restoreHistory()
@@ -26,7 +33,10 @@ class SceneHistory():
         self.restoreHistoryStamp(self.history_stack[self.history_current_step])
 
 
-    def storeHistory(self, desc):
+    def storeHistory(self, desc, setModified=False):
+        if setModified:
+            self.scene.has_been_modified = True
+
         if DEBUG: print("Storing history", '"%s"' % desc,
                         ".... current_step: @%d" % self.history_current_step,
                         "(%d)" % len(self.history_stack))
