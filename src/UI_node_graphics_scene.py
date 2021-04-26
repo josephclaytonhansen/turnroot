@@ -60,6 +60,7 @@ class QDMGraphicsView(QGraphicsView):
         
         self.mode = MODE_NOOP
         self.editingFlag = False
+        self.rubberBandDraggingRectangle = False
         
         self.zoomInFactor = ZOOM_IN
         self.zoomClamp = False
@@ -138,8 +139,9 @@ class QDMGraphicsView(QGraphicsView):
             res = self.edgeDragEnd(item)
             if res: return
         
-        if self.dragMode() == QGraphicsView.RubberBandDrag:
+        if self.rubberBandDraggingRectangle:
             self.grScene.scene.history.storeHistory("Selection changed")
+            self.rubberBandDraggingRectangle = False
 
         
         if item is None:
@@ -154,6 +156,9 @@ class QDMGraphicsView(QGraphicsView):
                 super().mouseReleaseEvent(fakeEvent)
                 QApplication.setOverrideCursor(Qt.CrossCursor)
                 return
+            else:
+                self.rubberBandDraggingRectangle = True
+
             
         super().mousePressEvent(event)
     
