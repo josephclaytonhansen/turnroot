@@ -136,7 +136,10 @@ class Edge(Serializable):
     def __init__(self, scene, start_socket=None, end_socket=None, edge_type=default_edge):
         super().__init__()
         self.scene = scene
-
+        
+        self._start_socket = None
+        self._end_socket = None
+        
         self.start_socket = start_socket
         self.end_socket = end_socket
         self.edge_type = edge_type
@@ -149,18 +152,32 @@ class Edge(Serializable):
 
     @start_socket.setter
     def start_socket(self, value):
+        # if we were assigned to some socket before, delete us from the socket
+        if self._start_socket is not None:
+            self._start_socket.removeEdge(self)
+
+        # assign new start socket
         self._start_socket = value
+        # addEdge to the Socket class
         if self.start_socket is not None:
-            self.start_socket.edge = self
+            self.start_socket.addEdge(self)
+
+
 
     @property
     def end_socket(self): return self._end_socket
 
     @end_socket.setter
     def end_socket(self, value):
+        # if we were assigned to some socket before, delete us from the socket
+        if self._end_socket is not None:
+            self._end_socket.removeEdge(self)
+
+        # assign new end socket
         self._end_socket= value
+        # addEdge to the Socket class
         if self.end_socket is not None:
-            self.end_socket.edge = self
+            self.end_socket.addEdge(self)
 
     @property
     def edge_type(self): return self._edge_type
@@ -200,10 +217,6 @@ class Edge(Serializable):
 
 
     def remove_from_sockets(self):
-        if self.start_socket is not None:
-            self.start_socket.edge = None
-        if self.end_socket is not None:
-            self.end_socket.edge = None
         self.end_socket = None
         self.start_socket = None
 
@@ -216,7 +229,6 @@ class Edge(Serializable):
             self.scene.removeEdge(self)
         except ValueError:
             pass
-
 
     def serialize(self):
         return OrderedDict([
@@ -231,4 +243,5 @@ class Edge(Serializable):
         self.start_socket = hashmap[data['start']]
         self.end_socket = hashmap[data['end']]
         self.edge_type = data['edge_type']
+
 
