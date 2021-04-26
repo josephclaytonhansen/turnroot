@@ -439,6 +439,7 @@ class QDMGraphicsScene(QGraphicsScene):
         super().__init__(parent)
         
         self.scene = scene
+        self.file_name = None
         
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
         self.gridSize = GRID_SIZE

@@ -87,21 +87,18 @@ class Scene(Serializable):
             self.path = fileName
 
     def loadFromFile(self):
+        print("loading")
+        
+        self.openFileDialog()
         if self.path == None:
-            self.openFileDialog()
-            if self.path == None:
-                c = infoClose("No file selected")
-                c.exec_()
-            else:
-                with open(self.path, "r") as file:
-                    raw_data = file.read()
-                    data = json.loads(raw_data)
-                    self.deserialize(data)
+            c = infoClose("No file selected")
+            c.exec_()
         else:
             with open(self.path, "r") as file:
                 raw_data = file.read()
                 data = json.loads(raw_data)
                 self.deserialize(data)
+        
     
     def saveFileDialog(self):
         q = QFileDialog()
