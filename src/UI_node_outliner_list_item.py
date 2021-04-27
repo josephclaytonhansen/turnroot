@@ -24,10 +24,14 @@ class OutlinerGraphicsListItem(QGraphicsItem):
         self.initContent()
         self.initUI()
         self.text = self.list_item.path
+        self.index = self.list_item.index
         
         active_theme = getattr(UI_colorTheme, data["active_theme"])
 
-        self.brush_background = QBrush(QColor(active_theme.node_background_color))
+        if self.index % 2 == 0:
+            self.brush_background = QBrush(QColor(active_theme.node_background_color))
+        else:
+            self.brush_background = QBrush(QColor(active_theme.node_title_background_color))
         self.brush_selected = QBrush(QColor(active_theme.node_selected_color))
     
     def initContent(self):
@@ -58,11 +62,12 @@ class OutlinerGraphicsListItem(QGraphicsItem):
         painter.drawPath(content.simplified())
 
 class OutlinerListItem():
-    def __init__(self, scene, path="/path/", depth = 0):
+    def __init__(self, scene, path="/path/", depth = 0, index = 0):
         super().__init__()
         self.scene = scene
         self.indent = depth
         self.path = path
+        self.index = index
         
         if self.indent > 0:
             self.collapse = True

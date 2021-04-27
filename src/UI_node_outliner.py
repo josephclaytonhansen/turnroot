@@ -49,9 +49,9 @@ class outlinerWnd(QWidget):
         height = 0
         items = {}
         for x in range(0,9):
-            items[x] = OutlinerListItem(self.scene)
+            items[x] = OutlinerListItem(self.scene, index = x)
             items[x].setPos(0,height)
-            height += tmp_height + 2
+            height += tmp_height
     
     def loadStyleSheet(self, filename):
         file = QFile(filename)
