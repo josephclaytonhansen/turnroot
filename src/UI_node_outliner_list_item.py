@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
+from src.UI_node_outliner_label import Flag
 import json
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
@@ -97,6 +98,7 @@ class OutlinerListItem():
         self.indent = depth
         self.path = path
         self.index = index
+        self.flags = []
         
         if self.indent > 0:
             self.collapse = True
@@ -105,8 +107,19 @@ class OutlinerListItem():
         
         self.grListItem = OutlinerGraphicsListItem(self)
         
+        
+        for x in range(0,3):
+            self.flags.append(Flag(list_item=self,position=x,index=self.index))
+            self.scene.grScene.addItem(self.flags[x].grFlag)
+        
         self.scene.addListItem(self)
         self.scene.grScene.addItem(self.grListItem)
     
     def setPos(self,x,y):
         self.grListItem.setPos(x,y)
+        
+    def getFlagPosition(self, index, position):
+        print(index)
+        x = position*20+self.grListItem.padding
+        y = (index * 24) + self.grListItem.padding + self.grListItem.height
+        return [x, y]
