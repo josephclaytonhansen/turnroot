@@ -53,6 +53,9 @@ class NodeEditorWnd(QWidget):
         
         self.lower_half_layout.addWidget(self.lower_half_preview, 65)
         self.lower_half_layout.addWidget(self.lower_half_outliner, 35)
+        
+        self.lower_half_outliner.setMaximumWidth(400)
+        self.lower_half_outliner.setMinimumWidth(400)
 
         
         self.show()

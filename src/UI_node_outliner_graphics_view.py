@@ -7,10 +7,14 @@ class OutlinerGraphicsView(QGraphicsView):
         self.grScene = scene
         self.initUI()
         self.setScene(self.grScene)
+        self.show()
         
     def initUI(self):
         self.setRenderHints(QPainter.Antialiasing | QPainter.HighQualityAntialiasing | QPainter.TextAntialiasing | QPainter.SmoothPixmapTransform )
         self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
+        self.setTransformationAnchor(QGraphicsView.AnchorViewCenter)
+        self.setAlignment( Qt.AlignTop )
+        self.setSceneRect (0,0,400, 400)
+        self.centerOn(0,0)
