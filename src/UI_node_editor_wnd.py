@@ -49,6 +49,8 @@ class NodeEditorWnd(QWidget):
         self.layout.addWidget(self.scroll_area, 25)
         
         self.lower_half_layout = QHBoxLayout()
+        self.lower_half_layout.setContentsMargins(0,0,0,0)
+        self.lower_half_layout.setSpacing(0)
         self.lower_half.setLayout(self.lower_half_layout)
         
         self.lower_half_layout.addWidget(self.lower_half_preview, 65)

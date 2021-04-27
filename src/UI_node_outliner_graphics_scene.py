@@ -16,7 +16,7 @@ class OutlinerGraphicsScene(QGraphicsScene):
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
         
         self.scene_width = 400
-        self.scene_height = 660
+        self.scene_height = 1660
     
         self._color_background = QColor(self.active_theme.node_grid_background_color)
 
