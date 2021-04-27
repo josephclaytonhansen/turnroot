@@ -21,21 +21,37 @@ class OutlinerGraphicsListItem(QGraphicsItem):
         self.height = FONT_SIZE * 2.5
         self.padding = 10
         
-        self.initContent()
-        self.initUI()
         self.text = self.list_item.path
         self.index = self.list_item.index
+        self.selected_text_dark = None
+        self.selected_dark = None
         
+        self.initContent()
+        self.initUI()
+
         active_theme = getattr(UI_colorTheme, data["active_theme"])
 
         if self.index % 2 == 0:
             self.brush_background = QBrush(QColor(active_theme.node_background_color))
         else:
             self.brush_background = QBrush(QColor(active_theme.node_title_background_color))
+            
         self.brush_selected = QBrush(QColor(active_theme.node_selected_color))
+        
     
     def initContent(self):
         self.path_color = QColor(active_theme.node_title_color)
+        self.selected_dark = self.determineTextColor(QColor(active_theme.node_selected_color))
+        self.selected_text_dark = self.determineTextColor(QColor(active_theme.node_title_color))
+
+        if self.selected_text_dark == self.selected_dark:
+            if self.selected_dark == False:
+                self.selected_color = QColor("white")
+            else:
+                self.selected_color = QColor("black")
+        else:
+            self.selected_color = QColor(active_theme.node_title_color)
+        
         self.path_font = QFont(NODE_FONT)
         self.path_font.setPointSize(FONT_SIZE)
         self.path_item = QGraphicsTextItem(self)
@@ -49,6 +65,13 @@ class OutlinerGraphicsListItem(QGraphicsItem):
     def boundingRect(self):
         return QRectF(0,0,self.width,
                       self.height).normalized()
+    
+    def determineTextColor(self,color):
+        lightness = color.lightness()
+        if lightness > 127:
+            return True
+        else:
+            return False
 
     def initUI(self):
         self.setFlag(QGraphicsItem.ItemIsSelectable)
@@ -59,6 +82,12 @@ class OutlinerGraphicsListItem(QGraphicsItem):
         content.addRect(0,0,self.width,self.height)
         painter.setPen(Qt.NoPen)
         painter.setBrush(self.brush_background if not self.isSelected() else self.brush_selected)
+            
+        if not self.isSelected():
+            self.path_item.setDefaultTextColor(self.path_color)
+        else:
+            self.path_item.setDefaultTextColor(self.selected_color)   
+            
         painter.drawPath(content.simplified())
 
 class OutlinerListItem():
