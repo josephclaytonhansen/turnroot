@@ -16,5 +16,5 @@ class OutlinerGraphicsView(QGraphicsView):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setTransformationAnchor(QGraphicsView.AnchorViewCenter)
         self.setAlignment( Qt.AlignTop )
-        self.setSceneRect (0,0,400, 400)
+        self.setSceneRect (0,0,400, 660)
         self.centerOn(0,0)

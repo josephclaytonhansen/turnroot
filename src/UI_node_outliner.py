@@ -4,12 +4,13 @@ from PyQt5.QtGui import *
 from src.UI_node_outliner_graphics_scene import OutlinerGraphicsScene
 from src.UI_node_outliner_graphics_view import OutlinerGraphicsView
 from src.UI_node_outliner_list_item import OutlinerListItem
+import math
 
 class OutlinerScene():
     def __init__(self):
         super().__init__()
         self.scene_width = 400
-        self.scene_height = 400
+        self.scene_height = 660
         self.list_items = []
         self.initUI()
         
@@ -48,7 +49,7 @@ class outlinerWnd(QWidget):
         tmp_height = items[0].grListItem.height
         height = 0
         items = {}
-        for x in range(0,9):
+        for x in range(0,math.ceil(660/tmp_height)):
             items[x] = OutlinerListItem(self.scene, index = x)
             items[x].setPos(0,height)
             height += tmp_height
