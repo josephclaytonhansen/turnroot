@@ -195,6 +195,8 @@ class main(QMainWindow):
                     except:
                         c = infoClose("Invalid path")
                         c.exec_()
+                        with open("src/tmp/wer.taic", "w") as tmp_reason:
+                            tmp_reason.write(OPEN_NEW_FILE)
                     
                 os.execl(sys.executable, sys.executable, *sys.argv)
         
