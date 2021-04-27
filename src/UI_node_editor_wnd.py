@@ -7,6 +7,8 @@ from src.UI_node_scene import Scene
 from src.UI_node_socket import (Socket,S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN)
 from src.UI_node_edge import Edge, EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT
 
+from src.UI_node_outliner import outlinerWnd, OutlinerScene
+
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
 data = updateJSON()
@@ -36,7 +38,7 @@ class NodeEditorWnd(QWidget):
         self.lower_half = QWidget()
 
         self.lower_half_preview = QTextEdit()
-        self.lower_half_outliner = QTextEdit()
+        self.lower_half_outliner = outlinerWnd(scene=OutlinerScene())
         
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidget(self.lower_half)
