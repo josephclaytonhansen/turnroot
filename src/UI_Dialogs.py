@@ -319,9 +319,18 @@ class colorThemeEdit(QDialog):
         
         self.values = {}
         self.color_blocks = {}
+        
+        self.setMaximumHeight(750)
 
         self.tabs = QTabWidget()
-        self.tabs.setTabPosition(QTabWidget.South)
+        self.tabs.setTabPosition(QTabWidget.North)
+        
+        self.tscroll = QScrollArea()
+        self.tscroll.setMaximumHeight(900)
+        self.tscroll.setWidget(self.tabs)
+        self.tscroll.setWidgetResizable(True)
+        self.tscroll.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
+        self.tscroll.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOn )
 
         self.theme_groups = self.active_theme.groups
         for tab in (self.theme_groups):
@@ -360,12 +369,13 @@ class colorThemeEdit(QDialog):
         self.setLayout(self.layout)
         
         self.in_ok = QWidget()
+        self.in_ok.setMaximumHeight(70)
         self.in_ok_layout = QHBoxLayout()
         self.in_ok_layout.addWidget(QLabel("To change, type in hex color and press Enter\n(changes save automatically)"))
         self.in_ok.setLayout(self.in_ok_layout)
         
         self.layout.addWidget(self.in_ok)
-        self.layout.addWidget(self.tabs)
+        self.layout.addWidget(self.tscroll)
         
         self.show()
     

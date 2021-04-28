@@ -20,6 +20,8 @@ class FlagColor():
             self.color = QColor(active_theme.node_outliner_label_1)
         elif self.pos == 2:
             self.color = QColor(active_theme.node_outliner_label_2)
+        elif self.pos == 3:
+            self.color = QColor(active_theme.node_outliner_label_3)
 
 
 class Flag():

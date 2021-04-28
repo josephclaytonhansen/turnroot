@@ -111,7 +111,7 @@ class OutlinerListItem():
         self.grListItem = OutlinerGraphicsListItem(self)
         
         if self.flags_init:
-            for x in range(0,3):
+            for x in range(0,4):
                 self.flags.append(Flag(list_item=self,position=x,index=self.index))
                 self.scene.grScene.addItem(self.flags[x].grFlag)
         
