@@ -23,15 +23,16 @@ class OutlinerScene():
         self.list_items.append(list_item)
         
 class outlinerWnd(QWidget):
-    def __init__(self, scene, parent=None):
+    def __init__(self, scene, parent_scene, parent=None):
         super().__init__(parent)
         self.stylesheet_filename = "src/node_outliner_style.qss"
         self.loadStyleSheet(self.stylesheet_filename)
         self.scene = scene
+        self.parent_scene = parent_scene
+        self.scene_path = parent_scene.path
         self.path = "."
         self.initUI()
         self.addItems()
-        
         
     def initUI(self):
         self.layout = QVBoxLayout()
@@ -47,7 +48,7 @@ class outlinerWnd(QWidget):
         self.show()
     
     def addItems(self):
-        items = [OutlinerListItem(self.scene)]
+        items = [OutlinerListItem(self.scene,parent_scene = self.parent_scene)]
         tmp_height = items[0].grListItem.height
         height = 0
         items = {}
@@ -56,7 +57,7 @@ class outlinerWnd(QWidget):
         
         for f in file_list:
             if f.ext.strip() == ".trnep":
-                items[x] = OutlinerListItem(self.scene, path=f.name, index = x, depth=f.depth)
+                items[x] = OutlinerListItem(self.scene, path=f.name, index = x, depth=f.depth, parent_scene = self.parent_scene)
                 items[x].setPos(0,height)
                 height += tmp_height
                 x += 1

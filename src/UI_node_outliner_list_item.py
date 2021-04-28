@@ -93,11 +93,13 @@ class OutlinerGraphicsListItem(QGraphicsItem):
         painter.drawPath(content.simplified())
 
 class OutlinerListItem():
-    def __init__(self, scene, path="/path/", depth = 0, index = 0):
+    def __init__(self, scene, path="/path/", depth = 0, index = 0, flags = True, parent_scene=None):
         super().__init__()
         self.scene = scene
         self.indent = depth - 1
         self.path = path
+        self.parent_scene = parent_scene
+        self.flags_init = flags
         self.index = index
         self.flags = []
         
@@ -108,10 +110,10 @@ class OutlinerListItem():
         
         self.grListItem = OutlinerGraphicsListItem(self)
         
-        
-        for x in range(0,3):
-            self.flags.append(Flag(list_item=self,position=x,index=self.index))
-            self.scene.grScene.addItem(self.flags[x].grFlag)
+        if self.flags_init:
+            for x in range(0,3):
+                self.flags.append(Flag(list_item=self,position=x,index=self.index))
+                self.scene.grScene.addItem(self.flags[x].grFlag)
         
         self.scene.addListItem(self)
         self.scene.grScene.addItem(self.grListItem)

@@ -20,7 +20,7 @@ class File(object):
         self.name = self.path[self.path.rfind("\\")+1:self.path.rfind(".")]
 
     def getDir(self):
-        self.dir = self.path[:self.path.rfind("\\")]+"\\"
+        self.dir = self.path[:self.path.rfind("\\")]
         
 def getFiles(path):
     folders = []

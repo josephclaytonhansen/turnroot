@@ -11,7 +11,7 @@ from src.UI_node_editor_wnd import NodeEditorWnd
 from src.UI_ProxyStyle import ProxyStyle
 from src.UI_node_preferences_dialog import NodePreferencesDialog
 import qtmodern.styles
-import qtmodern.windows
+import qtmodern.windows, json
 
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])

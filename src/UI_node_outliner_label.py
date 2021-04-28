@@ -46,10 +46,10 @@ class OutlinerGraphicFlag(QGraphicsItem):
         
         if self.flag.index % 2 == 0:
             self.off_color = QBrush(QColor(active_theme.node_background_color))
-            self.pen = QPen(QColor(active_theme.node_background_color).lighter(165))
+            self.pen = QPen(QColor(active_theme.node_background_color).lighter(130))
         else:
             self.off_color = QBrush(QColor(active_theme.node_title_background_color))
-            self.pen = QPen(QColor(active_theme.node_title_background_color).lighter(165))
+            self.pen = QPen(QColor(active_theme.node_title_background_color).lighter(130))
         
         self.setFlag(QGraphicsItem.ItemIsSelectable)
         self.on_color = QBrush(self.color.color)

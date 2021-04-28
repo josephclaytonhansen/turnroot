@@ -38,7 +38,7 @@ class NodeEditorWnd(QWidget):
         self.lower_half = QWidget()
 
         self.lower_half_preview = QTextEdit()
-        self.lower_half_outliner = outlinerWnd(scene=OutlinerScene())
+        self.lower_half_outliner = outlinerWnd(scene=OutlinerScene(),parent_scene=self.scene)
         
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidget(self.lower_half)
