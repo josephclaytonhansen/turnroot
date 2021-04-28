@@ -27,6 +27,7 @@ FONT_SIZE = int(const[6]) / 2
 
 AND = 0
 OR = 1
+ALL = 2
 
 class OutlinerScene():
     def __init__(self):
@@ -59,10 +60,12 @@ class outlinerWnd(QWidget):
         self.parent_scene = parent_scene
         self.scene_path = parent_scene.path
         self.path = "."
+        
         self.initUI()
         self.addItems()
-        
         self.addHeader()
+        
+        self.Filter()
         
     def initUI(self):
         self.layout = QVBoxLayout()
@@ -71,7 +74,7 @@ class outlinerWnd(QWidget):
         
         self.setLayout(self.layout)
         self.grScene = self.scene.grScene
-                
+        
         self.view = OutlinerGraphicsView(self.grScene, self)
         self.view.centerOn(0,0)
         self.layout.addWidget(self.view)
@@ -84,11 +87,22 @@ class outlinerWnd(QWidget):
         self.header_filter = QGraphicsPixmapItem(self.header.filter_icon)
         self.scene.grScene.addItem(self.header_filter)
         self.header_filter.setPos(275,8)
-    
+        self.filter_rect = QRect(275,8,28,28)
+        
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.leftMouseButtonPress(event)
+
+    def leftMouseButtonPress(self, event):
+        if self.grScene.filter_view_update and self.filter_rect.contains(event.pos()):
+            self.Filter(flags=self.header.flags_status,AO=AND)
+            print("FILTERING: ", self.header.flags_status)
+        super().mousePressEvent(event)
+
     def addItems(self):
         tmp_height = FONT_SIZE * 2.5
         height = 50
-        items = {}
+        self.items = {}
         self.scene.placement = {}
         self.scene.slots = []
         #placement stores the top of each list_item- slots holds this by index. So placement[slots[0]] will give the first, etc
@@ -97,18 +111,50 @@ class outlinerWnd(QWidget):
         
         for f in file_list:
             if f.ext.strip() == ".trnep":
-                items[x] = OutlinerListItem(self.scene, path=f.name, index = x, depth=f.depth, parent_scene = self.parent_scene)
-                items[x].setPos(0,height)
-                self.scene.placement[height] = items[x]
+                self.items[x] = OutlinerListItem(self.scene, path=f.name, index = x, depth=f.depth, parent_scene = self.parent_scene)
+                self.items[x].setPos(0,height)
+                self.scene.placement[height] = self.items[x]
                 self.scene.slots.append(height)
                 height += tmp_height
                 x += 1
     
-    def Filter(self, flags, ao=AND):
-        #remove nodes that don't match: self.scene.placement[self.scene.slots[0]].remove()
+    def Filter(self, flags={0: False, 1: False, 2: False, 3: False}, AO=ALL):
+        #if ao = AND; get and matches. if ao = OR; get or matches
+        match_flags = flags
         
-        #collapse list for filter results
-        condenseList(self.scene.placement, self.scene.slots)
+        item_amount = len(self.items)
+        true_count = 0
+        
+        if AO == AND:
+            true_count_threshold = 4
+        elif AO == OR:
+            true_count_threshold = 1
+        elif AO == ALL:
+            true_count_threshold = 4
+        
+        for g in range(item_amount): #check each OutlinerListItem
+            true_count = 0
+            current_item = self.items[g]
+            item_flags = current_item.flags_status
+            
+            print("ITEM FLAGS: ",item_flags)
+            
+            for flag in item_flags: #check each flag
+                if item_flags[flag] == match_flags[flag]:
+                    if AO == AND:
+                        true_count += 1
+            print("TRUE COUNT: ", true_count, "THRESHOLD: ", true_count_threshold, true_count == true_count_threshold)
+            if true_count == true_count_threshold:
+                pass
+            else:
+                if AO != ALL:
+                    try:
+                        self.scene.placement[self.scene.slots[g]].remove()
+                    except:
+                        pass
+        
+            #collapse list for filter results
+            condenseList(self.scene.placement, self.scene.slots)
 
     
     def loadStyleSheet(self, filename):

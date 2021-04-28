@@ -31,6 +31,7 @@ class OutlinerGraphicsView(QGraphicsView):
         self.last_lmb_click_scene_pos = self.mapToScene(event.pos())
         
         if isinstance(item, OutlinerGraphicFlag):
+            self.grScene.filter_view_update = True
             if item.flag.on:
                 item.flag.on = False
                 item.flag.list_item.flags_status[item.flag.position] = item.flag.on
@@ -42,6 +43,7 @@ class OutlinerGraphicsView(QGraphicsView):
             print("Labels ", item.flag.list_item.flags_status)
             
         if hasattr(item, "list_item") and isinstance(item, OutlinerGraphicFlag) == False:
+            self.grScene.filter_view_update = False
             print("clicked list item ", item.list_item.grListItem.text)
             print("path from list item ", item.list_item.parent_scene.path)
         
@@ -53,7 +55,7 @@ class OutlinerGraphicsView(QGraphicsView):
                 item.flag.on = True
                 item.flag.outliner_header.flags_status[item.flag.position] = item.flag.on
             item.update()
-            print("Labels ", item.flag.outliner_header.flags_status) 
+            self.grScene.filter_view_update = True
             
         super().mousePressEvent(event)
             

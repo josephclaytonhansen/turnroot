@@ -12,6 +12,8 @@ class OutlinerGraphicsScene(QGraphicsScene):
         super().__init__(parent)
         
         self.scene = scene
+        
+        self.filter_view_update = False
 
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
         
