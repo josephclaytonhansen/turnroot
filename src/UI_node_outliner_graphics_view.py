@@ -35,10 +35,11 @@ class OutlinerGraphicsView(QGraphicsView):
             else:
                 item.flag.on = True
             item.update()
+            print("label at position", item.flag.position, "at index",item.flag.index, "with color", item.color.color.name(), "clicked on",item.flag.list_item.grListItem.text)
             
         if hasattr(item, "list_item") and isinstance(item, OutlinerGraphicFlag) == False:
-            print("clicked list item ", item, item.list_item.grListItem.text)
-            print("path from list item ", item, item.list_item.parent_scene.path)
+            print("clicked list item ", item.list_item.grListItem.text)
+            print("path from list item ", item.list_item.parent_scene.path)
             
         super().mousePressEvent(event)
             
