@@ -4,8 +4,15 @@ from PyQt5.QtGui import *
 from src.UI_node_outliner_graphics_scene import OutlinerGraphicsScene
 from src.UI_node_outliner_graphics_view import OutlinerGraphicsView
 from src.UI_node_outliner_list_item import OutlinerListItem
+from src.UI_node_outliner_header import OutlinerHeader
 from src.node_backend import getFiles, GET_FOLDERS, GET_FILES
-import math
+import math, json
+
+with open("src/tmp/nenc.json", "r") as readfile:
+    const = json.load(readfile)
+
+NODE_FONT = const[5]
+FONT_SIZE = int(const[6]) / 2
 
 class OutlinerScene():
     def __init__(self):
@@ -13,6 +20,7 @@ class OutlinerScene():
         self.scene_width = 400
         self.scene_height = 1660
         self.list_items = []
+        self.header = None
         self.initUI()
         
     def initUI(self):
@@ -21,6 +29,9 @@ class OutlinerScene():
 
     def addListItem(self, list_item):
         self.list_items.append(list_item)
+    
+    def addHeader(self,header):
+        self.header = header
         
 class outlinerWnd(QWidget):
     def __init__(self, scene, parent_scene, parent=None):
@@ -33,6 +44,7 @@ class outlinerWnd(QWidget):
         self.path = "."
         self.initUI()
         self.addItems()
+        self.addHeader()
         
     def initUI(self):
         self.layout = QVBoxLayout()
@@ -47,12 +59,19 @@ class outlinerWnd(QWidget):
         self.layout.addWidget(self.view)
         self.show()
     
+    def addHeader(self):
+        self.header = OutlinerHeader(self.scene,parent_scene = self.parent_scene)
+        self.header.setPos(0,0)
+        self.header.filter_icon = QPixmap("src\\ui_icons\\white\\filter.png")
+        self.header_filter = QGraphicsPixmapItem(self.header.filter_icon)
+        self.scene.grScene.addItem(self.header_filter)
+        self.header_filter.setPos(275,8)
+    
     def addItems(self):
-        items = [OutlinerListItem(self.scene,parent_scene = self.parent_scene)]
-        tmp_height = items[0].grListItem.height
-        height = 0
+        tmp_height = FONT_SIZE * 2.5
+        height = 50
         items = {}
-        x =0
+        x = 0
         file_list = getFiles(self.path)[GET_FILES]
         
         for f in file_list:
@@ -61,6 +80,7 @@ class outlinerWnd(QWidget):
                 items[x].setPos(0,height)
                 height += tmp_height
                 x += 1
+        items[0] = None
 
     
     def loadStyleSheet(self, filename):

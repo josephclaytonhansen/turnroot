@@ -39,6 +39,21 @@ class Flag():
     def getFlagPosition(self):
         res = self.list_item.getFlagPosition(self.position)
         return res
+
+class Flag_Filter():
+    def __init__(self, outliner_header, position=LEFT):
+        super().__init__()
+        self.outliner_header = outliner_header
+        self.position = position
+        self.on = False
+        
+        self.color = FlagColor(self.position)
+        self.grFlag = OutlinerGraphicFlag_Filter(self, self.color)
+        self.grFlag.setPos(*self.outliner_header.getFlagPosition(position))
+        
+    def getFlagPosition(self):
+        res = self.outliner_header.getFlagPosition(self.position)
+        return res
         
 class OutlinerGraphicFlag(QGraphicsItem):
     def __init__(self, flag, color):
@@ -77,3 +92,37 @@ class OutlinerGraphicFlag(QGraphicsItem):
                       -10,
                       14,
                       20)
+class OutlinerGraphicFlag_Filter(QGraphicsItem):
+    def __init__(self, flag, color):
+        super().__init__(flag.outliner_header.grHeaderItem)
+        self.color = color
+        self.flag = flag
+        
+        self.off_color = QBrush(QColor(active_theme.window_background_color))
+        self.pen = QPen(QColor(active_theme.window_background_color).lighter(130))
+        
+        self.setFlag(QGraphicsItem.ItemIsSelectable)
+        self.on_color = QBrush(self.color.color)
+
+        self.selected_pen = QPen(QColor(active_theme.node_selected_color))
+        self.selected_pen.setWidth(3)
+        self.selected_brush = QBrush(QColor(active_theme.node_selected_color))
+        
+        self.pen.setWidth(2)
+        self.brush = self.off_color
+        self.setZValue(2)
+        self.show()
+    
+    def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
+        path_title = QPainterPath()
+        painter.setBrush(self.off_color if not self.flag.on else self.on_color)
+        painter.setPen(self.pen if not self.isSelected() else self.selected_pen)
+        path_title.addRoundedRect(-10,-10,14,20, 1,1)
+        painter.drawPath(path_title.simplified())
+        
+    def boundingRect(self):
+        return QRectF(-10,
+                      -10,
+                      14,
+                      20)
+

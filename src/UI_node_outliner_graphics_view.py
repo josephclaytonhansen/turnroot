@@ -1,8 +1,9 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from src.UI_node_outliner_label import OutlinerGraphicFlag
+from src.UI_node_outliner_label import OutlinerGraphicFlag, OutlinerGraphicFlag_Filter
 from src.UI_node_outliner_list_item import OutlinerGraphicsListItem
+
 class OutlinerGraphicsView(QGraphicsView):
     def __init__(self, scene, parent=None):
         super().__init__(parent)
@@ -32,14 +33,27 @@ class OutlinerGraphicsView(QGraphicsView):
         if isinstance(item, OutlinerGraphicFlag):
             if item.flag.on:
                 item.flag.on = False
+                item.flag.list_item.flags_status[item.flag.position] = item.flag.on
             else:
                 item.flag.on = True
+                item.flag.list_item.flags_status[item.flag.position] = item.flag.on
             item.update()
             print("label at position", item.flag.position, "at index",item.flag.index, "with color", item.color.color.name(), "clicked on",item.flag.list_item.grListItem.text)
+            print("Labels ", item.flag.list_item.flags_status)
             
         if hasattr(item, "list_item") and isinstance(item, OutlinerGraphicFlag) == False:
             print("clicked list item ", item.list_item.grListItem.text)
             print("path from list item ", item.list_item.parent_scene.path)
+        
+        if isinstance(item, OutlinerGraphicFlag_Filter):
+            if item.flag.on:
+                item.flag.on = False
+                item.flag.outliner_header.flags_status[item.flag.position] = item.flag.on
+            else:
+                item.flag.on = True
+                item.flag.outliner_header.flags_status[item.flag.position] = item.flag.on
+            item.update()
+            print("Labels ", item.flag.outliner_header.flags_status) 
             
         super().mousePressEvent(event)
             

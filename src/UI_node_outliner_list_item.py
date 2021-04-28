@@ -111,8 +111,11 @@ class OutlinerListItem():
         self.grListItem = OutlinerGraphicsListItem(self)
         
         if self.flags_init:
+            self.flags_status = {}
             for x in range(0,4):
-                self.flags.append(Flag(list_item=self,position=x,index=self.index))
+                flag = Flag(list_item=self,position=x,index=self.index)
+                self.flags.append(flag)
+                self.flags_status[x] = flag.on
                 self.scene.grScene.addItem(self.flags[x].grFlag)
         
         self.scene.addListItem(self)
@@ -123,5 +126,5 @@ class OutlinerListItem():
         
     def getFlagPosition(self, index, position):
         x = 395 - (position*20+self.grListItem.padding)
-        y = (index * self.grListItem.height) + self.grListItem.padding + 4
+        y = (index * self.grListItem.height) + self.grListItem.padding + 54
         return [x, y]
