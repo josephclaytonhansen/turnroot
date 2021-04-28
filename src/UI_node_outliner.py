@@ -95,7 +95,8 @@ class outlinerWnd(QWidget):
 
     def leftMouseButtonPress(self, event):
         if self.grScene.filter_view_update and self.filter_rect.contains(event.pos()):
-            self.Filter(flags=self.header.flags_status,AO=ALL)
+            print(self.grScene.filter_mode)
+            self.Filter(flags=self.header.flags_status,AO=self.grScene.filter_mode)
             print("FILTERING: ", self.header.flags_status)
         super().mousePressEvent(event)
 

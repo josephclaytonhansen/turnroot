@@ -1,8 +1,12 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from src.UI_node_outliner_label import OutlinerGraphicFlag, OutlinerGraphicFlag_Filter
+from src.UI_node_outliner_label import OutlinerGraphicFlag, OutlinerGraphicFlag_Filter, filterButtonText
 from src.UI_node_outliner_list_item import OutlinerGraphicsListItem
+
+AND = 0
+OR = 1
+ALL = 2
 
 class OutlinerGraphicsView(QGraphicsView):
     def __init__(self, scene, parent=None):
@@ -28,6 +32,7 @@ class OutlinerGraphicsView(QGraphicsView):
     
     def leftMouseButtonPress(self, event):
         item = self.getItemAtClick(event)
+        print(item)
         self.last_lmb_click_scene_pos = self.mapToScene(event.pos())
         
         if isinstance(item, OutlinerGraphicFlag):
@@ -56,6 +61,17 @@ class OutlinerGraphicsView(QGraphicsView):
                 item.flag.outliner_header.flags_status[item.flag.position] = item.flag.on
             item.update()
             self.grScene.filter_view_update = True
+        
+        if isinstance(item, filterButtonText):
+            self.grScene.filter_view_update = True
+            print("FILTER BUTTON CLICKED")
+            if item.position == 0:
+                self.grScene.filter_mode = AND
+            elif item.position == 1:
+                self.grScene.filter_mode = OR
+            elif item.position == 2:
+                self.grScene.filter_mode = ALL
+            print(self.grScene.filter_mode)
             
         super().mousePressEvent(event)
             

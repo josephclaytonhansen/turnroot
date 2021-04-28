@@ -54,7 +54,12 @@ class Flag_Filter():
     def getFlagPosition(self):
         res = self.outliner_header.getFlagPosition(self.position)
         return res
-    
+
+
+class filterButtonText(QGraphicsTextItem):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        
 class FilterButton():
     def __init__(self, outliner_header, position=LEFT, label = ""):
         super().__init__()
@@ -80,19 +85,19 @@ class FilterButton():
             return True
         else:
             return False
-    
+        
     def initTitle(self):
         active_theme = getattr(UI_colorTheme, data["active_theme"])
         self._title_color = QColor(active_theme.node_title_background_color)
         self._title_font = QFont("Lucida Sans Unicode")
         self._title_font.setPointSize(15)
 
-        self.title_item = QGraphicsTextItem(self.grButton)
+        self.title_item = filterButtonText(self.grButton)
         self.title_item.setDefaultTextColor(self._title_color)
         self.title_item.setFont(self._title_font)
         self.title_item.setPos(-12, -3)
         self.title_item.setPlainText(self.label)
-        
+        self.title_item.position = self.position
 class OutlinerGraphicFlag(QGraphicsItem):
     def __init__(self, flag, color):
         super().__init__(flag.list_item.grListItem)
