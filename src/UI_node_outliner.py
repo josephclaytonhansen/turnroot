@@ -95,7 +95,7 @@ class outlinerWnd(QWidget):
 
     def leftMouseButtonPress(self, event):
         if self.grScene.filter_view_update and self.filter_rect.contains(event.pos()):
-            self.Filter(flags=self.header.flags_status,AO=AND)
+            self.Filter(flags=self.header.flags_status,AO=ALL)
             print("FILTERING: ", self.header.flags_status)
         super().mousePressEvent(event)
 
@@ -128,7 +128,7 @@ class outlinerWnd(QWidget):
         if AO == AND:
             true_count_threshold = 4
         elif AO == OR:
-            true_count_threshold = 1
+            true_count_threshold = 0
         elif AO == ALL:
             true_count_threshold = 4
         
@@ -137,21 +137,36 @@ class outlinerWnd(QWidget):
             current_item = self.items[g]
             item_flags = current_item.flags_status
             
-            print("ITEM FLAGS: ",item_flags)
-            
-            for flag in item_flags: #check each flag
-                if item_flags[flag] == match_flags[flag]:
-                    if AO == AND:
+            if AO != OR:
+                for flag in item_flags: #check each flag
+                    if item_flags[flag] == match_flags[flag]:
                         true_count += 1
-            print("TRUE COUNT: ", true_count, "THRESHOLD: ", true_count_threshold, true_count == true_count_threshold)
-            if true_count == true_count_threshold:
-                pass
-            else:
-                if AO != ALL:
+                        
+            elif AO == OR:
+                for flag in item_flags:
+                    if flag:
+                      if item_flags[flag] == match_flags[flag]:
+                        true_count += 1
+                        
+            if AO != OR: 
+                if true_count == true_count_threshold:
+                    pass
+                else:
+                    if AO != ALL:
+                        try:
+                            self.scene.placement[self.scene.slots[g]].remove()
+                        except:
+                            pass
+            
+            elif AO == OR:
+                if true_count > true_count_threshold:
+                    pass
+                else:
                     try:
                         self.scene.placement[self.scene.slots[g]].remove()
                     except:
                         pass
+                
         
             #collapse list for filter results
             condenseList(self.scene.placement, self.scene.slots)
