@@ -71,7 +71,7 @@ class OutlinerGraphicsView(QGraphicsView):
                 self.grScene.filter_mode = OR
             elif item.position == 2:
                 self.grScene.filter_mode = ALL
-            print(self.grScene.filter_mode)
+            print("GLOBAL FILTER MODE: ", self.grScene.filter_mode)
             
         super().mousePressEvent(event)
             

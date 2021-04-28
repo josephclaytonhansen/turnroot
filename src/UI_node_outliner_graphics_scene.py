@@ -7,6 +7,10 @@ from src.UI_updateJSON import updateJSON
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
+AND = 0
+OR = 1
+ALL = 2
+
 class OutlinerGraphicsScene(QGraphicsScene):
     def __init__(self,scene,parent=None):
         super().__init__(parent)
@@ -14,7 +18,7 @@ class OutlinerGraphicsScene(QGraphicsScene):
         self.scene = scene
         
         self.filter_view_update = False
-        self.filter_mode = None
+        self.filter_mode = ALL
 
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
         

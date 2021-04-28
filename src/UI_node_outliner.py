@@ -120,6 +120,7 @@ class outlinerWnd(QWidget):
                 x += 1
     
     def Filter(self, flags={0: False, 1: False, 2: False, 3: False}, AO=ALL):
+        print("CURRENT FILTER: ", AO)
         #if ao = AND; get and matches. if ao = OR; get or matches
         match_flags = flags
         
@@ -136,6 +137,8 @@ class outlinerWnd(QWidget):
         for g in range(item_amount): #check each OutlinerListItem
             true_count = 0
             current_item = self.items[g]
+            if current_item == None:
+                continue
             item_flags = current_item.flags_status
             
             if AO != OR:
