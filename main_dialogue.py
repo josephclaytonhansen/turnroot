@@ -26,6 +26,19 @@ size = screen.size()
 
 title = "Turnroot Node Editor" 
 
+if os.sep == "\\":
+    font_string = "Lucida Sans Unicode"
+else:
+    font_string = "Lucida Grande"
+
+with open("src/nodestyle.qss", "r") as style_file:
+    style_file_content = style_file.read()
+    t_style_file_content = style_file_content
+    
+    t_style_file_content = t_style_file_content.replace("~", font_string)
+    with open("src/nodestyle.qss", "w") as style_file_write:
+        style_file_write.write(t_style_file_content)
+
 with open("src/tmp/aic.json", "r") as cons:
     const = json.load(cons)
     

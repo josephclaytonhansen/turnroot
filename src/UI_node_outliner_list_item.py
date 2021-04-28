@@ -4,14 +4,21 @@ from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
 from src.UI_node_outliner_label import Flag
-import json
+import json, os
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
-with open("src/tmp/nenc.json", "r") as readfile:
-    const = json.load(readfile)
-
-NODE_FONT = const[5]
+if os.sep != "\\":
+    const_path = "src/tmp/nenc.json"
+    with open(const_path, "r") as readfile:
+        const = json.load(readfile)
+    NODE_FONT = "Lucida Grande"
+else:
+    const_path = "src\\tmp\\nenc.json"
+    with open(const_path, "r") as readfile:
+        const = json.load(readfile)
+    NODE_FONT = const[5]
+    
 FONT_SIZE = int(const[6]) / 2
 
 class OutlinerGraphicsListItem(QGraphicsItem):

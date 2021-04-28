@@ -6,12 +6,23 @@ from src.UI_node_outliner_graphics_view import OutlinerGraphicsView
 from src.UI_node_outliner_list_item import OutlinerListItem
 from src.UI_node_outliner_header import OutlinerHeader
 from src.node_backend import getFiles, GET_FOLDERS, GET_FILES
-import math, json
+import math, json, os
 
-with open("src/tmp/nenc.json", "r") as readfile:
-    const = json.load(readfile)
+if os.sep != "\\":
+    const_path = "src/tmp/nenc.json"
+    filter_icon_path = "src/ui_icons/white/filter.png"
+    stylesheet_path = "src/node_outliner_style.qss"
+    with open(const_path, "r") as readfile:
+        const = json.load(readfile)
+    NODE_FONT = const[5]
+else:
+    const_path = "src\\tmp\\nenc.json"
+    filter_icon_path = "src\\ui_icons\\white\\filter.png"
+    stylesheet_path = "src\\node_outliner_style.qss"
+    with open(const_path, "r") as readfile:
+        const = json.load(readfile)
+    NODE_FONT = "Lucida Grande"
 
-NODE_FONT = const[5]
 FONT_SIZE = int(const[6]) / 2
 
 class OutlinerScene():
@@ -39,7 +50,7 @@ class OutlinerScene():
 class outlinerWnd(QWidget):
     def __init__(self, scene, parent_scene, parent=None):
         super().__init__(parent)
-        self.stylesheet_filename = "src/node_outliner_style.qss"
+        self.stylesheet_filename = stylesheet_path
         self.loadStyleSheet(self.stylesheet_filename)
         self.scene = scene
         self.parent_scene = parent_scene
@@ -67,7 +78,7 @@ class outlinerWnd(QWidget):
     def addHeader(self):
         self.header = OutlinerHeader(self.scene,parent_scene = self.parent_scene)
         self.header.setPos(0,0)
-        self.header.filter_icon = QPixmap("src\\ui_icons\\white\\filter.png")
+        self.header.filter_icon = QPixmap(filter_icon_path)
         self.header_filter = QGraphicsPixmapItem(self.header.filter_icon)
         self.scene.grScene.addItem(self.header_filter)
         self.header_filter.setPos(275,8)

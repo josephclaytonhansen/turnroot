@@ -1,3 +1,3 @@
 QDMNodeContentWidget {background: transparent;}
-QDMNodeContentWidget QLabel {font-size: 20pt; background: transparent; font-family:Lucida Sans Unicode;}
+QDMNodeContentWidget QLabel {font-size: 20pt; background: transparent; font-family:Lucida Grande;}
 QGraphicsView {selection-background-color: white;}
