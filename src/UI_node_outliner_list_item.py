@@ -58,10 +58,11 @@ class OutlinerGraphicsListItem(QGraphicsItem):
         self.path_item = QGraphicsTextItem(self)
         self.path_item.list_item = self.list_item
         self.path_item.setPlainText(self.list_item.path)
-        self.path_item.setDefaultTextColor(self.path_color)
+        self.path_item.setDefaultTextColor(QColor(active_theme.node_text_color))
         self.path_item.setFont(self.path_font)
-        self.path_item.setPos(self.padding, 0)
+        self.path_item.setPos(self.padding+(self.list_item.indent*20), 0)
         self.path_item.setTextWidth(self.width-3*self.padding)
+        self.path_item.setZValue(3)
     
     def boundingRect(self):
         return QRectF(0,0,self.width,
@@ -95,7 +96,7 @@ class OutlinerListItem():
     def __init__(self, scene, path="/path/", depth = 0, index = 0):
         super().__init__()
         self.scene = scene
-        self.indent = depth
+        self.indent = depth - 1
         self.path = path
         self.index = index
         self.flags = []

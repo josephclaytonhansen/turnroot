@@ -37,7 +37,7 @@ class OutlinerGraphicsView(QGraphicsView):
             item.update()
             
         if hasattr(item, "list_item") and isinstance(item, OutlinerGraphicFlag) == False:
-            print("clicked list item ", item)
+            print("clicked list item ", item, item.list_item.grListItem.text)
             
         super().mousePressEvent(event)
             

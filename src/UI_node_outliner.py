@@ -28,9 +28,10 @@ class outlinerWnd(QWidget):
         self.stylesheet_filename = "src/node_outliner_style.qss"
         self.loadStyleSheet(self.stylesheet_filename)
         self.scene = scene
+        self.path = "."
         self.initUI()
         self.addItems()
-        self.path = ""
+        
         
     def initUI(self):
         self.layout = QVBoxLayout()
@@ -54,17 +55,12 @@ class outlinerWnd(QWidget):
         file_list = getFiles(self.path)[GET_FILES]
         
         for f in file_list:
-            if f.name != "":
-                if f.ext.endswith(".trnep"):
-                    items[x] = OutlinerListItem(self.scene, path=f.name, index = x)
-                    items[x].setPos(0,height)
-                    height += tmp_height
-                    x += 1
-                else:
-                    items[x] = OutlinerListItem(self.scene, path="", index = x)
-                    items[x].setPos(0,height)
-                    height += tmp_height
-                    x += 1
+            if f.ext.strip() == ".trnep":
+                items[x] = OutlinerListItem(self.scene, path=f.name, index = x, depth=f.depth)
+                items[x].setPos(0,height)
+                height += tmp_height
+                x += 1
+
     
     def loadStyleSheet(self, filename):
         file = QFile(filename)

@@ -11,16 +11,16 @@ class File(object):
         self.getDir()
 
     def getDepth(self):
-        self.depth = self.path.count("/")
+        self.depth = self.path.count("\\")
 
     def getExt(self):
         self.ext = self.path[self.path.rfind("."):]
 
     def getName(self):
-        self.name = self.path[self.path.rfind("/")+1:self.path.rfind(".")]
+        self.name = self.path[self.path.rfind("\\")+1:self.path.rfind(".")]
 
     def getDir(self):
-        self.dir = self.path[:self.path.rfind("/")]+"/"
+        self.dir = self.path[:self.path.rfind("\\")]+"\\"
         
 def getFiles(path):
     folders = []
