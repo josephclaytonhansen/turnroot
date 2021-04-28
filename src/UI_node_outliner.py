@@ -5,7 +5,7 @@ from src.UI_node_outliner_graphics_scene import OutlinerGraphicsScene
 from src.UI_node_outliner_graphics_view import OutlinerGraphicsView
 from src.UI_node_outliner_list_item import OutlinerListItem
 from src.UI_node_outliner_header import OutlinerHeader
-from src.node_backend import getFiles, GET_FOLDERS, GET_FILES
+from src.node_backend import getFiles, GET_FOLDERS, GET_FILES, condenseList
 import math, json, os
 
 if os.sep != "\\":
@@ -24,6 +24,9 @@ else:
     NODE_FONT = "Lucida Grande"
 
 FONT_SIZE = int(const[6]) / 2
+
+AND = 0
+OR = 1
 
 class OutlinerScene():
     def __init__(self):
@@ -58,8 +61,7 @@ class outlinerWnd(QWidget):
         self.path = "."
         self.initUI()
         self.addItems()
-        self.scene.placement[self.scene.slots[0]].remove()
-        print(self.scene.placement,self.scene.slots)
+        
         self.addHeader()
         
     def initUI(self):
@@ -101,6 +103,12 @@ class outlinerWnd(QWidget):
                 self.scene.slots.append(height)
                 height += tmp_height
                 x += 1
+    
+    def Filter(self, flags, ao=AND):
+        #remove nodes that don't match: self.scene.placement[self.scene.slots[0]].remove()
+        
+        #collapse list for filter results
+        condenseList(self.scene.placement, self.scene.slots)
 
     
     def loadStyleSheet(self, filename):
