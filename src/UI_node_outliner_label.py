@@ -27,7 +27,8 @@ class Flag():
         super().__init__()
         self.list_item = list_item
         self.position = position
-        self.on = True
+        self.on = False
+        self.index = index
         
         self.color = FlagColor(self.position)
         self.grFlag = OutlinerGraphicFlag(self, self.color)
@@ -42,12 +43,35 @@ class OutlinerGraphicFlag(QGraphicsItem):
         super().__init__(flag.list_item.grListItem)
         self.color = color
         self.flag = flag
-    
-        self.pen = QPen(QColor("black"))
-        self.pen.setWidth(1)
-        self.brush = QBrush(self.color.color)
+        
+        if self.flag.index % 2 == 0:
+            self.off_color = QBrush(QColor(active_theme.node_background_color))
+            self.pen = QPen(QColor(active_theme.node_title_background_color))
+        else:
+            self.off_color = QBrush(QColor(active_theme.node_title_background_color))
+            self.pen = QPen(QColor(active_theme.node_background_color))
+        
+        self.setFlag(QGraphicsItem.ItemIsSelectable)
+        self.on_color = QBrush(self.color.color)
+
+        self.selected_pen = QPen(QColor(active_theme.node_selected_color))
+        self.selected_pen.setWidth(3)
+        self.selected_brush = QBrush(QColor(active_theme.node_selected_color))
+        
+        self.pen.setWidth(2)
+        self.brush = self.off_color
+        self.setZValue(2)
+        self.show()
     
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
-        painter.setBrush(self.brush)
-        painter.setPen(self.pen)
-        painter.drawEllipse(-10,-10,10,10)
+        path_title = QPainterPath()
+        painter.setBrush(self.brush if not self.flag.list_item.grListItem.isSelected() else self.selected_brush)
+        painter.setPen(self.pen if not self.isSelected() else self.selected_pen)
+        path_title.addRoundedRect(-10,-10,14,20, 1,1)
+        painter.drawPath(path_title.simplified())
+        
+    def boundingRect(self):
+        return QRectF(-10,
+                      -10,
+                      14,
+                      20)

@@ -57,14 +57,12 @@ class outlinerWnd(QWidget):
             if f.name != "":
                 if f.ext.endswith(".trnep"):
                     items[x] = OutlinerListItem(self.scene, path=f.name, index = x)
-                    print(x)
                     items[x].setPos(0,height)
                     height += tmp_height
                     x += 1
                 else:
                     items[x] = OutlinerListItem(self.scene, path="", index = x)
                     items[x].setPos(0,height)
-                    print(x)
                     height += tmp_height
                     x += 1
     
