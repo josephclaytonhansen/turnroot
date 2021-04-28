@@ -67,7 +67,7 @@ class OutlinerGraphicsListItem(QGraphicsItem):
         self.path_item.setPlainText(self.list_item.path)
         self.path_item.setDefaultTextColor(QColor(active_theme.node_text_color))
         self.path_item.setFont(self.path_font)
-        self.path_item.setPos(self.padding+(self.list_item.indent*20), 0)
+        self.path_item.setPos((self.padding*2)+(self.list_item.indent*20), 0)
         self.path_item.setTextWidth(self.width-3*self.padding)
         self.path_item.setZValue(3)
     
@@ -100,11 +100,12 @@ class OutlinerGraphicsListItem(QGraphicsItem):
         painter.drawPath(content.simplified())
 
 class OutlinerListItem():
-    def __init__(self, scene, path="", depth = 0, index = 0, flags = True, parent_scene=None):
+    def __init__(self, scene, path="", depth = 0, index = 0, flags = True, parent_scene=None, full_path = None):
         super().__init__()
         self.scene = scene
         self.indent = depth - 1
         self.path = path
+        self.full_path = full_path
         self.parent_scene = parent_scene
         self.flags_init = flags
         self.index = index

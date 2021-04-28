@@ -19,6 +19,8 @@ class OutlinerGraphicsScene(QGraphicsScene):
         
         self.filter_view_update = False
         self.filter_mode = ALL
+        
+        self.file_selection_path = None
 
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
         

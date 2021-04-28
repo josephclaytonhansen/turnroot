@@ -112,7 +112,8 @@ class outlinerWnd(QWidget):
         
         for f in file_list:
             if f.ext.strip() == ".trnep":
-                self.items[x] = OutlinerListItem(self.scene, path=f.name, index = x, depth=f.depth, parent_scene = self.parent_scene)
+                self.items[x] = OutlinerListItem(self.scene, path=f.name, index = x, depth=f.depth,
+                                                 parent_scene = self.parent_scene, full_path = f.fullPath)
                 self.items[x].setPos(0,height)
                 self.scene.placement[height] = self.items[x]
                 self.scene.slots.append(height)

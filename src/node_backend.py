@@ -5,10 +5,12 @@ GET_FOLDERS = 0
 class File(object):
     def __init__(self, path):
         self.path = path
+        self.fullPath = self.path
         self.getDepth()
         self.getExt()
         self.getName()
         self.getDir()
+        
 
     def getDepth(self):
         self.depth = self.path.count("\\")

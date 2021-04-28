@@ -50,7 +50,8 @@ class OutlinerGraphicsView(QGraphicsView):
         if hasattr(item, "list_item") and isinstance(item, OutlinerGraphicFlag) == False:
             self.grScene.filter_view_update = False
             print("clicked list item ", item.list_item.grListItem.text)
-            print("path from list item ", item.list_item.parent_scene.path)
+            item.list_item.parent_scene.path = item.list_item.full_path
+            item.list_item.parent_scene.loadFromFile(dialog=False)
         
         if isinstance(item, OutlinerGraphicFlag_Filter):
             if item.flag.on:

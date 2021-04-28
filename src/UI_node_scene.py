@@ -86,13 +86,18 @@ class Scene(Serializable):
         if fileName:
             self.path = fileName
 
-    def loadFromFile(self):
+    def loadFromFile(self, dialog=True):
         print("loading")
-        
-        self.openFileDialog()
-        if self.path == None:
-            c = infoClose("No file selected")
-            c.exec_()
+        if dialog:
+            self.openFileDialog()
+            if self.path == None:
+                c = infoClose("No file selected")
+                c.exec_()
+            else:
+                with open(self.path, "r") as file:
+                    raw_data = file.read()
+                    data = json.loads(raw_data)
+                    self.deserialize(data)
         else:
             with open(self.path, "r") as file:
                 raw_data = file.read()
