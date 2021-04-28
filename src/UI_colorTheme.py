@@ -181,10 +181,10 @@ class charcoal(colorTheme):
     node_socket_event_color = "#808080"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#FF3333"
-    node_outliner_label_0 = ""
-    node_outliner_label_1 = ""
-    node_outliner_label_2 = ""
-    node_outliner_label_3 = ""
+    node_outliner_label_0 = "#D95F80"
+    node_outliner_label_1 = "#5a82d1"
+    node_outliner_label_2 = "#F27B50"
+    node_outliner_label_3 = "#D7D9D0"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -243,10 +243,10 @@ class ocean_waves(colorTheme):
     node_socket_event_color = "#FFFFFF"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#C02D0C"
-    node_outliner_label_0 = ""
-    node_outliner_label_1 = ""
-    node_outliner_label_2 = ""
-    node_outliner_label_3 = ""
+    node_outliner_label_0 = "#D95F80"
+    node_outliner_label_1 = "#94c9ff"
+    node_outliner_label_2 = "#F27B50"
+    node_outliner_label_3 = "#D7D9D0"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,

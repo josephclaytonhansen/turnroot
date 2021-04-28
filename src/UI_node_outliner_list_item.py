@@ -93,7 +93,7 @@ class OutlinerGraphicsListItem(QGraphicsItem):
         painter.drawPath(content.simplified())
 
 class OutlinerListItem():
-    def __init__(self, scene, path="/path/", depth = 0, index = 0, flags = True, parent_scene=None):
+    def __init__(self, scene, path="", depth = 0, index = 0, flags = True, parent_scene=None):
         super().__init__()
         self.scene = scene
         self.indent = depth - 1
