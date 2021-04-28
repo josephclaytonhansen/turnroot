@@ -119,6 +119,6 @@ class OutlinerListItem():
         self.grListItem.setPos(x,y)
         
     def getFlagPosition(self, index, position):
-        x = 390 - (position*20+self.grListItem.padding)
+        x = 395 - (position*20+self.grListItem.padding)
         y = (index * self.grListItem.height) + self.grListItem.padding + 4
         return [x, y]

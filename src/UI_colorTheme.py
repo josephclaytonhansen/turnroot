@@ -107,9 +107,10 @@ class sand_dunes(colorTheme):
     node_socket_event_color = "#968080"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#f74b20"
-    node_outliner_label_0 = ""
-    node_outliner_label_1 = ""
-    node_outliner_label_2 = ""
+    
+    node_outliner_label_0 = "#4b59e3"
+    node_outliner_label_1 = "#FFFFFF"
+    node_outliner_label_2 = "#f74b20"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,

@@ -30,6 +30,7 @@ class outlinerWnd(QWidget):
         self.scene = scene
         self.initUI()
         self.addItems()
+        self.path = ""
         
     def initUI(self):
         self.layout = QVBoxLayout()
@@ -50,8 +51,7 @@ class outlinerWnd(QWidget):
         height = 0
         items = {}
         x =0
-        test_dir = "."
-        file_list = getFiles(test_dir)[GET_FILES]
+        file_list = getFiles(self.path)[GET_FILES]
         
         for f in file_list:
             if f.name != "":

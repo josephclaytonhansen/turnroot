@@ -46,10 +46,10 @@ class OutlinerGraphicFlag(QGraphicsItem):
         
         if self.flag.index % 2 == 0:
             self.off_color = QBrush(QColor(active_theme.node_background_color))
-            self.pen = QPen(QColor(active_theme.node_title_background_color))
+            self.pen = QPen(QColor(active_theme.node_background_color).lighter(165))
         else:
             self.off_color = QBrush(QColor(active_theme.node_title_background_color))
-            self.pen = QPen(QColor(active_theme.node_background_color))
+            self.pen = QPen(QColor(active_theme.node_title_background_color).lighter(165))
         
         self.setFlag(QGraphicsItem.ItemIsSelectable)
         self.on_color = QBrush(self.color.color)
@@ -65,7 +65,7 @@ class OutlinerGraphicFlag(QGraphicsItem):
     
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
         path_title = QPainterPath()
-        painter.setBrush(self.brush if not self.flag.list_item.grListItem.isSelected() else self.selected_brush)
+        painter.setBrush(self.off_color if not self.flag.on else self.on_color)
         painter.setPen(self.pen if not self.isSelected() else self.selected_pen)
         path_title.addRoundedRect(-10,-10,14,20, 1,1)
         painter.drawPath(path_title.simplified())
