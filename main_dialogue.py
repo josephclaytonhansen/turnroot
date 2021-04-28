@@ -11,7 +11,7 @@ from src.UI_node_editor_wnd import NodeEditorWnd
 from src.UI_ProxyStyle import ProxyStyle
 from src.UI_node_preferences_dialog import NodePreferencesDialog
 import qtmodern.styles
-import qtmodern.windows
+import qtmodern.windows, json
 
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
@@ -25,6 +25,19 @@ screen = app.primaryScreen()
 size = screen.size()
 
 title = "Turnroot Node Editor" 
+
+if os.sep == "\\":
+    font_string = "Lucida Sans Unicode"
+else:
+    font_string = "Lucida Grande"
+
+with open("src/nodestyle.qss", "r") as style_file:
+    style_file_content = style_file.read()
+    t_style_file_content = style_file_content
+    
+    t_style_file_content = t_style_file_content.replace("~", font_string)
+    with open("src/nodestyle.qss", "w") as style_file_write:
+        style_file_write.write(t_style_file_content)
 
 with open("src/tmp/aic.json", "r") as cons:
     const = json.load(cons)
@@ -195,6 +208,8 @@ class main(QMainWindow):
                     except:
                         c = infoClose("Invalid path")
                         c.exec_()
+                        with open("src/tmp/wer.taic", "w") as tmp_reason:
+                            tmp_reason.write(OPEN_NEW_FILE)
                     
                 os.execl(sys.executable, sys.executable, *sys.argv)
         

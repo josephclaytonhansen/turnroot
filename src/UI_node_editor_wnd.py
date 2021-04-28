@@ -7,6 +7,8 @@ from src.UI_node_scene import Scene
 from src.UI_node_socket import (Socket,S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN)
 from src.UI_node_edge import Edge, EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT
 
+from src.UI_node_outliner import outlinerWnd, OutlinerScene
+
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
 data = updateJSON()
@@ -36,7 +38,7 @@ class NodeEditorWnd(QWidget):
         self.lower_half = QWidget()
 
         self.lower_half_preview = QTextEdit()
-        self.lower_half_outliner = QTextEdit()
+        self.lower_half_outliner = outlinerWnd(scene=OutlinerScene(),parent_scene=self.scene)
         
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidget(self.lower_half)
@@ -47,10 +49,15 @@ class NodeEditorWnd(QWidget):
         self.layout.addWidget(self.scroll_area, 25)
         
         self.lower_half_layout = QHBoxLayout()
+        self.lower_half_layout.setContentsMargins(0,0,0,0)
+        self.lower_half_layout.setSpacing(0)
         self.lower_half.setLayout(self.lower_half_layout)
         
         self.lower_half_layout.addWidget(self.lower_half_preview, 65)
         self.lower_half_layout.addWidget(self.lower_half_outliner, 35)
+        
+        self.lower_half_outliner.setMaximumWidth(400)
+        self.lower_half_outliner.setMinimumWidth(400)
 
         
         self.show()
