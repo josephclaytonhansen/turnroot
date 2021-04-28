@@ -92,6 +92,7 @@ class OutlinerGraphicFlag(QGraphicsItem):
                       -10,
                       14,
                       20)
+        
 class OutlinerGraphicFlag_Filter(QGraphicsItem):
     def __init__(self, flag, color):
         super().__init__(flag.outliner_header.grHeaderItem)

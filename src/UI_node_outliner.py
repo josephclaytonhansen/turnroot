@@ -33,6 +33,9 @@ class OutlinerScene():
     def addHeader(self,header):
         self.header = header
         
+    def removeListItem(self, list_item):
+        self.list_items.remove(list_item)
+        
 class outlinerWnd(QWidget):
     def __init__(self, scene, parent_scene, parent=None):
         super().__init__(parent)
@@ -44,6 +47,8 @@ class outlinerWnd(QWidget):
         self.path = "."
         self.initUI()
         self.addItems()
+        self.scene.placement[self.scene.slots[0]].remove()
+        print(self.scene.placement,self.scene.slots)
         self.addHeader()
         
     def initUI(self):
@@ -71,6 +76,9 @@ class outlinerWnd(QWidget):
         tmp_height = FONT_SIZE * 2.5
         height = 50
         items = {}
+        self.scene.placement = {}
+        self.scene.slots = []
+        #placement stores the top of each list_item- slots holds this by index. So placement[slots[0]] will give the first, etc
         x = 0
         file_list = getFiles(self.path)[GET_FILES]
         
@@ -78,9 +86,10 @@ class outlinerWnd(QWidget):
             if f.ext.strip() == ".trnep":
                 items[x] = OutlinerListItem(self.scene, path=f.name, index = x, depth=f.depth, parent_scene = self.parent_scene)
                 items[x].setPos(0,height)
+                self.scene.placement[height] = items[x]
+                self.scene.slots.append(height)
                 height += tmp_height
                 x += 1
-        items[0] = None
 
     
     def loadStyleSheet(self, filename):

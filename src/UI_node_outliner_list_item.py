@@ -123,6 +123,16 @@ class OutlinerListItem():
     
     def setPos(self,x,y):
         self.grListItem.setPos(x,y)
+    
+    def remove(self):
+        for f in self.flags:
+            self.scene.grScene.removeItem(f.grFlag)
+        self.flags=[]
+        self.scene.grScene.removeItem(self.grListItem)
+        self.grListItem = None
+        self.scene.placement[self.scene.slots[self.index]] = None
+        self.scene.slots[self.index] = None
+        self.scene.removeListItem(self)
         
     def getFlagPosition(self, index, position):
         x = 395 - (position*20+self.grListItem.padding)
