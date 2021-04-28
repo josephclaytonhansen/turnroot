@@ -3,13 +3,18 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
-import json
+import json, os
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 LEFT = 0
 MIDDLE = 1
 RIGHT = 2
+
+if os.sep == "\\":
+    point_size = 11
+else:
+    point_size = 15
 
 class FlagColor():
     def __init__(self, pos):
@@ -90,7 +95,7 @@ class FilterButton():
         active_theme = getattr(UI_colorTheme, data["active_theme"])
         self._title_color = QColor(active_theme.node_title_background_color)
         self._title_font = QFont("Lucida Sans Unicode")
-        self._title_font.setPointSize(15)
+        self._title_font.setPointSize(point_size)
 
         self.title_item = filterButtonText(self.grButton)
         self.title_item.setDefaultTextColor(self._title_color)
@@ -98,6 +103,7 @@ class FilterButton():
         self.title_item.setPos(-12, -3)
         self.title_item.setPlainText(self.label)
         self.title_item.position = self.position
+        
 class OutlinerGraphicFlag(QGraphicsItem):
     def __init__(self, flag, color):
         super().__init__(flag.list_item.grListItem)
