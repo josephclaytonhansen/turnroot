@@ -54,6 +54,44 @@ class Flag_Filter():
     def getFlagPosition(self):
         res = self.outliner_header.getFlagPosition(self.position)
         return res
+    
+class FilterButton():
+    def __init__(self, outliner_header, position=LEFT, label = ""):
+        super().__init__()
+        
+        self.outliner_header = outliner_header
+        self.position = position
+        self.on = False
+        self.label = label
+        self.color = QColor(active_theme.node_grid_background_color)
+        self.grButton = OutlinerGraphicButton(self, self.color)
+        self.grButton.setPos(*self.outliner_header.getButtonPosition(position))
+        
+        self.initTitle()
+        
+    def getButtonPosition(self):
+        res = self.outliner_header.getButtonPosition(self.position)
+        return res
+    
+            
+    def determineTextColor(self,color):
+        lightness = color.lightness()
+        if lightness > 127:
+            return True
+        else:
+            return False
+    
+    def initTitle(self):
+        active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self._title_color = QColor(active_theme.node_title_background_color)
+        self._title_font = QFont("Lucida Sans Unicode")
+        self._title_font.setPointSize(15)
+
+        self.title_item = QGraphicsTextItem(self.grButton)
+        self.title_item.setDefaultTextColor(self._title_color)
+        self.title_item.setFont(self._title_font)
+        self.title_item.setPos(-12, -3)
+        self.title_item.setPlainText(self.label)
         
 class OutlinerGraphicFlag(QGraphicsItem):
     def __init__(self, flag, color):
@@ -126,4 +164,29 @@ class OutlinerGraphicFlag_Filter(QGraphicsItem):
                       -10,
                       14,
                       20)
+    
+class OutlinerGraphicButton(QGraphicsItem):
+    def __init__(self, flag, color):
+        super().__init__(flag.outliner_header.grHeaderItem)
+        self.color = color
+        self.flag = flag
+        
+        self.off_color = QBrush(QColor(active_theme.node_grid_background_color))
+        
+        self.setFlag(QGraphicsItem.ItemIsSelectable)
+        self.on_color = QBrush(QColor(active_theme.node_selected_color))
+    
+    def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
+        path_title = QPainterPath()
+        painter.setBrush(self.off_color if not self.isSelected() else self.on_color)
+        painter.setPen(Qt.NoPen)
+        path_title.addRoundedRect(-10,-5,35,30, 1,1)
+        painter.drawPath(path_title.simplified())
+
+        
+    def boundingRect(self):
+        return QRectF(-10,
+                      -10,
+                      35,
+                      30)
 
