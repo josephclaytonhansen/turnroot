@@ -154,7 +154,64 @@ class rainforest(colorTheme):
     workspace_background_color = "#789187"
     list_background_color = "#85A687"
     window_text_color = "#EFE4AE"
-    window_background_color = "#2E3532"
+    window_background_color = "#5b6e49"
+    button_alt_text_color = "#F8EDC0"
+    button_alt_color = "#716754"
+    node_grid_lines_color = "#85A788"
+    node_grid_alt_lines_color = "#758E6E"
+    node_grid_background_color = "#7F9F80"
+    node_selected_color = "#C69C4D"
+    node_title_color = "#F8EDC0"
+    node_title_background_color = "#b59a70"
+    node_background_color = "#796950"
+    node_text_color = "#F8EDC0"
+    node_wire_color = "#bcc99d"
+    
+    node_socket_trigger_color = "#00EE88"
+    node_socket_file_color = "#FF57A2"
+    node_socket_object_color = "#FF7700"
+    node_socket_number_color = "#009EFF"
+    node_socket_text_color = "#FFE099"
+    node_socket_event_color = "#968080"
+    node_socket_boolean_color = "#2f3aa3"
+
+    node_wire_error_color = "#7B2523"
+    node_outliner_label_0 = "#D88552"
+    node_outliner_label_1 = "#F2E396"
+    node_outliner_label_2 = "#7BBAB3"
+    node_outliner_label_3 = "#DACDA4"
+
+    level_editor = ["level_editor", window_background_color,list_background_color,
+                    window_text_color,
+                    button_alt_color,button_alt_text_color]
+
+    node_grid = ["node_grid",node_grid_background_color, node_grid_lines_color,
+                 node_grid_alt_lines_color, node_selected_color, node_title_color,
+                 node_title_background_color, node_background_color,
+                 node_text_color, node_wire_color, node_socket_trigger_color,
+                 node_socket_file_color, node_socket_object_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_boolean_color, node_wire_error_color,
+                 node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
+                 node_outliner_label_3]
+
+    level_editor_labels = ["level_editor", "window_background_color",
+                           "list_background_color",
+                    "window_text_color",
+                    "button_alt_color","button_alt_text_color"]
+
+    node_grid_labels = ["node_grid","node_grid_background_color",
+                        "node_grid_lines_color",
+                 "node_grid_alt_lines_color", "node_selected_color","node_title_color",
+                 "node_title_background_color", "node_background_color",
+                 "node_text_color", "node_wire_color", "node_socket_trigger_color",
+                 "node_socket_file_color", "node_socket_object_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_boolean_color", "node_wire_error_color",
+                        "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
+                        "node_outliner_label_3"]
+
+    groups = [level_editor, node_grid]
 
 class charcoal(colorTheme):
     name = "Charcoal"
@@ -243,10 +300,10 @@ class ocean_waves(colorTheme):
     node_socket_event_color = "#FFFFFF"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#C02D0C"
-    node_outliner_label_0 = "#D95F80"
-    node_outliner_label_1 = "#94c9ff"
-    node_outliner_label_2 = "#F27B50"
-    node_outliner_label_3 = "#D7D9D0"
+    node_outliner_label_0 = "#F29472"
+    node_outliner_label_1 = "#5FE3E3"
+    node_outliner_label_2 = "#0F2440"
+    node_outliner_label_3 = "#F2D49B"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -324,6 +381,7 @@ class custom(colorTheme):
     node_outliner_label_0 = ""
     node_outliner_label_1 = ""
     node_outliner_label_2 = ""
+    node_outliner_label_3 = ""
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -336,7 +394,8 @@ class custom(colorTheme):
                  node_socket_file_color, node_socket_object_color,
                  node_socket_number_color, node_socket_text_color, node_socket_event_color,
                  node_socket_boolean_color, node_wire_error_color,
-                 node_outliner_label_0,node_outliner_label_1,node_outliner_label_2]
+                 node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
+                 node_outliner_label_3]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -351,12 +410,10 @@ class custom(colorTheme):
                  "node_socket_file_color", "node_socket_object_color",
                  "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
                  "node_socket_boolean_color", "node_wire_error_color",
-                        "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2"]
+                        "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
+                        "node_outliner_label_3"]
 
     groups = [level_editor, node_grid]
-
-
-
 
 
 

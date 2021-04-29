@@ -93,7 +93,7 @@ class FilterButton():
         
     def initTitle(self):
         active_theme = getattr(UI_colorTheme, data["active_theme"])
-        self._title_color = QColor(active_theme.node_title_background_color)
+        self._title_color = QColor(active_theme.node_text_color)
         self._title_font = QFont("Lucida Sans Unicode")
         self._title_font.setPointSize(point_size)
 
