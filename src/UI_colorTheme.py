@@ -169,8 +169,8 @@ class charcoal(colorTheme):
     node_grid_alt_lines_color = "#292929"
     node_grid_lines_color = "#2f2f2f"
     node_title_color = "#ffffff"
-    node_title_background_color = "#FF313131"
-    node_background_color = "#e3212121"
+    node_title_background_color = "#494949"
+    node_background_color = "#323232"
     node_text_color = "#d0d0d0"
     node_wire_color = "#ACACAC"
     node_socket_trigger_color = "#00FF77"
@@ -354,6 +354,9 @@ class custom(colorTheme):
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2"]
 
     groups = [level_editor, node_grid]
+
+
+
 
 
 

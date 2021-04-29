@@ -259,6 +259,8 @@ class NodePreferencesDialog(QDialog):
         c = confirmAction(parent=self, s="edit this color theme")
         c.exec_()
         if(c.return_confirm):
+            data["theme_changed"] == True
+            dumpJSON(data)
             d= colorThemeEdit(parent=self)
             d.exec_()
         
