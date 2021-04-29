@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from src.UI_node_outliner_label import OutlinerGraphicFlag, OutlinerGraphicFlag_Filter, filterButtonText
 from src.UI_node_outliner_list_item import OutlinerGraphicsListItem
+from src.UI_node_outliner_header import RefreshItem
 
 AND = 0
 OR = 1
@@ -35,6 +36,9 @@ class OutlinerGraphicsView(QGraphicsView):
         print(item)
         self.last_lmb_click_scene_pos = self.mapToScene(event.pos())
         
+        if isinstance(item, RefreshItem):
+            self.grScene.refresh_files = True
+        
         if isinstance(item, OutlinerGraphicFlag):
             self.grScene.filter_view_update = True
             if item.flag.on:
@@ -47,13 +51,14 @@ class OutlinerGraphicsView(QGraphicsView):
             print("label at position", item.flag.position, "at index",item.flag.index, "with color", item.color.color.name(), "clicked on",item.flag.list_item.grListItem.text)
             print("Labels ", item.flag.list_item.flags_status)
             
-        if hasattr(item, "list_item") and isinstance(item, OutlinerGraphicFlag) == False:
+        elif hasattr(item, "list_item") and isinstance(item, OutlinerGraphicFlag) == False:
             self.grScene.filter_view_update = False
+            self.grScene.refresh_files = False
             print("clicked list item ", item.list_item.grListItem.text)
             item.list_item.parent_scene.path = item.list_item.full_path
             item.list_item.parent_scene.loadFromFile(dialog=False)
         
-        if isinstance(item, OutlinerGraphicFlag_Filter):
+        elif isinstance(item, OutlinerGraphicFlag_Filter):
             if item.flag.on:
                 item.flag.on = False
                 item.flag.outliner_header.flags_status[item.flag.position] = item.flag.on
@@ -63,7 +68,7 @@ class OutlinerGraphicsView(QGraphicsView):
             item.update()
             self.grScene.filter_view_update = True
         
-        if isinstance(item, filterButtonText):
+        elif isinstance(item, filterButtonText):
             self.grScene.filter_view_update = True
             print("FILTER BUTTON CLICKED")
             if item.position == 0:

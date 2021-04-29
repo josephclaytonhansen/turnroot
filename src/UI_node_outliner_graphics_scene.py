@@ -18,6 +18,7 @@ class OutlinerGraphicsScene(QGraphicsScene):
         self.scene = scene
         
         self.filter_view_update = False
+        self.refresh_files = False
         self.filter_mode = ALL
         
         self.file_selection_path = None

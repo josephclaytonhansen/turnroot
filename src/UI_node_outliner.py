@@ -4,13 +4,14 @@ from PyQt5.QtGui import *
 from src.UI_node_outliner_graphics_scene import OutlinerGraphicsScene
 from src.UI_node_outliner_graphics_view import OutlinerGraphicsView
 from src.UI_node_outliner_list_item import OutlinerListItem
-from src.UI_node_outliner_header import OutlinerHeader
+from src.UI_node_outliner_header import OutlinerHeader, RefreshItem
 from src.node_backend import getFiles, GET_FOLDERS, GET_FILES, condenseList
 import math, json, os
 
 if os.sep != "\\":
     const_path = "src/tmp/nenc.json"
     filter_icon_path = "src/ui_icons/white/filter.png"
+    refresh_icon_path = "src/ui_icons/white/refresh_files.png"
     stylesheet_path = "src/node_outliner_style.qss"
     with open(const_path, "r") as readfile:
         const = json.load(readfile)
@@ -18,6 +19,7 @@ if os.sep != "\\":
 else:
     const_path = "src\\tmp\\nenc.json"
     filter_icon_path = "src\\ui_icons\\white\\filter.png"
+    refresh_icon_path = "src\\ui_icons\\white\\refresh_files.png"
     stylesheet_path = "src\\node_outliner_style.qss"
     with open(const_path, "r") as readfile:
         const = json.load(readfile)
@@ -83,11 +85,18 @@ class outlinerWnd(QWidget):
     def addHeader(self):
         self.header = OutlinerHeader(self.scene,parent_scene = self.parent_scene)
         self.header.setPos(0,0)
+        
         self.header.filter_icon = QPixmap(filter_icon_path)
         self.header_filter = QGraphicsPixmapItem(self.header.filter_icon)
         self.scene.grScene.addItem(self.header_filter)
         self.header_filter.setPos(275,8)
-        self.filter_rect = QRect(275,8,28,28)
+        self.filter_rect = QRect(275,8,38,38)
+        
+        self.header.refresh_icon = QPixmap(refresh_icon_path)
+        self.header_refresh = RefreshItem(self.header.refresh_icon)
+        self.scene.grScene.addItem(self.header_refresh)
+        self.header_refresh.setPos(110,7)
+        self.refresh_rect = QRect(110,7,38,38)
         
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -98,6 +107,11 @@ class outlinerWnd(QWidget):
             print(self.grScene.filter_mode)
             self.Filter(flags=self.header.flags_status,AO=self.grScene.filter_mode)
             print("FILTERING: ", self.header.flags_status)
+        
+        elif self.grScene.refresh_files and self.refresh_rect.contains(event.pos()):
+            self.addItems()
+            self.update()
+            self.grScene.refresh_files = False
         super().mousePressEvent(event)
 
     def addItems(self):

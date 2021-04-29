@@ -8,6 +8,11 @@ import json
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
+class RefreshItem(QGraphicsPixmapItem):
+    def __init__(self, QPixmap=None, parent=None):
+        super().__init__(parent)
+        self.setPixmap(QPixmap)
+
 class OutlinerHeader():
     def __init__(self, scene, parent_scene=None):
         super().__init__()
