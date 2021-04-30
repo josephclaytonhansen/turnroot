@@ -484,6 +484,7 @@ class switchEditorDialog(QDialog):
         data = updateJSON()
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
+        self.setWindowFlags(Qt.Popup)
         self.mode = NEW_WINDOW
         self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
@@ -542,7 +543,7 @@ class switchEditorDialog(QDialog):
                 w = editorDialogItem(current_icon, current_label, EDITORS[e], parent=self)
                 self.rows[current_row].addWidget(w)
 
-        self.layout.addWidget(self.radioGroup)
+        #self.layout.addWidget(self.radioGroup)
         
         self.setLayout(self.layout)
         
