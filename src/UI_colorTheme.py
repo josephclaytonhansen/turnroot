@@ -344,6 +344,66 @@ class chocolate(colorTheme):
     list_background_color = "#733A2D"
     window_text_color = "#DB8C50"
     workspace_background_color = "#994E33"
+    
+    button_alt_color = "#F9C27E"
+    button_alt_text_color = "#512C2A"
+
+    node_grid_lines_color = "#b86748"
+    node_grid_alt_lines_color = "#914e34"
+    node_grid_background_color = "#A65638"
+    node_selected_color = "#F9C27E"
+    node_title_color = "#DB8C50"
+    node_title_background_color = "#59302C"
+    node_background_color = "#512C2A"
+    node_text_color = "#FBF4EB"
+    node_wire_color = "#DB8C50"
+    
+    node_socket_trigger_color = "#00EE88"
+    node_socket_file_color = "#FF57A2"
+    node_socket_object_color = "#FF7700"
+    node_socket_number_color = "#009EFF"
+    node_socket_text_color = "#FFE099"
+    node_socket_event_color = "#968080"
+    node_socket_boolean_color = "#2f3aa3"
+
+    node_wire_error_color = "#7B2523"
+    
+    node_outliner_label_0 = "#EF965E"
+    node_outliner_label_1 = "#F9C27E"
+    node_outliner_label_2 = "#C3BCAC"
+    node_outliner_label_3 = "#5FE3E3"
+
+    level_editor = ["level_editor", window_background_color,list_background_color,
+                    window_text_color,
+                    button_alt_color,button_alt_text_color]
+
+    node_grid = ["node_grid",node_grid_background_color, node_grid_lines_color,
+                 node_grid_alt_lines_color, node_selected_color, node_title_color,
+                 node_title_background_color, node_background_color,
+                 node_text_color, node_wire_color, node_socket_trigger_color,
+                 node_socket_file_color, node_socket_object_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_boolean_color, node_wire_error_color,
+                 node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
+                 node_outliner_label_3]
+
+    level_editor_labels = ["level_editor", "window_background_color",
+                           "list_background_color",
+                    "window_text_color",
+                    "button_alt_color","button_alt_text_color"]
+
+    node_grid_labels = ["node_grid","node_grid_background_color",
+                        "node_grid_lines_color",
+                 "node_grid_alt_lines_color", "node_selected_color","node_title_color",
+                 "node_title_background_color", "node_background_color",
+                 "node_text_color", "node_wire_color", "node_socket_trigger_color",
+                 "node_socket_file_color", "node_socket_object_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_boolean_color", "node_wire_error_color",
+                        "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
+                        "node_outliner_label_3"]
+
+    groups = [level_editor, node_grid]
 
 class chili_pepper(colorTheme):
     name = "Chili Pepper"
@@ -414,11 +474,6 @@ class custom(colorTheme):
                         "node_outliner_label_3"]
 
     groups = [level_editor, node_grid]
-
-
-
-
-
 
 
 
