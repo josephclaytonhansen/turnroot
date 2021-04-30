@@ -59,7 +59,6 @@ class colorTheme:
                         "node_outliner_label_3"]
 
     groups = [level_editor, node_grid]
-    
 
 class midnight_spark(colorTheme):
     name = "Midnight Spark"
@@ -423,21 +422,21 @@ class chili_pepper(colorTheme):
     node_title_background_color = "#FFE0B5"
     node_background_color = "#fae7cd"
     node_text_color = "#333333"
-    node_wire_color = "#2C363F"
+    node_wire_color = "#632533"
     
-    node_socket_trigger_color = "#000000"
-    node_socket_file_color = "#000000"
-    node_socket_object_color = "#000000"
-    node_socket_number_color = "#000000"
-    node_socket_text_color = "#000000"
-    node_socket_event_color = "#000000"
-    node_socket_boolean_color = "#000000"
-    node_wire_error_color = "#000000"
+    node_socket_trigger_color = "#00EE88"
+    node_socket_file_color = "#FF57A2"
+    node_socket_object_color = "#FF7700"
+    node_socket_number_color = "#009EFF"
+    node_socket_text_color = "#FFE099"
+    node_socket_event_color = "#968080"
+    node_socket_boolean_color = "#2f3aa3"
+    node_wire_error_color = "#b8304e"
     
-    node_outliner_label_0 = "#FFD1BA"
-    node_outliner_label_1 = "#493657"
-    node_outliner_label_2 = "#FFD1BA"
-    node_outliner_label_3 = "#A4AF69"
+    node_outliner_label_0 = "#A59A6F"
+    node_outliner_label_1 = "#D48D8D"
+    node_outliner_label_2 = "#C5B99B"
+    node_outliner_label_3 = "#699987"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -532,37 +531,6 @@ class custom(colorTheme):
                         "node_outliner_label_3"]
 
     groups = [level_editor, node_grid]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
