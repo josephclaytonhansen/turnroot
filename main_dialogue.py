@@ -1,12 +1,13 @@
-import sys, json, os
+import sys, json, os, runpy
 import src.UI_colorTheme as UI_colorTheme
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QSize
 from PyQt5.QtCore import QSize, Qt, pyqtSignal
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 from src.UI_updateJSON import updateJSON
-from src.UI_Dialogs import confirmAction, infoClose
+from src.UI_Dialogs import confirmAction, infoClose, switchEditorDialog, REPLACE_WINDOW, NEW_WINDOW
 from src.UI_node_editor_wnd import NodeEditorWnd
 from src.UI_ProxyStyle import ProxyStyle
 from src.UI_node_preferences_dialog import NodePreferencesDialog
@@ -71,6 +72,7 @@ class main(QMainWindow):
         self.toolbar.addAction(self.forumButton)
         
         self.optionsButton.triggered.connect(self.OptionsMenu)
+        self.backButton.triggered.connect(self.editorSelect)
         
         self.addToolBar(self.toolbar)
         
@@ -189,6 +191,18 @@ class main(QMainWindow):
         if(c.return_confirm):
             sys.exit()
     
+    def editorSelect(self):
+        e = switchEditorDialog(parent=self)
+        e.exec_()
+        new_editor = e.editor
+        if e.mode == REPLACE_WINDOW:
+            pass
+        elif e.mode == NEW_WINDOW:
+            if new_editor == 0:
+                from main_level_editor import main
+            elif new_editor == 1:
+                pass
+
     def OptionsMenu(self):
         p = NodePreferencesDialog(parent=self)
         theme = p.exec_()

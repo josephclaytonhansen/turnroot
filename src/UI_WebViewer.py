@@ -2,7 +2,7 @@
 
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import QFile, QUrl
+from PyQt5.QtCore import *
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import json
 from src.UI_updateJSON import updateJSON

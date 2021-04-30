@@ -11,7 +11,9 @@ from src.UI_Dialogs import (confirmAction,
                         infoClose,
                         addObject,
                         resourcePackDialog,
-                        activeResourcePack)
+                        activeResourcePack,
+                        switchEditorDialog,
+                        REPLACE_WINDOW, NEW_WINDOW)
 from src.UI_updateJSON import updateJSON
 from src.UI_workspaceContainer import (showWorkspace,
                                    hideWorkspace,
@@ -242,6 +244,7 @@ class main(QMainWindow):
         self.edit_mode.triggered.connect(self.tileEditMode)
         self.justTilesButton.triggered.connect(self.full_screen)
         self.resourcesButton.triggered.connect(self.resourcesDialog)
+        self.backButton.triggered.connect(self.editorSelect)
         
         #add toolbar buttons to toolbar
         self.toolbar.addAction(self.backButton)
@@ -631,6 +634,18 @@ class main(QMainWindow):
             with open(self.path+"o", "w") as write_object_file:
                 json.dump(self.object_data, write_object_file)
                 write_object_file.close()
+                
+    def editorSelect(self):
+        e = switchEditorDialog(parent=self)
+        e.exec_()
+        new_editor = e.editor
+        if e.mode == REPLACE_WINDOW:
+            pass
+        elif e.mode == NEW_WINDOW:
+            if new_editor == 0:
+                pass
+            elif new_editor == 1:
+                from main_dialogue import main
                 
 window = main()
 window.show()

@@ -437,3 +437,122 @@ class colorThemeEdit(QDialog):
             self.c_block_pixmap.fill(QColor("black"))
         
         self.c_block.setPixmap(self.c_block_pixmap)
+
+NEW_WINDOW = 0
+REPLACE_WINDOW = 1
+
+class editorDialogItem(QWidget):
+    def __init__(self,icon,text,editor,parent=None):
+        data = updateJSON()
+        super().__init__(parent)
+        self.icon = icon
+        self.text = text
+        self.editor = editor
+        self.parent = parent
+        
+        self.layout = QVBoxLayout()
+        self.layout.setSpacing(2)
+        self.setLayout(self.layout)
+        self.icon_widget = QLabel()
+        self.icon_widget.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.icon_widget.setPixmap(QPixmap(self.icon))
+        self.label_widget = QPushButton(self.text)
+        self.label_widget.clicked.connect(self.changeEditor)
+        
+        self.layout.addWidget(self.icon_widget)
+        self.layout.addWidget(self.label_widget)
+    
+    def changeEditor(self):
+        self.parent.editor = self.editor
+        self.parent.close()
+
+TILE_EDITOR = 0
+NODE_EDITOR = 1
+WORLD_EDITOR = 2
+HUB_EDITOR = 3
+UNIT_EDITOR = 4
+OBJECT_EDITOR = 5
+PORTRAIT_EDITOR = 6
+MENU_EDITOR = 7
+STORE_EDITOR = 8
+GAME_EDITOR = 9
+
+EDITORS = [TILE_EDITOR,NODE_EDITOR,WORLD_EDITOR,HUB_EDITOR,UNIT_EDITOR,OBJECT_EDITOR,PORTRAIT_EDITOR,MENU_EDITOR,STORE_EDITOR,GAME_EDITOR]
+
+class switchEditorDialog(QDialog):
+    def __init__(self,parent=None):
+        data = updateJSON()
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        self.mode = NEW_WINDOW
+        self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        
+        self.editor = None
+        
+        self.layout = QVBoxLayout()
+
+        self.radioGroup = QWidget()
+        self.radioGroup_layout = QHBoxLayout()
+        self.radioGroup.setLayout(self.radioGroup_layout)
+        
+        self.radio_new = QRadioButton("Open new window")
+        self.radio_new.setChecked(True)
+        self.radio_new.toggled.connect(self.newWindow)
+        
+        self.radio_replace = QRadioButton("Replace current window")
+        self.radio_new.setChecked(False)
+        self.radio_new.toggled.connect(self.replaceWindow)
+        
+        self.radioGroup_layout.addWidget(self.radio_new)
+        self.radioGroup_layout.addWidget(self.radio_replace)
+        
+        self.row_1 = QWidget()
+        self.row_2 = QWidget()
+        self.row_3 = QWidget()
+        
+        self.row_1_layout = QHBoxLayout()
+        self.row_2_layout = QHBoxLayout()
+        self.row_3_layout = QHBoxLayout()
+        
+        self.row_1.setLayout(self.row_1_layout)
+        self.row_2.setLayout(self.row_2_layout)
+        self.row_3.setLayout(self.row_3_layout)
+        
+        self.layout.addWidget(self.row_1)
+        self.layout.addWidget(self.row_2)
+        self.layout.addWidget(self.row_3)
+        
+        self.icons = [["src/ui_icons/white/e_tile.png", "src/ui_icons/white/e_node.png", "src/ui_icons/white/e_world.png","src/ui_icons/white/e_hub.png"],
+                      ["src/ui_icons/white/e_unit.png","src/ui_icons/white/e_object.png","src/ui_icons/white/e_portrait.png"],
+                      ["src/ui_icons/white/e_menu.png", "src/ui_icons/white/e_store.png", "src/ui_icons/white/e_game.png"]]
+        self.labels = [["Tile (level) editor", "Node (dialogue/actions) editor", "Tile (world) editor", "Hub editor"],
+                       ["Unit editor", "Object editor", "Portrait editor"],
+                       ["Menu editor", "Store editor", "Game editor"]]
+        self.widgets = [[0,1,2, 3],[0,1,2],[0,1,2]]
+        self.rows = [self.row_1_layout, self.row_2_layout, self.row_3_layout]
+        
+        e = -1
+        current_row = -1
+        for row in self.widgets:
+            current_row  += 1
+            for item in row:
+                e += 1
+                current_icon = self.icons[current_row][item]
+                current_label = self.labels[current_row][item]
+                w = editorDialogItem(current_icon, current_label, EDITORS[e], parent=self)
+                self.rows[current_row].addWidget(w)
+
+        self.layout.addWidget(self.radioGroup)
+        
+        self.setLayout(self.layout)
+        
+        self.show()
+    
+    def newWindow(self):
+        self.mode = NEW_WINDOW
+    
+    def replaceWindow(self):
+        self.mode = REPLACE_WINDOW
+
+        
+        

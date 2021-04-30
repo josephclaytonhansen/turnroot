@@ -13,7 +13,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 with open("src/tmp/neec.json", "r") as readfile:
     const = json.load(readfile)
-    
+
 WIDTH = const[0]
 SELECTED_WIDTH = const[1]
     
@@ -131,6 +131,7 @@ EDGE_CP_ROUNDNESS = 100
 with open("src/tmp/node_preferences.json", "r") as r:
     node_data = json.load(r)
     default_edge = node_data["edge_type"]
+    print(default_edge)
 
 class Edge(Serializable):
     def __init__(self, scene, start_socket=None, end_socket=None, edge_type=default_edge):
