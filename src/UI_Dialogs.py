@@ -473,11 +473,12 @@ HUB_EDITOR = 3
 UNIT_EDITOR = 4
 OBJECT_EDITOR = 5
 PORTRAIT_EDITOR = 6
-MENU_EDITOR = 7
-STORE_EDITOR = 8
-GAME_EDITOR = 9
+CLASS_EDITOR = 7
+MENU_EDITOR = 8
+STORE_EDITOR = 9
+GAME_EDITOR = 10
 
-EDITORS = [TILE_EDITOR,NODE_EDITOR,WORLD_EDITOR,HUB_EDITOR,UNIT_EDITOR,OBJECT_EDITOR,PORTRAIT_EDITOR,MENU_EDITOR,STORE_EDITOR,GAME_EDITOR]
+EDITORS = [TILE_EDITOR,NODE_EDITOR,WORLD_EDITOR,HUB_EDITOR,UNIT_EDITOR,OBJECT_EDITOR,PORTRAIT_EDITOR,CLASS_EDITOR,MENU_EDITOR,STORE_EDITOR,GAME_EDITOR]
 
 class switchEditorDialog(QDialog):
     def __init__(self,parent=None):
@@ -524,12 +525,12 @@ class switchEditorDialog(QDialog):
         self.layout.addWidget(self.row_3)
         
         self.icons = [["src/ui_icons/white/e_tile.png", "src/ui_icons/white/e_node.png", "src/ui_icons/white/e_world.png","src/ui_icons/white/e_hub.png"],
-                      ["src/ui_icons/white/e_unit.png","src/ui_icons/white/e_object.png","src/ui_icons/white/e_portrait.png"],
+                      ["src/ui_icons/white/e_unit.png","src/ui_icons/white/e_object.png","src/ui_icons/white/e_portrait.png", "src/ui_icons/white/e_class.png"],
                       ["src/ui_icons/white/e_menu.png", "src/ui_icons/white/e_store.png", "src/ui_icons/white/e_game.png"]]
         self.labels = [["Tile (level) editor", "Node (dialogue/actions) editor", "Tile (world) editor", "Hub editor"],
-                       ["Unit editor", "Object editor", "Portrait editor"],
+                       ["Unit editor", "Object editor", "Portrait editor", "Class editor"],
                        ["Menu editor", "Store editor", "Game editor"]]
-        self.widgets = [[0,1,2, 3],[0,1,2],[0,1,2]]
+        self.widgets = [[0,1,2,3],[0,1,2,3],[0,1,2]]
         self.rows = [self.row_1_layout, self.row_2_layout, self.row_3_layout]
         
         e = -1
