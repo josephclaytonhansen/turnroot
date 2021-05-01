@@ -1,7 +1,6 @@
-import sys, json, os, runpy
+import sys, json, os
 import src.UI_colorTheme as UI_colorTheme
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import QSize
 from PyQt5.QtCore import QSize, Qt, pyqtSignal
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
