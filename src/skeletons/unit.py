@@ -3,11 +3,11 @@ from weapon_experience import weaponExperience
 from unit_class import unitClass
 from weakness_strength import Weakness, Strength
 from unit_level import Level
-from Portrait import Portrait
 from unit_class import unitClass
 from team_likes_dislikes import teamDislike, teamLike
 
 #general imports
+from Portrait import Portrait
 from Object import Object
 from Skill import Skill
 from Tactic import Tactic
