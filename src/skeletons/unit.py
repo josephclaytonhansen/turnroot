@@ -1,3 +1,22 @@
+#specific imports
+from weapon_experience import weaponExperience
+from unit_class import unitClass
+from weakness_strength import Weakness, Strength
+from unit_level import Level
+from Portrait import Portrait
+from unit_class import unitClass
+from team_likes_dislikes import teamDislike, teamLike
+
+#general imports
+from Object import Object
+from Skill import Skill
+from Tactic import Tactic
+from Skilled_Blow import skilledBlow
+from Attack import Attack
+from Action import Action
+
+from Support_Level import supportLevel
+
 import json
 with open("universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)

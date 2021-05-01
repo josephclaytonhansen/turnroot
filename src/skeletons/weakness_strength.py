@@ -1,7 +1,7 @@
-class weakness():
+class Weakness():
     def __init__(self):
         pass
     
-class strength():
+class Strength():
     def __init__(self):
         pass
