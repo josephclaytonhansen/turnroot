@@ -97,10 +97,8 @@ class Unit():
             for stat in unit_stats:
                 setattr(self,stat,unit_stats[stat])
     
-    def setIdentity(self,custom_pronouns=False):
-        if custom_pronouns == False:
-            self.pronouns = pronouns(self.gender).pronouns
-        else:
-            self.pronouns = custom_pronouns
+    def setIdentity(self):
+        self.pronouns = pronouns(self.gender).pronouns
+
 
         

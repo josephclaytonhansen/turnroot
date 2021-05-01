@@ -26,4 +26,8 @@ class pronouns():
             self.pronouns_direct = "they"
             self.pronouns_indirect = "them"
             self.pronouns_possessive = "theirs"
+        else:
+            self.pronouns_direct = "!CUSTOM PRONOUNS NOT ASSIGNED!"
+            self.pronouns_indirect = "!CUSTOM PRONOUNS NOT ASSIGNED!"
+            self.pronouns_possessive = "!CUSTOM PRONOUNS NOT ASSIGNED!"
         self.pronouns = [self.pronouns_direct, self.pronouns_indirect, self.pronouns_possessive]
