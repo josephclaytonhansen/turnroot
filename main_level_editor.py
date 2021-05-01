@@ -646,6 +646,24 @@ class main(QMainWindow):
                 pass
             elif new_editor == 1:
                 from main_dialogue import main
+            elif new_editor == 2:
+                from main_world_editor import main
+            elif new_editor == 3:
+                from main_hub_editor import main
+            elif new_editor == 4:
+                from main_unit_editor import main
+            elif new_editor == 5:
+                from main_object_editor import main
+            elif new_editor == 6:
+                from main_portrait_editor import main
+            elif new_editor == 7:
+                from main_class_editor import main
+            elif new_editor == 8:
+                from main_menu_editor import main
+            elif new_editor == 9:
+                from main_shop_editor import main
+            elif new_editor == 10:
+                from main_game_editor import main
                 
 window = main()
 window.show()
