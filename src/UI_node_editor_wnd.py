@@ -63,11 +63,16 @@ class NodeEditorWnd(QWidget):
         self.show()
         
     def addNodes(self):
-        node1 = Node(self.scene, "Node - 3 in 1 out", inputs = [S_TRIGGER, S_NUMBER, S_TEXT], outputs = [S_TRIGGER],
-                     contents = [QLabel("<font color='"+active_theme.node_text_color+"'>Some text</font>"),
+        node1 = Node(self.scene, "Node - 6 in 1 out", inputs = [S_TRIGGER, S_NUMBER,
+                                                                S_TEXT, S_TEXT, S_TEXT,S_TEXT
+                                                                ], outputs = [S_TRIGGER],
+                     contents = [QComboBox(),
+                                 QLabel("<font color='"+active_theme.node_text_color+"'>Some text</font>"),
+                                 QLabel("<font color='"+active_theme.node_text_color+"'>Some text</font>"),
+                                 QLabel("<font color='"+active_theme.node_text_color+"'>Some text</font>"),
                                  QLabel("<font color='"+active_theme.node_text_color+"'>Some text</font>"),
                                  QLabel("<font color='"+active_theme.node_text_color+"'>Some text</font>")],
-                     socket_content_index = 1)
+                     socket_content_index = 0)
         node2 = Node(self.scene, "Node - 3 in 3 out", inputs = [S_TRIGGER,S_BOOLEAN,S_NUMBER],
                      outputs = [S_TRIGGER,S_BOOLEAN,S_NUMBER])
         node3 = Node(self.scene, "All Sockets",

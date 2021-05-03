@@ -29,7 +29,7 @@ class QDMNodeContentWidget(QWidget, Serializable):
         self.initUI()
         
     def initUI(self):
-        active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
         self.setLayout(self.layout)
@@ -37,10 +37,11 @@ class QDMNodeContentWidget(QWidget, Serializable):
         for widget in self.contents:
             self.layout.addWidget(widget)
             widget.adjustSize()
-            self.spacer_height -= widget.height()
-            self.spacer_height -= NODE_PADDING*1.5
+            widget.setMinimumHeight(29)
+            widget.setMaximumHeight(29)
+            self.spacer_height -= 41
         self.spacer_height -= NODE_TITLE_HEIGHT
-        print(self.spacer_height)
+        self.spacer_height -= NODE_PADDING
         self.layout.addSpacerItem(QSpacerItem(2, self.spacer_height))
     
     def setEditingFlag(self,value):
@@ -112,7 +113,6 @@ class QDMGraphicsNode(QGraphicsItem):
         self._title_color = QColor(active_theme.node_title_color)
         self._title_font = QFont(NODE_FONT)
         self._title_font.setPointSize(FONT_SIZE)
-        self._title_font.setStyleStrategy(QFont.NoAntialias)
         self.title_item = QGraphicsTextItem(self)
         self.title_item.node = self.node
         self.title_item.setDefaultTextColor(self._title_color)
