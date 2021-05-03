@@ -197,6 +197,7 @@ class Node(Serializable):
         self.scene = scene
         self.socket_content_index = socket_content_index
         self.height = height
+        self.node_preset = None
         
         self.contents = contents
         self.content = QDMNodeContentWidget(self, self.contents)

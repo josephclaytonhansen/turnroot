@@ -73,11 +73,13 @@ class Socket(Serializable):
         self.index = index
         self.position = position
         self.is_multi_edges = multi_edges
-        
+
         if self.position == LEFT_TOP:
             self.direction = INPUT
+            self.reception = None
         else:
             self.direction = OUTPUT
+            self.emission = None
             
         self.type = t
         self.grSocket = QDMGraphicsSocket(self, self.type)
@@ -93,6 +95,10 @@ class Socket(Serializable):
     
     def addEdge(self, edge):
         self.edges.append(edge)
+        for n in range(len(self.edges)):
+            
+            self.edges[n].start_socket.emission = self.edges[n].start_socket.node.node_preset.values[2]
+            print(self.edges[n].start_socket.emission)
 
     def removeEdge(self, edge):
         if edge in self.edges: self.edges.remove(edge)

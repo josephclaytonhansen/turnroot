@@ -65,11 +65,8 @@ class NodeEditorWnd(QWidget):
         
     def addNodes(self):
         node1 = number_number_math(scene=self.scene).n
-        node2 = Node(self.scene, "Node - 3 in 3 out", inputs = [S_TRIGGER,S_BOOLEAN,S_NUMBER],
-                     outputs = [S_TRIGGER,S_BOOLEAN,S_NUMBER])
-        node3 = Node(self.scene, "All Sockets",
-                     inputs = [S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN],
-                     outputs = [S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN])
+        node2 = number_number_math(scene=self.scene).n
+        node3 = number_number_math(scene=self.scene).n
         node1.setPos(-350*2,-250*2)
         node2.setPos(-75*2, 0)
         node3.setPos(200*2, -150*2)
