@@ -22,9 +22,10 @@ NODE_FONT = const[5]
 FONT_SIZE = const[6]
 
 class QDMNodeContentWidget(QWidget, Serializable):
-    def __init__(self, node, parent = None):
+    def __init__(self, node, contents, parent = None):
         super().__init__(parent)
         self.node = node
+        self.contents = contents
         self.initUI()
         
     def initUI(self):
@@ -32,9 +33,15 @@ class QDMNodeContentWidget(QWidget, Serializable):
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
         self.setLayout(self.layout)
-        self.w_label = QLabel("<font color='"+active_theme.node_text_color+"'>Some text</font>")
-        self.layout.addWidget(self.w_label)
-        self.layout.addWidget(QDMTextEdit())
+        self.spacer_height = 600
+        for widget in self.contents:
+            self.layout.addWidget(widget)
+            widget.adjustSize()
+            self.spacer_height -= widget.height()
+            self.spacer_height -= NODE_PADDING*1.5
+        self.spacer_height -= NODE_TITLE_HEIGHT
+        print(self.spacer_height)
+        self.layout.addSpacerItem(QSpacerItem(2, self.spacer_height))
     
     def setEditingFlag(self,value):
         self.node.scene.grScene.views()[0].editingFlag = value
@@ -176,11 +183,13 @@ class QDMGraphicsNode(QGraphicsItem):
         painter.drawPath(path_outline.simplified())
               
 class Node(Serializable):
-    def __init__(self, scene, title="node item", inputs = [], outputs=[]):
+    def __init__(self, scene, title="node item", inputs = [], outputs=[], contents = [], socket_content_index = 0):
         super().__init__()
         self.scene = scene
+        self.socket_content_index = socket_content_index
         
-        self.content = QDMNodeContentWidget(self)
+        self.contents = contents
+        self.content = QDMNodeContentWidget(self, self.contents)
         self.grNode = QDMGraphicsNode(self)
         
         self._title = title
@@ -228,6 +237,7 @@ class Node(Serializable):
             x = self.grNode.width
         
         y = self.grNode.title_height + self.grNode.padding + (1.5*self.grNode.edge_size) + (index * 20 * 2.0)
+        y = self.socket_content_index * 40 + y
         return [x, y]
     
     def updateConnectedEdges(self):
