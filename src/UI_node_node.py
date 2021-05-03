@@ -33,7 +33,12 @@ class QDMNodeContentWidget(QWidget, Serializable):
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
         self.setLayout(self.layout)
-        self.spacer_height = 600
+        
+        if self.node.height == None:
+            self.spacer_height = 600
+        else:
+            self.spacer_height = self.node.height
+        
         for widget in self.contents:
             self.layout.addWidget(widget)
             widget.adjustSize()
@@ -78,8 +83,12 @@ class QDMGraphicsNode(QGraphicsItem):
         super().__init__(parent)
         self.node = node
         self.content = self.node.content
+        print(self.content.height())
         self.width = NODE_WIDTH
-        self.height = NODE_HEIGHT
+        if self.node.height == None:
+            self.height = NODE_HEIGHT
+        else:
+            self.height = self.node.height
         self.title_height = NODE_TITLE_HEIGHT
         self.padding = NODE_PADDING
         self.edge_size = EDGE_SIZE
@@ -183,10 +192,11 @@ class QDMGraphicsNode(QGraphicsItem):
         painter.drawPath(path_outline.simplified())
               
 class Node(Serializable):
-    def __init__(self, scene, title="node item", inputs = [], outputs=[], contents = [], socket_content_index = 0):
+    def __init__(self, scene, title="node item", inputs = [], outputs=[], contents = [], socket_content_index = 0, height = None):
         super().__init__()
         self.scene = scene
         self.socket_content_index = socket_content_index
+        self.height = height
         
         self.contents = contents
         self.content = QDMNodeContentWidget(self, self.contents)
