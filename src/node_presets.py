@@ -5,6 +5,73 @@ from PyQt5.QtGui import *
 from src.UI_node_socket import Socket, S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN
 import math
 
+class CreateVariableLineEdit(QLineEdit):
+    def __init__(self,parent=None):
+        QObject.__init__(self)
+        self.parent = parent
+        
+    def mousePressEvent(self,event):
+        super().mousePressEvent(event)
+        self.parent.storage.name = self.text()
+                
+        self.parent.updateEmission()
+
+        self.update()
+        
+class VariableStorage():
+    def __init__(self, name, data_type, value):
+        self.name = name
+        self._data_type = data_type
+        self._value = value
+        
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, a):
+        self._value = a
+        self._data_type = type(a)
+    
+    @property
+    def data_type(self):
+        return self._data_type
+
+    @value.setter
+    def data_type(self, t):
+        self._data_type = t
+         
+class create_variable(QWidget):
+    def __init__(self, scene):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title="Create Variable"
+        self.inputs = []
+        self.outputs=[S_OBJECT]
+        
+        self.storage = VariableStorage(name="", value = 0, data_type = None)
+        self.variable = CreateVariableLineEdit(self)
+        self.variable_label = QLabel("Variable name")
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.line1_layout.addWidget(self.variable_label)
+        self.line1_layout.addWidget(self.variable)
+        self.line1.setLayout(self.line1_layout)
+        
+        self.contents = [self.line1]
+        self.socket_content_index = 0
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160)
+        self.n.node_preset = self
+        
+    def updateEmission(self):
+        self.n.outputs[0].emission = self.n.node_preset.storage
+    def updateReception(self):
+        pass
+
 class NumberMathLineEdit(QDoubleSpinBox):
     def __init__(self,place,socket,parent=None):
         QObject.__init__(self)
@@ -21,7 +88,6 @@ class NumberMathLineEdit(QDoubleSpinBox):
 
         self.update()
 
-#node naming convention: scope_data_name
 class number_number_math(QWidget):
     def __init__(self, scene):
         QObject.__init__(self)
