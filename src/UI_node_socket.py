@@ -73,6 +73,7 @@ class Socket(Serializable):
         self.index = index
         self.position = position
         self.is_multi_edges = multi_edges
+        self.reception = None
 
         if self.position == LEFT_TOP:
             self.direction = INPUT

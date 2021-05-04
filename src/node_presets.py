@@ -5,6 +5,8 @@ from PyQt5.QtGui import *
 from src.UI_node_socket import Socket, S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN
 import math
 
+GLOBAL_VARIABLES = {}
+
 class CreateVariableLineEdit(QLineEdit):
     def __init__(self,parent=None):
         QObject.__init__(self)
@@ -18,11 +20,22 @@ class CreateVariableLineEdit(QLineEdit):
 
         self.update()
         
+    def keyPressEvent(self,event):
+        super().keyPressEvent(event)
+        if event.key() == Qt.Key_Return:
+            GLOBAL_VARIABLES[self.text()] = VariableStorage(name=self.text(), value = self.parent.storage.value, data_type = None)
+            self.parent.storage = GLOBAL_VARIABLES[self.text()]
+            self.parent.update_r = True
+            self.parent.updateReception()
+        else:
+            self.parent.update_r = False
+
 class VariableStorage():
     def __init__(self, name, data_type, value):
         self.name = name
         self._data_type = data_type
         self._value = value
+
         
     @property
     def value(self):
@@ -45,13 +58,16 @@ class create_variable(QWidget):
     def __init__(self, scene):
         QObject.__init__(self)
         self.scene = scene
-        self.title="Create Variable"
-        self.inputs = []
-        self.outputs=[S_OBJECT]
+        self.title="Access Variable"
+        self.inputs = [S_NUMBER]
+        self.outputs=[S_OBJECT, S_NUMBER]
         
-        self.storage = VariableStorage(name="", value = 0, data_type = None)
+        self.update_r = False
+        
+        GLOBAL_VARIABLES[""] = VariableStorage(name="", value = 0, data_type = None)
+        self.storage = GLOBAL_VARIABLES[""]
         self.variable = CreateVariableLineEdit(self)
-        self.variable_label = QLabel("Variable name")
+        self.variable_label = QLabel("Value")
         
         self.line1 = QWidget()
         self.line1_layout = QHBoxLayout()
@@ -61,16 +77,37 @@ class create_variable(QWidget):
         self.line1_layout.addWidget(self.variable)
         self.line1.setLayout(self.line1_layout)
         
-        self.contents = [self.line1]
-        self.socket_content_index = 0
+        self.line2 = QWidget()
+        self.line2_layout = QHBoxLayout()
+        self.line2_layout.setSpacing(8)
+        self.line2_layout.setContentsMargins(0,0,0,0)
+        self.line2_layout.addSpacerItem(QSpacerItem(330, 2))
+        self.line2_layout.addWidget(QLabel("Value"))
+        self.line2.setLayout(self.line2_layout)
         
-        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160)
+        self.line_label =QLabel("Variable")
+        self.line_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        
+        self.contents = [self.line_label, self.line1, self.line2]
+        self.socket_content_index = 1
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 200)
         self.n.node_preset = self
         
     def updateEmission(self):
         self.n.outputs[0].emission = self.n.node_preset.storage
+        self.n.outputs[1].emission = self.n.node_preset.storage.value
+        
     def updateReception(self):
-        pass
+        if self.update_r:
+            try:
+                self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+            except:
+                self.n.inputs[0].reception = None
+            self.storage.value = self.n.inputs[0].reception
+            self.update_r = False
+
+            
 
 class NumberMathLineEdit(QDoubleSpinBox):
     def __init__(self,place,socket,parent=None):
@@ -130,7 +167,7 @@ class number_number_math(QWidget):
         self.line2_layout.setContentsMargins(0,0,0,0)
         self.line2_layout.addWidget(QLabel("Number"))
         self.line2_layout.addWidget(self.math_value_b)
-        self.line2_layout.addSpacerItem(QSpacerItem(86, 2))
+        self.line2_layout.addSpacerItem(QSpacerItem(132, 2))
         self.line2.setLayout(self.line2_layout)
         
         self.contents = [self.math_operation_choose, self.line1, self.line2]

@@ -67,7 +67,7 @@ class NodeEditorWnd(QWidget):
     def addNodes(self):
         node1 = number_number_math(scene=self.scene).n
         node2 = number_number_math(scene=self.scene).n
-        node3 = number_number_math(scene=self.scene).n
+        node3 = create_variable(scene=self.scene).n
         node4 = create_variable(scene=self.scene).n
         self.scene.added_nodes.append(node1)
         self.scene.added_nodes.append(node2)
