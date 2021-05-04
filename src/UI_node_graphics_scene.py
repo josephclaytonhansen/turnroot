@@ -185,7 +185,8 @@ class QDMGraphicsView(QGraphicsView):
                     self.drag_start_socket.removeAllEdges()
 
                 new_edge = Edge(self.grScene.scene, self.drag_start_socket, item.socket, edge_type=EDGE_TYPE_BEZIER)
-                new_edge.end_socket.reception = new_edge.start_socket.node.node_preset.values[2]
+                #new_edge.end_socket.reception = new_edge.start_socket.emission
+                #print("reception ", new_edge.end_socket.reception)
 
                 self.grScene.scene.history.storeHistory("Created new edge by dragging", setModified=True)
                 return True
@@ -239,6 +240,10 @@ class QDMGraphicsView(QGraphicsView):
         super().mouseReleaseEvent(event)
     
     def mouseMoveEvent(self, event):
+        for x in self.grScene.scene.added_nodes:
+            x.node_preset.updateEmission()
+            x.node_preset.updateReception()
+            
         if self.mode == MODE_EDGE_DRAG:
             pos = self.mapToScene(event.pos())
             self.drag_edge.grEdge.setDestination(pos.x(), pos.y())

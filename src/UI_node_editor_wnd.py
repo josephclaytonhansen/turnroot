@@ -29,6 +29,7 @@ class NodeEditorWnd(QWidget):
         self.setLayout(self.layout)
         
         self.scene = Scene()
+        self.scene.added_nodes = []
         self.grScene = self.scene.grScene
         
         self.addNodes()
@@ -67,6 +68,9 @@ class NodeEditorWnd(QWidget):
         node1 = number_number_math(scene=self.scene).n
         node2 = number_number_math(scene=self.scene).n
         node3 = number_number_math(scene=self.scene).n
+        self.scene.added_nodes.append(node1)
+        self.scene.added_nodes.append(node2)
+        self.scene.added_nodes.append(node3)
         node1.setPos(-350*2,-250*2)
         node2.setPos(-75*2, 0)
         node3.setPos(200*2, -150*2)
