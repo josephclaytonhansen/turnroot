@@ -98,7 +98,6 @@ class Socket(Serializable):
         for n in range(len(self.edges)):
             
             self.edges[n].start_socket.emission = self.edges[n].start_socket.node.node_preset.values[2]
-            print(self.edges[n].start_socket.emission)
 
     def removeEdge(self, edge):
         if edge in self.edges: self.edges.remove(edge)

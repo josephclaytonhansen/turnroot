@@ -186,7 +186,6 @@ class QDMGraphicsView(QGraphicsView):
 
                 new_edge = Edge(self.grScene.scene, self.drag_start_socket, item.socket, edge_type=EDGE_TYPE_BEZIER)
                 new_edge.end_socket.reception = new_edge.start_socket.node.node_preset.values[2]
-                print(new_edge.end_socket.reception)
 
                 self.grScene.scene.history.storeHistory("Created new edge by dragging", setModified=True)
                 return True

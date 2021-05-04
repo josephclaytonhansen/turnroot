@@ -18,8 +18,6 @@ class NumberMathLineEdit(QLineEdit):
 
         if self.parent.current_operation == "Add":
             self.parent.values[2] = self.parent.values[0] + self.parent.values[1]
-            
-        print(self.parent.values)
 
 #node naming convention: scope_data_name
 class number_number_math():
