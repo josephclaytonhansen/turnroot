@@ -22,19 +22,33 @@ NODE_FONT = const[5]
 FONT_SIZE = const[6]
 
 class QDMNodeContentWidget(QWidget, Serializable):
-    def __init__(self, node, parent = None):
+    def __init__(self, node, contents, parent = None):
         super().__init__(parent)
         self.node = node
+        self.contents = contents
         self.initUI()
         
     def initUI(self):
-        active_theme = getattr(UI_colorTheme, data["active_theme"])
+        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
         self.setLayout(self.layout)
-        self.w_label = QLabel("<font color='"+active_theme.node_text_color+"'>Some text</font>")
-        self.layout.addWidget(self.w_label)
-        self.layout.addWidget(QDMTextEdit())
+        
+        if self.node.height == None:
+            self.spacer_height = 600
+        else:
+            self.spacer_height = self.node.height
+        
+        for widget in self.contents:
+            self.layout.addWidget(widget)
+            widget.adjustSize()
+            widget.setStyleSheet("background-color: "+active_theme.node_background_color+"; color:"+active_theme.node_text_color+"; font-size: "+str(data["font_size"]))
+            widget.setMinimumHeight(29)
+            widget.setMaximumHeight(29)
+            self.spacer_height -= 41
+        self.spacer_height -= NODE_TITLE_HEIGHT
+        self.spacer_height -= NODE_PADDING
+        self.layout.addSpacerItem(QSpacerItem(2, self.spacer_height))
     
     def setEditingFlag(self,value):
         self.node.scene.grScene.views()[0].editingFlag = value
@@ -70,8 +84,12 @@ class QDMGraphicsNode(QGraphicsItem):
         super().__init__(parent)
         self.node = node
         self.content = self.node.content
+        print(self.content.height())
         self.width = NODE_WIDTH
-        self.height = NODE_HEIGHT
+        if self.node.height == None:
+            self.height = NODE_HEIGHT
+        else:
+            self.height = self.node.height
         self.title_height = NODE_TITLE_HEIGHT
         self.padding = NODE_PADDING
         self.edge_size = EDGE_SIZE
@@ -105,7 +123,6 @@ class QDMGraphicsNode(QGraphicsItem):
         self._title_color = QColor(active_theme.node_title_color)
         self._title_font = QFont(NODE_FONT)
         self._title_font.setPointSize(FONT_SIZE)
-        self._title_font.setStyleStrategy(QFont.NoAntialias)
         self.title_item = QGraphicsTextItem(self)
         self.title_item.node = self.node
         self.title_item.setDefaultTextColor(self._title_color)
@@ -176,11 +193,15 @@ class QDMGraphicsNode(QGraphicsItem):
         painter.drawPath(path_outline.simplified())
               
 class Node(Serializable):
-    def __init__(self, scene, title="node item", inputs = [], outputs=[]):
+    def __init__(self, scene, title="node item", inputs = [], outputs=[], contents = [], socket_content_index = 0, height = None):
         super().__init__()
         self.scene = scene
+        self.socket_content_index = socket_content_index
+        self.height = height
+        self.node_preset = None
         
-        self.content = QDMNodeContentWidget(self)
+        self.contents = contents
+        self.content = QDMNodeContentWidget(self, self.contents)
         self.grNode = QDMGraphicsNode(self)
         
         self._title = title
@@ -228,6 +249,7 @@ class Node(Serializable):
             x = self.grNode.width
         
         y = self.grNode.title_height + self.grNode.padding + (1.5*self.grNode.edge_size) + (index * 20 * 2.0)
+        y = self.socket_content_index * 40 + y
         return [x, y]
     
     def updateConnectedEdges(self):

@@ -73,11 +73,13 @@ class Socket(Serializable):
         self.index = index
         self.position = position
         self.is_multi_edges = multi_edges
-        
+
         if self.position == LEFT_TOP:
             self.direction = INPUT
+            self.reception = None
         else:
             self.direction = OUTPUT
+            self.emission = None
             
         self.type = t
         self.grSocket = QDMGraphicsSocket(self, self.type)
