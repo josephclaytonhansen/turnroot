@@ -42,6 +42,7 @@ class QDMNodeContentWidget(QWidget, Serializable):
         for widget in self.contents:
             self.layout.addWidget(widget)
             widget.adjustSize()
+            widget.setStyleSheet("background-color: "+active_theme.node_background_color+"; color:"+active_theme.node_text_color+"; font-size: "+str(data["font_size"]))
             widget.setMinimumHeight(29)
             widget.setMaximumHeight(29)
             self.spacer_height -= 41
