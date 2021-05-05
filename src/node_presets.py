@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from src.UI_node_socket import Socket, S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_LIST, S_BOOLEAN
-import math, random
+import math, random, pickle
 
 GLOBAL_VARIABLES = {}
 
@@ -581,10 +581,10 @@ class set_attr_for_object(QWidget):
             self.n.inputs[0].reception = None
             self.n.inputs[1].reception = None
             
-NODES = {"Math":number_number_math, "Variable":create_variable, "Each":each,
-                              "Sample List":list_tester, "Get Attribute":get_attr_from_object,"Condition":conditional_with_trigger,
-                              "Set Attribute":set_attr_for_object}
 
+with open("src/tmp/node_presets.npdf", "rb") as rf:
+    NODES = pickle.load(rf)
+    
 class Nodes():
     def __init__(self, scene, name):
         self.scene = scene
