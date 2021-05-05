@@ -6,7 +6,7 @@ from src.UI_node_node import Node
 from src.UI_node_scene import Scene
 from src.UI_node_socket import (Socket,S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_LIST, S_BOOLEAN)
 from src.UI_node_edge import Edge, EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT
-from src.node_presets import number_number_math, create_variable, each, list_tester, get_attr_from_object
+from src.node_presets import Nodes, NODES
 
 from src.UI_node_outliner import outlinerWnd, OutlinerScene
 
@@ -65,20 +65,8 @@ class NodeEditorWnd(QWidget):
         self.show()
         
     def addNodes(self):
-        node1 = number_number_math(scene=self.scene).n
-        node2 = get_attr_from_object(scene=self.scene).n
-        node3 = create_variable(scene=self.scene).n
-        node4 = each(scene=self.scene).n
-        node5 = list_tester(scene=self.scene).n
-        self.scene.added_nodes.append(node1)
-        self.scene.added_nodes.append(node2)
-        self.scene.added_nodes.append(node3)
-        self.scene.added_nodes.append(node4)
-        self.scene.added_nodes.append(node5)
+        node1 = Nodes(self.scene, "Math").node.n
         node1.setPos(-350*2,-250*2)
-        node2.setPos(-75*2, 0)
-        node3.setPos(200*2, -150*2)
-        node4.setPos(0, 75 * 2)
         
 
         

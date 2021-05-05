@@ -10,7 +10,7 @@ GLOBAL_VARIABLES = {}
 class TestObject():
     def __init__(self):
         self.stat = int(random.random() * 100)
-
+        
 class GetAttrLineEdit(QLineEdit):
     def __init__(self,parent=None):
         QObject.__init__(self)
@@ -50,7 +50,7 @@ class get_attr_from_object(QWidget):
         
         self.contents = [self.line1]
         
-        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 130)
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 300)
         self.n.node_preset = self
         
     def updateEmission(self):
@@ -90,7 +90,7 @@ class list_tester(QWidget):
         
         self.contents = [self.line1]
         
-        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 130)
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 300)
         self.n.node_preset = self
         
     def updateEmission(self):
@@ -147,7 +147,7 @@ class each(QWidget):
         
         self.contents = [self.line1, self.line2, self.line3]
         
-        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 200)
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 300)
         self.n.node_preset = self
         self.n.outputs[2].emission = None
         
@@ -160,7 +160,7 @@ class each(QWidget):
             self.list_length  = len(self.n.inputs[0].reception)
                 
         except:
-            self.n.inputs[0].reception = None
+            self.n.inputs[0].reception = self.n.inputs[0].reception
      
     def Execute(self):
         self.l += 1
@@ -253,7 +253,7 @@ class create_variable(QWidget):
         self.contents = [self.line_label, self.line1, self.line2]
         self.socket_content_index = 1
         
-        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 200)
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 300)
         self.n.node_preset = self
         
     def updateEmission(self):
@@ -333,7 +333,7 @@ class number_number_math(QWidget):
         self.contents = [self.math_operation_choose, self.line1, self.line2]
         self.socket_content_index = 1
         
-        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 220)
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 300)
         self.n.node_preset = self
         self.n_a = self.n.inputs[0]
         self.n_b = self.n.inputs[1]
@@ -415,6 +415,180 @@ class number_number_math(QWidget):
     def change_op(self,s):
         self.current_operation = s
 
+class conditional_with_trigger(QWidget):
+    def __init__(self, scene):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title="Condition (from Numbers)"
+        self.inputs = [S_NUMBER, S_NUMBER]
+        self.outputs=[S_BOOLEAN, S_TRIGGER]
+        
+        self.result = False
+        self.trigger = False
+        self.values = [0,0,0]
+        
+        self.current_operation = "Equal"
+        
+        self.math_operation_choose = QComboBox()
+        self.math_operation_choose.addItems(["Equal", "Not Equal", "Greater Than", "Less Than", "Greater Than or Equal",
+                                             "Less Than or Equal"])
+        
+        self.math_operation_choose.currentTextChanged.connect(self.change_op)
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.label1 = QLabel("Number")
+        self.label1.setAlignment(Qt.AlignLeft)
+        self.label2 = QLabel("Boolean")
+        self.label2.setAlignment(Qt.AlignRight)
+        self.number1 = NumberMathLineEdit(0,0,self)
+        self.line1_layout.addWidget(self.label1)
+        self.line1_layout.addWidget(self.number1)
+        self.line1_layout.addWidget(self.label2)
+        self.line1.setLayout(self.line1_layout)
+        
+        self.line2 = QWidget()
+        self.line2_layout = QHBoxLayout()
+        self.line2_layout.setSpacing(8)
+        self.line2_layout.setContentsMargins(0,0,0,0)
+        self.label3 = QLabel("Number")
+        self.label3.setAlignment(Qt.AlignLeft)
+        self.label4 = QLabel("Trigger")
+        self.label4.setAlignment(Qt.AlignRight)
+        self.number2 = NumberMathLineEdit(1,1,self)
+        self.line2_layout.addWidget(self.label3)
+        self.line2_layout.addWidget(self.number2)
+        self.line2_layout.addWidget(self.label4)
+        self.line2.setLayout(self.line2_layout)
+        
+        self.contents = [self.math_operation_choose, self.line1, self.line2]
+        self.socket_content_index = 1
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 300)
+        self.n.node_preset = self
+        self.n_a = self.n.inputs[0]
+        self.n_b = self.n.inputs[1]
+        self.n_out = self.n.outputs[0]
+    
+    def updateEmission(self):
+        self.n.outputs[0].emission = self.n.inputs[0].node.node_preset.values[2]
+        self.n.outputs[1].emission = self.n.inputs[0].node.node_preset.values[2]
+    
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+            self.values[0] = self.n.inputs[0].reception
+            self.number1.setValue(self.n.inputs[0].reception)
+        except:
+            self.values[0] = float(self.number1.value())
+        try:
+            self.n.inputs[1].reception = self.n.inputs[1].edges[0].start_socket.emission
+            self.values[1] = self.n.inputs[1].reception
+            self.number2.setValue(self.n.inputs[1].reception)
+        except:
+            self.values[1] = float(self.number2.value())
+            
+        if self.current_operation == "Equal":
+            self.values[2] = self.values[0] == self.values[1]
+        
+        elif self.current_operation == "Not Equal":
+            self.values[2] = self.values[0] != self.values[1]
+        
+        elif self.current_operation == "Less Than":
+            self.values[2] = self.values[0] < self.values[1]
+        
+        elif self.current_operation == "Greater Than":
+            self.values[2] = self.values[0] > self.values[1]
+        
+        elif self.current_operation == "Greater Than or Equal":
+            self.values[2] = self.values[0] >= self.values[1]
+            
+        elif self.current_operation == "Less Than or Equal":
+            self.values[2] = self.values[0] <= self.values[1]
+            
+        self.updateEmission()
+        
+    def change_op(self,s):
+        self.current_operation = s
+    
+class set_attr_for_object(QWidget):
+    def __init__(self, scene):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title="Set Attribute of Object"
+        self.inputs = [S_OBJECT, S_NUMBER]
+        self.outputs=[]
+        
+        self.attribute = ""
+        self.object = None
+        self.new_value = 0
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.label1 = QLabel("Object")
+        self.label1.setAlignment(Qt.AlignLeft)
+        self.attr_name = GetAttrLineEdit(self)
+        self.line1_layout.addWidget(self.label1)
+        self.line1_layout.addWidget(self.attr_name)
+        self.line1.setLayout(self.line1_layout)
+        
+        self.line2 = QWidget()
+        self.line2_layout = QHBoxLayout()
+        self.line2_layout.setSpacing(8)
+        self.line2_layout.setContentsMargins(0,0,0,0)
+        self.label2 = QLabel("Value")
+        self.label2.setAlignment(Qt.AlignLeft)
+
+        self.line2_layout.addWidget(self.label2)
+        self.line2.setLayout(self.line2_layout)
+        
+        
+        self.line3 = QWidget()
+        self.line3_layout = QHBoxLayout()
+        self.line3_layout.setSpacing(8)
+        self.line3_layout.setContentsMargins(0,0,0,0)
+        self.button = QPushButton("Set")
+        self.button.clicked.connect(self.Execute)
+        self.line3_layout.addWidget(self.button)
+        self.line3.setLayout(self.line3_layout)
+        
+        self.socket_content_index = 0
+        
+        self.contents = [self.line1, self.line2, self.line3]
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 300)
+        self.n.node_preset = self
+        
+    def Execute(self):
+        self.updateReception()
+        setattr(self.object, self.attribute, self.new_value)
+        print(self.object, self.object.stat)
+        
+    def updateEmission(self):
+        pass
+    
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+            self.n.inputs[1].reception = self.n.inputs[1].edges[0].start_socket.emission
+            self.object = self.n.inputs[0].reception
+            self.new_value = self.n.inputs[1].reception
+        except:
+            self.n.inputs[0].reception = None
+            self.n.inputs[1].reception = None
+            
+NODES = {"Math":number_number_math, "Variable":create_variable, "Each":each,
+                              "Sample List":list_tester, "Get Attribute":get_attr_from_object,"Condition":conditional_with_trigger,
+                              "Set Attribute":set_attr_for_object}
+
+class Nodes():
+    def __init__(self, scene, name):
+        self.scene = scene
+        self.node = NODES[name](self.scene)
 
 
 

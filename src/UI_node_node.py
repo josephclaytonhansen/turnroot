@@ -31,24 +31,45 @@ class QDMNodeContentWidget(QWidget, Serializable):
     def initUI(self):
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
         self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(0,0,0,0)
+        self.layout.setContentsMargins(0,4,0,0)
         self.setLayout(self.layout)
         
         if self.node.height == None:
             self.spacer_height = 600
         else:
             self.spacer_height = self.node.height
-        
+        self.layout.setSpacing(10)
         for widget in self.contents:
             self.layout.addWidget(widget)
-            widget.adjustSize()
             widget.setStyleSheet("background-color: "+active_theme.node_background_color+"; color:"+active_theme.node_text_color+"; font-size: "+str(data["font_size"]))
-            widget.setMinimumHeight(29)
-            widget.setMaximumHeight(29)
-            self.spacer_height -= 41
+            
+            self.font = widget.font()
+            self.font.setPointSize(16)
+            widget.setFont(self.font)
+            
+            widget.setMinimumHeight(30)
+            widget.setMaximumHeight(30)
+            self.spacer_height -= 38
         self.spacer_height -= NODE_TITLE_HEIGHT
         self.spacer_height -= NODE_PADDING
+        
+        self.eval_order = QSpinBox()
+        self.eval_order.valueChanged.connect(self.change_eval_order)
+        self.eval_order.setPrefix("Step: ")
+        self.eval_order.setMinimumHeight(42)
+        self.eval_order.setStyleSheet("background-color: "+active_theme.node_background_color+"; color:"+active_theme.node_text_color)
+
+        font = self.eval_order.font()
+        font.setPointSize(data["font_size"])
+        self.eval_order.setFont(font)
+
+        self.spacer_height -= 42
+        self.layout.addWidget(self.eval_order)
+        
         self.layout.addSpacerItem(QSpacerItem(2, self.spacer_height))
+    
+    def change_eval_order(self, i):
+        pass
     
     def setEditingFlag(self,value):
         self.node.scene.grScene.views()[0].editingFlag = value
