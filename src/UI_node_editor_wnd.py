@@ -30,6 +30,7 @@ class NodeEditorWnd(QWidget):
         
         self.scene = Scene()
         self.scene.added_nodes = []
+        self.scene.node_presets = NODES
         self.grScene = self.scene.grScene
         
         self.addNodes()
