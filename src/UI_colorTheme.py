@@ -20,7 +20,7 @@ class colorTheme:
     node_socket_object_color = ""
     node_socket_number_color = ""
     node_socket_text_color = ""
-    node_socket_event_color = "#000B73"
+    node_socket_list_color = "#000B73"
     node_socket_boolean_color = "#535353"
     node_wire_error_color = ""
     node_outliner_label_0 = ""
@@ -37,7 +37,7 @@ class colorTheme:
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
@@ -53,7 +53,7 @@ class colorTheme:
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
@@ -106,7 +106,7 @@ class sand_dunes(colorTheme):
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#968080"
+    node_socket_list_color = "#968080"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#f74b20"
     
@@ -124,7 +124,7 @@ class sand_dunes(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
@@ -140,7 +140,7 @@ class sand_dunes(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
@@ -171,7 +171,7 @@ class rainforest(colorTheme):
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#968080"
+    node_socket_list_color = "#968080"
     node_socket_boolean_color = "#2f3aa3"
 
     node_wire_error_color = "#7B2523"
@@ -189,7 +189,7 @@ class rainforest(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
@@ -205,7 +205,7 @@ class rainforest(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
@@ -234,7 +234,7 @@ class charcoal(colorTheme):
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#808080"
+    node_socket_list_color = "#808080"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#FF3333"
     node_outliner_label_0 = "#D95F80"
@@ -251,7 +251,7 @@ class charcoal(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
@@ -267,7 +267,7 @@ class charcoal(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
@@ -296,7 +296,7 @@ class ocean_waves(colorTheme):
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#FFFFFF"
+    node_socket_list_color = "#FFFFFF"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#C02D0C"
     node_outliner_label_0 = "#F29472"
@@ -313,7 +313,7 @@ class ocean_waves(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
@@ -329,7 +329,7 @@ class ocean_waves(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
@@ -362,7 +362,7 @@ class chocolate(colorTheme):
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#968080"
+    node_socket_list_color = "#968080"
     node_socket_boolean_color = "#2f3aa3"
 
     node_wire_error_color = "#7B2523"
@@ -381,7 +381,7 @@ class chocolate(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
@@ -397,7 +397,7 @@ class chocolate(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
@@ -429,7 +429,7 @@ class chili_pepper(colorTheme):
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#968080"
+    node_socket_list_color = "#968080"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#b8304e"
     
@@ -447,7 +447,7 @@ class chili_pepper(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
@@ -463,7 +463,7 @@ class chili_pepper(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
@@ -492,7 +492,7 @@ class custom(colorTheme):
     node_socket_object_color = "#000000"
     node_socket_number_color = "#000000"
     node_socket_text_color = "#000000"
-    node_socket_event_color = "#000000"
+    node_socket_list_color = "#000000"
     node_socket_boolean_color = "#000000"
     node_wire_error_color = "#000000"
     node_outliner_label_0 = ""
@@ -509,7 +509,7 @@ class custom(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
@@ -525,7 +525,7 @@ class custom(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]

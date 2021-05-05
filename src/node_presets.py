@@ -2,10 +2,172 @@ from src.UI_node_node import Node
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from src.UI_node_socket import Socket, S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN
-import math
+from src.UI_node_socket import Socket, S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_LIST, S_BOOLEAN
+import math, random
 
 GLOBAL_VARIABLES = {}
+
+class TestObject():
+    def __init__(self):
+        self.stat = int(random.random() * 100)
+
+class GetAttrLineEdit(QLineEdit):
+    def __init__(self,parent=None):
+        QObject.__init__(self)
+        self.parent = parent
+
+    def keyPressEvent(self,event):
+        super().keyPressEvent(event)
+        self.parent.attribute = self.text()
+        self.parent.updateEmission()
+
+class get_attr_from_object(QWidget):
+    def __init__(self, scene):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title="Get Attribute of Object"
+        self.inputs = [S_OBJECT]
+        self.outputs=[S_NUMBER]
+        
+        self.attribute = ""
+        self.object = None
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.label1 = QLabel("Object")
+        self.label1.setAlignment(Qt.AlignLeft)
+        self.label2 = QLabel("Value")
+        self.label2.setAlignment(Qt.AlignRight)
+        self.attr_name = GetAttrLineEdit(self)
+        self.line1_layout.addWidget(self.label1)
+        self.line1_layout.addWidget(self.attr_name)
+        self.line1_layout.addWidget(self.label2)
+        self.line1.setLayout(self.line1_layout)
+        
+        self.socket_content_index = 0
+        
+        self.contents = [self.line1]
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 130)
+        self.n.node_preset = self
+        
+    def updateEmission(self):
+        try:
+            self.n.outputs[0].emission = getattr(self.object, self.attribute)
+        except:
+            pass
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+            self.object = self.n.inputs[0].reception
+        except:
+            self.n.inputs[0].reception = None
+
+class list_tester(QWidget):
+    def __init__(self, scene):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title="List Tester"
+        self.inputs = []
+        self.outputs=[S_LIST]
+        
+        self.output_list = [TestObject(), TestObject(), TestObject()]
+        print(self.output_list)
+        print(self.output_list[0].stat, self.output_list[1].stat, self.output_list[2].stat)
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.label1 = QLabel("List")
+        self.label1.setAlignment(Qt.AlignRight)
+        self.line1_layout.addWidget(self.label1)
+        self.line1.setLayout(self.line1_layout)
+        
+        self.socket_content_index = 0
+        
+        self.contents = [self.line1]
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 130)
+        self.n.node_preset = self
+        
+    def updateEmission(self):
+        self.n.outputs[0].emission = self.output_list
+    def updateReception(self):
+        pass
+
+class each(QWidget):
+    def __init__(self, scene):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title="Each (List to Object)"
+        self.inputs = [S_LIST]
+        self.outputs=[S_OBJECT, S_NUMBER, S_TRIGGER]
+        
+        self.list_length = 0
+        self.current_index = 0
+        self.l = 0
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.label1 = QLabel("List")
+        self.label1.setAlignment(Qt.AlignLeft)
+        self.label2 = QLabel("Object")
+        self.label2.setAlignment(Qt.AlignRight)
+        self.line1_layout.addWidget(self.label1)
+        self.line1_layout.addWidget(self.label2)
+        self.line1.setLayout(self.line1_layout)
+        
+        self.line2 = QWidget()
+        self.line2_layout = QHBoxLayout()
+        self.line2_layout.setSpacing(8)
+        self.line2_layout.setContentsMargins(0,0,0,0)
+        self.label4 = QLabel("List Length")
+        self.label4.setAlignment(Qt.AlignRight)
+        self.line2_layout.addWidget(self.label4)
+        self.line2.setLayout(self.line2_layout)
+        
+        self.line3 = QWidget()
+        self.line3_layout = QHBoxLayout()
+        self.line3_layout.setSpacing(8)
+        self.line3_layout.setContentsMargins(0,0,0,0)
+        self.button = QPushButton("Step")
+        self.button.clicked.connect(self.Execute)
+        self.label5 = QLabel("Index")
+        self.label5.setAlignment(Qt.AlignRight)
+        self.line3_layout.addWidget(self.button)
+        self.line3_layout.addWidget(self.label5)
+        self.line3.setLayout(self.line3_layout)
+        
+        self.socket_content_index = 0
+        
+        self.contents = [self.line1, self.line2, self.line3]
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 200)
+        self.n.node_preset = self
+        self.n.outputs[2].emission = None
+        
+    def updateEmission(self):
+        self.n.outputs[1].emission  = self.list_length
+
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+            self.list_length  = len(self.n.inputs[0].reception)
+                
+        except:
+            self.n.inputs[0].reception = None
+     
+    def Execute(self):
+        self.l += 1
+        if self.l == 3:
+            self.l = 0
+        self.n.outputs[0].emission = self.n.inputs[0].reception[self.l]
+        self.n.outputs[2].emission = self.l
 
 class CreateVariableLineEdit(QLineEdit):
     def __init__(self,parent=None):
@@ -106,8 +268,6 @@ class create_variable(QWidget):
                 self.n.inputs[0].reception = None
             self.storage.value = self.n.inputs[0].reception
             self.update_r = False
-
-            
 
 class NumberMathLineEdit(QDoubleSpinBox):
     def __init__(self,place,socket,parent=None):

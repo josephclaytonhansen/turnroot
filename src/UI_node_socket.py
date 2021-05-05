@@ -19,14 +19,14 @@ S_FILE = socket_data[0][1]
 S_OBJECT = socket_data[0][2]
 S_NUMBER = socket_data[0][3]
 S_TEXT = socket_data[0][4]
-S_EVENT = socket_data[0][5]
+S_LIST = socket_data[0][5]
 S_BOOLEAN = socket_data[0][6]
-socket_types = [S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_EVENT, S_BOOLEAN]
+socket_types = [S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_LIST, S_BOOLEAN]
 
 socket_types_colors = [active_theme.node_socket_trigger_color,
                active_theme.node_socket_file_color, active_theme.node_socket_object_color,
                active_theme.node_socket_number_color, active_theme.node_socket_text_color,
-               active_theme.node_socket_event_color, active_theme.node_socket_boolean_color]
+               active_theme.node_socket_list_color, active_theme.node_socket_boolean_color]
 
 RADIUS = socket_data[2]
 OUTLINE_WIDTH = socket_data[3]

@@ -281,20 +281,13 @@ class QDMGraphicsView(QGraphicsView):
                 self.grScene.scene.path = None
                 self.grScene.scene.saveToFile()
             else:
-                if not self.editingFlag:
-                    self.OptionsMenu()
-                    #open preferences
-                else:
-                    super().keyPressEvent(event)
+                super().keyPressEvent(event)
                     
         elif event.key() == Qt.Key_O:
             if event.modifiers() == Qt.ControlModifier:
                 self.grScene.scene.loadFromFile()
             else:
-                if not self.editingFlag:
-                    self.OptionsMenu()
-                else:
-                    super().keyPressEvent(event)
+                super().keyPressEvent(event)
                     
         elif event.key() == Qt.Key_N:
             if event.modifiers() == Qt.ControlModifier:
@@ -307,11 +300,7 @@ class QDMGraphicsView(QGraphicsView):
             if event.modifiers() == Qt.ControlModifier:
                 self.quitWindow()
             else:
-                if not self.editingFlag:
-                    pass
-                    #open forums
-                else:
-                    super().keyPressEvent(event)
+                super().keyPressEvent(event)
         
         elif event.key() == Qt.Key_Escape:
             if not self.editingFlag:
@@ -319,13 +308,7 @@ class QDMGraphicsView(QGraphicsView):
                 #back
             else:
                 super().keyPressEvent(event)
-        
-        elif event.key() == Qt.Key_H:
-            if not self.editingFlag:
-                pass
-                #help
-            else:
-                super().keyPressEvent(event)
+
                 
         elif event.key() == Qt.Key_Z and event.modifiers() == Qt.ControlModifier and self.editingFlag == False:
             self.grScene.scene.history.undo()
