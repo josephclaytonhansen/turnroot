@@ -65,7 +65,7 @@ class NodeEditorWnd(QWidget):
         self.show()
         
     def addNodes(self):
-        node1 = Nodes(self.scene, "Math").node.n
+        node1 = Nodes(self.scene, "Math").node
         node1.setPos(-350*2,-250*2)
         
 

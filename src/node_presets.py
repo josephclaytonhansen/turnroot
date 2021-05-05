@@ -588,7 +588,7 @@ NODES = {"Math":number_number_math, "Variable":create_variable, "Each":each,
 class Nodes():
     def __init__(self, scene, name):
         self.scene = scene
-        self.node = NODES[name](self.scene)
+        self.node = NODES[name](self.scene).n
 
 
 
