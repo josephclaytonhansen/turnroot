@@ -1,36 +1,39 @@
 #specific imports
-from weapon_experience import weaponExperience
-from unit_class import unitClass
-from weakness_strength import Weakness, Strength
-from unit_level import Level
-from unit_class import unitClass
-from team_likes_dislikes import teamDislike, teamLike
-from identities import orientations, genders, pronouns
+from src.skeletons.weapon_experience import weaponExperience
+from src.skeletons.unit_class import unitClass
+from src.skeletons.weakness_strength import Weakness, Strength
+from src.skeletons.unit_level import Level
+from src.skeletons.unit_class import unitClass
+from src.skeletons.team_likes_dislikes import teamDislike, teamLike
+from src.skeletons.identities import orientations, genders, pronouns
 
 #general imports
-from Portrait import Portrait
-from Object import Object
-from Skill import Skill
-from Tactic import Tactic
-from Skilled_Blow import skilledBlow
-from Attack import Attack
-from Action import Action
+from src.skeletons.Portrait import Portrait
+from src.skeletons.Object import Object
+from src.skeletons.Skill import Skill
+from src.skeletons.Tactic import Tactic
+from src.skeletons.Skilled_Blow import skilledBlow
+from src.skeletons.Attack import Attack
+from src.skeletons.Action import Action
 
-from Support_Level import supportLevel
+from src.skeletons.Support_Level import supportLevel
 
 import json
-with open("universal_stats.json", "r") as stats_file:
+with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
 
 class Unit():
     def __init__(self):
         self.name = ""
         self.title = ""
+        self.unique = True
         self.is_friendly = True
         self.is_recruitable = False
         self.is_lord = False
         self.has_dialogue = True
         self.is_permanently_dead = False
+        
+        self.AI_sheet = None
         
         self.portraits = {}
         self.sprites = {}
