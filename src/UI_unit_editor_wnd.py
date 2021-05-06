@@ -102,13 +102,21 @@ class UnitEditorWnd(QWidget):
         name_row.setLayout(name_row_layout)
         
         self.name_edit = QLineEdit()
-        self.name_edit .setAlignment(Qt.AlignCenter)
-        self.name_edit .setPlaceholderText("Name")
+        self.name_edit.setAlignment(Qt.AlignCenter)
+        self.name_edit.setPlaceholderText("Name")
         name_font = self.name_edit.font()
         name_font.setPointSize(18)
-        self.name_edit.setFont(name_font)
-        name_row_layout.addWidget(self.name_edit)
         
+        header_font = self.name_edit.font()
+        header_font.setPointSize(21)
+        
+        self.name_edit.setFont(name_font)
+
+        id_label = QLabel("Identity")
+        id_label.setFont(header_font)
+        id_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.basic_left_layout.addWidget(id_label)
+        name_row_layout.addWidget(self.name_edit)
         name_row_layout.addWidget(QLabel(" - "))
         
         self.title_edit = QLabel()
@@ -173,7 +181,7 @@ class UnitEditorWnd(QWidget):
         self.working_tab_layout.addWidget(self.basic_left)
         
         stat_label = QLabel("Stats")
-        stat_label.setFont(name_font)
+        stat_label.setFont(header_font)
         stat_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.basic_center_layout.addWidget(stat_label)
         
