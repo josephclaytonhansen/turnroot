@@ -14,7 +14,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
-from src.UI_Dialogs import confirmAction
+from src.UI_Dialogs import confirmAction, popupInfo
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -284,10 +284,10 @@ class UnitEditorWnd(QWidget):
         self.tables = {}
         
         self.table_data = [
-            [["move_towards1","player or ally IS nearest","!"],
+            [["move_towards1","player or ally IS nearest","SOLDIER"],
 ["move_towards2","player or ally IS disadvantage","STRATEGIC"],
 ["move_towards3","IS safe","COWARDLY"],
-["move_towards4","chest IF self can open","GREED+LONE_WOLF"]],
+["move_towards4","chest IF self can open","LONE_WOLF + GREED"]],
 [["move_goals1","self IS in group: stay in group","SOLDIER"],
 ["move_goals2","",""]],
 [["target1","player or ally IS last","SOLDIER"],
@@ -295,17 +295,44 @@ class UnitEditorWnd(QWidget):
 ["target3","player or ally IS leader","BRASH"],
 ["target4","player or ally IS nearest","MINDLESS"]],
 [["target_change1","possible_target IS disadvantage","STRATEGIC"],
-["target_change2","last_target IS NOT in vision","!"]],
+["target_change2","last_target IS NOT in vision","ALWAYS!"]],
 [["avoid1","doors IF shut",""],
-["avoid2","IS stop","!"],
+["avoid2","IS stop","ALWAYS!"],
 ["avoid3","space IS emplacement",""],
 ["avoid4","self IS alone in vision","SOLDIER"],
 ["avoid5","space IS hurt",""],
 ["avoid6","space IS last position",""],
-["avoid7","IS slow ","STRATEGIC"]]
-            ]
+["avoid7","IS slow ","STRATEGIC"]],
+            [["ground","move"],
+["wall","stop"],
+["cliff","stop,blind"],
+["chasm","stop"],
+["trap","hurt_if_enter,hurt_if_stay"],
+["fire","hurt_if_stay"],
+["sand","slow"],
+["stairs","slow*.5"],
+["ice","slow*1.2"],
+["snow","slow*2"],
+["shallow_water","slow*1.5"],
+["deep_water","stop"],
+["door","shut,open_if_item,open_if_skilled"],
+["chest","shut,open_if_item,open_if_skilled"],
+["lava","stop"],
+["warp","teleport"],
+["arrow_emplacement","use_if_skilled"],
+["magic_emplacement","use_if_skilled"],
+["switch","use_if_safe"],
+["heal","heal"],
+["forest","guard,avoid*1.5"],
+["fortress","guard*2,avoid"],
+["thicket","guard*.5,avoid*.5"],
+["avo","avoid"],
+["guard","guard"],
+["roof","stop"],
+["tallwall","stop,blind"]]
+]
         
-        self.basic_table_categories = ["move_towards", "move_goals", "target", "target_change", "avoid"]
+        self.basic_table_categories = ["Move Towards", "Move Goals", "Targeting", "Targeting Change", "Avoid", "Tile Interactions"]
         
         for t in self.basic_table_categories:
             table = QTableView()
@@ -337,6 +364,8 @@ class UnitEditorWnd(QWidget):
         personality_slider_row_3.setLayout(personality_slider_row_layout_3)
         
         self.solider_lone_wolf_slider= QSlider(Qt.Horizontal)
+        self.solider_lone_wolf_slider.name = 1
+        self.solider_lone_wolf_slider.setFixedWidth(650)
         self.solider_lone_wolf_slider.valueChanged.connect(self.colorizeSlider)
         self.solider_lone_wolf_slider.setValue(50)
         self.solider_lone_wolf_slider.setRange(0,100)
@@ -350,6 +379,8 @@ class UnitEditorWnd(QWidget):
         personality_slider_row_1_layout.addWidget(lonewolf_label)
         
         self.strategic_mindless_slider= QSlider(Qt.Horizontal)
+        self.strategic_mindless_slider.name = 2
+        self.strategic_mindless_slider.setFixedWidth(650)
         self.strategic_mindless_slider.valueChanged.connect(self.colorizeSlider)
         self.strategic_mindless_slider.setValue(50)
         self.strategic_mindless_slider.setRange(0,100)
@@ -363,6 +394,8 @@ class UnitEditorWnd(QWidget):
         personality_slider_row_layout_2.addWidget(mindless_label)
         
         self.cowardly_brash_slider= QSlider(Qt.Horizontal)
+        self.cowardly_brash_slider.name = 3
+        self.cowardly_brash_slider.setFixedWidth(650)
         self.cowardly_brash_slider.valueChanged.connect(self.colorizeSlider)
         self.cowardly_brash_slider.setValue(50)
         self.cowardly_brash_slider.setRange(0,100)
@@ -391,6 +424,11 @@ class UnitEditorWnd(QWidget):
             basic_table_tabs.addTab(c_tab, tab_title)
         
         self.basic_layout.addWidget(basic_table_tabs)
+        
+        basic_principles = QPushButton("Rules")
+        basic_principles.clicked.connect(self.AIOverviewDialog)
+        
+        self.basic_layout.addWidget(basic_principles)
 
         self.working_tab_layout.addWidget(self.basic_layout_widget)
         
@@ -496,6 +534,16 @@ class UnitEditorWnd(QWidget):
         
     
     def colorizeSlider(self, v):
+        for tab in self.basic_table_categories:
+            c_tab = self.tables[tab]
+            if self.sender().name == 1:
+                c_tab.model().slider_value1 = v
+            elif self.sender().name == 2:
+                c_tab.model().slider_value2 = v
+            elif self.sender().name == 3:
+                c_tab.model().slider_value3 = v
+            c_tab.viewport().repaint()
+        
         v = v / 100
         color_left = QColor(active_theme.node_outliner_label_0)
         color_right = QColor(active_theme.node_outliner_label_1)
@@ -514,4 +562,10 @@ class UnitEditorWnd(QWidget):
         self.sender().setStyleSheet(
             "QSlider::handle:horizontal {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;width:40px;height:40px;}"
             )
+    def AIOverviewDialog(self):
+        instructions_text = ["Rule 1 in a set has more weight towards the final decision than 2.\n",
+        "\nOrder of Importance: Avoid > Target > Target Change > Movement Goal > Move Towards > Random\n\n",
+        "With attributes such as SOLDIER, the more to that side the slider is, the more weight the rule carries."]
+        a = popupInfo(instructions_text[0]+instructions_text[1]+instructions_text[2],self)
+        a.exec_()
 

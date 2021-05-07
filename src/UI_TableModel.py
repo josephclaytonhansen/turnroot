@@ -1,13 +1,23 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
 
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+
+import src.UI_colorTheme as UI_colorTheme
+from src.UI_updateJSON import updateJSON
+data = updateJSON()
+active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 class TableModel(QtCore.QAbstractTableModel):
 
     def __init__(self, data):
         super(TableModel, self).__init__()
         self._data = data
+        self.slider_value1 = 0
+        self.slider_value2 = 0
+        self.slider_value3 = 0
 
     def data(self, index, role):
         if role == Qt.DisplayRole:
@@ -16,20 +26,56 @@ class TableModel(QtCore.QAbstractTableModel):
         
         if role == Qt.BackgroundRole and index.row() % 2 == 0:
             value = self._data[index.row()][index.column()]
-            return QtGui.QColor('white')
-    
-        if role == Qt.ForegroundRole:
-            value = self._data[index.row()][index.column()]
-            return QtGui.QColor('black')
+            if value.startswith("SOLDIER"):
+                return QtGui.QColor(self.colorizeCell(self.slider_value1))
+            elif value.startswith("LONE WOLF"):
+                return QtGui.QColor(self.colorizeCell(self.slider_value1))
+            elif value.startswith("STRATEGIC"):
+                return QtGui.QColor(self.colorizeCell(self.slider_value2))
+            elif value.startswith("MINDLESS"):
+                return QtGui.QColor(self.colorizeCell(self.slider_value2))
+            elif value.startswith("COWARDLY"):
+                return QtGui.QColor(self.colorizeCell(self.slider_value3))
+            elif value.startswith("BRASH"):
+                return QtGui.QColor(self.colorizeCell(self.slider_value3))
+            elif value.startswith("ALWAYS!"):
+                return QtGui.QColor("black")
+            else:
+                return QtGui.QColor("white")
         
         elif role == Qt.BackgroundRole and index.row() % 2 != 0:
             value = self._data[index.row()][index.column()]
-            return QtGui.QColor('#efefef')
+            if value.startswith("SOLDIER"):
+                return QtGui.QColor(self.colorizeCell(self.slider_value1))
+            elif value.startswith("LONE"):
+                return QtGui.QColor(self.colorizeCell(self.slider_value1))
+            elif value.startswith("STRATEGIC"):
+                return QtGui.QColor(self.colorizeCell(self.slider_value2))
+            elif value.startswith("MINDLESS"):
+                return QtGui.QColor(self.colorizeCell(self.slider_value2))
+            elif value.startswith("COWARDLY"):
+                return QtGui.QColor(self.colorizeCell(self.slider_value3))
+            elif value.startswith("BRASH"):
+                return QtGui.QColor(self.colorizeCell(self.slider_value3))
+            elif value.startswith("ALWAYS!"):
+                return QtGui.QColor("black")
+            else:
+                return QtGui.QColor("#efefef")
+
+        if role == Qt.ForegroundRole:
+            value = self._data[index.row()][index.column()]
+            if value.startswith("ALWAYS!") == False:
+                return QtGui.QColor('black')
+            else:
+                return QtGui.QColor('white')
             
     def setData(self, index, value, role):
         if role == Qt.EditRole and value != "" and value != None:
             self._data[index.row()][index.column()] = value
             return True
+        
+
+        
         else:
             return True
 
@@ -44,3 +90,21 @@ class TableModel(QtCore.QAbstractTableModel):
             return Qt.ItemIsSelectable|Qt.ItemIsEnabled|Qt.ItemIsEditable
         else:
             return Qt.ItemIsSelectable|Qt.ItemIsEnabled
+        
+    def colorizeCell(self, v):
+        v = v / 100
+        color_left = QColor(active_theme.node_outliner_label_0)
+        color_right = QColor(active_theme.node_outliner_label_1)
+        color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
+        color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
+        
+        distances = [(color_right.red() - color_left.red()),
+                     (color_right.green() - color_left.green()),
+                     (color_right.blue() - color_left.blue())]
+        
+        
+        new_color = [int(color_left.red() + v * distances[0]),
+                     int(color_left.green() + v * distances[1]),
+                     int(color_left.blue()+ v * distances[2])]
+        
+        return(QColor(new_color[0],new_color[1],new_color[2]).name())

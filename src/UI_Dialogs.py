@@ -559,5 +559,24 @@ class switchEditorDialog(QDialog):
     def replaceWindow(self):
         self.mode = REPLACE_WINDOW
 
+class popupInfo(QDialog):
+    def __init__(self,s,parent=None):
+        data = updateJSON()
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        self.setWindowFlags(Qt.Popup)
+        self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
+        self.info = s
+        
+        layout = QVBoxLayout()
+        layout.setContentsMargins( 8,8,8,8)
+        layout.setSpacing(0)
+        
+        self.label =QLabel(self.info)
+        self.label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        layout.addWidget(self.label, 1)
+        self.setLayout(layout)
+        self.show()
+
         
