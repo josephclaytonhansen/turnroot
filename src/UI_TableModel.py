@@ -18,6 +18,7 @@ class TableModel(QtCore.QAbstractTableModel):
         self.slider_value1 = 0
         self.slider_value2 = 0
         self.slider_value3 = 0
+        
         self.column_colors = []
 
     def data(self, index, role):
@@ -30,18 +31,21 @@ class TableModel(QtCore.QAbstractTableModel):
         
         if role == Qt.BackgroundRole and index.row() % 2 == 0 and index.column() != 0:
             value = self._data[index.row()][index.column()]
+            self.slider_value4 = 100 - self.slider_value1
+            self.slider_value5 = 100 - self.slider_value2
+            self.slider_value6 = 100 - self.slider_value3
             if value.startswith("SOLDIER"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value1))
             elif value.startswith("LONE WOLF"):
-                return QtGui.QColor(self.colorizeCell(self.slider_value1))
+                return QtGui.QColor(self.colorizeCell(self.slider_value4))
             elif value.startswith("STRATEGIC"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value2))
             elif value.startswith("MINDLESS"):
-                return QtGui.QColor(self.colorizeCell(self.slider_value2))
+                return QtGui.QColor(self.colorizeCell(self.slider_value5))
             elif value.startswith("COWARDLY"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value3))
             elif value.startswith("BRASH"):
-                return QtGui.QColor(self.colorizeCell(self.slider_value3))
+                return QtGui.QColor(self.colorizeCell(self.slider_value6))
             elif value.startswith("ALWAYS!"):
                 return QtGui.QColor("black")
             else:
@@ -52,15 +56,15 @@ class TableModel(QtCore.QAbstractTableModel):
             if value.startswith("SOLDIER"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value1))
             elif value.startswith("LONE"):
-                return QtGui.QColor(self.colorizeCell(self.slider_value1))
+                return QtGui.QColor(self.colorizeCell(self.slider_value4))
             elif value.startswith("STRATEGIC"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value2))
             elif value.startswith("MINDLESS"):
-                return QtGui.QColor(self.colorizeCell(self.slider_value2))
+                return QtGui.QColor(self.colorizeCell(self.slider_value5))
             elif value.startswith("COWARDLY"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value3))
             elif value.startswith("BRASH"):
-                return QtGui.QColor(self.colorizeCell(self.slider_value3))
+                return QtGui.QColor(self.colorizeCell(self.slider_value6))
             elif value.startswith("ALWAYS!"):
                 return QtGui.QColor("black")
             else:

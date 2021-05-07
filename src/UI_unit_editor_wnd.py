@@ -545,12 +545,14 @@ class UnitEditorWnd(QWidget):
             c_tab = self.tables[tab]
             if self.sender().name == 1:
                 c_tab.model().slider_value1 = v
+                c_tab.viewport().repaint()
             elif self.sender().name == 2:
                 c_tab.model().slider_value2 = v
+                c_tab.viewport().repaint()
             elif self.sender().name == 3:
                 c_tab.model().slider_value3 = v
-            c_tab.viewport().repaint()
-        
+                c_tab.viewport().repaint()
+
         v = v / 100
         color_left = QColor(active_theme.node_outliner_label_0)
         color_right = QColor(active_theme.node_outliner_label_1)
