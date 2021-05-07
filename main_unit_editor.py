@@ -37,8 +37,8 @@ OPEN_LAST_FILE = const[0]
 OPEN_NEW_FILE = const[1]
 
 class mainN(UnitEditorWnd):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent):
+        super().__init__(parent)
         self.setMinimumSize(QSize(int(size.width()/1.85), int(size.height()*.7)))
         self.setMaximumSize(QSize(int(size.width()), int(size.height())))
 
@@ -56,7 +56,7 @@ class main(QMainWindow):
         font = self.menubar.font()
         font.setPointSize(data["font_size"])
         
-        self.m = mainN()
+        self.m = mainN(parent=self)
         self.setCentralWidget(self.m)
                         
 window = main()

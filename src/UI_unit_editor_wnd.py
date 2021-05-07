@@ -2,8 +2,9 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from src.UI_node_graphics_scene import QDMGraphicsView, QDMGraphicsScene
+from src.UI_TableModel import TableModel
 
-import json
+import json, math
 
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
@@ -273,8 +274,108 @@ class UnitEditorWnd(QWidget):
         #name, title, gender, pronouns, friendly/enemy, recruitable, protagonist, mounted, stats, portraits
         
     def initAI(self):
-        working_tab = self.tabs_dict["AI"]
-        working_tab_layout = working_tab.layout
+        self.working_tab = self.tabs_dict["AI"]
+        self.working_tab_layout = self.working_tab.layout()
+        
+        self.basic_layout = QVBoxLayout()
+        self.basic_layout_widget = QWidget()
+        self.basic_layout_widget.setLayout(self.basic_layout)
+        
+        self.table = QTableView()
+        table_font = QFont("Menlo")
+        table_font.setStyleHint(QFont.TypeWriter)
+        self.table.setFont(table_font)
+        self.table.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Expanding)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+        self.table_data = [
+            ["move_towards1","player or ally IS nearest","!"],
+["move_towards2","player or ally IS disadvantage","STRATEGIC"],
+["move_towards3","IS safe","COWARDLY"],
+["move_towards4","chest IF self can open","GREED+LONE_WOLF"],
+            ["","",""],
+["move_goals1","self IS in group: stay in group","SOLDIER"],
+["move_goals2","",""],
+            ["","",""],
+["target1","player or ally IS last","SOLDIER"],
+["target2","player or ally IS disadvantage","STRATEGIC"],
+["target3","player or ally IS leader","BRASH"],
+["target4","player or ally IS nearest","MINDLESS"],
+            ["","",""],
+["target_change1","possible_target IS disadvantage","STRATEGIC"],
+["target_change2","last_target IS NOT in vision","!"],
+            ["","",""],
+["avoid1","doors IF shut",""],
+["avoid2","IS stop","!"],
+["avoid3","space IS emplacement",""],
+["avoid4","self IS alone in vision","SOLDIER"],
+["avoid5","space IS hurt",""],
+["avoid6","space IS last position",""],
+["avoid7","IS slow ","STRATEGIC"]
+            ]
+
+        self.model = TableModel(self.table_data)
+        self.table.setModel(self.model)
+        
+        personality_slider_row_1 = QWidget()
+        personality_slider_row_1_layout = QHBoxLayout()
+        personality_slider_row_1.setLayout(personality_slider_row_1_layout)
+        
+        personality_slider_row_2 = QWidget()
+        personality_slider_row_layout_2 = QHBoxLayout()
+        personality_slider_row_2.setLayout(personality_slider_row_layout_2)
+        
+        personality_slider_row_3 = QWidget()
+        personality_slider_row_layout_3 = QHBoxLayout()
+        personality_slider_row_3.setLayout(personality_slider_row_layout_3)
+        
+        self.solider_lone_wolf_slider= QSlider(Qt.Horizontal)
+        self.solider_lone_wolf_slider.valueChanged.connect(self.colorizeSlider)
+        self.solider_lone_wolf_slider.setValue(50)
+        self.solider_lone_wolf_slider.setRange(0,100)
+        self.solider_lone_wolf_slider.setSingleStep(1)
+        
+        soldier_label = QLabel("Soldier")
+        lonewolf_label = QLabel("Lone Wolf")
+        
+        personality_slider_row_1_layout.addWidget(soldier_label)
+        personality_slider_row_1_layout.addWidget(self.solider_lone_wolf_slider)
+        personality_slider_row_1_layout.addWidget(lonewolf_label)
+        
+        self.strategic_mindless_slider= QSlider(Qt.Horizontal)
+        self.strategic_mindless_slider.valueChanged.connect(self.colorizeSlider)
+        self.strategic_mindless_slider.setValue(50)
+        self.strategic_mindless_slider.setRange(0,100)
+        self.strategic_mindless_slider.setSingleStep(1)
+        
+        strategic_label = QLabel("Strategic")
+        mindless_label = QLabel("Mindless")
+        
+        personality_slider_row_layout_2.addWidget(strategic_label)
+        personality_slider_row_layout_2.addWidget(self.strategic_mindless_slider)
+        personality_slider_row_layout_2.addWidget(mindless_label)
+        
+        self.cowardly_brash_slider= QSlider(Qt.Horizontal)
+        self.cowardly_brash_slider.valueChanged.connect(self.colorizeSlider)
+        self.cowardly_brash_slider.setValue(50)
+        self.cowardly_brash_slider.setRange(0,100)
+        self.cowardly_brash_slider.setSingleStep(1)
+        
+        cowardly_label = QLabel("Cowardly")
+        brash_label = QLabel("Brash")
+        
+        personality_slider_row_layout_3.addWidget(cowardly_label)
+        personality_slider_row_layout_3.addWidget(self.cowardly_brash_slider)
+        personality_slider_row_layout_3.addWidget(brash_label)
+
+        self.basic_layout.addWidget(personality_slider_row_1)
+        self.basic_layout.addWidget(personality_slider_row_2)
+        self.basic_layout.addWidget(personality_slider_row_3)
+
+        
+        self.basic_layout.addWidget(self.table)
+
+        self.working_tab_layout.addWidget(self.basic_layout_widget)
         
     def initAttacks(self):
         working_tab = self.tabs_dict["Attacks"]
@@ -375,3 +476,21 @@ class UnitEditorWnd(QWidget):
     def descriptionChange(self):
         self.unit.description=self.description.toPlainText()
         self.unit.selfToJSON()
+    
+    def colorizeSlider(self, v):
+        v = v / 100
+        color_left = QColor(active_theme.node_outliner_label_0)
+        color_right = QColor(active_theme.node_outliner_label_1)
+        color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
+        color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
+        
+        distances = [(color_right.red() - color_left.red()),
+                     (color_right.green() - color_left.green()),
+                     (color_right.blue() - color_left.blue())]
+        
+        
+        new_color = [int(color_left.red() + v * distances[0]),
+                     int(color_left.green() + v * distances[1]),
+                     int(color_left.blue()+ v * distances[2])]
+        
+        self.sender().setStyleSheet("QSlider::handle:horizontal {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;}")
