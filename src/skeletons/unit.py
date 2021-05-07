@@ -28,6 +28,7 @@ class Unit():
         self.title = ""
         self.unique = True
         self.is_friendly = True
+        self.is_ally = False
         self.is_recruitable = False
         self.is_lord = False
         self.has_dialogue = True

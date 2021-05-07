@@ -11,9 +11,17 @@ data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 from src.skeletons.unit import Unit
+from src.skeletons.identities import orientations, genders, pronouns
+
+from src.UI_Dialogs import confirmAction
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
+
+class ValuedSpinBox(QSpinBox):
+    def __init__(self,parent=None):
+        super().__init__(parent)
+        self.index = 0
 
 class UnitEditorWnd(QWidget):
     def __init__(self, parent=None):
@@ -21,7 +29,7 @@ class UnitEditorWnd(QWidget):
         self.initUI()
         
     def initUI(self):
-        self.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        self.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
 
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
@@ -29,14 +37,17 @@ class UnitEditorWnd(QWidget):
         self.setLayout(self.layout)
         
         self.tabs = QTabWidget()
+        self.tabs_font = self.tabs.font()
+        self.tabs_font.setPointSize(12)
+        self.tabs.setFont(self.tabs_font)
+        
         self.tabs.setTabPosition(QTabWidget.South)
         
         self.tscroll = QScrollArea()
         self.tscroll.setWidget(self.tabs)
         self.tscroll.setWidgetResizable(True)
         
-        self.tab_names = ["Basic", "AI", "Attacks", "Actions", "Classes", "Skills",
-                          "Tactics", "Skilled Blows", "Objects", "Relationships"]
+        self.tab_names = ["Basic", "AI", "Attacks", "Actions", "Classes", "Skills", "Objects", "Relationships", "Graphics/Sounds"]
         
         self.tabs_dict = {}
         for tab in self.tab_names:
@@ -55,8 +66,6 @@ class UnitEditorWnd(QWidget):
         self.initActions()
         self.initClasses()
         self.initSkills()
-        self.initTactics()
-        self.initSkilledBlows()
         self.initObjects()
         self.initRelationships()
         
@@ -82,7 +91,7 @@ class UnitEditorWnd(QWidget):
         self.basic_left_layout.setSpacing(0)
         self.basic_left.setLayout(self.basic_left_layout)
         self.basic_layout.addWidget(self.basic_left, 40)
-        self.basic_left.setMaximumWidth(350)
+        self.basic_left.setMaximumWidth(580)
         
         self.basic_center = QWidget()
         self.basic_center_layout = QVBoxLayout()
@@ -90,41 +99,45 @@ class UnitEditorWnd(QWidget):
         self.basic_center.setLayout(self.basic_center_layout)
         self.basic_layout.addWidget(self.basic_center, 60)
         
-        image = QLabel()
+        image = QPushButton()
+        image.setMaximumHeight(390)
+        image.setMaximumWidth(285)
         pixmap = QPixmap(270,375)
-        image.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         pixmap.fill(QColor("white"))
-        image.setPixmap(pixmap)
-        self.basic_left_layout.addWidget(image)
+        pixmap = QIcon(pixmap)
+        image.setIcon(pixmap)
+        image.setIconSize(QSize(270,375))
+        
+        img_container = QWidget()
+        img_container_layout = QHBoxLayout()
+        img_container.setLayout(img_container_layout)
+        img_container_layout.addWidget(image)
+        
+        self.basic_left_layout.addWidget(img_container)
         
         name_row = QWidget()
         name_row_layout = QHBoxLayout()
         name_row.setLayout(name_row_layout)
         
         self.name_edit = QLineEdit()
+        self.name_edit.textChanged.connect(self.nameChange)
         self.name_edit.setAlignment(Qt.AlignCenter)
         self.name_edit.setPlaceholderText("Name")
         name_font = self.name_edit.font()
-        name_font.setPointSize(18)
+        name_font.setPointSize(16)
         
         header_font = self.name_edit.font()
         header_font.setPointSize(21)
+        body_font = self.name_edit.font()
+        body_font.setPointSize(16)
         
         self.name_edit.setFont(name_font)
-
-        id_label = QLabel("Identity")
-        id_label.setFont(header_font)
-        id_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.basic_left_layout.addWidget(id_label)
         name_row_layout.addWidget(self.name_edit)
-        name_row_layout.addWidget(QLabel(" - "))
         
-        self.title_edit = QLabel()
-        self.title_edit.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.title_edit = QPushButton()
+        self.title_edit.clicked.connect(self.classChange)
         self.title_edit.setText("Soldier")
-        title_font = self.title_edit.font()
-        title_font.setPointSize(18)
-        self.title_edit.setFont(title_font)
+        self.title_edit.setFont(body_font)
         name_row_layout.addWidget(self.title_edit)
         
         self.basic_left_layout.addWidget(name_row)
@@ -134,17 +147,13 @@ class UnitEditorWnd(QWidget):
         identity_row.setLayout(identity_row_layout)
         
         self.gender_edit = QComboBox()
-        self.gender_edit.addItems(["Male", "Female", "Non-Binary", "Custom"])
-        gender_font = self.gender_edit.font()
-        gender_font.setPointSize(16)
-        self.gender_edit.setFont(title_font)
+        self.gender_edit.currentTextChanged.connect(self.genderChange)
+        self.gender_edit.addItems(["Male", "Female", "Other/Non-Binary", "Custom"])
+        self.gender_edit.setFont(body_font)
         identity_row_layout.addWidget(self.gender_edit)
         
-        self.pronouns_edit = QComboBox()
-        self.pronouns_edit.addItems(["He/Him/His", "She/Her/Hers", "They/Them/Theirs", "Custom"])
-        gender_font = self.pronouns_edit.font()
-        gender_font.setPointSize(16)
-        self.pronouns_edit.setFont(title_font)
+        self.pronouns_edit = QLabel("He/Him/His")
+        self.pronouns_edit.setFont(body_font)
         identity_row_layout.addWidget(self.pronouns_edit)
         
         self.basic_left_layout.addWidget(identity_row)
@@ -166,17 +175,23 @@ class UnitEditorWnd(QWidget):
         generic_label.setFont(checkbox_font)
         self.generic.setFont(checkbox_font)
         
-        self.friendly_toggle = QPushButton("Friendly")
-        self.friendly_toggle.setFont(checkbox_font)
-        checkbox_row_layout.addWidget(self.friendly_toggle)
-        
-        checkbox_row_layout.addWidget(protag_label)
-        checkbox_row_layout.addWidget(self.protag)
+        self.status = QComboBox()
+        self.status.currentTextChanged.connect(self.statusChange)
+        self.status.addItems(["Enemy", "Team", "Ally", "Protagonist", "Recruitable Enemy", "Recruitable Ally"])
+        self.status.setFont(checkbox_font)
         
         checkbox_row_layout.addWidget(generic_label)
         checkbox_row_layout.addWidget(self.generic)
+        self.generic.stateChanged.connect(self.genericChange)
         
         self.basic_left_layout.addWidget(checkbox_row)
+        
+        status_row = QWidget()
+        status_row_layout = QHBoxLayout()
+        status_row.setLayout(status_row_layout)
+        status_row_layout.addWidget(self.status)
+        
+        self.basic_left_layout.addWidget(status_row)
         
         self.working_tab_layout.addWidget(self.basic_left)
         
@@ -189,16 +204,38 @@ class UnitEditorWnd(QWidget):
         self.stat_values = {}
         for s in universal_stats:
             self.stat_row[s] = QWidget()
-            stat_row_layout = QHBoxLayout()
-            self.stat_row[s].setLayout(stat_row_layout)
+            self.stat_row_layout = QHBoxLayout()
+            self.stat_row[s].setLayout(self.stat_row_layout)
             
-            stat_row_layout.addWidget(QLabel(s))
+            stat_label = QLabel(s[0].upper()+s[1:])
+            stat_label.setFont(body_font)
+            self.stat_row_layout.addWidget(stat_label)
             self.stat_values[s] = getattr(self.unit, s)
-            stat_value = QSpinBox()
+            stat_value = ValuedSpinBox()
+            stat_value.index = universal_stats.index(s)
+            stat_value.valueChanged.connect(self.statChange)
+            stat_value.setFont(body_font)
             stat_value.setValue(int(self.stat_values[s]))
-            stat_row_layout.addWidget(stat_value)
+            self.stat_row_layout.addWidget(stat_value)
             
             self.basic_center_layout.addWidget(self.stat_row[s])
+            
+            stat_edit_row = QWidget()
+            stat_edit_row_layout = QHBoxLayout()
+            stat_edit_row.setLayout(stat_edit_row_layout)
+            
+        stat_remove = QPushButton("X")
+        stat_remove.setFont(body_font)
+        stat_remove.setMaximumWidth(40)
+        
+        stat_add = QPushButton("+")
+        stat_add.setFont(body_font)
+        stat_add.setMaximumWidth(40)
+        
+        stat_edit_row_layout.addWidget(stat_remove)
+        stat_edit_row_layout.addWidget(stat_add)
+        
+        self.basic_center_layout.addWidget(stat_edit_row)
         
         self.working_tab_layout.addWidget(self.basic_center)
         
@@ -224,14 +261,6 @@ class UnitEditorWnd(QWidget):
         working_tab = self.tabs_dict["Skills"]
         working_tab_layout = working_tab.layout
         
-    def initTactics(self):
-        working_tab = self.tabs_dict["Tactics"]
-        working_tab_layout = working_tab.layout
-
-    def initSkilledBlows(self):
-        working_tab = self.tabs_dict["Skilled Blows"]
-        working_tab_layout = working_tab.layout
-        
     def initObjects(self):
         working_tab = self.tabs_dict["Objects"]
         working_tab_layout = working_tab.layout
@@ -239,3 +268,63 @@ class UnitEditorWnd(QWidget):
     def initRelationships(self):
         working_tab = self.tabs_dict["Relationships"]
         working_tab_layout = working_tab.layout
+        
+    def genderChange(self, s):
+        if s == "Male":
+            self.unit.gender = genders().MALE
+        elif s == "Female":
+            self.unit.gender = genders().FEMALE
+        elif s == "Other/Non-Binary":
+            self.unit.gender = genders().OTHER
+        else:
+            #custom gender
+            pass
+        self.unit.pronoun_string = ""
+        for k in (self.unit.pronouns):
+            self.unit.pronoun_string += k[0].upper()+k[1:]
+            if self.unit.pronouns.index(k) != 2:
+                self.unit.pronoun_string += "/"
+        try:
+            self.pronouns_edit.setText(self.unit.pronoun_string)
+        except:
+            pass
+    
+    def nameChange(self,s):
+        self.unit.name = s
+            
+    def classChange(self):
+        pass
+    
+    def statusChange(self, s):
+        if s == "Enemy":
+            self.unit.is_friendly = False
+        elif s == "Team":
+            self.unit.is_friendly = True
+            self.has_dialogue = True
+        elif s == "Ally":
+            self.unit.is_friendly = False
+            self.unit.is_ally = True
+        elif s == "Protagonist":
+            k = confirmAction("#You can only have one!\nThis will clear the existing protagonist.\nContinue?")
+            k.exec_()
+            if k.return_confirm:
+                self.unit.is_friendly = True
+                self.unit.is_ally = False
+                self.unit.is_lord = True
+                #clear other units of lord flag
+        elif s == "Recruitable Enemy":
+            self.unit.is_friendly = False
+            self.unit.is_recruitable = True
+        elif s == "Recruitable Ally":
+            self.unit.is_friendly = False
+            self.unit.is_ally = True
+            self.unit.is_recruitable = True
+            
+    def genericChange(self, s):
+        if s == 0:
+            self.unit.unique = False
+        else:
+            self.unit.unique = True
+            
+    def statChange(self, i):
+        setattr(self.unit,universal_stats[self.sender().index],i)
