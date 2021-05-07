@@ -476,6 +476,7 @@ class UnitEditorWnd(QWidget):
     def descriptionChange(self):
         self.unit.description=self.description.toPlainText()
         self.unit.selfToJSON()
+        
     
     def colorizeSlider(self, v):
         v = v / 100
@@ -493,4 +494,7 @@ class UnitEditorWnd(QWidget):
                      int(color_left.green() + v * distances[1]),
                      int(color_left.blue()+ v * distances[2])]
         
-        self.sender().setStyleSheet("QSlider::handle:horizontal {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;}")
+        self.sender().setStyleSheet(
+            "QSlider::handle:horizontal {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;width:40px;height:40px;}"
+            )
+
