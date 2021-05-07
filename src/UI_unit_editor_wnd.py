@@ -107,6 +107,7 @@ class UnitEditorWnd(QWidget):
         pixmap = QIcon(pixmap)
         image.setIcon(pixmap)
         image.setIconSize(QSize(270,375))
+        image.setToolTip("Edit portraits in the Graphics/Sounds tab")
         
         img_container = QWidget()
         img_container_layout = QHBoxLayout()
@@ -130,6 +131,8 @@ class UnitEditorWnd(QWidget):
         header_font.setPointSize(21)
         body_font = self.name_edit.font()
         body_font.setPointSize(16)
+        small_font = self.name_edit.font()
+        small_font.setPointSize(12)
         
         self.name_edit.setFont(name_font)
         name_row_layout.addWidget(self.name_edit)
@@ -137,6 +140,7 @@ class UnitEditorWnd(QWidget):
         self.title_edit = QPushButton()
         self.title_edit.clicked.connect(self.classChange)
         self.title_edit.setText("Soldier")
+        self.title_edit.setToolTip("Go to Classes tab")
         self.title_edit.setFont(body_font)
         name_row_layout.addWidget(self.title_edit)
         
@@ -149,11 +153,12 @@ class UnitEditorWnd(QWidget):
         self.gender_edit = QComboBox()
         self.gender_edit.currentTextChanged.connect(self.genderChange)
         self.gender_edit.addItems(["Male", "Female", "Other/Non-Binary", "Custom"])
-        self.gender_edit.setFont(body_font)
+        self.gender_edit.setFont(small_font)
         identity_row_layout.addWidget(self.gender_edit)
         
         self.pronouns_edit = QLabel("He/Him/His")
-        self.pronouns_edit.setFont(body_font)
+        self.pronouns_edit.setToolTip("Will change based on gender selection")
+        self.pronouns_edit.setFont(small_font)
         identity_row_layout.addWidget(self.pronouns_edit)
         
         self.basic_left_layout.addWidget(identity_row)
@@ -166,10 +171,11 @@ class UnitEditorWnd(QWidget):
         self.protag = QCheckBox()
         
         generic_label = QLabel("Generic")
+        generic_label.setToolTip("If checked, there can be copies of this unit- i.e., a basic soldier. If unchecked, unit is unique and cannot be copied")
         self.generic = QCheckBox()
         
         checkbox_font = protag_label.font()
-        checkbox_font.setPointSize(16)
+        checkbox_font.setPointSize(12)
         protag_label.setFont(checkbox_font)
         self.protag.setFont(checkbox_font)
         generic_label.setFont(checkbox_font)
@@ -195,9 +201,9 @@ class UnitEditorWnd(QWidget):
         
         self.working_tab_layout.addWidget(self.basic_left)
         
-        stat_label = QLabel("Stats")
-        stat_label.setFont(header_font)
-        stat_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        stat_label = QPushButton("Stats")
+        stat_label.setToolTip("Edit universal stats")
+        stat_label.setFont(body_font)
         self.basic_center_layout.addWidget(stat_label)
         
         self.stat_row = {}
@@ -208,34 +214,55 @@ class UnitEditorWnd(QWidget):
             self.stat_row[s].setLayout(self.stat_row_layout)
             
             stat_label = QLabel(s[0].upper()+s[1:])
-            stat_label.setFont(body_font)
+            stat_label.setFont(small_font)
             self.stat_row_layout.addWidget(stat_label)
             self.stat_values[s] = getattr(self.unit, s)
             stat_value = ValuedSpinBox()
+            stat_value.setRange(0,900)
             stat_value.index = universal_stats.index(s)
             stat_value.valueChanged.connect(self.statChange)
-            stat_value.setFont(body_font)
+            stat_value.setFont(small_font)
             stat_value.setValue(int(self.stat_values[s]))
             self.stat_row_layout.addWidget(stat_value)
             
             self.basic_center_layout.addWidget(self.stat_row[s])
-            
-            stat_edit_row = QWidget()
-            stat_edit_row_layout = QHBoxLayout()
-            stat_edit_row.setLayout(stat_edit_row_layout)
-            
-        stat_remove = QPushButton("X")
-        stat_remove.setFont(body_font)
-        stat_remove.setMaximumWidth(40)
         
-        stat_add = QPushButton("+")
-        stat_add.setFont(body_font)
-        stat_add.setMaximumWidth(40)
+        text_row = QWidget()
+        text_row_layout = QHBoxLayout()
+        text_row.setLayout(text_row_layout)
         
-        stat_edit_row_layout.addWidget(stat_remove)
-        stat_edit_row_layout.addWidget(stat_add)
+        notes_column = QWidget()
+        notes_column_layout = QVBoxLayout()
+        notes_column.setLayout(notes_column_layout)
         
-        self.basic_center_layout.addWidget(stat_edit_row)
+        desc_column = QWidget()
+        desc_column_layout = QVBoxLayout()
+        desc_column.setLayout(desc_column_layout)
+        
+        self.notes = QTextEdit()
+        self.notes.textChanged.connect(self.notesChange)
+        self.notes.setFont(small_font)
+        notes_label = QLabel("Notes")
+        notes_label.setToolTip("only seen by you")
+        notes_label.setFont(body_font)
+        
+        self.description = QTextEdit()
+        self.description.textChanged.connect(self.descriptionChange)
+        self.description.setFont(small_font)
+        description_label = QLabel("Description")
+        description_label.setToolTip("Added to game")
+        description_label.setFont(body_font)
+        
+        notes_column_layout.addWidget(notes_label)
+        notes_column_layout.addWidget(self.notes)
+        
+        desc_column_layout.addWidget(description_label)
+        desc_column_layout.addWidget(self.description)
+        
+        text_row_layout.addWidget(notes_column)
+        text_row_layout.addWidget(desc_column)
+        
+        self.basic_center_layout.addWidget(text_row)
         
         self.working_tab_layout.addWidget(self.basic_center)
         
@@ -291,6 +318,8 @@ class UnitEditorWnd(QWidget):
     
     def nameChange(self,s):
         self.unit.name = s
+        
+        self.unit.selfToJSON()
             
     def classChange(self):
         pass
@@ -320,11 +349,25 @@ class UnitEditorWnd(QWidget):
             self.unit.is_ally = True
             self.unit.is_recruitable = True
             
+        self.unit.selfToJSON()
+            
     def genericChange(self, s):
         if s == 0:
             self.unit.unique = False
         else:
             self.unit.unique = True
             
+        self.unit.selfToJSON()
+            
     def statChange(self, i):
         setattr(self.unit,universal_stats[self.sender().index],i)
+        
+        self.unit.selfToJSON()
+    
+    def notesChange(self):
+        self.unit.notes=self.notes.toPlainText()
+        self.unit.selfToJSON()
+    
+    def descriptionChange(self):
+        self.unit.description=self.description.toPlainText()
+        self.unit.selfToJSON()

@@ -36,6 +36,9 @@ class Unit():
         
         self.AI_sheet = None
         
+        self.description = ""
+        self.notes = ""
+        
         self.portraits = {}
         self.sprites = {}
         self.sounds =  {}
@@ -103,6 +106,30 @@ class Unit():
     
     def setIdentity(self):
         self.pronouns = pronouns(self.gender).pronouns
+    
+    def selfToJSON(self):
+        basic_attrs = ["name","title","unique","is_friendly","is_ally","is_lord","is_recruitable",
+                 "has_dialogue","is_permanently_dead","AI_sheet","gender","pronouns","orientation",
+                       "portraits","sprites","sounds","level","exp","exp_to_next_level","move","size",
+                       "is_mounted","is_currently_mounted","weapon_exps","unit_classes_exps",
+                       "unit_class","mastered_unit_classes","future_unit_classes","unique_classes",
+                       "unique_objects","strengths","weaknesses","skills","tactics",
+                       "skilled_blows","inventory_objects","attacks","actions","team_likes",
+                       "team_dislikes","support_levels","description","notes"]
+        
+        for stat in universal_stats:
+            basic_attrs.append(stat)
+        
+        basic_attrs_dict = {}
+        for b in basic_attrs:
+            basic_attrs_dict[b] = getattr(self,b)
+            
+        with open("src/skeletons/unit_test_save.json", "w") as wf:
+            json.dump(basic_attrs_dict, wf)
+
+
+
+
 
 
         
