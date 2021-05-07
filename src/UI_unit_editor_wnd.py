@@ -281,41 +281,48 @@ class UnitEditorWnd(QWidget):
         self.basic_layout_widget = QWidget()
         self.basic_layout_widget.setLayout(self.basic_layout)
         
-        self.table = QTableView()
-        table_font = QFont("Menlo")
-        table_font.setStyleHint(QFont.TypeWriter)
-        self.table.setFont(table_font)
-        self.table.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Expanding)
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-
+        self.tables = {}
+        
         self.table_data = [
-            ["move_towards1","player or ally IS nearest","!"],
+            [["move_towards1","player or ally IS nearest","!"],
 ["move_towards2","player or ally IS disadvantage","STRATEGIC"],
 ["move_towards3","IS safe","COWARDLY"],
-["move_towards4","chest IF self can open","GREED+LONE_WOLF"],
-            ["","",""],
-["move_goals1","self IS in group: stay in group","SOLDIER"],
-["move_goals2","",""],
-            ["","",""],
-["target1","player or ally IS last","SOLDIER"],
+["move_towards4","chest IF self can open","GREED+LONE_WOLF"]],
+[["move_goals1","self IS in group: stay in group","SOLDIER"],
+["move_goals2","",""]],
+[["target1","player or ally IS last","SOLDIER"],
 ["target2","player or ally IS disadvantage","STRATEGIC"],
 ["target3","player or ally IS leader","BRASH"],
-["target4","player or ally IS nearest","MINDLESS"],
-            ["","",""],
-["target_change1","possible_target IS disadvantage","STRATEGIC"],
-["target_change2","last_target IS NOT in vision","!"],
-            ["","",""],
-["avoid1","doors IF shut",""],
+["target4","player or ally IS nearest","MINDLESS"]],
+[["target_change1","possible_target IS disadvantage","STRATEGIC"],
+["target_change2","last_target IS NOT in vision","!"]],
+[["avoid1","doors IF shut",""],
 ["avoid2","IS stop","!"],
 ["avoid3","space IS emplacement",""],
 ["avoid4","self IS alone in vision","SOLDIER"],
 ["avoid5","space IS hurt",""],
 ["avoid6","space IS last position",""],
-["avoid7","IS slow ","STRATEGIC"]
+["avoid7","IS slow ","STRATEGIC"]]
             ]
+        
+        self.basic_table_categories = ["move_towards", "move_goals", "target", "target_change", "avoid"]
+        
+        for t in self.basic_table_categories:
+            table = QTableView()
+            table_font = QFont("Menlo")
+            table_font.setPointSize(14)
+            table_font.setStyleHint(QFont.TypeWriter)
+            table.setFont(table_font)
+            table.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Expanding)
+            table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+            table.horizontalHeader().setVisible(False)
+            table.verticalHeader().setVisible(False)
+            self.tables[t] = table
+            
+            table_data = self.table_data[self.basic_table_categories.index(t)]
 
-        self.model = TableModel(self.table_data)
-        self.table.setModel(self.model)
+            model = TableModel(table_data)
+            self.tables[t].setModel(model)
         
         personality_slider_row_1 = QWidget()
         personality_slider_row_1_layout = QHBoxLayout()
@@ -372,8 +379,18 @@ class UnitEditorWnd(QWidget):
         self.basic_layout.addWidget(personality_slider_row_2)
         self.basic_layout.addWidget(personality_slider_row_3)
 
+        basic_table_tabs = QTabWidget()
         
-        self.basic_layout.addWidget(self.table)
+        basic_table_tabs.setFont(self.tabs_font)
+        
+        basic_table_tabs.setTabPosition(QTabWidget.South)
+
+        for tab in self.basic_table_categories:
+            tab_title = tab
+            c_tab = self.tables[tab]
+            basic_table_tabs.addTab(c_tab, tab_title)
+        
+        self.basic_layout.addWidget(basic_table_tabs)
 
         self.working_tab_layout.addWidget(self.basic_layout_widget)
         
