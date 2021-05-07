@@ -18,13 +18,17 @@ class TableModel(QtCore.QAbstractTableModel):
         self.slider_value1 = 0
         self.slider_value2 = 0
         self.slider_value3 = 0
+        self.column_colors = []
 
     def data(self, index, role):
         if role == Qt.DisplayRole:
             value = self._data[index.row()][index.column()]
             return str(value)
         
-        if role == Qt.BackgroundRole and index.row() % 2 == 0:
+        if role == Qt.BackgroundRole and index.column() == 0:
+            return QtGui.QColor(self.column_colors[0])
+        
+        if role == Qt.BackgroundRole and index.row() % 2 == 0 and index.column() != 0:
             value = self._data[index.row()][index.column()]
             if value.startswith("SOLDIER"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value1))
@@ -43,7 +47,7 @@ class TableModel(QtCore.QAbstractTableModel):
             else:
                 return QtGui.QColor("white")
         
-        elif role == Qt.BackgroundRole and index.row() % 2 != 0:
+        elif role == Qt.BackgroundRole and index.row() % 2 != 0 and index.column() != 0:
             value = self._data[index.row()][index.column()]
             if value.startswith("SOLDIER"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value1))
@@ -64,8 +68,12 @@ class TableModel(QtCore.QAbstractTableModel):
 
         if role == Qt.ForegroundRole:
             value = self._data[index.row()][index.column()]
-            if value.startswith("ALWAYS!") == False:
+            if value.startswith("ALWAYS!") == False and index.column() != 0:
                 return QtGui.QColor('black')
+            elif self.column_colors[1] == "black" and index.column() == 0:
+                return QtGui.QColor('black')
+            elif self.column_colors[1] == "white" and index.column() == 0:
+                return QtGui.QColor('white')
             else:
                 return QtGui.QColor('white')
             

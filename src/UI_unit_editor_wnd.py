@@ -284,25 +284,25 @@ class UnitEditorWnd(QWidget):
         self.tables = {}
         
         self.table_data = [
-            [["move_towards1","player or ally IS nearest","SOLDIER"],
-["move_towards2","player or ally IS disadvantage","STRATEGIC"],
-["move_towards3","IS safe","COWARDLY"],
-["move_towards4","chest IF self can open","LONE_WOLF + GREED"]],
-[["move_goals1","self IS in group: stay in group","SOLDIER"],
+            [["move_towards1","nearest foe","SOLDIER"],
+["move_towards2","disadvantaged foe","STRATEGIC"],
+["move_towards3","safety","COWARDLY"],
+["move_towards4","chest IF can open","LONE_WOLF + GREED"]],
+[["move_goals1","stay in group","SOLDIER"],
 ["move_goals2","",""]],
-[["target1","player or ally IS last","SOLDIER"],
-["target2","player or ally IS disadvantage","STRATEGIC"],
-["target3","player or ally IS leader","BRASH"],
-["target4","player or ally IS nearest","MINDLESS"]],
-[["target_change1","possible_target IS disadvantage","STRATEGIC"],
-["target_change2","last_target IS NOT in vision","ALWAYS!"]],
-[["avoid1","doors IF shut",""],
-["avoid2","IS stop","ALWAYS!"],
-["avoid3","space IS emplacement",""],
-["avoid4","self IS alone in vision","SOLDIER"],
-["avoid5","space IS hurt",""],
-["avoid6","space IS last position",""],
-["avoid7","IS slow ","STRATEGIC"]],
+[["target1","last attacked foe","SOLDIER"],
+["target2","disadvantaged foe","STRATEGIC"],
+["target3","protagonist","BRASH"],
+["target4","nearest foe","MINDLESS"]],
+[["target_change1"," new target is disadvantaged","STRATEGIC"],
+["target_change2","last target is not visible","ALWAYS!"]],
+[["avoid1","doors if shut",""],
+["avoid2","tile if stop","ALWAYS!"],
+["avoid3","space is emplacement",""],
+["avoid4","is alone","SOLDIER"],
+["avoid5","tile is hurt",""],
+["avoid6","tile is last position",""],
+["avoid7","tile is slow ","STRATEGIC"]],
             [["ground","move"],
 ["wall","stop"],
 ["cliff","stop,blind"],
@@ -332,7 +332,13 @@ class UnitEditorWnd(QWidget):
 ["tallwall","stop,blind"]]
 ]
         
-        self.basic_table_categories = ["Move Towards", "Move Goals", "Targeting", "Targeting Change", "Avoid", "Tile Interactions"]
+        self.basic_table_categories = ["Move Towards", "Move Goals", "Targeting", "Targeting Change", "Avoid", "Tiles"]
+        self.column_colors_dict = [["#d4f59e", "black"],
+                                   ["#92c47f", "black"],
+                                   ["#609480", "white"],
+                                   ["#527554", "white"],
+                                   ["#334f3d", "white"],
+                                   ["##4a5c6d", "white"]]
         
         for t in self.basic_table_categories:
             table = QTableView()
@@ -350,6 +356,7 @@ class UnitEditorWnd(QWidget):
 
             model = TableModel(table_data)
             self.tables[t].setModel(model)
+            self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
         
         personality_slider_row_1 = QWidget()
         personality_slider_row_1_layout = QHBoxLayout()
