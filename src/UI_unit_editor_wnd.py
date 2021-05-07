@@ -124,6 +124,7 @@ class UnitEditorWnd(QWidget):
         self.name_edit.textChanged.connect(self.nameChange)
         self.name_edit.setAlignment(Qt.AlignCenter)
         self.name_edit.setPlaceholderText("Name")
+        self.name_edit.setStyleSheet("background-color: "+active_theme.window_background_color+";")
         name_font = self.name_edit.font()
         name_font.setPointSize(16)
         
@@ -218,6 +219,7 @@ class UnitEditorWnd(QWidget):
             self.stat_row_layout.addWidget(stat_label)
             self.stat_values[s] = getattr(self.unit, s)
             stat_value = ValuedSpinBox()
+            stat_value.setStyleSheet("background-color: "+active_theme.window_background_color+";")
             stat_value.setRange(0,900)
             stat_value.index = universal_stats.index(s)
             stat_value.valueChanged.connect(self.statChange)
@@ -240,6 +242,7 @@ class UnitEditorWnd(QWidget):
         desc_column.setLayout(desc_column_layout)
         
         self.notes = QTextEdit()
+        self.notes.setStyleSheet("background-color: "+active_theme.window_background_color+";")
         self.notes.textChanged.connect(self.notesChange)
         self.notes.setFont(small_font)
         notes_label = QLabel("Notes")
@@ -247,6 +250,7 @@ class UnitEditorWnd(QWidget):
         notes_label.setFont(body_font)
         
         self.description = QTextEdit()
+        self.description.setStyleSheet("background-color: "+active_theme.window_background_color+";")
         self.description.textChanged.connect(self.descriptionChange)
         self.description.setFont(small_font)
         description_label = QLabel("Description")
