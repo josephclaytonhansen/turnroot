@@ -14,7 +14,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
-from src.UI_Dialogs import confirmAction, popupInfo
+from src.UI_Dialogs import confirmAction, popupInfo, infoClose
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -30,6 +30,8 @@ class UnitEditorWnd(QWidget):
         self.initUI()
         
     def initUI(self):
+        self.path = None
+        
         self.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
 
         self.layout = QVBoxLayout()
@@ -417,8 +419,12 @@ class UnitEditorWnd(QWidget):
         default_values_button = QPushButton("Load Default Sheets")
         default_values_button.clicked.connect(self.AILoadSheets)
         
+        save_values_button = QPushButton("Save")
+        save_values_button.clicked.connect(self.unitToJSON)
+        
         default_values_row_layout.addWidget(self.default_values)
         default_values_row_layout.addWidget(default_values_button)
+        default_values_row_layout.addWidget(save_values_button)
         
         self.basic_layout.addWidget(default_values_row)
 
@@ -467,11 +473,15 @@ class UnitEditorWnd(QWidget):
             self.pronouns_edit.setText(self.unit.pronoun_string)
         except:
             pass
+        
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
     
     def nameChange(self,s):
         self.unit.name = s
         
-        self.unit.selfToJSON()
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
             
     def classChange(self):
         pass
@@ -500,8 +510,9 @@ class UnitEditorWnd(QWidget):
             self.unit.is_friendly = False
             self.unit.is_ally = True
             self.unit.is_recruitable = True
-            
-        self.unit.selfToJSON()
+        
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
             
     def genericChange(self, s):
         if s == 0:
@@ -509,21 +520,24 @@ class UnitEditorWnd(QWidget):
         else:
             self.unit.unique = True
             
-        self.unit.selfToJSON()
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
             
     def statChange(self, i):
         setattr(self.unit,universal_stats[self.sender().index],i)
         
-        self.unit.selfToJSON()
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
     
     def notesChange(self):
         self.unit.notes=self.notes.toPlainText()
-        self.unit.selfToJSON()
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
     
     def descriptionChange(self):
         self.unit.description=self.description.toPlainText()
-        self.unit.selfToJSON()
-        
+        if self.path != None:
+            self.unit.selfToJSON(self.path)      
     
     def colorizeSlider(self, v):
         for tab in self.basic_table_categories:
@@ -534,7 +548,7 @@ class UnitEditorWnd(QWidget):
                 c_tab.viewport().repaint()
             elif self.sender().name == 2:
                 c_tab.model().slider_value2 = v
-                self.unit.AI_strategic = AI_soldier
+                self.unit.AI_strategic = v
                 c_tab.viewport().repaint()
             elif self.sender().name == 3:
                 c_tab.model().slider_value3 = v
@@ -559,6 +573,9 @@ class UnitEditorWnd(QWidget):
         self.sender().setStyleSheet(
             "QSlider::handle:horizontal {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;width:40px;height:40px;}"
             )
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
+        
     def AIOverviewDialog(self):
         print(self.table_data)
         instructions_text = ["Rule 1 in a set has more weight towards the final decision than 2.\n",
@@ -594,3 +611,27 @@ class UnitEditorWnd(QWidget):
             self.sheets["Basic Foot Soldier"] = json.load(rf)
         with open("src/skeletons/sheets/basic_pegasus_knight.json", "r") as rf:
             self.sheets["Basic Pegasus (Flying) Knight"] = json.load(rf)
+
+    def saveFileDialog(self):
+        q = QFileDialog(self)
+        options = q.Options()
+        options |= q.DontUseNativeDialog
+        fileName, _ = q.getSaveFileName(None,"Save","","Turnroot Unit (*.truf)", options=options)
+        if fileName:
+            self.path = fileName+".truf"
+            print(self.path)
+            g = infoClose("Saved unit as "+self.path+"\nAll changes to this unit will now autosave")
+            g.exec_()
+            
+    def unitToJSON(self):
+        print(self.path)
+        self.unit.AI_sheets = self.table_data
+        if self.path == None or self.path == '':
+            self.saveFileDialog()
+            if self.path == None or self.path == '':
+                c = infoClose("No file selected")
+                c.exec_()
+            else:
+                self.unit.selfToJSON(self.path)
+        else:
+            self.unit.selfToJSON(self.path)

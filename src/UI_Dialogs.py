@@ -51,8 +51,7 @@ class confirmAction(QDialog):
         self.no.clicked.connect(self.no_clicked)
         self.setLayout(layout)
         self.show()
-        
-    
+
     def yes_clicked(self):
         self.return_confirm = True
         self.close()
