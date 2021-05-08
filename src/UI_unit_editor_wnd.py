@@ -602,12 +602,7 @@ class UnitEditorWnd(QWidget):
                 self.sheetsFromJSON()
                 self.table_data = self.sheets[sheet]
                 
-                if sheet == "Foot Soldier":
-                    self.dv_slider_dv = self.dv_slider_from_sheet[sheet]
-                elif sheet == "Pegasus (Flying) Knight":
-                    self.dv_slider_dv = self.dv_slider_from_sheet[sheet]
-                elif sheet == "Mindless Creature":
-                    self.dv_slider_dv = self.dv_slider_from_sheet[sheet]
+                self.dv_slider_dv = self.dv_slider_from_sheet[sheet]
                     
                 self.solider_lone_wolf_slider.setValue(self.dv_slider_dv[0])
                 self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
