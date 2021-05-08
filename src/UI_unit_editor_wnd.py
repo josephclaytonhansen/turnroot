@@ -14,7 +14,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
-from src.UI_Dialogs import confirmAction, popupInfo, infoClose
+from src.UI_Dialogs import confirmAction, popupInfo, infoClose, AIHelpDialog
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -399,15 +399,12 @@ class UnitEditorWnd(QWidget):
         basic_principles = QPushButton("Overview")
         basic_principles.clicked.connect(self.AIOverviewDialog)
         
-        detailed_help = QPushButton("Detailed Help")
-        #detailed_help.clicked.connect(self.AIHelpDialog)
-        
-        look_up = QPushButton("Look Up")
-        #look_up.clicked.connect(self.AILookUpDialog)
+        detailed_help = QPushButton("Rule Guidelines")
+        detailed_help.clicked.connect(self.AIHelpDialog)
+
         
         rules_row_layout.addWidget(basic_principles)
         rules_row_layout.addWidget(detailed_help)
-        rules_row_layout.addWidget(look_up)
         
         self.basic_layout.addWidget(rules_row)
         
@@ -586,7 +583,9 @@ class UnitEditorWnd(QWidget):
         
     def AIOverviewDialog(self):
         print(self.table_data)
-        instructions_text = ["Rule 1 in a set has more weight towards the final decision than 2.\n",
+        c = infoClose("Generally speaking, you don't need to edit rules. Just load a default set and change the sliders.")
+        c.exec_()
+        instructions_text = ["\nRule 1 in a set has more weight towards the final decision than 2.\n",
         "\nOrder of Importance: Avoid > Target > Target Change > Movement Goal > Move Towards > Random\n\n",
         "With attributes such as SOLDIER, the more to that side the slider is, the more weight the rule carries.\n",
         "These attributes may mean that rule2 in a set has more weight than rule1, based on slider positions."]
@@ -652,3 +651,8 @@ class UnitEditorWnd(QWidget):
                 self.unit.selfToJSON(self.path)
         else:
             self.unit.selfToJSON(self.path)
+
+    def AIHelpDialog(self):
+        a = AIHelpDialog()
+        a.exec_()
+        

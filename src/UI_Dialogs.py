@@ -578,4 +578,83 @@ class popupInfo(QDialog):
         self.setLayout(layout)
         self.show()
 
+class AIHelpDialog(QDialog):
+    def __init__(self, parent=None):
+        data = updateJSON()
+
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
         
+        self.setMinimumWidth(1000)
+        self.setMinimumHeight(760)
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+
+        self.setLayout(self.layout)
+        
+        self.tabs = QTabWidget()
+        
+        self.tabs.setTabPosition(QTabWidget.South)
+        
+        self.tscroll = QScrollArea()
+        self.tscroll.setWidget(self.tabs)
+        self.tscroll.setWidgetResizable(True)
+        
+        self.layout.addWidget(self.tscroll)
+        
+        self.tab_names = ["Move Towards", "Move Goals", "Targeting", "Targeting Change", "Avoid", "Tiles"]
+        
+        self.tabs_dict = {}
+        for tab in self.tab_names:
+            self.tab_title = tab
+            self.c_tab = QWidget()
+            self.c_tab_layout = QVBoxLayout()
+            self.c_tab.setLayout(self.c_tab_layout)
+            self.tabs_dict[tab] = self.c_tab
+            self.tabs.addTab(self.c_tab, self.tab_title)
+        
+        self.initMT()
+        #self.initMG()
+        #self.initT()
+        #self.initTC()
+        #self.initA()
+        #self.initTi()
+        
+    def initMT(self):
+        self.working_tab = self.tabs_dict["Move Towards"]
+        self.working_tab_layout = self.working_tab.layout()
+        self.working_tab_layout.setSpacing(0)
+        
+        img_label = QLabel()
+        img_label.setPixmap(QPixmap("src/ui_images/move_towards.png"))
+        img_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.working_tab_layout.addWidget(img_label)
+        instructions = [
+            "A move towards rule influence what object, state, or unit this unit moves towards.\n",
+            "As the chart shows, each rule can only move towards one of the above (object, state, or unit.)\n\n",
+            "Units are the simplest: describe the foe with an adjective, and optionally add \"foe\" to the end.\n",
+            "For example, \"nearest\" would be the nearest unit. The chart shows the allowed unit descriptions.\n",
+            "State describes the state the unit will be in if they move. States can either be \"safety\" or \"in/not in range of\".\n",
+            "\"safety\" means the unit is out of danger. As for range: \"not in range of arrows\" means the unit is avoiding as many arrows as possible.\n",
+            "Lastly, units can move towards objects. The format for this is object + \"if can/ if can not\" + take action.\n",
+            "For example, \"chest if can open\" will move towards chests, if they can be opened by the unit."
+            ]
+        for t in instructions:
+            v = instructions.index(t) / 8
+            color_left = QColor(self.active_theme.node_outliner_label_0)
+            color_right = QColor(self.active_theme.node_outliner_label_1)
+            color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
+            color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
+        
+            distances = [(color_right.red() - color_left.red()),
+                     (color_right.green() - color_left.green()),
+                     (color_right.blue() - color_left.blue())]
+        
+            new_color = [int(color_left.red() + v * distances[0]),
+                     int(color_left.green() + v * distances[1]),
+                     int(color_left.blue()+ v * distances[2])]
+            
+            g = QLabel(t)
+            g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
+            self.working_tab_layout.addWidget(g)
+
