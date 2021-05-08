@@ -275,10 +275,7 @@ class UnitEditorWnd(QWidget):
         
     def initAI(self):
         self.sheets = {}
-        with open("src/skeletons/sheets/basic_foot_soldier.json", "r") as rf:
-            self.sheets["Basic Foot Soldier"] = json.load(rf)
-        with open("src/skeletons/sheets/basic_pegasus_knight.json", "r") as rf:
-            self.sheets["Basic Pegasus (Flying) Knight"] = json.load(rf)
+        self.sheetsFromJSON()
 
         self.working_tab = self.tabs_dict["AI"]
         self.working_tab_layout = self.working_tab.layout()
@@ -562,24 +559,34 @@ class UnitEditorWnd(QWidget):
     def AIOverviewDialog(self):
         instructions_text = ["Rule 1 in a set has more weight towards the final decision than 2.\n",
         "\nOrder of Importance: Avoid > Target > Target Change > Movement Goal > Move Towards > Random\n\n",
-        "With attributes such as SOLDIER, the more to that side the slider is, the more weight the rule carries."]
-        a = popupInfo(instructions_text[0]+instructions_text[1]+instructions_text[2],self)
+        "With attributes such as SOLDIER, the more to that side the slider is, the more weight the rule carries.\n",
+        "These attributes may mean that rule2 in a set has more weight than rule1, based on slider positions."]
+        a = popupInfo(instructions_text[0]+instructions_text[1]+instructions_text[2]+instructions_text[3],self)
         a.exec_()
     
     def AILoadSheets(self):
-        sheet = self.default_values.currentText()
-        self.table_data = self.sheets[sheet]
-        
-        for t in self.basic_table_categories:
-            
-            table_data = self.table_data[self.basic_table_categories.index(t)]
-            model = TableModel(table_data)
-            self.tables[t].setModel(model)
-            
-            self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
-            
-            self.tables[t].model().slider_value1 = self.solider_lone_wolf_slider.value()
-            self.tables[t].model().slider_value2 = self.strategic_mindless_slider.value()
-            self.tables[t].model().slider_value3 = self.cowardly_brash_slider.value()
-            self.tables[t].viewport().repaint()
+        p = confirmAction("#Your changes will be lost if not saved, continue?")
+        p.exec_()
+        if p.return_confirm:
+            sheet = self.default_values.currentText()
+            if sheet != "":
+                self.sheetsFromJSON()
+                self.table_data = self.sheets[sheet]
+                for t in self.basic_table_categories:
+                    
+                    table_data = self.table_data[self.basic_table_categories.index(t)]
+                    model = TableModel(table_data)
+                    self.tables[t].setModel(model)
+                    
+                    self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
+                    
+                    self.tables[t].model().slider_value1 = self.solider_lone_wolf_slider.value()
+                    self.tables[t].model().slider_value2 = self.strategic_mindless_slider.value()
+                    self.tables[t].model().slider_value3 = self.cowardly_brash_slider.value()
+                    self.tables[t].viewport().repaint()
 
+    def sheetsFromJSON(self):
+        with open("src/skeletons/sheets/basic_foot_soldier.json", "r") as rf:
+            self.sheets["Basic Foot Soldier"] = json.load(rf)
+        with open("src/skeletons/sheets/basic_pegasus_knight.json", "r") as rf:
+            self.sheets["Basic Pegasus (Flying) Knight"] = json.load(rf)
