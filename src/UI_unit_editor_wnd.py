@@ -289,7 +289,7 @@ class UnitEditorWnd(QWidget):
         self.tables = {}
         
         #default values- basic foot soldier
-        self.table_data = self.sheets["Basic Foot Soldier"]
+        self.table_data = self.sheets["Foot Soldier"]
         
         self.basic_table_categories = ["Move Towards", "Move Goals", "Targeting", "Targeting Change", "Avoid", "Tiles"]
         self.column_colors_dict = [["#d4f59e", "black"],
@@ -415,7 +415,13 @@ class UnitEditorWnd(QWidget):
         default_values_row.setLayout(default_values_row_layout)
         
         self.default_values = QComboBox()
-        self.default_values.addItems(["", "Basic Foot Soldier", "Basic Pegasus (Flying) Knight"])
+        self.dv_slider_dv = [15,35,40]
+        
+        self.solider_lone_wolf_slider.setValue(self.dv_slider_dv[0])
+        self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
+        self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
+        
+        self.default_values.addItems(["--Select--", "Foot Soldier", "Pegasus (Flying) Knight", "Mindless Creature"])
         default_values_button = QPushButton("Load Default Sheets")
         default_values_button.clicked.connect(self.AILoadSheets)
         
@@ -593,6 +599,19 @@ class UnitEditorWnd(QWidget):
             if sheet != "":
                 self.sheetsFromJSON()
                 self.table_data = self.sheets[sheet]
+                
+                    
+                if sheet == "Foot Soldier":
+                    self.dv_slider_dv = [15,35,40]
+                elif sheet == "Pegasus (Flying) Knight":
+                    self.dv_slider_dv = [80,10,45]
+                elif sheet == "Mindless Creature":
+                    self.dv_slider_dv = [90,95,75]
+                    
+                self.solider_lone_wolf_slider.setValue(self.dv_slider_dv[0])
+                self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
+                self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
+                
                 for t in self.basic_table_categories:
                     
                     table_data = self.table_data[self.basic_table_categories.index(t)]
@@ -600,7 +619,7 @@ class UnitEditorWnd(QWidget):
                     self.tables[t].setModel(model)
                     
                     self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
-                    
+                
                     self.tables[t].model().slider_value1 = self.solider_lone_wolf_slider.value()
                     self.tables[t].model().slider_value2 = self.strategic_mindless_slider.value()
                     self.tables[t].model().slider_value3 = self.cautious_brash_slider.value()
@@ -608,9 +627,11 @@ class UnitEditorWnd(QWidget):
 
     def sheetsFromJSON(self):
         with open("src/skeletons/sheets/basic_foot_soldier.json", "r") as rf:
-            self.sheets["Basic Foot Soldier"] = json.load(rf)
+            self.sheets["Foot Soldier"] = json.load(rf)
         with open("src/skeletons/sheets/basic_pegasus_knight.json", "r") as rf:
-            self.sheets["Basic Pegasus (Flying) Knight"] = json.load(rf)
+            self.sheets["Pegasus (Flying) Knight"] = json.load(rf)
+        with open("src/skeletons/sheets/basic_mindless_creature.json", "r") as rf:
+            self.sheets["Mindless Creature"] = json.load(rf)
 
     def saveFileDialog(self):
         q = QFileDialog(self)
