@@ -290,6 +290,7 @@ class UnitEditorWnd(QWidget):
         
         #default values- basic foot soldier
         self.table_data = self.sheets["Foot Soldier"]
+        self.dv_slider_dv = [15,35,40]
         
         self.basic_table_categories = ["Move Towards", "Move Goals", "Targeting", "Targeting Change", "Avoid", "Tiles"]
         self.column_colors_dict = [["#d4f59e", "black"],
@@ -415,14 +416,15 @@ class UnitEditorWnd(QWidget):
         default_values_row.setLayout(default_values_row_layout)
         
         self.default_values = QComboBox()
-        self.dv_slider_dv = [15,35,40]
-        
+        with open("src/skeletons/sheets/default_slider_values.json", "r") as file:
+            self.dv_slider_from_sheet = json.load(file)
+
         self.solider_lone_wolf_slider.setValue(self.dv_slider_dv[0])
         self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
         self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
         
         self.default_values.addItems(["--Select--", "Foot Soldier", "Pegasus (Flying) Knight", "Mindless Creature"])
-        default_values_button = QPushButton("Load Default Sheets")
+        default_values_button = QPushButton("Load Default")
         default_values_button.clicked.connect(self.AILoadSheets)
         
         save_values_button = QPushButton("Save")
@@ -590,7 +592,7 @@ class UnitEditorWnd(QWidget):
         "These attributes may mean that rule2 in a set has more weight than rule1, based on slider positions."]
         a = popupInfo(instructions_text[0]+instructions_text[1]+instructions_text[2]+instructions_text[3],self)
         a.exec_()
-    
+        
     def AILoadSheets(self):
         p = confirmAction("#Your changes will be lost if not saved, continue?")
         p.exec_()
@@ -600,13 +602,12 @@ class UnitEditorWnd(QWidget):
                 self.sheetsFromJSON()
                 self.table_data = self.sheets[sheet]
                 
-                    
                 if sheet == "Foot Soldier":
-                    self.dv_slider_dv = [15,35,40]
+                    self.dv_slider_dv = self.dv_slider_from_sheet[sheet]
                 elif sheet == "Pegasus (Flying) Knight":
-                    self.dv_slider_dv = [80,10,45]
+                    self.dv_slider_dv = self.dv_slider_from_sheet[sheet]
                 elif sheet == "Mindless Creature":
-                    self.dv_slider_dv = [90,95,75]
+                    self.dv_slider_dv = self.dv_slider_from_sheet[sheet]
                     
                 self.solider_lone_wolf_slider.setValue(self.dv_slider_dv[0])
                 self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
