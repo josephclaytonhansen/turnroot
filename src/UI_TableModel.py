@@ -42,7 +42,7 @@ class TableModel(QtCore.QAbstractTableModel):
                 return QtGui.QColor(self.colorizeCell(self.slider_value2))
             elif value.startswith("MINDLESS"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value5))
-            elif value.startswith("COWARDLY"):
+            elif value.startswith("CAUTIOUS"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value3))
             elif value.startswith("BRASH"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value6))
@@ -61,7 +61,7 @@ class TableModel(QtCore.QAbstractTableModel):
                 return QtGui.QColor(self.colorizeCell(self.slider_value2))
             elif value.startswith("MINDLESS"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value5))
-            elif value.startswith("COWARDLY"):
+            elif value.startswith("CAUTIOUS"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value3))
             elif value.startswith("BRASH"):
                 return QtGui.QColor(self.colorizeCell(self.slider_value6))

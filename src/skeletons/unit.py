@@ -82,6 +82,10 @@ class Unit():
         self.team_likes = {}
         self.team_dislikes = {}
         self.support_levels = {}
+        
+        self.AI_soldier = 0
+        self.AI_strategic = 0
+        self.AI_cautious = 0
     
     @property
     def gender(self):

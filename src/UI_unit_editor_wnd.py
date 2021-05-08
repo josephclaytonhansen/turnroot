@@ -357,19 +357,19 @@ class UnitEditorWnd(QWidget):
         personality_slider_row_layout_2.addWidget(self.strategic_mindless_slider)
         personality_slider_row_layout_2.addWidget(mindless_label)
         
-        self.cowardly_brash_slider= QSlider(Qt.Horizontal)
-        self.cowardly_brash_slider.name = 3
-        self.cowardly_brash_slider.setFixedWidth(750)
-        self.cowardly_brash_slider.valueChanged.connect(self.colorizeSlider)
-        self.cowardly_brash_slider.setValue(50)
-        self.cowardly_brash_slider.setRange(0,100)
-        self.cowardly_brash_slider.setSingleStep(1)
+        self.cautious_brash_slider= QSlider(Qt.Horizontal)
+        self.cautious_brash_slider.name = 3
+        self.cautious_brash_slider.setFixedWidth(750)
+        self.cautious_brash_slider.valueChanged.connect(self.colorizeSlider)
+        self.cautious_brash_slider.setValue(50)
+        self.cautious_brash_slider.setRange(0,100)
+        self.cautious_brash_slider.setSingleStep(1)
         
-        cowardly_label = QLabel("Cowardly")
+        cautious_label = QLabel("Cautious")
         brash_label = QLabel("Brash")
         
-        personality_slider_row_layout_3.addWidget(cowardly_label)
-        personality_slider_row_layout_3.addWidget(self.cowardly_brash_slider)
+        personality_slider_row_layout_3.addWidget(cautious_label)
+        personality_slider_row_layout_3.addWidget(self.cautious_brash_slider)
         personality_slider_row_layout_3.addWidget(brash_label)
 
         self.basic_layout.addWidget(personality_slider_row_1)
@@ -530,12 +530,15 @@ class UnitEditorWnd(QWidget):
             c_tab = self.tables[tab]
             if self.sender().name == 1:
                 c_tab.model().slider_value1 = v
+                self.unit.AI_soldier = v
                 c_tab.viewport().repaint()
             elif self.sender().name == 2:
                 c_tab.model().slider_value2 = v
+                self.unit.AI_strategic = AI_soldier
                 c_tab.viewport().repaint()
             elif self.sender().name == 3:
                 c_tab.model().slider_value3 = v
+                self.unit.AI_cautious = v
                 c_tab.viewport().repaint()
 
         v = v / 100
@@ -557,6 +560,7 @@ class UnitEditorWnd(QWidget):
             "QSlider::handle:horizontal {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;width:40px;height:40px;}"
             )
     def AIOverviewDialog(self):
+        print(self.table_data)
         instructions_text = ["Rule 1 in a set has more weight towards the final decision than 2.\n",
         "\nOrder of Importance: Avoid > Target > Target Change > Movement Goal > Move Towards > Random\n\n",
         "With attributes such as SOLDIER, the more to that side the slider is, the more weight the rule carries.\n",
@@ -582,7 +586,7 @@ class UnitEditorWnd(QWidget):
                     
                     self.tables[t].model().slider_value1 = self.solider_lone_wolf_slider.value()
                     self.tables[t].model().slider_value2 = self.strategic_mindless_slider.value()
-                    self.tables[t].model().slider_value3 = self.cowardly_brash_slider.value()
+                    self.tables[t].model().slider_value3 = self.cautious_brash_slider.value()
                     self.tables[t].viewport().repaint()
 
     def sheetsFromJSON(self):
