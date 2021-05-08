@@ -154,7 +154,7 @@ class UnitEditorWnd(QWidget):
         
         self.gender_edit = QComboBox()
         self.gender_edit.currentTextChanged.connect(self.genderChange)
-        self.gender_edit.addItems(["Male", "Female", "Other/Non-Binary", "Custom"])
+        self.gender_edit.addItems(["Male", "Female", "Non-Binary", "Custom"])
         self.gender_edit.setFont(small_font)
         identity_row_layout.addWidget(self.gender_edit)
         
@@ -274,6 +274,12 @@ class UnitEditorWnd(QWidget):
         #name, title, gender, pronouns, friendly/enemy, recruitable, protagonist, mounted, stats, portraits
         
     def initAI(self):
+        self.sheets = {}
+        with open("src/skeletons/sheets/basic_foot_soldier.json", "r") as rf:
+            self.sheets["Basic Foot Soldier"] = json.load(rf)
+        with open("src/skeletons/sheets/basic_pegasus_knight.json", "r") as rf:
+            self.sheets["Basic Pegasus (Flying) Knight"] = json.load(rf)
+
         self.working_tab = self.tabs_dict["AI"]
         self.working_tab_layout = self.working_tab.layout()
         
@@ -283,54 +289,8 @@ class UnitEditorWnd(QWidget):
         
         self.tables = {}
         
-        self.table_data = [
-            [["move_towards1","nearest foe","SOLDIER"],
-["move_towards2","disadvantaged foe","STRATEGIC"],
-["move_towards3","safety","COWARDLY"],
-["move_towards4","chest IF can open","LONE_WOLF + GREED"]],
-[["move_goals1","stay in group","SOLDIER"],
-["move_goals2","",""]],
-[["target1","last attacked foe","SOLDIER"],
-["target2","disadvantaged foe","STRATEGIC"],
-["target3","protagonist","BRASH"],
-["target4","nearest foe","MINDLESS"]],
-[["target_change1"," new target is disadvantaged","STRATEGIC"],
-["target_change2","last target is not visible","ALWAYS!"]],
-[["avoid1","doors if shut",""],
-["avoid2","tile if stop","ALWAYS!"],
-["avoid3","space is emplacement",""],
-["avoid4","is alone","SOLDIER"],
-["avoid5","tile is hurt",""],
-["avoid6","tile is last position",""],
-["avoid7","tile is slow ","STRATEGIC"]],
-            [["ground","move"],
-["wall","stop"],
-["cliff","stop,blind"],
-["chasm","stop"],
-["trap","hurt_if_enter,hurt_if_stay"],
-["fire","hurt_if_stay"],
-["sand","slow"],
-["stairs","slow*.5"],
-["ice","slow*1.2"],
-["snow","slow*2"],
-["shallow_water","slow*1.5"],
-["deep_water","stop"],
-["door","shut,open_if_item,open_if_skilled"],
-["chest","shut,open_if_item,open_if_skilled"],
-["lava","stop"],
-["warp","teleport"],
-["arrow_emplacement","use_if_skilled"],
-["magic_emplacement","use_if_skilled"],
-["switch","use_if_safe"],
-["heal","heal"],
-["forest","guard,avoid*1.5"],
-["fortress","guard*2,avoid"],
-["thicket","guard*.5,avoid*.5"],
-["avo","avoid"],
-["guard","guard"],
-["roof","stop"],
-["tallwall","stop,blind"]]
-]
+        #default values- basic foot soldier
+        self.table_data = self.sheets["Basic Foot Soldier"]
         
         self.basic_table_categories = ["Move Towards", "Move Goals", "Targeting", "Targeting Change", "Avoid", "Tiles"]
         self.column_colors_dict = [["#d4f59e", "black"],
@@ -372,7 +332,7 @@ class UnitEditorWnd(QWidget):
         
         self.solider_lone_wolf_slider= QSlider(Qt.Horizontal)
         self.solider_lone_wolf_slider.name = 1
-        self.solider_lone_wolf_slider.setFixedWidth(650)
+        self.solider_lone_wolf_slider.setFixedWidth(750)
         self.solider_lone_wolf_slider.valueChanged.connect(self.colorizeSlider)
         self.solider_lone_wolf_slider.setValue(50)
         self.solider_lone_wolf_slider.setRange(0,100)
@@ -387,7 +347,7 @@ class UnitEditorWnd(QWidget):
         
         self.strategic_mindless_slider= QSlider(Qt.Horizontal)
         self.strategic_mindless_slider.name = 2
-        self.strategic_mindless_slider.setFixedWidth(650)
+        self.strategic_mindless_slider.setFixedWidth(750)
         self.strategic_mindless_slider.valueChanged.connect(self.colorizeSlider)
         self.strategic_mindless_slider.setValue(50)
         self.strategic_mindless_slider.setRange(0,100)
@@ -402,7 +362,7 @@ class UnitEditorWnd(QWidget):
         
         self.cowardly_brash_slider= QSlider(Qt.Horizontal)
         self.cowardly_brash_slider.name = 3
-        self.cowardly_brash_slider.setFixedWidth(650)
+        self.cowardly_brash_slider.setFixedWidth(750)
         self.cowardly_brash_slider.valueChanged.connect(self.colorizeSlider)
         self.cowardly_brash_slider.setValue(50)
         self.cowardly_brash_slider.setRange(0,100)
@@ -432,10 +392,38 @@ class UnitEditorWnd(QWidget):
         
         self.basic_layout.addWidget(basic_table_tabs)
         
-        basic_principles = QPushButton("Rules")
+        rules_row = QWidget()
+        rules_row_layout = QHBoxLayout()
+        rules_row.setLayout(rules_row_layout)
+        
+        basic_principles = QPushButton("Overview")
         basic_principles.clicked.connect(self.AIOverviewDialog)
         
-        self.basic_layout.addWidget(basic_principles)
+        detailed_help = QPushButton("Detailed Help")
+        #detailed_help.clicked.connect(self.AIHelpDialog)
+        
+        look_up = QPushButton("Look Up")
+        #look_up.clicked.connect(self.AILookUpDialog)
+        
+        rules_row_layout.addWidget(basic_principles)
+        rules_row_layout.addWidget(detailed_help)
+        rules_row_layout.addWidget(look_up)
+        
+        self.basic_layout.addWidget(rules_row)
+        
+        default_values_row = QWidget()
+        default_values_row_layout = QHBoxLayout()
+        default_values_row.setLayout(default_values_row_layout)
+        
+        self.default_values = QComboBox()
+        self.default_values.addItems(["", "Basic Foot Soldier", "Basic Pegasus (Flying) Knight"])
+        default_values_button = QPushButton("Load Default Sheets")
+        default_values_button.clicked.connect(self.AILoadSheets)
+        
+        default_values_row_layout.addWidget(self.default_values)
+        default_values_row_layout.addWidget(default_values_button)
+        
+        self.basic_layout.addWidget(default_values_row)
 
         self.working_tab_layout.addWidget(self.basic_layout_widget)
         
@@ -577,4 +565,21 @@ class UnitEditorWnd(QWidget):
         "With attributes such as SOLDIER, the more to that side the slider is, the more weight the rule carries."]
         a = popupInfo(instructions_text[0]+instructions_text[1]+instructions_text[2],self)
         a.exec_()
+    
+    def AILoadSheets(self):
+        sheet = self.default_values.currentText()
+        self.table_data = self.sheets[sheet]
+        
+        for t in self.basic_table_categories:
+            
+            table_data = self.table_data[self.basic_table_categories.index(t)]
+            model = TableModel(table_data)
+            self.tables[t].setModel(model)
+            
+            self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
+            
+            self.tables[t].model().slider_value1 = self.solider_lone_wolf_slider.value()
+            self.tables[t].model().slider_value2 = self.strategic_mindless_slider.value()
+            self.tables[t].model().slider_value3 = self.cowardly_brash_slider.value()
+            self.tables[t].viewport().repaint()
 
