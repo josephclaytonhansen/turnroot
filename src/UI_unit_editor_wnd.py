@@ -422,7 +422,8 @@ class UnitEditorWnd(QWidget):
         self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
         self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
         
-        self.default_values.addItems(["--Select--", "Foot Soldier", "Pegasus (Flying) Knight", "Mindless Creature", "Cautious Healer", "Solo Assassin"])
+        self.default_values.addItems(["--Select--", "Foot Soldier", "Pegasus (Flying) Knight", "Mindless Creature", "Cautious Healer", "Solo Assassin", "Sniper", "Vengeful Demon",
+                                      "Strategic Leader"])
         default_values_button = QPushButton("Load Default")
         default_values_button.clicked.connect(self.AILoadSheets)
         
@@ -590,8 +591,6 @@ class UnitEditorWnd(QWidget):
             self.unit.selfToJSON(self.path)
         
     def AIOverviewDialog(self):
-        c = infoClose("Generally speaking, you don't need to edit rules. Just load a default set and change the sliders.")
-        c.exec_()
         instructions_text = ["\nRule 1 in a set has more weight towards the final decision than 2.\n",
         "\nOrder of Importance: Avoid > Target > Target Change > Movement Goal > Move Towards > Random\n\n",
         "With attributes such as SOLDIER, the more to that side the slider is, the more weight the rule carries.\n",
@@ -661,6 +660,12 @@ class UnitEditorWnd(QWidget):
             self.sheets["Cautious Healer"] = json.load(rf)
         with open("src/skeletons/sheets/basic_assassin.json", "r") as rf:
             self.sheets["Solo Assassin"] = json.load(rf)
+        with open("src/skeletons/sheets/basic_ranged_fighter.json", "r") as rf:
+            self.sheets["Sniper"] = json.load(rf)
+        with open("src/skeletons/sheets/basic_wrath_fighter.json", "r") as rf:
+            self.sheets["Vengeful Demon"] = json.load(rf)
+        with open("src/skeletons/sheets/basic_leader.json", "r") as rf:
+            self.sheets["Strategic Leader"] = json.load(rf)
 
     def saveFileDialog(self):
         q = QFileDialog(self)

@@ -736,7 +736,7 @@ class AIHelpDialog(QDialog):
         
         instructions = [
             "A targeting rule influences who to focus attacks on. If attacking isn't the final decision, this may have no apparent effect.\n",
-            "These rules are very simple: the possible options are \"disadvantaged\", \"visible\", \"killable\", \"protagonist\", and \"personal enemy\".",
+            "These rules are very simple: the possible options are \"disadvantaged foe\", \"visible foe\", \"killable foe\",\n \"protagonist\", \"nearest foe\", \"furthest foe\", and \"personal enemy\".",
             "See Target Change guidelines for more info on these.\n",
             "What's the difference between Targeting and Target Change? In practice, not much- both influence targeting decisions.",
             "They are very similar and work very closely together. It's generally a good idea to have similar Targeting and Target Change rules."
