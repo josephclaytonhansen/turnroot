@@ -423,7 +423,7 @@ class UnitEditorWnd(QWidget):
         self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
         
         self.default_values.addItems(["--Select--", "Foot Soldier", "Pegasus (Flying) Knight", "Mindless Creature", "Cautious Healer", "Assassin", "Sniper", "Vengeful Demon",
-                                      "Strategic Leader"])
+                                      "Strategic Leader", "Armored Tank"])
         default_values_button = QPushButton("Load Preset")
         default_values_button.clicked.connect(self.AILoadSheets)
         
@@ -666,7 +666,9 @@ class UnitEditorWnd(QWidget):
             self.sheets["Vengeful Demon"] = json.load(rf)
         with open("src/skeletons/sheets/basic_leader.json", "r") as rf:
             self.sheets["Strategic Leader"] = json.load(rf)
-
+        with open("src/skeletons/sheets/basic_tank.json", "r") as rf:
+            self.sheets["Armored Tank"] = json.load(rf)
+            
     def saveFileDialog(self):
         q = QFileDialog(self)
         options = q.Options()
