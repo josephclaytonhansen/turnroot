@@ -53,6 +53,7 @@ class Unit():
         self.exp_to_next_level = 0
         self.move = 0
         self.size = 1
+        self.visibility_range = 0
         
         self.is_mounted = False
         self.is_currently_mounted = False
@@ -116,7 +117,7 @@ class Unit():
                        "unique_objects","strengths","weaknesses","skills","tactics",
                        "skilled_blows","inventory_objects","attacks","actions","team_likes",
                        "team_dislikes","support_levels","description","notes","AI_soldier",
-                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy"]
+                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
@@ -137,7 +138,7 @@ class Unit():
                        "unique_objects","strengths","weaknesses","skills","tactics",
                        "skilled_blows","inventory_objects","attacks","actions","team_likes",
                        "team_dislikes","support_levels","description","notes","AI_soldier",
-                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy"]
+                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)

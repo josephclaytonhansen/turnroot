@@ -615,10 +615,10 @@ class AIHelpDialog(QDialog):
         
         self.initMT()
         self.initMG()
-        #self.initT()
+        self.initT()
         self.initTC()
-        #self.initA()
-        #self.initTi()
+        self.initA()
+        self.initTi()
         
     def initMT(self):
         self.working_tab = self.tabs_dict["Move Towards"]
@@ -631,17 +631,17 @@ class AIHelpDialog(QDialog):
         self.working_tab_layout.addWidget(img_label)
         instructions = [
             "A move towards rule influences what object, state, or unit this unit moves towards.\n",
-            "As the chart shows, each rule can only move towards one of the above (object, state, or unit.)\n\n",
-            "Units are the simplest. For a foe, describe the foe with an adjective and  add \"foe\" to the end.\n",
-            "For an ally/team member, choose an adjective and add \"ally\". for example- \"injured ally\".\n",
+            "As the chart shows, each rule can only move towards one of the above (object, state, or unit.)\n",
+            "Units are the simplest. For a foe, describe the foe with an adjective and  add \"foe\" to the end.",
+            "For an ally/team member, choose an adjective and add \"ally\". for example- \"injured ally\".",
             "For example, \"nearest foe\" would be the nearest enemy unit. The chart shows the allowed unit descriptions.\n",
-            "State describes the state the unit will be in if they move. States can either be \"safety\" or \"in/not in range of\".\n",
+            "State describes the state the unit will be in if they move. States can either be \"safety\" or \"in/not in range of\".",
             "\"safety\" means the unit is out of danger. As for range: \"not in range of arrows\" means the unit is avoiding as many arrows as possible.\n",
-            "Lastly, units can move towards objects. The format for this is object + \"if can/ if can not\" + take action.\n",
+            "Lastly, units can move towards objects. The format for this is object + \"if can/ if can not\" + take action.",
             "For example, \"chest if can open\" will move towards chests, if they can be opened by the unit."
             ]
         for t in instructions:
-            v = instructions.index(t) / 9
+            v = instructions.index(t) / len(instructions)
             color_left = QColor(self.active_theme.node_outliner_label_0)
             color_right = QColor(self.active_theme.node_outliner_label_1)
             color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
@@ -666,13 +666,13 @@ class AIHelpDialog(QDialog):
         
         instructions = [
             "A move towards rule influence what the unit wants to accomplish by moving.\n",
-            "Movement goals are very simple- there's only a few.\n\n",
-            "\"stay in group\" means the unit will try to stay close to its allies.\n",
-            "\"alone\" is the direct opposite, where the unit will try to stay alone.\n\n",
-            "After those two, the movement goals follow the format of \"maximize/minimize\" + \"given damage/received damage/movement/visibility\".\n",
-            "For example, \"maximize movement\" means the unit wants to move as much as it can every turn.\n",
-            "Another example- \"minimize received damage\" means the unit wants to take as little damage as possible.\n",
-            "\"minimize visibility\" means the unit will try to be targeted as little as possible, and \"maximize visiblity\" means they are front and center.\n",
+            "Movement goals are very simple- there's only a few.\n",
+            "\"stay in group\" means the unit will try to stay close to its allies.",
+            "\"alone\" is the direct opposite, where the unit will try to stay alone.\n",
+            "After those two, the movement goals follow the format of \"maximize/minimize\" + \"given damage/received damage/movement/visibility\".",
+            "For example, \"maximize movement\" means the unit wants to move as much as it can every turn.",
+            "Another example- \"minimize received damage\" means the unit wants to take as little damage as possible.",
+            "\"minimize visibility\" means the unit will try to be targeted as little as possible, and \"maximize visiblity\" means they are front and center.",
             ]
         for t in instructions:
             v = instructions.index(t) / len(instructions)
@@ -703,15 +703,128 @@ class AIHelpDialog(QDialog):
         img_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.working_tab_layout.addWidget(img_label)
         instructions = [
-            "A target change rule shifts focus from an enemy to a different one. If attacking isn't the final decision, this may have no apparent effect.\n\n",
-            "These rules start with \"new target\" or \"last target\", followed by \"is/is not\", than a condition. \n",
-            "\"new target\" refers to a potential new enemy to shift focus to, \"last target\" is the enemy current focused on.\n",
-            "For example, \"new target is disadvantaged\" means that this unit will switch focus if they can gain the upper hand on a new enemy.\n",
-            "Or \"last target is killable\" would keep focus on the current enemy if this unit has a good chance of killing them with the next attack.\n",
-            "\"personal enemy\" allows a unit to target especially hated foes- these can be defined in the Relationships tab of the Unit Editor.\n",
+            "A target change rule shifts focus from an enemy to a different one. If attacking isn't the final decision, this may have no apparent effect.\n",
+            "These rules start with \"new target\" or \"last target\", followed by \"is/is not\", than a condition. ",
+            "\"new target\" refers to a potential new enemy to shift focus to, \"last target\" is the enemy current focused on.",
+            "For example, \"new target is disadvantaged\" means that this unit will switch focus if they can gain the upper hand on a new enemy.",
+            "Or \"last target is killable\" would keep focus on the current enemy if this unit has a good chance of killing them with the next attack.",
+            "\"personal enemy\" allows a unit to target especially hated foes- these can be defined in the Relationships tab of the Unit Editor.",
             ]
         for t in instructions:
-            v = instructions.index(t) / 9
+            v = instructions.index(t) / len(instructions)
+            color_left = QColor(self.active_theme.node_outliner_label_0)
+            color_right = QColor(self.active_theme.node_outliner_label_1)
+            color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
+            color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
+        
+            distances = [(color_right.red() - color_left.red()),
+                     (color_right.green() - color_left.green()),
+                     (color_right.blue() - color_left.blue())]
+        
+            new_color = [int(color_left.red() + v * distances[0]),
+                     int(color_left.green() + v * distances[1]),
+                     int(color_left.blue()+ v * distances[2])]
+            
+            g = QLabel(t)
+            g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
+            self.working_tab_layout.addWidget(g)
+
+    def initT(self):
+        self.working_tab = self.tabs_dict["Targeting"]
+        self.working_tab_layout = self.working_tab.layout()
+        self.working_tab_layout.setSpacing(0)
+        
+        instructions = [
+            "A targeting rule influences who to focus attacks on. If attacking isn't the final decision, this may have no apparent effect.\n",
+            "These rules are very simple: the possible options are \"disadvantaged\", \"visible\", \"killable\", \"protagonist\", and \"personal enemy\".",
+            "See Target Change guidelines for more info on these.\n",
+            "What's the difference between Targeting and Target Change? In practice, not much- both influence targeting decisions.",
+            "They are very similar and work very closely together. It's generally a good idea to have similar Targeting and Target Change rules."
+            ]
+        for t in instructions:
+            v = instructions.index(t) / len(instructions)
+            color_left = QColor(self.active_theme.node_outliner_label_0)
+            color_right = QColor(self.active_theme.node_outliner_label_1)
+            color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
+            color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
+        
+            distances = [(color_right.red() - color_left.red()),
+                     (color_right.green() - color_left.green()),
+                     (color_right.blue() - color_left.blue())]
+        
+            new_color = [int(color_left.red() + v * distances[0]),
+                     int(color_left.green() + v * distances[1]),
+                     int(color_left.blue()+ v * distances[2])]
+            
+            g = QLabel(t)
+            g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
+            self.working_tab_layout.addWidget(g)
+            
+    def initA(self):
+        self.working_tab = self.tabs_dict["Avoid"]
+        self.working_tab_layout = self.working_tab.layout()
+        self.working_tab_layout.setSpacing(0)
+        
+        img_label = QLabel()
+        img_label.setPixmap(QPixmap("src/ui_images/avoid.png"))
+        img_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.working_tab_layout.addWidget(img_label)
+        instructions = [
+            "An avoid rule tells units which tiles to move away from.\n",
+            "These rules start with \"tile\" or \"door\", then \"if\", then the condition\n",
+            "Doors have one rule- \"door if shut\". This means closed doors will be avoided.",
+            "Another essential rule is \"tile if stop\". This means that tiles that stop movement- like chasms- will be avoided.",
+            "\nNote that by default, \"tile if stop\" is set to ALWAYS!, but \"door if shut\" is not.",
+            "This is because a closed door can be opened by the unit, but a stop tile can't change.",
+            "So avoiding closed doors always would mean that doors could never be opened.",
+            "\n\"slow\" indicates tiles that slow the unit down, and \"hurt\" indicates tiles that hurt the unit.",
+            ]
+        for t in instructions:
+            v = instructions.index(t) / len(instructions)
+            color_left = QColor(self.active_theme.node_outliner_label_0)
+            color_right = QColor(self.active_theme.node_outliner_label_1)
+            color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
+            color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
+        
+            distances = [(color_right.red() - color_left.red()),
+                     (color_right.green() - color_left.green()),
+                     (color_right.blue() - color_left.blue())]
+        
+            new_color = [int(color_left.red() + v * distances[0]),
+                     int(color_left.green() + v * distances[1]),
+                     int(color_left.blue()+ v * distances[2])]
+            
+            g = QLabel(t)
+            g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
+            self.working_tab_layout.addWidget(g)
+            
+    def initTi(self):
+        self.working_tab = self.tabs_dict["Tiles"]
+        self.working_tab_layout = self.working_tab.layout()
+        self.working_tab_layout.setSpacing(0)
+        
+        instructions = [
+            "Tile rules determine how the unit interacts with tiles.\n",
+            "These rules take the tile type and set a status or result. To set multiple, use a comma: \"stop,blind\".",
+            "You can change the amount of attributes \"slow\", \"hurt\", \"avoid\", \"guard\", and \"heal\" by adding \"*\" and a number.",
+            "For example, \"slow * .5\" means this tile type slows half as much as a tile type set to \"slow\".\n",
+            "\"move\" means the unit can move on this tile type.",
+            "\"stop\" means the unit cannot move on this tile type.",
+            "\"blind\" means that visibility is cut off by this tile type.",
+            "\"hurt_if_enter\" means the unit takes immediate damage when moving to this tile type.",
+            "\"hurt_if_stay\" means the unit takes damage at the beginning of each turn standing on ",
+            "\"shut\" means the unit can't move onto the tile unless the item (door/chest) is opened.",
+            "\"open_if_item\" and \"open_if_skilled\" allow shut tiles to be opened.",
+            "\"teleport\" is for warp tiles- stepping onto the tile will move the unit to a different tile.",
+            "\"use_if_skilled\" is for emplacements- tiles that can do damage to enemies.",
+            "\"heal\" heals the unit at the beginning of each turn standing on the tile.",
+            "\"use_if_safe\" is for switches or levers- the unit will use the switch if they're not on a trap tile.",
+            "\"guard\" raises defense when standing on this tile.",
+            "\"avoid\" raises dodge change (dexterity) when standing on this tile.",
+            "\"empower\" raises strength and magic when standing on this tile type."
+            ]
+        for t in instructions:
+            v = instructions.index(t) / len(instructions)
             color_left = QColor(self.active_theme.node_outliner_label_0)
             color_right = QColor(self.active_theme.node_outliner_label_1)
             color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
