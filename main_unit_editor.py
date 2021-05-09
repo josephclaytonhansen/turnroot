@@ -65,6 +65,11 @@ class main(QMainWindow):
         self.openButton.triggered.connect(self.nameChange)
         self.menubar.addAction(self.openButton)
         
+        self.saveButton = QAction("&Save", self)
+        self.saveButton.triggered.connect(self.m.unitToJSON)
+        self.saveButton.triggered.connect(self.nameChange)
+        self.menubar.addAction(self.saveButton)
+        
         self.setCentralWidget(self.m)
         
     def nameChange(self):
