@@ -422,7 +422,7 @@ class UnitEditorWnd(QWidget):
         self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
         self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
         
-        self.default_values.addItems(["--Select--", "Foot Soldier", "Pegasus (Flying) Knight", "Mindless Creature"])
+        self.default_values.addItems(["--Select--", "Foot Soldier", "Pegasus (Flying) Knight", "Mindless Creature", "Cautious Healer", "Solo Assassin"])
         default_values_button = QPushButton("Load Default")
         default_values_button.clicked.connect(self.AILoadSheets)
         
@@ -601,56 +601,55 @@ class UnitEditorWnd(QWidget):
         a.exec_()
         
     def AILoadSheets(self, ca=True):
-        if ca:
-            p = confirmAction("#Your changes will be lost if not saved, continue?")
-            p.exec_()
-            if p.return_confirm:
-                sheet = self.default_values.currentText()
-                if sheet != "--Select--":
-                    self.sheetsFromJSON()
-                    self.table_data = self.sheets[sheet]
+        p = confirmAction("#Your changes will be lost if not saved, continue?")
+        p.exec_()
+        if p.return_confirm:
+            sheet = self.default_values.currentText()
+            if sheet != "--Select--":
+                self.sheetsFromJSON()
+                self.table_data = self.sheets[sheet]
+                
+                self.dv_slider_dv = self.dv_slider_from_sheet[sheet]
                     
-                    self.dv_slider_dv = self.dv_slider_from_sheet[sheet]
-                        
-                    self.solider_lone_wolf_slider.setValue(self.dv_slider_dv[0])
-                    self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
-                    self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
+                self.solider_lone_wolf_slider.setValue(self.dv_slider_dv[0])
+                self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
+                self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
+                
+                for t in self.basic_table_categories:
                     
-                    for t in self.basic_table_categories:
-                        
-                        table_data = self.table_data[self.basic_table_categories.index(t)]
-                        model = TableModel(table_data)
-                        self.tables[t].setModel(model)
-                        
-                        self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
+                    table_data = self.table_data[self.basic_table_categories.index(t)]
+                    model = TableModel(table_data)
+                    self.tables[t].setModel(model)
                     
-                        self.tables[t].model().slider_value1 = self.solider_lone_wolf_slider.value()
-                        self.tables[t].model().slider_value2 = self.strategic_mindless_slider.value()
-                        self.tables[t].model().slider_value3 = self.cautious_brash_slider.value()
-                        self.tables[t].viewport().repaint()
-        else:
-            with open(self.path+".trui", "r") as r:
+                    self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
+                
+                    self.tables[t].model().slider_value1 = self.solider_lone_wolf_slider.value()
+                    self.tables[t].model().slider_value2 = self.strategic_mindless_slider.value()
+                    self.tables[t].model().slider_value3 = self.cautious_brash_slider.value()
+                    self.tables[t].viewport().repaint()
+
+    def loadSheet(self):
+        with open(self.path+".trui", "r") as r:
                 self.table_data = json.load(r)
                 
-            self.dv_slider_dv = self.table_data[len(self.table_data)-1]
-            print(self.dv_slider_dv)
+        self.dv_slider_dv = self.table_data[len(self.table_data)-1]
                 
-            self.solider_lone_wolf_slider.setValue(self.dv_slider_dv[0])
-            self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
-            self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
+        self.solider_lone_wolf_slider.setValue(self.dv_slider_dv[0])
+        self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
+        self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
             
-            for t in self.basic_table_categories:
+        for t in self.basic_table_categories:
                 
-                table_data = self.table_data[self.basic_table_categories.index(t)]
-                model = TableModel(table_data)
-                self.tables[t].setModel(model)
+            table_data = self.table_data[self.basic_table_categories.index(t)]
+            model = TableModel(table_data)
+            self.tables[t].setModel(model)
                 
-                self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
+            self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
             
-                self.tables[t].model().slider_value1 = self.solider_lone_wolf_slider.value()
-                self.tables[t].model().slider_value2 = self.strategic_mindless_slider.value()
-                self.tables[t].model().slider_value3 = self.cautious_brash_slider.value()
-                self.tables[t].viewport().repaint()
+            self.tables[t].model().slider_value1 = self.solider_lone_wolf_slider.value()
+            self.tables[t].model().slider_value2 = self.strategic_mindless_slider.value()
+            self.tables[t].model().slider_value3 = self.cautious_brash_slider.value()
+            self.tables[t].viewport().repaint()
 
     def sheetsFromJSON(self):
         with open("src/skeletons/sheets/basic_foot_soldier.json", "r") as rf:
@@ -659,6 +658,10 @@ class UnitEditorWnd(QWidget):
             self.sheets["Pegasus (Flying) Knight"] = json.load(rf)
         with open("src/skeletons/sheets/basic_mindless_creature.json", "r") as rf:
             self.sheets["Mindless Creature"] = json.load(rf)
+        with open("src/skeletons/sheets/basic_healer.json", "r") as rf:
+            self.sheets["Cautious Healer"] = json.load(rf)
+        with open("src/skeletons/sheets/basic_assassin.json", "r") as rf:
+            self.sheets["Solo Assassin"] = json.load(rf)
 
     def saveFileDialog(self):
         q = QFileDialog(self)
@@ -684,10 +687,12 @@ class UnitEditorWnd(QWidget):
                 with open(self.path+".trui", "w") as w:
                     json.dump(self.unit.AI_sheets, w)
                 self.unit.selfToJSON(self.path)
+                self.parent().nameChange()
         else:
             with open(self.path+".trui", "w") as w:
                 json.dump(self.unit.AI_sheets, w)
             self.unit.selfToJSON(self.path)
+            self.parent().nameChange()
     
     def openFileDialog(self):
         options = QFileDialog.Options()
@@ -726,7 +731,7 @@ class UnitEditorWnd(QWidget):
             
             self.description.setPlainText(self.unit.description)
             
-            self.AILoadSheets(ca=False)
+            self.loadSheet()
             
             if self.unit.is_friendly == False and self.unit.is_recruitable == False and self.unit.is_ally == False:
                 self.status.setCurrentText("Enemy")

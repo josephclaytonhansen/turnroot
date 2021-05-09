@@ -585,8 +585,8 @@ class AIHelpDialog(QDialog):
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         
-        self.setMinimumWidth(1000)
-        self.setMinimumHeight(760)
+        self.setMinimumWidth(1020)
+        self.setMinimumHeight(780)
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
 
@@ -632,15 +632,16 @@ class AIHelpDialog(QDialog):
         instructions = [
             "A move towards rule influence what object, state, or unit this unit moves towards.\n",
             "As the chart shows, each rule can only move towards one of the above (object, state, or unit.)\n\n",
-            "Units are the simplest: describe the foe with an adjective, and optionally add \"foe\" to the end.\n",
-            "For example, \"nearest\" would be the nearest unit. The chart shows the allowed unit descriptions.\n",
+            "Units are the simplest. For a foe, describe the foe with an adjective, and optionally add \"foe\" to the end.\n",
+            "For an ally/team member, choose an adjective and optionally add \"ally\". for example- \"injured ally\".\n",
+            "For example, \"nearest foe\" would be the nearest enemy unit. The chart shows the allowed unit descriptions.\n",
             "State describes the state the unit will be in if they move. States can either be \"safety\" or \"in/not in range of\".\n",
             "\"safety\" means the unit is out of danger. As for range: \"not in range of arrows\" means the unit is avoiding as many arrows as possible.\n",
             "Lastly, units can move towards objects. The format for this is object + \"if can/ if can not\" + take action.\n",
             "For example, \"chest if can open\" will move towards chests, if they can be opened by the unit."
             ]
         for t in instructions:
-            v = instructions.index(t) / 8
+            v = instructions.index(t) / 9
             color_left = QColor(self.active_theme.node_outliner_label_0)
             color_right = QColor(self.active_theme.node_outliner_label_1)
             color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
