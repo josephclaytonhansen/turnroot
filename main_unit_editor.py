@@ -56,19 +56,14 @@ class main(QMainWindow):
         font = self.menubar.font()
         font.setPointSize(data["font_size"])
         self.menubar.setNativeMenuBar(False)
-        fileMenu = self.menubar.addMenu('&File')
         self.bar = self.menuBar()
         
         self.m = mainN(parent=self)
         
-        self.openButton = QAction("&Open\tCrtl+O", self)
+        self.openButton = QAction("&Open", self)
         self.openButton.triggered.connect(self.m.loadFromFile)
         self.openButton.triggered.connect(self.nameChange)
-        fileMenu.addAction(self.openButton)
-        
-        self.saveButton = QAction("&Save\tCrtl+S", self)
-        self.saveButton.triggered.connect(self.m.unitToJSON)
-        fileMenu.addAction(self.saveButton)
+        self.menubar.addAction(self.openButton)
         
         self.setCentralWidget(self.m)
         

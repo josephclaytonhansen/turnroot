@@ -81,6 +81,8 @@ class Unit():
         self.team_dislikes = {}
         self.support_levels = {}
         
+        self.personal_enemy = None
+        
         self.AI_soldier = 0
         self.AI_strategic = 0
         self.AI_cautious = 0
@@ -114,7 +116,7 @@ class Unit():
                        "unique_objects","strengths","weaknesses","skills","tactics",
                        "skilled_blows","inventory_objects","attacks","actions","team_likes",
                        "team_dislikes","support_levels","description","notes","AI_soldier",
-                       "AI_strategic", "AI_cautious", "AI_sheets"]
+                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
@@ -135,7 +137,7 @@ class Unit():
                        "unique_objects","strengths","weaknesses","skills","tactics",
                        "skilled_blows","inventory_objects","attacks","actions","team_likes",
                        "team_dislikes","support_levels","description","notes","AI_soldier",
-                       "AI_strategic", "AI_cautious", "AI_sheets"]
+                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)

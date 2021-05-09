@@ -740,8 +740,7 @@ class UnitEditorWnd(QWidget):
                 self.status.setCurrentText("Team")
             else:
                 self.status.setCurrentText("Protagonist")
-            
-   
+
     def AIHelpDialog(self):
         a = AIHelpDialog()
         a.exec_()
