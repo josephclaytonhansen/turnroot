@@ -727,6 +727,20 @@ class UnitEditorWnd(QWidget):
             self.description.setPlainText(self.unit.description)
             
             self.AILoadSheets(ca=False)
+            
+            if self.unit.is_friendly == False and self.unit.is_recruitable == False and self.unit.is_ally == False:
+                self.status.setCurrentText("Enemy")
+            elif self.unit.is_friendly == False and self.unit.is_recruitable == True and self.unit.is_ally == False:
+                self.status.setCurrentText("Recruitable Enemy")
+            elif self.unit.is_friendly == False and self.unit.is_recruitable == True and self.unit.is_ally == True:
+                self.status.setCurrentText("Recruitable Ally")
+            elif self.unit.is_friendly == False and self.unit.is_recruitable == False and self.unit.is_ally == True:
+                self.status.setCurrentText("Ally")
+            elif self.unit.is_friendly == True and self.unit.is_lord == False and self.unit.has_dialogue == True:
+                self.status.setCurrentText("Team")
+            else:
+                self.status.setCurrentText("Protagonist")
+            
    
     def AIHelpDialog(self):
         a = AIHelpDialog()
