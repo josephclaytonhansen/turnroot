@@ -422,9 +422,9 @@ class UnitEditorWnd(QWidget):
         self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
         self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
         
-        self.default_values.addItems(["--Select--", "Foot Soldier", "Pegasus (Flying) Knight", "Mindless Creature", "Cautious Healer", "Solo Assassin", "Sniper", "Vengeful Demon",
+        self.default_values.addItems(["--Select--", "Foot Soldier", "Pegasus (Flying) Knight", "Mindless Creature", "Cautious Healer", "Assassin", "Sniper", "Vengeful Demon",
                                       "Strategic Leader"])
-        default_values_button = QPushButton("Load Default")
+        default_values_button = QPushButton("Load Preset")
         default_values_button.clicked.connect(self.AILoadSheets)
         
         save_values_button = QPushButton("Save")
@@ -659,7 +659,7 @@ class UnitEditorWnd(QWidget):
         with open("src/skeletons/sheets/basic_healer.json", "r") as rf:
             self.sheets["Cautious Healer"] = json.load(rf)
         with open("src/skeletons/sheets/basic_assassin.json", "r") as rf:
-            self.sheets["Solo Assassin"] = json.load(rf)
+            self.sheets["Assassin"] = json.load(rf)
         with open("src/skeletons/sheets/basic_ranged_fighter.json", "r") as rf:
             self.sheets["Sniper"] = json.load(rf)
         with open("src/skeletons/sheets/basic_wrath_fighter.json", "r") as rf:
