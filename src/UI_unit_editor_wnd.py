@@ -590,7 +590,6 @@ class UnitEditorWnd(QWidget):
             self.unit.selfToJSON(self.path)
         
     def AIOverviewDialog(self):
-        print(self.table_data)
         c = infoClose("Generally speaking, you don't need to edit rules. Just load a default set and change the sliders.")
         c.exec_()
         instructions_text = ["\nRule 1 in a set has more weight towards the final decision than 2.\n",

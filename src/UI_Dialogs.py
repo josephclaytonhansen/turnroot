@@ -585,8 +585,8 @@ class AIHelpDialog(QDialog):
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         
-        self.setMinimumWidth(1020)
-        self.setMinimumHeight(780)
+        self.setMinimumWidth(1080)
+        self.setMinimumHeight(600)
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
 
@@ -594,7 +594,7 @@ class AIHelpDialog(QDialog):
         
         self.tabs = QTabWidget()
         
-        self.tabs.setTabPosition(QTabWidget.South)
+        self.tabs.setTabPosition(QTabWidget.North)
         
         self.tscroll = QScrollArea()
         self.tscroll.setWidget(self.tabs)
@@ -602,7 +602,7 @@ class AIHelpDialog(QDialog):
         
         self.layout.addWidget(self.tscroll)
         
-        self.tab_names = ["Move Towards", "Move Goals", "Targeting", "Targeting Change", "Avoid", "Tiles"]
+        self.tab_names = ["Move Towards", "Move Goals", "Targeting", "Target Change", "Avoid", "Tiles"]
         
         self.tabs_dict = {}
         for tab in self.tab_names:
@@ -614,9 +614,9 @@ class AIHelpDialog(QDialog):
             self.tabs.addTab(self.c_tab, self.tab_title)
         
         self.initMT()
-        #self.initMG()
+        self.initMG()
         #self.initT()
-        #self.initTC()
+        self.initTC()
         #self.initA()
         #self.initTi()
         
@@ -630,10 +630,10 @@ class AIHelpDialog(QDialog):
         img_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.working_tab_layout.addWidget(img_label)
         instructions = [
-            "A move towards rule influence what object, state, or unit this unit moves towards.\n",
+            "A move towards rule influences what object, state, or unit this unit moves towards.\n",
             "As the chart shows, each rule can only move towards one of the above (object, state, or unit.)\n\n",
-            "Units are the simplest. For a foe, describe the foe with an adjective, and optionally add \"foe\" to the end.\n",
-            "For an ally/team member, choose an adjective and optionally add \"ally\". for example- \"injured ally\".\n",
+            "Units are the simplest. For a foe, describe the foe with an adjective and  add \"foe\" to the end.\n",
+            "For an ally/team member, choose an adjective and add \"ally\". for example- \"injured ally\".\n",
             "For example, \"nearest foe\" would be the nearest enemy unit. The chart shows the allowed unit descriptions.\n",
             "State describes the state the unit will be in if they move. States can either be \"safety\" or \"in/not in range of\".\n",
             "\"safety\" means the unit is out of danger. As for range: \"not in range of arrows\" means the unit is avoiding as many arrows as possible.\n",
@@ -659,3 +659,72 @@ class AIHelpDialog(QDialog):
             g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
             self.working_tab_layout.addWidget(g)
 
+    def initMG(self):
+        self.working_tab = self.tabs_dict["Move Goals"]
+        self.working_tab_layout = self.working_tab.layout()
+        self.working_tab_layout.setSpacing(0)
+        
+        instructions = [
+            "A move towards rule influence what the unit wants to accomplish by moving.\n",
+            "Movement goals are very simple- there's only a few.\n\n",
+            "\"stay in group\" means the unit will try to stay close to its allies.\n",
+            "\"alone\" is the direct opposite, where the unit will try to stay alone.\n\n",
+            "After those two, the movement goals follow the format of \"maximize/minimize\" + \"given damage/received damage/movement/visibility\".\n",
+            "For example, \"maximize movement\" means the unit wants to move as much as it can every turn.\n",
+            "Another example- \"minimize received damage\" means the unit wants to take as little damage as possible.\n",
+            "\"minimize visibility\" means the unit will try to be targeted as little as possible, and \"maximize visiblity\" means they are front and center.\n",
+            ]
+        for t in instructions:
+            v = instructions.index(t) / len(instructions)
+            color_left = QColor(self.active_theme.node_outliner_label_0)
+            color_right = QColor(self.active_theme.node_outliner_label_1)
+            color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
+            color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
+        
+            distances = [(color_right.red() - color_left.red()),
+                     (color_right.green() - color_left.green()),
+                     (color_right.blue() - color_left.blue())]
+        
+            new_color = [int(color_left.red() + v * distances[0]),
+                     int(color_left.green() + v * distances[1]),
+                     int(color_left.blue()+ v * distances[2])]
+            
+            g = QLabel(t)
+            g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
+            self.working_tab_layout.addWidget(g)
+    
+    def initTC(self):
+        self.working_tab = self.tabs_dict["Target Change"]
+        self.working_tab_layout = self.working_tab.layout()
+        self.working_tab_layout.setSpacing(0)
+        
+        img_label = QLabel()
+        img_label.setPixmap(QPixmap("src/ui_images/target_change.png"))
+        img_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.working_tab_layout.addWidget(img_label)
+        instructions = [
+            "A target change rule shifts focus from an enemy to a different one. If attacking isn't the final decision, this may have no apparent effect.\n\n",
+            "These rules start with \"new target\" or \"last target\", followed by \"is/is not\", than a condition. \n",
+            "\"new target\" refers to a potential new enemy to shift focus to, \"last target\" is the enemy current focused on.\n",
+            "For example, \"new target is disadvantaged\" means that this unit will switch focus if they can gain the upper hand on a new enemy.\n",
+            "Or \"last target is killable\" would keep focus on the current enemy if this unit has a good chance of killing them with the next attack.\n",
+            "\"personal enemy\" allows a unit to target especially hated foes- these can be defined in the Relationships tab of the Unit Editor.\n",
+            ]
+        for t in instructions:
+            v = instructions.index(t) / 9
+            color_left = QColor(self.active_theme.node_outliner_label_0)
+            color_right = QColor(self.active_theme.node_outliner_label_1)
+            color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
+            color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
+        
+            distances = [(color_right.red() - color_left.red()),
+                     (color_right.green() - color_left.green()),
+                     (color_right.blue() - color_left.blue())]
+        
+            new_color = [int(color_left.red() + v * distances[0]),
+                     int(color_left.green() + v * distances[1]),
+                     int(color_left.blue()+ v * distances[2])]
+            
+            g = QLabel(t)
+            g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
+            self.working_tab_layout.addWidget(g)
