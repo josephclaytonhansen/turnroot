@@ -212,6 +212,7 @@ class UnitEditorWnd(QWidget):
         
         self.stat_row = {}
         self.stat_values = {}
+        self.stat_spins = {}
         for s in universal_stats:
             self.stat_row[s] = QWidget()
             self.stat_row_layout = QHBoxLayout()
@@ -222,6 +223,7 @@ class UnitEditorWnd(QWidget):
             self.stat_row_layout.addWidget(stat_label)
             self.stat_values[s] = getattr(self.unit, s)
             stat_value = ValuedSpinBox()
+            self.stat_spins[s] = stat_value
             stat_value.setStyleSheet("background-color: "+active_theme.window_background_color+";")
             stat_value.setRange(0,900)
             stat_value.index = universal_stats.index(s)
@@ -550,16 +552,22 @@ class UnitEditorWnd(QWidget):
             if self.sender().name == 1:
                 c_tab.model().slider_value1 = v
                 self.unit.AI_soldier = v
+                self.dv_slider_dv[0] = v
                 c_tab.viewport().repaint()
             elif self.sender().name == 2:
                 c_tab.model().slider_value2 = v
                 self.unit.AI_strategic = v
+                self.dv_slider_dv[1] = v
                 c_tab.viewport().repaint()
             elif self.sender().name == 3:
                 c_tab.model().slider_value3 = v
                 self.unit.AI_cautious = v
+                self.dv_slider_dv[2] = v
                 c_tab.viewport().repaint()
-
+        
+        if self.path != None:
+            self.unitToJSON()
+        
         v = v / 100
         color_left = QColor(active_theme.node_outliner_label_0)
         color_right = QColor(active_theme.node_outliner_label_1)
@@ -592,33 +600,57 @@ class UnitEditorWnd(QWidget):
         a = popupInfo(instructions_text[0]+instructions_text[1]+instructions_text[2]+instructions_text[3],self)
         a.exec_()
         
-    def AILoadSheets(self):
-        p = confirmAction("#Your changes will be lost if not saved, continue?")
-        p.exec_()
-        if p.return_confirm:
-            sheet = self.default_values.currentText()
-            if sheet != "":
-                self.sheetsFromJSON()
-                self.table_data = self.sheets[sheet]
-                
-                self.dv_slider_dv = self.dv_slider_from_sheet[sheet]
+    def AILoadSheets(self, ca=True):
+        if ca:
+            p = confirmAction("#Your changes will be lost if not saved, continue?")
+            p.exec_()
+            if p.return_confirm:
+                sheet = self.default_values.currentText()
+                if sheet != "--Select--":
+                    self.sheetsFromJSON()
+                    self.table_data = self.sheets[sheet]
                     
-                self.solider_lone_wolf_slider.setValue(self.dv_slider_dv[0])
-                self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
-                self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
-                
-                for t in self.basic_table_categories:
+                    self.dv_slider_dv = self.dv_slider_from_sheet[sheet]
+                        
+                    self.solider_lone_wolf_slider.setValue(self.dv_slider_dv[0])
+                    self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
+                    self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
                     
-                    table_data = self.table_data[self.basic_table_categories.index(t)]
-                    model = TableModel(table_data)
-                    self.tables[t].setModel(model)
+                    for t in self.basic_table_categories:
+                        
+                        table_data = self.table_data[self.basic_table_categories.index(t)]
+                        model = TableModel(table_data)
+                        self.tables[t].setModel(model)
+                        
+                        self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
                     
-                    self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
+                        self.tables[t].model().slider_value1 = self.solider_lone_wolf_slider.value()
+                        self.tables[t].model().slider_value2 = self.strategic_mindless_slider.value()
+                        self.tables[t].model().slider_value3 = self.cautious_brash_slider.value()
+                        self.tables[t].viewport().repaint()
+        else:
+            with open(self.path+".trui", "r") as r:
+                self.table_data = json.load(r)
                 
-                    self.tables[t].model().slider_value1 = self.solider_lone_wolf_slider.value()
-                    self.tables[t].model().slider_value2 = self.strategic_mindless_slider.value()
-                    self.tables[t].model().slider_value3 = self.cautious_brash_slider.value()
-                    self.tables[t].viewport().repaint()
+            self.dv_slider_dv = self.table_data[len(self.table_data)-1]
+            print(self.dv_slider_dv)
+                
+            self.solider_lone_wolf_slider.setValue(self.dv_slider_dv[0])
+            self.strategic_mindless_slider.setValue(self.dv_slider_dv[1])
+            self.cautious_brash_slider.setValue(self.dv_slider_dv[2])
+            
+            for t in self.basic_table_categories:
+                
+                table_data = self.table_data[self.basic_table_categories.index(t)]
+                model = TableModel(table_data)
+                self.tables[t].setModel(model)
+                
+                self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
+            
+                self.tables[t].model().slider_value1 = self.solider_lone_wolf_slider.value()
+                self.tables[t].model().slider_value2 = self.strategic_mindless_slider.value()
+                self.tables[t].model().slider_value3 = self.cautious_brash_slider.value()
+                self.tables[t].viewport().repaint()
 
     def sheetsFromJSON(self):
         with open("src/skeletons/sheets/basic_foot_soldier.json", "r") as rf:
@@ -640,18 +672,62 @@ class UnitEditorWnd(QWidget):
             g.exec_()
             
     def unitToJSON(self):
-        print(self.path)
         self.unit.AI_sheets = self.table_data
+        self.unit.AI_sheets.append(self.dv_slider_dv)
+
         if self.path == None or self.path == '':
             self.saveFileDialog()
             if self.path == None or self.path == '':
                 c = infoClose("No file selected")
                 c.exec_()
             else:
+                with open(self.path+".trui", "w") as w:
+                    json.dump(self.unit.AI_sheets, w)
                 self.unit.selfToJSON(self.path)
         else:
+            with open(self.path+".trui", "w") as w:
+                json.dump(self.unit.AI_sheets, w)
             self.unit.selfToJSON(self.path)
+    
+    def openFileDialog(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getOpenFileName(None,"Open", "","Turnroot Unit File (*.truf)", options=options)
+        if fileName:
+            self.path = fileName
 
+    def loadFromFile(self, dialog=True):
+        self.openFileDialog()
+        if self.path == None:
+            c = infoClose("No file selected")
+            c.exec_()
+        else:
+            self.unit.selfFromJSON(self.path)
+            #update graphics
+            self.name_edit.setText(self.unit.name)
+
+            if self.unit.gender == genders().MALE:
+                self.gender_edit.setCurrentText("Male")
+            elif self.unit.gender == genders().FEMALE:
+                self.gender_edit.setCurrentText("Female")
+            elif self.unit.gender == genders().OTHER:
+                self.gender_edit.setCurrentText("Non-Binary")
+            
+            if self.unit.is_lord:
+                self.protag.setCheckState(2)
+            
+            if self.unit.unique != True:
+                self.generic.setCheckState(2)
+            
+            for s in universal_stats:
+                self.stat_spins[s].setValue(getattr(self.unit,s))
+            
+            self.notes.setPlainText(self.unit.notes)
+            
+            self.description.setPlainText(self.unit.description)
+            
+            self.AILoadSheets(ca=False)
+   
     def AIHelpDialog(self):
         a = AIHelpDialog()
         a.exec_()

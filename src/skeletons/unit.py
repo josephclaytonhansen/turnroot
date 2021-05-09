@@ -37,6 +37,9 @@ class Unit():
         self.description = ""
         self.notes = ""
         
+        for stat in universal_stats:
+            setattr(self,stat,0)
+        
         self.portraits = {}
         self.sprites = {}
         self.sounds =  {}
@@ -56,9 +59,6 @@ class Unit():
         
         self.weapon_exps = {}
         self.unit_classes_exps = {} 
-        
-        for stat in universal_stats:
-            setattr(self,stat,0)
         
         self.unit_class = None
         self.mastered_unit_classes = {}
@@ -102,12 +102,6 @@ class Unit():
             json.dump(universal_stats, stats_file)
         setattr(self, stat, 0)
     
-    def setStats(self, unit_file):
-        with open(unit_file, "r") as stats_file:
-            unit_stats =  json.load(stats_file)
-            for stat in unit_stats:
-                setattr(self,stat,unit_stats[stat])
-    
     def setIdentity(self):
         self.pronouns = pronouns(self.gender).pronouns
     
@@ -131,10 +125,24 @@ class Unit():
             
         with open(path, "w") as wf:
             json.dump(basic_attrs_dict, wf)
-
-
-
-
-
-
+    
+    def selfFromJSON(self, path):
+        basic_attrs = ["name","title","unique","is_friendly","is_ally","is_lord","is_recruitable",
+                 "has_dialogue","is_permanently_dead","gender","pronouns","orientation",
+                       "portraits","sprites","sounds","level","exp","exp_to_next_level","move","size",
+                       "is_mounted","is_currently_mounted","weapon_exps","unit_classes_exps",
+                       "unit_class","mastered_unit_classes","future_unit_classes","unique_classes",
+                       "unique_objects","strengths","weaknesses","skills","tactics",
+                       "skilled_blows","inventory_objects","attacks","actions","team_likes",
+                       "team_dislikes","support_levels","description","notes","AI_soldier",
+                       "AI_strategic", "AI_cautious", "AI_sheets"]
         
+        for stat in universal_stats:
+            basic_attrs.append(stat)
+        
+        with open(path, "r") as rf:
+            tmp_data = json.load(rf)
+        
+        for a in basic_attrs:
+            setattr(self, a, tmp_data[a])
+      
