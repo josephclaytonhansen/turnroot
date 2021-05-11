@@ -807,7 +807,7 @@ class UnitEditorWnd(QWidget):
                 #self.loadFromFile
                 if tmp_unit.unique:
                     if tmp_unit.name+"."+str(c) not in all_units:
-                        all_units[tmp_unit.name+"."+str(c)] = tmp_unit
+                        all_units[tmp_unit.name+"\t#"+str(c)] = tmp_unit
                         if tmp_unit.name != "":
                             all_unit_names.append(tmp_unit.name)
                         else:
