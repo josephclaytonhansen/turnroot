@@ -27,6 +27,13 @@ class colorTheme:
     node_outliner_label_1 = ""
     node_outliner_label_2 = ""
     node_outliner_label_3 = ""
+    
+    unit_editor_rule_0 = ""
+    unit_editor_rule_1 = ""
+    unit_editor_rule_2 = ""
+    unit_editor_rule_3 = ""
+    unit_editor_rule_4 = ""
+    unit_editor_rule_5 = ""
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -41,6 +48,9 @@ class colorTheme:
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
+    
+    unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -57,8 +67,11 @@ class colorTheme:
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
+    
+    unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
-    groups = [level_editor, node_grid]
+    groups = [level_editor, node_grid, unit_editor]
 
 class midnight_spark(colorTheme):
     name = "Midnight Spark"
@@ -179,6 +192,13 @@ class rainforest(colorTheme):
     node_outliner_label_1 = "#F2E396"
     node_outliner_label_2 = "#7BBAB3"
     node_outliner_label_3 = "#DACDA4"
+    
+    unit_editor_rule_0 = "#d4f59e"
+    unit_editor_rule_1 = "#92c47f"
+    unit_editor_rule_2 = "#609480"
+    unit_editor_rule_3 = "#527554"
+    unit_editor_rule_4 = "#334f3d"
+    unit_editor_rule_5 = "#4a5c6d"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -193,6 +213,9 @@ class rainforest(colorTheme):
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
+    
+    unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -209,8 +232,11 @@ class rainforest(colorTheme):
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
+    
+    unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
-    groups = [level_editor, node_grid]
+    groups = [level_editor, node_grid, unit_editor]
 
 class charcoal(colorTheme):
     name = "Charcoal"
@@ -241,6 +267,13 @@ class charcoal(colorTheme):
     node_outliner_label_1 = "#5a82d1"
     node_outliner_label_2 = "#F27B50"
     node_outliner_label_3 = "#D7D9D0"
+    
+    unit_editor_rule_0 = "#D9D4D2"
+    unit_editor_rule_1 = "#9BBFB2"
+    unit_editor_rule_2 = "#60A69F"
+    unit_editor_rule_3 = "#4D6873"
+    unit_editor_rule_4 = "#1B4859"
+    unit_editor_rule_5 = "#0a1e26"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -255,6 +288,9 @@ class charcoal(colorTheme):
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
+    
+    unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -271,9 +307,12 @@ class charcoal(colorTheme):
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
+    
+    unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
-    groups = [level_editor, node_grid]
-
+    groups = [level_editor, node_grid, unit_editor]
+    
 class ocean_waves(colorTheme):
     name = "Ocean Waves"
     tag = "ocean_waves"

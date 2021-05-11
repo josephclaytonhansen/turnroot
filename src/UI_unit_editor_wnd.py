@@ -303,12 +303,12 @@ class UnitEditorWnd(QWidget):
         self.dv_slider_dv = [15,35,40]
         
         self.basic_table_categories = ["Move Towards", "Move Goals", "Targeting", "Targeting Change", "Avoid", "Tiles"]
-        self.column_colors_dict = [["#d4f59e", "black"],
-                                   ["#92c47f", "black"],
-                                   ["#609480", "white"],
-                                   ["#527554", "white"],
-                                   ["#334f3d", "white"],
-                                   ["##4a5c6d", "white"]]
+        self.column_colors_dict = [[active_theme.unit_editor_rule_0, "black"],
+                                   [active_theme.unit_editor_rule_1, "black"],
+                                   [active_theme.unit_editor_rule_2, "white"],
+                                   [active_theme.unit_editor_rule_3, "white"],
+                                   [active_theme.unit_editor_rule_4, "white"],
+                                   [active_theme.unit_editor_rule_5, "white"]]
         
         for t in self.basic_table_categories:
             table = QTableView()
@@ -539,8 +539,8 @@ class UnitEditorWnd(QWidget):
         support_difficulty_layout = QHBoxLayout()
         support_difficulty_widget.setLayout(support_difficulty_layout)
         
-        hate_label = QLabel("Strongly Dislikes \n(Builds support slowly)")
-        love_label = QLabel("Strongly Likes \n(Builds support quickly)")
+        hate_label = QLabel("Intensely Dislikes \n(Builds support very slowly)")
+        love_label = QLabel("Intensely Likes \n(Builds support very quickly)")
         
         support_difficulty_layout.addWidget(hate_label)
         support_difficulty_layout.addWidget(self.support_difficulty_slider)
@@ -550,7 +550,10 @@ class UnitEditorWnd(QWidget):
         
         self.supports_setup_layout.addSpacerItem(QSpacerItem(1, 200))
         
-        spacer_label = QLabel("------------------------------------------------------------")
+        spacer_label = QLabel("--------------------------------------------------------------------------------")
+        d_color = QColor(active_theme.list_background_color).darker(125).name()
+
+        spacer_label.setStyleSheet("font-size: "+str(data["font_size"])+"px; color: "+str(d_color))
         spacer_label.setAlignment(Qt.AlignCenter)
         self.supports_setup_layout.addWidget(spacer_label)
         
@@ -924,14 +927,13 @@ class UnitEditorWnd(QWidget):
             try:
                 self.support_difficulty_slider.setValue(self.unit.support_difficulty[self.selected_unit.name])
             except:
-                print("slider not set")
+                pass
             try:
-                print(self.unit.max_support_levels[self.selected_unit.name])
                 for rb in self.max_support_radio_buttons:
                     if rb.text() == self.unit.max_support_levels[self.selected_unit.name]:
                         rb.setChecked()
             except:
-                print("radio not set")
+                pass
 
     
     def personal_enemy_changed(self, s):
@@ -942,13 +944,13 @@ class UnitEditorWnd(QWidget):
         try:
             self.unit.max_support_levels[self.selected_unit.name] = self.sender().text()
         except:
-            print("max support set failed")
+            pass
     
     def colorizeSliderB(self, v):
         try:
             self.unit.support_difficulty[self.selected_unit.name] = v
         except:
-            print("support difficulty set failed")
+            pass
         
         v = v / 10
         color_left = QColor(active_theme.node_outliner_label_0)
