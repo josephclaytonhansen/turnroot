@@ -18,7 +18,8 @@ from src.skeletons.Action import Action
 
 from src.skeletons.Support_Level import supportLevel
 
-import json
+import json, pickle
+
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
 
@@ -129,8 +130,8 @@ class Unit():
         for b in basic_attrs:
             basic_attrs_dict[b] = getattr(self,b)
             
-        with open(path, "w") as wf:
-            json.dump(basic_attrs_dict, wf)
+        with open(path, "wb") as wf:
+            pickle.dump(basic_attrs_dict, wf)
             
         if p == True:
             self.parent.getUnitsInFolder()
@@ -149,8 +150,8 @@ class Unit():
         for stat in universal_stats:
             basic_attrs.append(stat)
         
-        with open(path, "r") as rf:
-            tmp_data = json.load(rf)
+        with open(path, "rb") as rf:
+            tmp_data = pickle.load(rf)
         
         for a in basic_attrs:
             setattr(self, a, tmp_data[a])

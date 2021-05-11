@@ -513,6 +513,13 @@ class UnitEditorWnd(QWidget):
         self.max_support_level_A = QRadioButton("A")
         self.max_support_level_S = QRadioButton("S")
         
+        self.max_support_radio_buttons = [self.max_support_level_D, self.max_support_level_C,
+                                          self.max_support_level_B, self.max_support_level_A,
+                                          self.max_support_level_S]
+        
+        for rb in self.max_support_radio_buttons:
+            rb.clicked.connect(self.max_support_changed)
+        
         self.max_support_level_widget_layout.addWidget(self.max_support_level_D)
         self.max_support_level_widget_layout.addWidget(self.max_support_level_C)
         self.max_support_level_widget_layout.addWidget(self.max_support_level_B)
@@ -553,11 +560,13 @@ class UnitEditorWnd(QWidget):
         personal_enemy_layout = QHBoxLayout()
         personal_enemy_widget.setLayout(personal_enemy_layout)
         
-        personal_enemy_label = QLabel("Personal enemy")
+        self.personal_enemy_label = QLabel("Personal enemy\n--None--")
         self.personal_enemy = QListWidget()
+        self.personal_enemy.setFixedWidth(300)
+        self.personal_enemy.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+active_theme.window_background_color)
         self.personal_enemy.currentTextChanged.connect(self.personal_enemy_changed)
         
-        personal_enemy_layout.addWidget(personal_enemy_label)
+        personal_enemy_layout.addWidget(self.personal_enemy_label)
         personal_enemy_layout.addWidget(self.personal_enemy)
         
         self.supports_setup_layout.addWidget(personal_enemy_widget)
@@ -848,6 +857,9 @@ class UnitEditorWnd(QWidget):
             self.notes.setPlainText(self.unit.notes)
             
             self.description.setPlainText(self.unit.description)
+        
+            if self.unit.personal_enemy != None:
+                self.personal_enemy_label.setText("Personal enemy\nCurrent: "+self.unit.personal_enemy.name)
             
             self.loadSheet()
             
@@ -880,12 +892,12 @@ class UnitEditorWnd(QWidget):
                 tmp_unit.folder_index = c
                 #self.loadFromFile
                 if tmp_unit.unique:
-                    if tmp_unit.name+"."+str(c) not in all_units:
-                        all_units[tmp_unit.name+"\tID:  "+str(c)] = tmp_unit
+                    if tmp_unit.name not in all_units:
+                        all_units[tmp_unit.name] = tmp_unit
                         if tmp_unit.name != "":
                             all_unit_names.append(tmp_unit.name)
                         else:
-                            all_unit_names.append("NamelessUniqueUnit"+str(c))
+                            all_unit_names.append("NamelessUniqueUnit")
                     
                 tmp_unit.selfToJSON(f.fullPath, p = False)
                 
@@ -905,13 +917,38 @@ class UnitEditorWnd(QWidget):
         self.personal_enemy.addItems(enemy_units)
 
     
-    def team_member_change(self):
-        pass
+    def team_member_change(self, s):
+        #selected unit, support_difficulty, max_support_levels
+        if s != "":
+            self.selected_unit = all_units[s]
+            try:
+                self.support_difficulty_slider.setValue(self.unit.support_difficulty[self.selected_unit.name])
+            except:
+                print("slider not set")
+            try:
+                print(self.unit.max_support_levels[self.selected_unit.name])
+                for rb in self.max_support_radio_buttons:
+                    if rb.text() == self.unit.max_support_levels[self.selected_unit.name]:
+                        rb.setChecked()
+            except:
+                print("radio not set")
+
     
     def personal_enemy_changed(self, s):
-        pass
+        if s != "":
+            self.unit.personal_enemy = all_units[s]
+        
+    def max_support_changed(self):
+        try:
+            self.unit.max_support_levels[self.selected_unit.name] = self.sender().text()
+        except:
+            print("max support set failed")
     
     def colorizeSliderB(self, v):
+        try:
+            self.unit.support_difficulty[self.selected_unit.name] = v
+        except:
+            print("support difficulty set failed")
         
         v = v / 10
         color_left = QColor(active_theme.node_outliner_label_0)
