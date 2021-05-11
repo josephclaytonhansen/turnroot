@@ -24,6 +24,8 @@ GET_FILES = 1
 GET_FOLDERS = 0
 
 all_units = {}
+team_units = {}
+enemy_units = {}
 
 class ValuedSpinBox(QSpinBox):
     def __init__(self,parent=None):
@@ -130,7 +132,7 @@ class UnitEditorWnd(QWidget):
         name_row.setLayout(name_row_layout)
         
         self.name_edit = QLineEdit()
-        self.name_edit.textChanged.connect(self.nameChange)
+        self.name_edit.returnPressed.connect(self.nameChange)
         self.name_edit.setAlignment(Qt.AlignCenter)
         self.name_edit.setPlaceholderText("Name")
         self.name_edit.setStyleSheet("background-color: "+active_theme.window_background_color+";")
@@ -468,8 +470,28 @@ class UnitEditorWnd(QWidget):
         working_tab = self.tabs_dict["Relationships"]
         working_tab_layout = working_tab.layout()
         
-        self.other_units = QComboBox()
-        working_tab_layout.addWidget(self.other_units)
+        team_supports = QWidget()
+        team_supports_layout = QHBoxLayout()
+        team_supports.setLayout(team_supports_layout)
+        
+        team_supports_list = QWidget()
+        team_supports_list_layout = QVBoxLayout()
+        team_supports_list.setLayout(team_supports_list_layout)
+        
+        team_member_list_label = QLabel("Team Members")
+        
+        self.team_member_list = QListWidget()
+        self.team_member_list.setMinimumWidth(160)
+        self.team_member_list.setMaximumWidth(260)
+        self.team_member_list.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+active_theme.window_background_color)
+        self.team_member_list.currentTextChanged.connect(self.team_member_change)
+        
+        team_supports_list_layout.addWidget(team_member_list_label)
+        team_supports_list_layout.addWidget(self.team_member_list)
+        
+        team_supports_layout.addWidget(team_supports_list)
+        
+        working_tab_layout.addWidget(team_supports)
         
     def genderChange(self, s):
         if s == "Male":
@@ -494,7 +516,8 @@ class UnitEditorWnd(QWidget):
         if self.path != None:
             self.unit.selfToJSON(self.path)
     
-    def nameChange(self,s):
+    def nameChange(self):
+        s = self.sender().text()
         self.unit.name = s
         
         if self.path != None:
@@ -533,9 +556,9 @@ class UnitEditorWnd(QWidget):
             
     def genericChange(self, s):
         if s == 0:
-            self.unit.unique = False
-        else:
             self.unit.unique = True
+        else:
+            self.unit.unique = False
             
         if self.path != None:
             self.unit.selfToJSON(self.path)
@@ -782,15 +805,28 @@ class UnitEditorWnd(QWidget):
                 tmp_unit.selfFromJSON(f.fullPath)
                 tmp_unit.folder_index = c
                 #self.loadFromFile
-                if tmp_unit.name+"."+str(c) not in all_units:
-                    all_units[tmp_unit.name+"."+str(c)] = tmp_unit
-                    if tmp_unit.name != "":
-                        all_unit_names.append(tmp_unit.name)
-                    else:
-                        all_unit_names.append("UnnamedUnit"+str(c))
+                if tmp_unit.unique:
+                    if tmp_unit.name+"."+str(c) not in all_units:
+                        all_units[tmp_unit.name+"."+str(c)] = tmp_unit
+                        if tmp_unit.name != "":
+                            all_unit_names.append(tmp_unit.name)
+                        else:
+                            all_unit_names.append("NamelessUniqueUnit"+str(c))
                 tmp_unit.selfToJSON(f.fullPath, p = False)
+                
+        self.team_member_list.clear()
+        team_units = {}
+                
+        for l in all_units:
+            if self.unit.is_friendly == all_units[l].is_friendly:
+                team_units[l] = all_units[l]
+            else:
+                enemy_units[l] = all_units[l]
+        self.team_member_list.addItems(team_units)
 
-        self.other_units.addItems(all_unit_names)
+    
+    def team_member_change(self):
+        pass
 
 
         
