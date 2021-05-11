@@ -491,7 +491,81 @@ class UnitEditorWnd(QWidget):
         
         team_supports_layout.addWidget(team_supports_list)
         
+        supports_setup = QWidget()
+        supports_setup.setMinimumWidth(400)
+        self.supports_setup_layout = QVBoxLayout()
+        
+        self.relationship_label = QLabel("Relationship with team member")
+        self.relationship_label.setAlignment(Qt.AlignCenter)
+        self.supports_setup_layout.addWidget(self.relationship_label)
+        
+        self.max_support_level_label = QLabel("Max support level")
+        self.max_support_level_label.setAlignment(Qt.AlignCenter)
+        self.supports_setup_layout.addWidget(self.max_support_level_label)
+        
+        self.max_support_level_widget = QWidget()
+        self.max_support_level_widget_layout = QHBoxLayout()
+        self.max_support_level_widget.setLayout(self.max_support_level_widget_layout)
+        
+        self.max_support_level_D = QRadioButton("D")
+        self.max_support_level_C = QRadioButton("C")
+        self.max_support_level_B = QRadioButton("B")
+        self.max_support_level_A = QRadioButton("A")
+        self.max_support_level_S = QRadioButton("S")
+        
+        self.max_support_level_widget_layout.addWidget(self.max_support_level_D)
+        self.max_support_level_widget_layout.addWidget(self.max_support_level_C)
+        self.max_support_level_widget_layout.addWidget(self.max_support_level_B)
+        self.max_support_level_widget_layout.addWidget(self.max_support_level_A)
+        self.max_support_level_widget_layout.addWidget(self.max_support_level_S)
+        
+        self.supports_setup_layout.addWidget(self.max_support_level_widget)
+        
+        self.support_difficulty_slider = QSlider(Qt.Horizontal)
+        self.support_difficulty_slider.setFixedWidth(300)
+        self.support_difficulty_slider.valueChanged.connect(self.colorizeSliderB)
+        self.support_difficulty_slider.setValue(5)
+        self.support_difficulty_slider.setRange(0,10)
+        self.support_difficulty_slider.setSingleStep(1)
+        
+        support_difficulty_widget = QWidget()
+        support_difficulty_layout = QHBoxLayout()
+        support_difficulty_widget.setLayout(support_difficulty_layout)
+        
+        hate_label = QLabel("Strongly Dislikes \n(Builds support slowly)")
+        love_label = QLabel("Strongly Likes \n(Builds support quickly)")
+        
+        support_difficulty_layout.addWidget(hate_label)
+        support_difficulty_layout.addWidget(self.support_difficulty_slider)
+        support_difficulty_layout.addWidget(love_label)
+        
+        self.supports_setup_layout.addWidget(support_difficulty_widget)
+        
+        self.supports_setup_layout.addSpacerItem(QSpacerItem(1, 200))
+        
+        spacer_label = QLabel("------------------------------------------------------------")
+        spacer_label.setAlignment(Qt.AlignCenter)
+        self.supports_setup_layout.addWidget(spacer_label)
+        
+        self.supports_setup_layout.addSpacerItem(QSpacerItem(1, 200))
+        
+        personal_enemy_widget = QWidget()
+        personal_enemy_layout = QHBoxLayout()
+        personal_enemy_widget.setLayout(personal_enemy_layout)
+        
+        personal_enemy_label = QLabel("Personal enemy")
+        self.personal_enemy = QListWidget()
+        self.personal_enemy.currentTextChanged.connect(self.personal_enemy_changed)
+        
+        personal_enemy_layout.addWidget(personal_enemy_label)
+        personal_enemy_layout.addWidget(self.personal_enemy)
+        
+        self.supports_setup_layout.addWidget(personal_enemy_widget)
+        
+        supports_setup.setLayout(self.supports_setup_layout)
+        
         working_tab_layout.addWidget(team_supports)
+        working_tab_layout.addWidget(supports_setup)
         
     def genderChange(self, s):
         if s == "Male":
@@ -816,7 +890,9 @@ class UnitEditorWnd(QWidget):
                 tmp_unit.selfToJSON(f.fullPath, p = False)
                 
         self.team_member_list.clear()
+        self.personal_enemy.clear()
         team_units = {}
+        enemy_units = {}
                 
         for l in all_units:
             if self.unit.name+str(self.unit.folder_index) == all_units[l].name+str(all_units[l].folder_index):
@@ -826,10 +902,34 @@ class UnitEditorWnd(QWidget):
             else:
                 enemy_units[l] = all_units[l]
         self.team_member_list.addItems(team_units)
+        self.personal_enemy.addItems(enemy_units)
 
     
     def team_member_change(self):
         pass
-
+    
+    def personal_enemy_changed(self, s):
+        pass
+    
+    def colorizeSliderB(self, v):
+        
+        v = v / 10
+        color_left = QColor(active_theme.node_outliner_label_0)
+        color_right = QColor(active_theme.node_outliner_label_1)
+        color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
+        color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
+        
+        distances = [(color_right.red() - color_left.red()),
+                     (color_right.green() - color_left.green()),
+                     (color_right.blue() - color_left.blue())]
+        
+        
+        new_color = [int(color_left.red() + v * distances[0]),
+                     int(color_left.green() + v * distances[1]),
+                     int(color_left.blue()+ v * distances[2])]
+        
+        self.sender().setStyleSheet(
+            "QSlider::handle:horizontal {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;width:40px;height:40px;}"
+            )
 
         

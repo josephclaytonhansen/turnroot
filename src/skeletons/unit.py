@@ -81,8 +81,8 @@ class Unit():
         self.attacks = {}
         self.actions = {}
         
-        self.team_likes = {}
-        self.team_dislikes = {}
+        self.max_support_levels = {}
+        self.support_difficulty = {}
         self.support_levels = {}
         
         self.personal_enemy = None
@@ -118,8 +118,8 @@ class Unit():
                        "is_mounted","is_currently_mounted","weapon_exps","unit_classes_exps",
                        "unit_class","mastered_unit_classes","future_unit_classes","unique_classes",
                        "unique_objects","strengths","weaknesses","skills","tactics",
-                       "skilled_blows","inventory_objects","attacks","actions","team_likes",
-                       "team_dislikes","support_levels","description","notes","AI_soldier",
+                       "skilled_blows","inventory_objects","attacks","actions","support_difficulty",
+                       "max_support_levels","support_levels","description","notes","AI_soldier",
                        "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range", "folder_index"]
         
         for stat in universal_stats:
@@ -142,8 +142,8 @@ class Unit():
                        "is_mounted","is_currently_mounted","weapon_exps","unit_classes_exps",
                        "unit_class","mastered_unit_classes","future_unit_classes","unique_classes",
                        "unique_objects","strengths","weaknesses","skills","tactics",
-                       "skilled_blows","inventory_objects","attacks","actions","team_likes",
-                       "team_dislikes","support_levels","description","notes","AI_soldier",
+                       "skilled_blows","inventory_objects","attacks","actions","support_difficulty",
+                       "max_support_levels","support_levels","description","notes","AI_soldier",
                        "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range", "folder_index"]
         
         for stat in universal_stats:
