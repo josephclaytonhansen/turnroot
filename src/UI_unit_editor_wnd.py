@@ -796,28 +796,31 @@ class UnitEditorWnd(QWidget):
         
     def getUnitsInFolder(self):
         file_list = getFiles(self.path[0:self.path.rfind("/") + 1])[GET_FILES]
-        c = 0
+        c = 1000
         all_unit_names = []
         for f in file_list:
             if f.ext.strip() == ".truf":
-                c += 100
+                c += 10
                 tmp_unit = Unit()
                 tmp_unit.selfFromJSON(f.fullPath)
                 tmp_unit.folder_index = c
                 #self.loadFromFile
                 if tmp_unit.unique:
                     if tmp_unit.name+"."+str(c) not in all_units:
-                        all_units[tmp_unit.name+"\t#"+str(c)] = tmp_unit
+                        all_units[tmp_unit.name+"\tID:  "+str(c)] = tmp_unit
                         if tmp_unit.name != "":
                             all_unit_names.append(tmp_unit.name)
                         else:
                             all_unit_names.append("NamelessUniqueUnit"+str(c))
+                    
                 tmp_unit.selfToJSON(f.fullPath, p = False)
                 
         self.team_member_list.clear()
         team_units = {}
                 
         for l in all_units:
+            if self.unit.name+str(self.unit.folder_index) == all_units[l].name+str(all_units[l].folder_index):
+                continue
             if self.unit.is_friendly == all_units[l].is_friendly:
                 team_units[l] = all_units[l]
             else:
