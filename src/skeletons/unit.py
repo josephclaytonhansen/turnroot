@@ -24,6 +24,9 @@ with open("src/skeletons/universal_stats.json", "r") as stats_file:
 
 class Unit():
     def __init__(self):
+        self.folder_index = 0
+        self.parent = None
+        
         self.name = ""
         self.title = ""
         self.unique = True
@@ -108,7 +111,7 @@ class Unit():
     def setIdentity(self):
         self.pronouns = pronouns(self.gender).pronouns
     
-    def selfToJSON(self, path):
+    def selfToJSON(self, path, p = True):
         basic_attrs = ["name","title","unique","is_friendly","is_ally","is_lord","is_recruitable",
                  "has_dialogue","is_permanently_dead","gender","pronouns","orientation",
                        "portraits","sprites","sounds","level","exp","exp_to_next_level","move","size",
@@ -117,7 +120,7 @@ class Unit():
                        "unique_objects","strengths","weaknesses","skills","tactics",
                        "skilled_blows","inventory_objects","attacks","actions","team_likes",
                        "team_dislikes","support_levels","description","notes","AI_soldier",
-                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range"]
+                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range", "folder_index"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
@@ -128,6 +131,9 @@ class Unit():
             
         with open(path, "w") as wf:
             json.dump(basic_attrs_dict, wf)
+            
+        if p == True:
+            self.parent.getUnitsInFolder()
     
     def selfFromJSON(self, path):
         basic_attrs = ["name","title","unique","is_friendly","is_ally","is_lord","is_recruitable",
@@ -138,7 +144,7 @@ class Unit():
                        "unique_objects","strengths","weaknesses","skills","tactics",
                        "skilled_blows","inventory_objects","attacks","actions","team_likes",
                        "team_dislikes","support_levels","description","notes","AI_soldier",
-                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range"]
+                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range", "folder_index"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)

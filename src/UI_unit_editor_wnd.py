@@ -3,8 +3,9 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from src.UI_node_graphics_scene import QDMGraphicsView, QDMGraphicsScene
 from src.UI_TableModel import TableModel
+from src.node_backend import getFiles, File
 
-import json, math
+import json, math, random
 
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
@@ -18,6 +19,11 @@ from src.UI_Dialogs import confirmAction, popupInfo, infoClose, AIHelpDialog
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
+
+GET_FILES = 1
+GET_FOLDERS = 0
+
+all_units = {}
 
 class ValuedSpinBox(QSpinBox):
     def __init__(self,parent=None):
@@ -460,7 +466,10 @@ class UnitEditorWnd(QWidget):
     
     def initRelationships(self):
         working_tab = self.tabs_dict["Relationships"]
-        working_tab_layout = working_tab.layout
+        working_tab_layout = working_tab.layout()
+        
+        self.other_units = QComboBox()
+        working_tab_layout.addWidget(self.other_units)
         
     def genderChange(self, s):
         if s == "Male":
@@ -676,13 +685,15 @@ class UnitEditorWnd(QWidget):
         fileName, _ = q.getSaveFileName(None,"Save","","Turnroot Unit (*.truf)", options=options)
         if fileName:
             self.path = fileName+".truf"
-            print(self.path)
             g = infoClose("Saved unit as "+self.path+"\nAll changes to this unit will now autosave")
             g.exec_()
             
     def unitToJSON(self):
         self.unit.AI_sheets = self.table_data
-        self.unit.AI_sheets.append(self.dv_slider_dv)
+        if self.unit.AI_sheets[len(self.unit.AI_sheets)-1] == (self.dv_slider_dv):
+            pass
+        else:
+            self.unit.AI_sheets.append(self.dv_slider_dv)
 
         if self.path == None or self.path == '':
             self.saveFileDialog()
@@ -692,13 +703,16 @@ class UnitEditorWnd(QWidget):
             else:
                 with open(self.path+".trui", "w") as w:
                     json.dump(self.unit.AI_sheets, w)
+                self.unit.parent = self
                 self.unit.selfToJSON(self.path)
                 self.parent().nameChange()
+
         else:
             with open(self.path+".trui", "w") as w:
                 json.dump(self.unit.AI_sheets, w)
             self.unit.selfToJSON(self.path)
             self.parent().nameChange()
+
     
     def openFileDialog(self):
         options = QFileDialog.Options()
@@ -707,13 +721,14 @@ class UnitEditorWnd(QWidget):
         if fileName:
             self.path = fileName
 
-    def loadFromFile(self, dialog=True):
+    def loadFromFile(self, p=True):
         self.openFileDialog()
         if self.path == None:
             c = infoClose("No file selected")
             c.exec_()
         else:
             self.unit.selfFromJSON(self.path)
+            self.unit.parent = self
             #update graphics
             self.name_edit.setText(self.unit.name)
 
@@ -755,4 +770,27 @@ class UnitEditorWnd(QWidget):
     def AIHelpDialog(self):
         a = AIHelpDialog()
         a.exec_()
+        
+    def getUnitsInFolder(self):
+        file_list = getFiles(self.path[0:self.path.rfind("/") + 1])[GET_FILES]
+        c = 0
+        all_unit_names = []
+        for f in file_list:
+            if f.ext.strip() == ".truf":
+                c += 100
+                tmp_unit = Unit()
+                tmp_unit.selfFromJSON(f.fullPath)
+                tmp_unit.folder_index = c
+                #self.loadFromFile
+                if tmp_unit.name+"."+str(c) not in all_units:
+                    all_units[tmp_unit.name+"."+str(c)] = tmp_unit
+                    if tmp_unit.name != "":
+                        all_unit_names.append(tmp_unit.name)
+                    else:
+                        all_unit_names.append("UnnamedUnit"+str(c))
+                tmp_unit.selfToJSON(f.fullPath, p = False)
+
+        self.other_units.addItems(all_unit_names)
+
+
         

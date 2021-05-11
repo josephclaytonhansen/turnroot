@@ -82,6 +82,7 @@ class TableModel(QtCore.QAbstractTableModel):
                 return QtGui.QColor('white')
             
     def setData(self, index, value, role):
+
         if role == Qt.EditRole and value != "" and value != None:
             self._data[index.row()][index.column()] = value
             return True
