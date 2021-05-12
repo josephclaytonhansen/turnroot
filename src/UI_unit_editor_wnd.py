@@ -981,16 +981,22 @@ class UnitEditorWnd(QWidget):
     def personal_enemy_changed(self, s):
         if s != "":
             self.unit.personal_enemy = all_units[s]
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
         
     def max_support_changed(self):
         try:
             self.unit.max_support_levels[self.selected_unit.name] = self.sender().text()
+            if self.path != None:
+                self.unit.selfToJSON(self.path)
         except:
             pass
     
     def colorizeSliderB(self, v):
         try:
             self.unit.support_difficulty[self.selected_unit.name] = v
+            if self.path != None:
+                self.unit.selfToJSON(self.path)
         except:
             pass
             
@@ -1038,8 +1044,13 @@ class UnitEditorWnd(QWidget):
         self.starting_level_labels[self.sender().name].setText(number_to_value[n])
         self.unit.current_weapon_levels[self.sender().name] = number_to_value[n]
         
-    def growth_multiplier_changed(self):
-        pass
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
+        
+    def growth_multiplier_changed(self, i):
+        self.unit.affinities[self.sender().name] = self.sender().value()
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
     
     def weapon_starting_level_changed(self):
         pass
