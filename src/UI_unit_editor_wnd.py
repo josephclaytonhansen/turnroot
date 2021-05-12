@@ -730,8 +730,8 @@ class UnitEditorWnd(QWidget):
             self.unitToJSON()
         
         v = v / 100
-        color_left = QColor(active_theme.node_outliner_label_0)
-        color_right = QColor(active_theme.node_outliner_label_1)
+        color_left = QColor(active_theme.unit_editor_slider_color_0)
+        color_right = QColor(active_theme.unit_editor_slider_color_1)
         color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
         color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
         
@@ -1010,8 +1010,8 @@ class UnitEditorWnd(QWidget):
             pass
             
         v = v / 10
-        color_left = QColor(active_theme.node_outliner_label_0)
-        color_right = QColor(active_theme.node_outliner_label_1)
+        color_left = QColor(active_theme.unit_editor_slider_color_0)
+        color_right = QColor(active_theme.unit_editor_slider_color_1)
         color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
         color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
         
@@ -1031,8 +1031,8 @@ class UnitEditorWnd(QWidget):
     def colorizeSliderC(self, v):
         n = v
         v = v / 9
-        color_left = QColor(active_theme.node_outliner_label_0)
-        color_right = QColor(active_theme.node_outliner_label_1)
+        color_left = QColor(active_theme.unit_editor_slider_color_0)
+        color_right = QColor(active_theme.unit_editor_slider_color_1)
         color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
         color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
         

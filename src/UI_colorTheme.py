@@ -274,6 +274,9 @@ class charcoal(colorTheme):
     unit_editor_rule_3 = "#d97904"
     unit_editor_rule_4 = "#a35e07"
     unit_editor_rule_5 = "#262523"
+    
+    unit_editor_slider_color_0 = "#D95F80"
+    unit_editor_slider_color_1 = "#5a82d1"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -290,7 +293,8 @@ class charcoal(colorTheme):
                  node_outliner_label_3]
     
     unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
-                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5]
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5,
+                   unit_editor_slider_color_0, unit_editor_slider_color_1]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -309,7 +313,8 @@ class charcoal(colorTheme):
                         "node_outliner_label_3"]
     
     unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
-                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5",
+                          "unit_editor_slider_color_0", "unit_editor_slider_color_1"]
 
     groups = [level_editor, node_grid, unit_editor]
     
@@ -349,6 +354,9 @@ class ocean_waves(colorTheme):
     unit_editor_rule_3 = "#4D6873"
     unit_editor_rule_4 = "#1B4859"
     unit_editor_rule_5 = "#0a1e26"
+    
+    unit_editor_slider_color_0 = "#F29472"
+    unit_editor_slider_color_1 = "#5FE3E3"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -365,7 +373,8 @@ class ocean_waves(colorTheme):
                  node_outliner_label_3]
     
     unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
-                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5]
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5,
+                   unit_editor_slider_color_0, unit_editor_slider_color_1]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -384,10 +393,11 @@ class ocean_waves(colorTheme):
                         "node_outliner_label_3"]
     
     unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
-                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5",
+                          "unit_editor_slider_color_0", "unit_editor_slider_color_1"]
 
     groups = [level_editor, node_grid, unit_editor]
-
+    
 class chocolate(colorTheme):
     name = "Chocolate"
     tag = "chocolate"
@@ -552,6 +562,13 @@ class custom(colorTheme):
     node_outliner_label_2 = ""
     node_outliner_label_3 = ""
 
+    unit_editor_rule_0 = "#FFFFFF"
+    unit_editor_rule_1 = "#FFFFFF"
+    unit_editor_rule_2 = "#000000"
+    unit_editor_rule_3 = "#000000"
+    unit_editor_rule_4 = "#000000"
+    unit_editor_rule_5 = "#000000"
+
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
                     button_alt_color,button_alt_text_color]
@@ -565,6 +582,9 @@ class custom(colorTheme):
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
+    
+    unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -581,12 +601,8 @@ class custom(colorTheme):
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
+    
+    unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
-    groups = [level_editor, node_grid]
-
-
-
-
-
-
-
+    groups = [level_editor, node_grid, unit_editor]
