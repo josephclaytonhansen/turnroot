@@ -465,7 +465,7 @@ class UnitEditorWnd(QWidget):
             self.weapon_type_widgets[weapon_type] = weapon_type_widget
             
             self.starting_level_labels[weapon_type] = QLabel("D")
-            weapon_type_layout.addWidget(QLabel(weapon_type+"\nStarting level"))
+            weapon_type_layout.addWidget(QLabel("<b>"+weapon_type.upper()+"</b><br>Starting level"))
             weapon_type_layout.addWidget(self.starting_level_labels[weapon_type])
             
             self.starting_type_sliders[weapon_type] = QSlider(Qt.Vertical)
