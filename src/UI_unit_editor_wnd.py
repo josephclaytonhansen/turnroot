@@ -920,6 +920,15 @@ class UnitEditorWnd(QWidget):
                 self.status.setCurrentText("Team")
             else:
                 self.status.setCurrentText("Protagonist")
+                
+            for weapon_type in ["sword", "axe", "lance", "bow", "dagger", "gauntlets", "radiant magic", "void magic", "elemental magic", "staff"]:
+                if weapon_type in self.unit.affinities:
+                    self.growth_multipliers_widgets[weapon_type].setValue(round(self.unit.affinities[weapon_type],1))
+                
+                number_to_value = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S"]
+                
+                self.starting_type_sliders[weapon_type].setValue(number_to_value.index(self.unit.current_weapon_levels[weapon_type]))
+                
 
     def AIHelpDialog(self):
         a = AIHelpDialog()
