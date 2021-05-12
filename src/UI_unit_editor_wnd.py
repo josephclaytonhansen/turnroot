@@ -58,7 +58,7 @@ class UnitEditorWnd(QWidget):
         self.tscroll.setWidget(self.tabs)
         self.tscroll.setWidgetResizable(True)
         
-        self.tab_names = ["Basic", "AI", "Attacks", "Actions", "Classes", "Skills", "Objects", "Relationships", "Graphics/Sounds"]
+        self.tab_names = ["Basic", "AI", "Weapon Affinities", "Actions", "Classes", "Skills", "Objects", "Relationships", "Graphics/Sounds"]
         
         self.tabs_dict = {}
         for tab in self.tab_names:
@@ -73,7 +73,7 @@ class UnitEditorWnd(QWidget):
         
         self.initBasic()
         self.initAI()
-        self.initAttacks()
+        self.initWeaponAffinities()
         self.initActions()
         self.initClasses()
         self.initSkills()
@@ -446,10 +446,52 @@ class UnitEditorWnd(QWidget):
 
         self.working_tab_layout.addWidget(self.basic_layout_widget)
         
-    def initAttacks(self):
-        working_tab = self.tabs_dict["Attacks"]
-        working_tab_layout = working_tab.layout
+    def initWeaponAffinities(self):
+        working_tab = self.tabs_dict["Weapon Affinities"]
+        working_tab_layout = working_tab.layout()
         
+        self.starting_level_labels = {}
+        self.weapon_type_widgets = {}
+        self.starting_type_sliders = {}
+        self.growth_multipliers_widgets = {}
+        growth_multiplier_labels = {}
+        
+        for weapon_type in ["sword", "axe", "lance", "bow", "dagger", "gauntlets", "radiant magic", "void magic", "elemental magic", "staff"]:
+            weapon_type_widget = QWidget()
+            weapon_type_layout  = QVBoxLayout()
+            weapon_type_widget.setLayout(weapon_type_layout)
+            
+            self.weapon_type_widgets[weapon_type] = weapon_type_widget
+            
+            self.starting_level_labels[weapon_type] = QLabel("D")
+            weapon_type_layout.addWidget(QLabel(weapon_type+"\nStarting level"))
+            weapon_type_layout.addWidget(self.starting_level_labels[weapon_type])
+            
+            self.starting_type_sliders[weapon_type] = QSlider(Qt.Vertical)
+            self.starting_type_sliders[weapon_type].name = weapon_type
+            self.starting_type_sliders[weapon_type].valueChanged.connect(self.colorizeSliderC)
+            self.starting_type_sliders[weapon_type].valueChanged.connect(self.weapon_starting_level_changed)
+            self.starting_type_sliders[weapon_type].setValue(2)
+            self.starting_type_sliders[weapon_type].setValue(0)
+            self.starting_type_sliders[weapon_type].setRange(0,8)
+            self.starting_type_sliders[weapon_type].setSingleStep(1)
+            
+            weapon_type_layout.addWidget(self.starting_type_sliders[weapon_type])
+            
+            growth_multiplier_labels[weapon_type] = QLabel("Growth Rate")
+            weapon_type_layout.addWidget(growth_multiplier_labels[weapon_type])
+            
+            self.growth_multipliers_widgets[weapon_type] = QDoubleSpinBox()
+            self.growth_multipliers_widgets[weapon_type].name = weapon_type
+            self.growth_multipliers_widgets[weapon_type].setRange(0.5,1.5)
+            self.growth_multipliers_widgets[weapon_type].setValue(1.0)
+            self.growth_multipliers_widgets[weapon_type].setSingleStep(0.1)
+            self.growth_multipliers_widgets[weapon_type].valueChanged.connect(self.growth_multiplier_changed)
+            
+            weapon_type_layout.addWidget(self.growth_multipliers_widgets[weapon_type])
+            
+            working_tab_layout.addWidget(weapon_type_widget)
+ 
     def initActions(self):
         working_tab = self.tabs_dict["Actions"]
         working_tab_layout = working_tab.layout
@@ -951,7 +993,7 @@ class UnitEditorWnd(QWidget):
             self.unit.support_difficulty[self.selected_unit.name] = v
         except:
             pass
-        
+            
         v = v / 10
         color_left = QColor(active_theme.node_outliner_label_0)
         color_right = QColor(active_theme.node_outliner_label_1)
@@ -970,5 +1012,36 @@ class UnitEditorWnd(QWidget):
         self.sender().setStyleSheet(
             "QSlider::handle:horizontal {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;width:40px;height:40px;}"
             )
+        
+    def colorizeSliderC(self, v):
+        n = v
+        v = v / 9
+        color_left = QColor(active_theme.node_outliner_label_0)
+        color_right = QColor(active_theme.node_outliner_label_1)
+        color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
+        color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
+        
+        distances = [(color_right.red() - color_left.red()),
+                     (color_right.green() - color_left.green()),
+                     (color_right.blue() - color_left.blue())]
+        
+        
+        new_color = [int(color_left.red() + v * distances[0]),
+                     int(color_left.green() + v * distances[1]),
+                     int(color_left.blue()+ v * distances[2])]
+        
+        self.sender().setStyleSheet(
+            "QSlider::handle:vertical {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;width:40px;height:40px;}"
+            )
+        
+        number_to_value = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S"]
+        self.starting_level_labels[self.sender().name].setText(number_to_value[n])
+        self.unit.current_weapon_levels[self.sender().name] = number_to_value[n]
+        
+    def growth_multiplier_changed(self):
+        pass
+    
+    def weapon_starting_level_changed(self):
+        pass
 
         

@@ -269,10 +269,10 @@ class charcoal(colorTheme):
     node_outliner_label_3 = "#D7D9D0"
     
     unit_editor_rule_0 = "#f5cc7f"
-    unit_editor_rule_1 = "#F2EEEB"
+    unit_editor_rule_1 = "#edceb7"
     unit_editor_rule_2 = "#F2AE30"
-    unit_editor_rule_3 = "#BF7A26"
-    unit_editor_rule_4 = "#734F22"
+    unit_editor_rule_3 = "#d97904"
+    unit_editor_rule_4 = "#a35e07"
     unit_editor_rule_5 = "#262523"
 
     level_editor = ["level_editor", window_background_color,list_background_color,

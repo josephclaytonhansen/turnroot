@@ -63,6 +63,7 @@ class Unit():
         self.is_currently_mounted = False
         
         self.weapon_exps = {}
+        self.current_weapon_levels = {}
         self.unit_classes_exps = {} 
         
         self.unit_class = None
@@ -71,8 +72,7 @@ class Unit():
         self.unique_classes = {}
         self.unique_objects = {}
         
-        self.strengths = {}
-        self.weaknesses = {}
+        self.affinities = {}
         
         self.skills = {}
         self.tactics = {}
@@ -118,10 +118,11 @@ class Unit():
                        "portraits","sprites","sounds","level","exp","exp_to_next_level","move","size",
                        "is_mounted","is_currently_mounted","weapon_exps","unit_classes_exps",
                        "unit_class","mastered_unit_classes","future_unit_classes","unique_classes",
-                       "unique_objects","strengths","weaknesses","skills","tactics",
+                       "unique_objects","affinities","skills","tactics",
                        "skilled_blows","inventory_objects","attacks","actions","support_difficulty",
                        "max_support_levels","support_levels","description","notes","AI_soldier",
-                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range", "folder_index"]
+                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range",
+                       "folder_index", "current_weapon_levels"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
@@ -142,10 +143,11 @@ class Unit():
                        "portraits","sprites","sounds","level","exp","exp_to_next_level","move","size",
                        "is_mounted","is_currently_mounted","weapon_exps","unit_classes_exps",
                        "unit_class","mastered_unit_classes","future_unit_classes","unique_classes",
-                       "unique_objects","strengths","weaknesses","skills","tactics",
+                       "unique_objects","affinities","skills","tactics",
                        "skilled_blows","inventory_objects","attacks","actions","support_difficulty",
                        "max_support_levels","support_levels","description","notes","AI_soldier",
-                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range", "folder_index"]
+                       "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range",
+                       "folder_index", "current_weapon_levels"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
