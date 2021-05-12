@@ -15,7 +15,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
-from src.UI_Dialogs import confirmAction, popupInfo, infoClose, AIHelpDialog
+from src.UI_Dialogs import confirmAction, popupInfo, infoClose, AIHelpDialog, editUniversalStats
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -214,6 +214,7 @@ class UnitEditorWnd(QWidget):
         self.working_tab_layout.addWidget(self.basic_left)
         
         stat_label = QPushButton("Stats")
+        stat_label.clicked.connect(self.universalStats)
         stat_label.setToolTip("Edit universal stats")
         stat_label.setFont(body_font)
         self.basic_center_layout.addWidget(stat_label)
@@ -1063,5 +1064,8 @@ class UnitEditorWnd(QWidget):
     
     def weapon_starting_level_changed(self):
         pass
-
+    
+    def universalStats(self):
+        e = editUniversalStats(parent=self)
+        e.exec_()
         

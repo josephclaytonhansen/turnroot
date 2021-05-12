@@ -22,7 +22,7 @@ class confirmAction(QDialog):
         self.return_confirm = return_confirm
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
-        self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
         layout = QVBoxLayout()
         layout.setContentsMargins( 8,8,8,8)
@@ -68,7 +68,7 @@ class stackedInfoImgDialog(QDialog):
         self.row_styles = row_styles
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
-        self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(8,8,8,8)
@@ -97,7 +97,7 @@ class infoClose(QDialog):
         self.info = info
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
-        self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
         layout = QVBoxLayout()
         layout.setContentsMargins( 8,8,8,8)
@@ -127,7 +127,7 @@ class addObject(QDialog):
         
         self.setWindowFlags(Qt.Popup)
         
-        self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QHBoxLayout()
         self.layout.setContentsMargins(8,8,8,8)
         self.layout.addWidget(QLabel("Add object: "))
@@ -489,7 +489,7 @@ class switchEditorDialog(QDialog):
         super().__init__(parent)
         self.setWindowFlags(Qt.Popup)
         self.mode = NEW_WINDOW
-        self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
         self.editor = None
         
@@ -564,7 +564,7 @@ class popupInfo(QDialog):
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.setWindowFlags(Qt.Popup)
-        self.setStyleSheet("font-size: "+str(data["font_size"]+3)+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
         self.info = s
         
@@ -841,3 +841,49 @@ class AIHelpDialog(QDialog):
             g = QLabel(t)
             g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
             self.working_tab_layout.addWidget(g)
+
+
+class editUniversalStats(QDialog):
+    def __init__(self, parent=None):
+        data = updateJSON()
+        self.parent = parent
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        
+        row = QWidget()
+        row_layout = QHBoxLayout()
+        row.setLayout(row_layout)
+        
+        with open("src/skeletons/universal_stats.json", "r") as stats_file:
+            universal_stats =  json.load(stats_file)
+        
+        self.list = QListWidget()
+        self.list.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.list.addItems(universal_stats)
+    
+        row_layout.addWidget(self.list)
+        
+        row2 = QWidget()
+        row2_layout = QHBoxLayout()
+        row2.setLayout(row2_layout)
+        
+        self.add_stat_name = QLineEdit()
+        
+        self.add_stat = QPushButton("+Add Stat")
+        self.add_stat.clicked.connect(self.addStat)
+        
+        row2_layout.addWidget(self.add_stat_name)
+        row2_layout.addWidget(self.add_stat)
+        
+        self.layout.addWidget(row)
+        self.layout.addWidget(row2)
+        
+        self.setLayout(self.layout)
+    
+    def addStat(self):
+        self.parent.unit.createUniversalStat(self.add_stat_name.value())
+    
