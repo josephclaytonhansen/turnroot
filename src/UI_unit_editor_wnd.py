@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from src.skeletons.weapon_types import weaponTypes
+from src.skeletons.unit_class import unitClass
 from src.UI_TableModel import TableModel
 from src.node_backend import getFiles, File
 
@@ -90,6 +91,7 @@ class UnitEditorWnd(QWidget):
     def initUnit(self):
         #get unit from file
         self.unit = Unit()
+        self.unit.unit_class = unitClass()
         
     def initBasic(self):
         self.working_tab = self.tabs_dict["Basic"]
@@ -1206,22 +1208,28 @@ class UnitEditorWnd(QWidget):
             self.parent().restart()
     
     def class_name_change(self):
-        pass
+        self.unit.unit_class.unit_class_name = self.class_name.text()
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def minimum_level_change(self):
-        pass
+        self.unit.unit_class.minimum_level = self.minimum_level.value()
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def is_mounted_change(self):
-        pass
+        self.unit.unit_class.is_mounted = self.is_mounted.isChecked()
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def mounted_m_change(self):
-        pass
+        self.unit.unit_class.mounted_move_change = self.mounted_m.value()
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def exp_m_change(self):
-        pass
+        self.unit.unit_class.exp_gained_multiplier = self.exp_m.value()
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def class_type_change(self):
-        pass
+        self.unit.unit_class.class_type = self.class_type.value()
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.currentText()+".tructf")
 
     def growth_rates_dialog(self):
         pass
