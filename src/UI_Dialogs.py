@@ -872,12 +872,18 @@ class editUniversalStats(QDialog):
         row2.setLayout(row2_layout)
         
         self.add_stat_name = QLineEdit()
+        self.add_stat_name.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.add_stat_name.setPlaceholderText("New stat name")
         
         self.add_stat = QPushButton("+Add Stat")
         self.add_stat.clicked.connect(self.addStat)
         
+        self.remove_stat = QPushButton("-Remove Selected Stat")
+        self.remove_stat.clicked.connect(self.removeStat)
+        
         row2_layout.addWidget(self.add_stat_name)
         row2_layout.addWidget(self.add_stat)
+        row2_layout.addWidget(self.remove_stat)
         
         self.layout.addWidget(row)
         self.layout.addWidget(row2)
@@ -885,5 +891,13 @@ class editUniversalStats(QDialog):
         self.setLayout(self.layout)
     
     def addStat(self):
-        self.parent.unit.createUniversalStat(self.add_stat_name.value())
+        c = confirmAction("#This will add this stat to all units in the game, do you want to continue?", parent=self)
+        c.exec_()
+        if(c.return_confirm):
+            self.parent.unit.createUniversalStat(self.add_stat_name.value())
     
+    def removeStat(self):
+        c = confirmAction("#This will remove this stat from all units in the game, do you want to continue?",parent=self)
+        c.exec_()
+        if(c.return_confirm):
+            self.parent.unit.removeUniversalStat(self.self.add_stat_name.currentText())

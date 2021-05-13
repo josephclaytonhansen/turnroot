@@ -109,6 +109,11 @@ class Unit():
             json.dump(universal_stats, stats_file)
         setattr(self, stat, 0)
     
+    def removeUniversalStat(self, stat):
+        universal_stats.remove(stat)
+        with open("universal_stats.json", "w") as stats_file:
+            json.dump(universal_stats, stats_file)
+    
     def setIdentity(self):
         self.pronouns = pronouns(self.gender).pronouns
     
