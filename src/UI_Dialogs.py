@@ -894,10 +894,69 @@ class editUniversalStats(QDialog):
         c = confirmAction("#This will add this stat to all units in the game, do you want to continue?", parent=self)
         c.exec_()
         if(c.return_confirm):
-            self.parent.unit.createUniversalStat(self.add_stat_name.value())
+            self.parent.unit.createUniversalStat(self.add_stat_name.text())
     
     def removeStat(self):
         c = confirmAction("#This will remove this stat from all units in the game, do you want to continue?",parent=self)
         c.exec_()
         if(c.return_confirm):
-            self.parent.unit.removeUniversalStat(self.self.add_stat_name.currentText())
+            self.parent.unit.removeUniversalStat(self.list.currentItem().text())
+            
+class editUniversalWeaponTypes(QDialog):
+    def __init__(self, parent=None):
+        data = updateJSON()
+        self.parent = parent
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        
+        row = QWidget()
+        row_layout = QHBoxLayout()
+        row.setLayout(row_layout)
+        
+        with open("src/skeletons/universal_weapon_types.json", "r") as weapons_file:
+            weapon_types = json.load(weapons_file)
+        
+        self.list = QListWidget()
+        self.list.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.list.addItems(weapon_types)
+    
+        row_layout.addWidget(self.list)
+        
+        row2 = QWidget()
+        row2_layout = QHBoxLayout()
+        row2.setLayout(row2_layout)
+        
+        self.add_stat_name = QLineEdit()
+        self.add_stat_name.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.add_stat_name.setPlaceholderText("New weapon type name")
+        
+        self.add_stat = QPushButton("+Add Weapon Type")
+        self.add_stat.clicked.connect(self.addType)
+        
+        self.remove_stat = QPushButton("-Remove Selected Weapon Type")
+        self.remove_stat.clicked.connect(self.removeType)
+        
+        row2_layout.addWidget(self.add_stat_name)
+        row2_layout.addWidget(self.add_stat)
+        row2_layout.addWidget(self.remove_stat)
+        
+        self.layout.addWidget(row)
+        self.layout.addWidget(row2)
+        
+        self.setLayout(self.layout)
+    
+    def addType(self):
+        c = confirmAction("#This will add this weapon type to all units in the game, do you want to continue?", parent=self)
+        c.exec_()
+        if(c.return_confirm):
+            self.parent.unit.createUniversalWeaponsType(self.add_stat_name.text())
+    
+    def removeType(self):
+        c = confirmAction("#This will remove this weapon type from all units in the game, do you want to continue?",parent=self)
+        c.exec_()
+        if(c.return_confirm):
+            self.parent.unit.removeUniversalWeaponsType(self.list.currentItem().text())

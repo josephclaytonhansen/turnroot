@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from src.UI_node_graphics_scene import QDMGraphicsView, QDMGraphicsScene
+from src.skeletons.weapon_types import weaponTypes
 from src.UI_TableModel import TableModel
 from src.node_backend import getFiles, File
 
@@ -15,7 +15,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
-from src.UI_Dialogs import confirmAction, popupInfo, infoClose, AIHelpDialog, editUniversalStats
+from src.UI_Dialogs import confirmAction, popupInfo, infoClose, AIHelpDialog, editUniversalStats, editUniversalWeaponTypes
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -457,7 +457,15 @@ class UnitEditorWnd(QWidget):
         self.growth_multipliers_widgets = {}
         growth_multiplier_labels = {}
         
-        for weapon_type in ["sword", "axe", "lance", "bow", "dagger", "gauntlets", "radiant magic", "void magic", "elemental magic", "staff"]:
+        column = QWidget()
+        column_layout = QVBoxLayout()
+        column.setLayout(column_layout)
+        
+        column_inner = QWidget()
+        column_inner_layout = QHBoxLayout()
+        column_inner.setLayout(column_inner_layout)
+        
+        for weapon_type in weaponTypes().data:
             weapon_type_widget = QWidget()
             weapon_type_layout  = QVBoxLayout()
             weapon_type_widget.setLayout(weapon_type_layout)
@@ -491,7 +499,15 @@ class UnitEditorWnd(QWidget):
             
             weapon_type_layout.addWidget(self.growth_multipliers_widgets[weapon_type])
             
-            working_tab_layout.addWidget(weapon_type_widget)
+            column_inner_layout.addWidget(weapon_type_widget)
+            
+        column_layout.addWidget(column_inner)
+            
+        self.edit_weapon_types = QPushButton("Edit Weapon Types")
+        self.edit_weapon_types.clicked.connect(self.weaponTypesChange)
+        column_layout.addWidget(self.edit_weapon_types)
+            
+        working_tab_layout.addWidget(column)
  
     def initActions(self):
         working_tab = self.tabs_dict["Actions"]
@@ -922,7 +938,7 @@ class UnitEditorWnd(QWidget):
             else:
                 self.status.setCurrentText("Protagonist")
                 
-            for weapon_type in ["sword", "axe", "lance", "bow", "dagger", "gauntlets", "radiant magic", "void magic", "elemental magic", "staff"]:
+            for weapon_type in ["sword", "axe", "lance", "bow", "dagger", "hands", "radiant magic", "void magic", "elemental magic", "staff"]:
                 if weapon_type in self.unit.affinities:
                     self.growth_multipliers_widgets[weapon_type].setValue(round(self.unit.affinities[weapon_type],1))
                 
@@ -1068,4 +1084,8 @@ class UnitEditorWnd(QWidget):
     def universalStats(self):
         e = editUniversalStats(parent=self)
         e.exec_()
+
+    def weaponTypesChange(self):
+        f =editUniversalWeaponTypes(parent=self)
+        f.exec_()
         

@@ -6,6 +6,7 @@ from src.skeletons.unit_level import Level
 from src.skeletons.unit_class import unitClass
 from src.skeletons.team_likes_dislikes import teamDislike, teamLike
 from src.skeletons.identities import orientations, genders, pronouns
+from src.skeletons.weapon_types import weaponTypes
 
 #general imports
 from src.skeletons.Portrait import Portrait
@@ -22,6 +23,8 @@ import json, pickle
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
+
+universal_weapon_types = weaponTypes().data
 
 class Unit():
     def __init__(self):
@@ -105,14 +108,24 @@ class Unit():
     
     def createUniversalStat(self, stat):
         universal_stats.append(stat)
-        with open("universal_stats.json", "w") as stats_file:
+        with open("src/skeletons/universal_stats.json", "w") as stats_file:
             json.dump(universal_stats, stats_file)
         setattr(self, stat, 0)
     
     def removeUniversalStat(self, stat):
         universal_stats.remove(stat)
-        with open("universal_stats.json", "w") as stats_file:
+        with open("src/skeletons/universal_stats.json", "w") as stats_file:
             json.dump(universal_stats, stats_file)
+            
+    def createUniversalWeaponsType(self, stat):
+        universal_weapon_types.append(stat)
+        with open("src/skeletons/universal_weapon_types.json", "w") as stats_file:
+            json.dump(universal_weapon_types, stats_file)
+    
+    def removeUniversalWeaponsType(self, stat):
+        universal_weapon_types.remove(stat)
+        with open("src/skeletons/universal_weapon_types.json", "w") as stats_file:
+            json.dump(universal_weapon_types, stats_file)
     
     def setIdentity(self):
         self.pronouns = pronouns(self.gender).pronouns
