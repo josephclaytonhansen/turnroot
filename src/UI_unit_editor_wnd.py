@@ -64,7 +64,10 @@ class UnitEditorWnd(QWidget):
         for tab in self.tab_names:
             self.tab_title = tab
             self.c_tab = QWidget()
-            self.c_tab_layout = QHBoxLayout()
+            if tab == "Classes":
+                self.c_tab_layout = QGridLayout()
+            else:
+                self.c_tab_layout = QHBoxLayout()
             self.c_tab.setLayout(self.c_tab_layout)
             self.tabs_dict[tab] = self.c_tab
             self.tabs.addTab(self.c_tab, self.tab_title)
@@ -515,11 +518,116 @@ class UnitEditorWnd(QWidget):
     
     def initClasses(self):
         working_tab = self.tabs_dict["Classes"]
-        working_tab_layout = QGridLayout()
-        working_tab.setLayout(working_tab_layout)
+        working_tab_layout = working_tab.layout()
         
+        working_tab_layout.setSpacing(2)
         
-        
+        wt = weaponTypes().data
+
+        self.class_name = QLineEdit()
+        self.class_name.setPlaceholderText("Class name")
+        self.class_name.returnPressed.connect(self.class_name_change)
+        working_tab_layout.addWidget(self.class_name, 0,0,1,5)
+
+        allowed_weapons_label = QLabel("Allowed weapon types")
+        working_tab_layout.addWidget(allowed_weapons_label, 1,1,1,1)
+
+        not_allowed_weapons_label = QLabel("Not allowed weapon types")
+        working_tab_layout.addWidget(not_allowed_weapons_label, 1,2,1,1)
+
+        minimum_level_label = QLabel("Minimum level")
+        working_tab_layout.addWidget(minimum_level_label, 1,3,1,1)
+
+        self.minimum_level = QSpinBox()
+        self.minimum_level.setRange(0,30)
+        self.minimum_level.valueChanged.connect(self.minimum_level_change)
+        working_tab_layout.addWidget(self.minimum_level, 1,4,1,1)
+
+        is_mounted_label = QLabel("Mounted?")
+        working_tab_layout.addWidget(is_mounted_label, 2,3,1,1)
+
+        self.is_mounted = QCheckBox()
+        self.is_mounted.stateChanged.connect(self.is_mounted_change)
+        working_tab_layout.addWidget(self.is_mounted, 2,4,1,1)
+
+        mounted_m_label = QLabel("Mounted movement+")
+        working_tab_layout.addWidget(mounted_m_label, 3,3,1,1)
+
+        self.mounted_m = QSpinBox()
+        self.mounted_m.setRange(0,10)
+        self.mounted_m.valueChanged.connect(self.mounted_m_change)
+        working_tab_layout.addWidget(self.mounted_m, 3,4,1,1)
+
+        exp_m_label = QLabel("EXP growth X")
+        working_tab_layout.addWidget(exp_m_label, 4,3,1,1)
+
+        self.exp_m = QDoubleSpinBox()
+        self.exp_m.setRange(0.1,1.5)
+        self.exp_m.valueChanged.connect(self.exp_m_change)
+        working_tab_layout.addWidget(self.exp_m, 4,4,1,1)
+
+        class_type_label = QLabel("Class type")
+        working_tab_layout.addWidget(class_type_label, 5,3,1,1)
+
+        self.class_type = QComboBox()
+        self.class_type.currentTextChanged.connect(self.class_type_change)
+        working_tab_layout.addWidget(self.class_type, 5,4,1,1)
+
+        self.tactics = QPushButton("Tactics")
+        self.tactics.clicked.connect(self.tactics_dialog)
+        working_tab_layout.addWidget(self.tactics, len(wt)+2,0,1,1)
+
+        self.skills = QPushButton("Skills")
+        self.skills.clicked.connect(self.skills_dialog)
+        working_tab_layout.addWidget(self.skills, len(wt)+2,1,1,1)
+
+        self.skilled_blows = QPushButton("Skilled Blows")
+        self.skilled_blows.clicked.connect(self.skilled_blows_dialog)
+        working_tab_layout.addWidget(self.skilled_blows, len(wt)+2,2,1,1)
+
+        self.growth_rates = QPushButton("Growth Rates")
+        self.growth_rates.clicked.connect(self.growth_rates_dialog)
+        working_tab_layout.addWidget(self.growth_rates, len(wt)+2,3,1,1)
+
+        self.tile_changes = QPushButton("Tile Changes")
+        self.tile_changes.clicked.connect(self.tile_changes_dialog)
+        working_tab_layout.addWidget(self.tile_changes, len(wt)+3,0,1,2)
+
+        self.weak_against = QPushButton("Weakness")
+        self.weak_against.clicked.connect(self.weak_against_dialog)
+        working_tab_layout.addWidget(self.weak_against, len(wt)+3,2,1,2)
+
+        self.stat_bonuses = QPushButton("Stats+")
+        self.stat_bonuses.clicked.connect(self.stat_bonuses_dialog)
+        working_tab_layout.addWidget(self.stat_bonuses, len(wt)+4,0,1,4)
+
+        self.next_classes = QPushButton("Next Classes")
+        self.next_classes.clicked.connect(self.next_classes_dialog)
+        working_tab_layout.addWidget(self.next_classes, len(wt)+5,0,1,4)
+
+
+        self.wt_checkboxes_left = {}
+        self.wt_checkboxes_right = {}
+        count = 1
+
+        for w in wt:
+            count += 1
+            self.wt_checkboxes_left[w] = QCheckBox()
+            self.wt_checkboxes_left[w].stateChanged.connect(self.weapon_type_toggle)
+            self.wt_checkboxes_right[w] = QCheckBox()
+            self.wt_checkboxes_right[w].stateChanged.connect(self.weapon_type_toggle)
+            label = QLabel(w)
+            
+            working_tab_layout.addWidget(label, count, 0, 1, 1)
+            working_tab_layout.addWidget(self.wt_checkboxes_left[w], count, 1, 1, 1)
+            working_tab_layout.addWidget(self.wt_checkboxes_right[w], count, 2, 1, 1)
+            
+            working_tab_layout.setColumnStretch(0, 3)
+            working_tab_layout.setColumnStretch(1, 3)
+            working_tab_layout.setColumnStretch(2, 3)
+            working_tab_layout.setColumnStretch(3, 3)
+            working_tab_layout.setColumnStretch(4, 1)
+       
     def initSkills(self):
         working_tab = self.tabs_dict["Skills"]
         working_tab_layout = working_tab.layout
@@ -578,6 +686,7 @@ class UnitEditorWnd(QWidget):
         self.max_support_radio_buttons = [self.max_support_level_D, self.max_support_level_C,
                                           self.max_support_level_B, self.max_support_level_A,
                                           self.max_support_level_S]
+        
         
         for rb in self.max_support_radio_buttons:
             rb.clicked.connect(self.max_support_changed)
@@ -1095,4 +1204,52 @@ class UnitEditorWnd(QWidget):
         f.exec_()
         if f.restart:
             self.parent().restart()
-        
+    
+    def class_name_change(self):
+        pass
+
+    def minimum_level_change(self):
+        pass
+
+    def is_mounted_change(self):
+        pass
+
+    def mounted_m_change(self):
+        pass
+
+    def exp_m_change(self):
+        pass
+
+    def class_type_change(self):
+        pass
+
+    def growth_rates_dialog(self):
+        pass
+
+    def tile_changes_dialog(self):
+        pass
+
+    def weak_against_dialog(self):
+        pass
+
+    def stat_bonuses_dialog(self):
+        pass
+
+    def weapon_type_toggle(self):
+        pass
+
+    def class_icon_dialog(self):
+        pass
+
+    def tactics_dialog(self):
+        pass
+    
+    def skills_dialog(self):
+        pass
+
+    def skilled_blows_dialog(self):
+        pass
+    
+    def next_classes_dialog(self):
+        pass
+            
