@@ -107,6 +107,7 @@ class Unit():
         self.setIdentity()
     
     def createUniversalStat(self, stat):
+        stat = stat.lower()
         universal_stats.append(stat)
         with open("src/skeletons/universal_stats.json", "w") as stats_file:
             json.dump(universal_stats, stats_file)
@@ -118,6 +119,7 @@ class Unit():
             json.dump(universal_stats, stats_file)
             
     def createUniversalWeaponsType(self, stat):
+        stat = stat.lower()
         universal_weapon_types.append(stat)
         with open("src/skeletons/universal_weapon_types.json", "w") as stats_file:
             json.dump(universal_weapon_types, stats_file)
