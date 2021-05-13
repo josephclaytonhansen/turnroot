@@ -40,8 +40,8 @@ OPEN_NEW_FILE = const[1]
 class mainN(UnitEditorWnd):
     def __init__(self, parent):
         super().__init__(parent)
-        self.setMinimumSize(QSize(int(size.width()/1.7), int(size.height()*.7)))
-        self.setMaximumSize(QSize(int(size.width()), int(size.height())))
+        self.setMinimumSize(QSize(int(size.width()/1.55), int(size.height()*.7)))
+        self.setMaximumSize(QSize(int(size.width()*2), int(size.height()*2)))
 
 class main(QMainWindow):
     def __init__(self):
