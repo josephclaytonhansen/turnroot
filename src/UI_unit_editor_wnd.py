@@ -515,7 +515,10 @@ class UnitEditorWnd(QWidget):
     
     def initClasses(self):
         working_tab = self.tabs_dict["Classes"]
-        working_tab_layout = working_tab.layout
+        working_tab_layout = QGridLayout()
+        working_tab.setLayout(working_tab_layout)
+        
+        
         
     def initSkills(self):
         working_tab = self.tabs_dict["Skills"]
