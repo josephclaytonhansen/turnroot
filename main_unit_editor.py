@@ -130,15 +130,17 @@ class main(QMainWindow):
             active_theme = getattr(UI_colorTheme, data["active_theme"])
             if (data["theme_changed"] == True):
                 self.m.unitToJSON()
+                self.restart()
                     
-                with open("src/tmp/wer.taic", "w") as tmp_reason:
-                    tmp_reason.write(OPEN_LAST_FILE)
-                with open("src/tmp/lsf.taic", "w") as next_open_file:
-                    try:
-                        next_open_file.write(self.m.path)
-                    except:
-                        with open("src/tmp/wer.taic", "w") as tmp_reason:
-                            tmp_reason.write(OPEN_NEW_FILE)
+    def restart(self):
+        with open("src/tmp/wer.taic", "w") as tmp_reason:
+            tmp_reason.write(OPEN_LAST_FILE)
+            with open("src/tmp/lsf.taic", "w") as next_open_file:
+                try:
+                    next_open_file.write(self.m.path)
+                except:
+                    with open("src/tmp/wer.taic", "w") as tmp_reason:
+                        tmp_reason.write(OPEN_NEW_FILE)
                     
                 os.execl(sys.executable, sys.executable, *sys.argv)
                         

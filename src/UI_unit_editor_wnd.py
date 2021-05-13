@@ -1084,8 +1084,12 @@ class UnitEditorWnd(QWidget):
     def universalStats(self):
         e = editUniversalStats(parent=self)
         e.exec_()
+        if e.restart:
+            self.parent().restart()
 
     def weaponTypesChange(self):
         f =editUniversalWeaponTypes(parent=self)
         f.exec_()
+        if f.restart:
+            self.parent().restart()
         

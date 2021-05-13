@@ -847,6 +847,7 @@ class editUniversalStats(QDialog):
     def __init__(self, parent=None):
         data = updateJSON()
         self.parent = parent
+        self.restart = False
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         
@@ -895,17 +896,22 @@ class editUniversalStats(QDialog):
         c.exec_()
         if(c.return_confirm):
             self.parent.unit.createUniversalStat(self.add_stat_name.text())
+            self.restart = True
+            self.close()
     
     def removeStat(self):
         c = confirmAction("#This will remove this stat from all units in the game, do you want to continue?",parent=self)
         c.exec_()
         if(c.return_confirm):
             self.parent.unit.removeUniversalStat(self.list.currentItem().text())
+            self.restart = True
+            self.close()
             
 class editUniversalWeaponTypes(QDialog):
     def __init__(self, parent=None):
         data = updateJSON()
         self.parent = parent
+        self.restart = False
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         
@@ -954,9 +960,13 @@ class editUniversalWeaponTypes(QDialog):
         c.exec_()
         if(c.return_confirm):
             self.parent.unit.createUniversalWeaponsType(self.add_stat_name.text())
+            self.restart = True
+            self.close()
     
     def removeType(self):
         c = confirmAction("#This will remove this weapon type from all units in the game, do you want to continue?",parent=self)
         c.exec_()
         if(c.return_confirm):
             self.parent.unit.removeUniversalWeaponsType(self.list.currentItem().text())
+            self.close()
+            self.restart = True
