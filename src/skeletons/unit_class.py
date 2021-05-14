@@ -53,24 +53,25 @@ class unitClass():
         self.next_classes = {}
         
     def selfToJSON(self, path, p = True):
-        basic_attrs = ["unit_class_name", "tactics", "skills", "skilled_blows", "growth_rates",
-                       "tactics_minimum_class_exp", "skills_minimum_class_exp", "skilled_blows_minimum_class_exp",
-                       "allowed_weapon_types", "disallowed_weapon_types", "minimum_level", "is_mounted",
-                       "mounted_move_change", "mounted_tile_changes", "dismounted_tile_changes",
-                       "weak_against", "weak_against_amount", "exp_gained_multiplier",
-                       "class_type", "stat_bonuses", "stat_bonuses_criteria", "next_classes"]
+        if self.unit_class_name != None:
+            basic_attrs = ["unit_class_name", "tactics", "skills", "skilled_blows", "growth_rates",
+                           "tactics_minimum_class_exp", "skills_minimum_class_exp", "skilled_blows_minimum_class_exp",
+                           "allowed_weapon_types", "disallowed_weapon_types", "minimum_level", "is_mounted",
+                           "mounted_move_change", "mounted_tile_changes", "dismounted_tile_changes",
+                           "weak_against", "weak_against_amount", "exp_gained_multiplier",
+                           "class_type", "stat_bonuses", "stat_bonuses_criteria", "next_classes"]
 
-        
-        basic_attrs_dict = {}
-        for b in basic_attrs:
-            basic_attrs_dict[b] = getattr(self,b)
             
-        with open(path, "wb") as wf:
-            pickle.dump(basic_attrs_dict, wf)
-            
-        if p == True:
-            pass
-            # self.parent.getClassesInFolder()
+            basic_attrs_dict = {}
+            for b in basic_attrs:
+                basic_attrs_dict[b] = getattr(self,b)
+                
+            with open(path, "wb") as wf:
+                pickle.dump(basic_attrs_dict, wf)
+                
+            if p == True:
+                pass
+                # self.parent.getClassesInFolder()
     
     def selfFromJSON(self, path):
         basic_attrs = ["unit_class_name", "tactics", "skills", "skilled_blows", "growth_rates",
