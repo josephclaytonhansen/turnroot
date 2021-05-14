@@ -529,7 +529,7 @@ class switchEditorDialog(QDialog):
         self.icons = [["src/ui_icons/white/e_tile.png", "src/ui_icons/white/e_node.png", "src/ui_icons/white/e_world.png","src/ui_icons/white/e_hub.png"],
                       ["src/ui_icons/white/e_class.png","src/ui_icons/white/e_object.png","src/ui_icons/white/e_portrait.png"],
                       ["src/ui_icons/white/e_menu.png", "src/ui_icons/white/e_store.png", "src/ui_icons/white/e_game.png"]]
-        self.labels = [["Tiles (level)", "Nodes (dialogue/actions)", "Tiles (world)", "Hub"],
+        self.labels = [["Tiles (level)", "Dialogue/Actions", "Tiles (world)", "Hub"],
                        ["Units/Classes", "Objects", "Portraits"],
                        ["Menus", "Stores", "Game"]]
         self.widgets = [[0,1,2,3],[0,1,2],[0,1,2]]
