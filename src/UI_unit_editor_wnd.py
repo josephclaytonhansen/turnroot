@@ -615,9 +615,11 @@ class UnitEditorWnd(QWidget):
         for w in wt:
             count += 1
             self.wt_checkboxes_left[w] = QCheckBox()
-            self.wt_checkboxes_left[w].stateChanged.connect(self.weapon_type_toggle)
+            self.wt_checkboxes_left[w].name = w
+            self.wt_checkboxes_left[w].stateChanged.connect(self.left_weapon_type_toggle)
             self.wt_checkboxes_right[w] = QCheckBox()
-            self.wt_checkboxes_right[w].stateChanged.connect(self.weapon_type_toggle)
+            self.wt_checkboxes_right[w].name = w
+            self.wt_checkboxes_right[w].stateChanged.connect(self.right_weapon_type_toggle)
             label = QLabel(w)
             
             working_tab_layout.addWidget(label, count, 0, 1, 1)
@@ -1243,8 +1245,25 @@ class UnitEditorWnd(QWidget):
     def stat_bonuses_dialog(self):
         pass
 
-    def weapon_type_toggle(self):
-        pass
+    def left_weapon_type_toggle(self):
+        w = self.sender().name
+        s = self.sender().isChecked()
+        if s:
+            self.wt_checkboxes_right[w].setChecked(False)
+        else:
+            self.wt_checkboxes_right[w].setChecked(True)
+            
+    def right_weapon_type_toggle(self):
+        w = self.sender().name
+        s = self.sender().isChecked()
+        if s:
+            self.wt_checkboxes_left[w].setChecked(False)
+        else:
+            self.wt_checkboxes_left[w].setChecked(True)
+
+
+        
+        
 
     def class_icon_dialog(self):
         pass
