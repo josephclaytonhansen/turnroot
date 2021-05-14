@@ -112,13 +112,12 @@ class main(QMainWindow):
             elif new_editor == 6:
                 from main_portrait_editor import main
             elif new_editor == 7:
-                from main_class_editor import main
-            elif new_editor == 8:
                 from main_menu_editor import main
-            elif new_editor == 9:
+            elif new_editor == 8:
                 from main_stores_editor import main
-            elif new_editor == 10:
+            elif new_editor == 9:
                 from main_game_editor import main
+                
             
     def OptionsMenu(self):
         p = unitOptionsDialog(parent=self)

@@ -527,12 +527,12 @@ class switchEditorDialog(QDialog):
         self.layout.addWidget(self.row_3)
         
         self.icons = [["src/ui_icons/white/e_tile.png", "src/ui_icons/white/e_node.png", "src/ui_icons/white/e_world.png","src/ui_icons/white/e_hub.png"],
-                      ["src/ui_icons/white/e_unit.png","src/ui_icons/white/e_object.png","src/ui_icons/white/e_portrait.png", "src/ui_icons/white/e_class.png"],
+                      ["src/ui_icons/white/e_class.png","src/ui_icons/white/e_object.png","src/ui_icons/white/e_portrait.png"],
                       ["src/ui_icons/white/e_menu.png", "src/ui_icons/white/e_store.png", "src/ui_icons/white/e_game.png"]]
         self.labels = [["Tiles (level)", "Nodes (dialogue/actions)", "Tiles (world)", "Hub"],
-                       ["Units", "Objects", "Portraits", "Classes"],
+                       ["Units/Classes", "Objects", "Portraits"],
                        ["Menus", "Stores", "Game"]]
-        self.widgets = [[0,1,2,3],[0,1,2,3],[0,1,2]]
+        self.widgets = [[0,1,2,3],[0,1,2],[0,1,2]]
         self.rows = [self.row_1_layout, self.row_2_layout, self.row_3_layout]
         
         e = -1
