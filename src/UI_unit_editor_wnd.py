@@ -17,6 +17,7 @@ from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose, AIHelpDialog, editUniversalStats, editUniversalWeaponTypes
+from src.UI_unit_editor_dialogs import growthRateDialog
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -1234,7 +1235,8 @@ class UnitEditorWnd(QWidget):
         self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.currentText()+".tructf")
 
     def growth_rates_dialog(self):
-        pass
+        u = growthRateDialog(parent=self)
+        u.exec_()
 
     def tile_changes_dialog(self):
         pass
@@ -1260,13 +1262,6 @@ class UnitEditorWnd(QWidget):
             self.wt_checkboxes_left[w].setChecked(False)
         else:
             self.wt_checkboxes_left[w].setChecked(True)
-
-
-        
-        
-
-    def class_icon_dialog(self):
-        pass
 
     def tactics_dialog(self):
         pass
