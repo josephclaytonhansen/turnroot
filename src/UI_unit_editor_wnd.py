@@ -17,7 +17,7 @@ from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose, AIHelpDialog, editUniversalStats, editUniversalWeaponTypes
-from src.UI_unit_editor_dialogs import growthRateDialog
+from src.UI_unit_editor_dialogs import growthRateDialog, statBonusDialog
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -1245,7 +1245,8 @@ class UnitEditorWnd(QWidget):
         pass
 
     def stat_bonuses_dialog(self):
-        pass
+        i = statBonusDialog(parent=self)
+        i.exec_()
 
     def left_weapon_type_toggle(self):
         w = self.sender().name

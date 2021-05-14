@@ -81,3 +81,56 @@ class growthRateDialog(QDialog):
     def list_change(self):
         self.rate_slider.setValue(self.parent.unit.unit_class.growth_rates[self.list.currentItem().text()])
         
+class statBonusDialog(QDialog):
+    def __init__(self, parent=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        self.setMinimumWidth(200)
+        
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        
+        with open("src/skeletons/universal_stats.json", "r") as stats_file:
+            universal_stats =  json.load(stats_file)
+        
+        self.rows = {}
+        self.labels = {}
+        self.values = {}
+        
+        for s in universal_stats:
+            if s not in self.parent.unit.unit_class.stat_bonuses:
+                self.parent.unit.unit_class.stat_bonuses[s] = 0
+            row = QWidget()
+            row_layout = QHBoxLayout()
+            row.setLayout(row_layout)
+            
+            self.rows[s] = row
+            
+            label = QLabel(s)
+            self.labels[s] = label
+            row_layout.addWidget(label)
+            
+            value = QSpinBox()
+            value.name = s
+            value.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+            value.setRange(0,10)
+            value.setValue(self.parent.unit.unit_class.stat_bonuses[s])
+            value.valueChanged.connect(self.value_changed)
+            self.values[s] = value
+            row_layout.addWidget(value)
+            
+            self.layout.addWidget(row)
+            
+        self.setLayout(self.layout)
+        
+    def value_changed(self):
+        try:
+            self.parent.unit.unit_class.stat_bonuses[self.sender().name] = self.sender().value()
+            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.currentText()+".tructf")
+        except:
+            pass
+        
