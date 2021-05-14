@@ -133,6 +133,7 @@ class Unit():
         self.pronouns = pronouns(self.gender).pronouns
     
     def selfToJSON(self, path, p = True):
+
         basic_attrs = ["name","title","unique","is_friendly","is_ally","is_lord","is_recruitable",
                  "has_dialogue","is_permanently_dead","gender","pronouns","orientation",
                        "portraits","sprites","sounds","level","exp","exp_to_next_level","move","size",
@@ -153,7 +154,7 @@ class Unit():
             
         with open(path, "wb") as wf:
             pickle.dump(basic_attrs_dict, wf)
-            
+        
         if p == True:
             self.parent.getUnitsInFolder()
     

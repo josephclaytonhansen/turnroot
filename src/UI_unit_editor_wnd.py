@@ -28,6 +28,7 @@ GET_FOLDERS = 0
 all_units = {}
 team_units = {}
 enemy_units = {}
+classes = {}
 
 class ValuedSpinBox(QSpinBox):
     def __init__(self,parent=None):
@@ -155,12 +156,13 @@ class UnitEditorWnd(QWidget):
         self.name_edit.setFont(name_font)
         name_row_layout.addWidget(self.name_edit)
         
-        self.title_edit = QPushButton()
-        self.title_edit.clicked.connect(self.classChange)
-        self.title_edit.setText("Soldier")
-        self.title_edit.setToolTip("Go to Classes tab")
+        self.title_edit = QComboBox()
+        self.title_edit.currentTextChanged.connect(self.classChange)
+        self.title_edit.setToolTip("Choose from existing classes (edit or create new in the Classes tab)")
         self.title_edit.setFont(body_font)
         name_row_layout.addWidget(self.title_edit)
+        
+        self.getClassesInFolder()
         
         self.basic_left_layout.addWidget(name_row)
         
@@ -785,8 +787,10 @@ class UnitEditorWnd(QWidget):
         if self.path != None:
             self.unit.selfToJSON(self.path)
             
-    def classChange(self):
-        pass
+    def classChange(self, s):
+        global classes
+        if s != "":
+            self.unit.unit_class = classes[s]
     
     def statusChange(self, s):
         if s == "Enemy":
@@ -1213,6 +1217,7 @@ class UnitEditorWnd(QWidget):
     def class_name_change(self):
         self.unit.unit_class.unit_class_name = self.class_name.text()
         self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.getClassesInFolder()
 
     def minimum_level_change(self):
         self.unit.unit_class.minimum_level = self.minimum_level.value()
@@ -1276,3 +1281,23 @@ class UnitEditorWnd(QWidget):
     def next_classes_dialog(self):
         pass
             
+    def getClassesInFolder(self):
+        file_list = getFiles("src/skeletons/classes")[GET_FILES]
+        class_names = []
+        if hasattr(self.unit, "unit_class_name"):
+            tmp_class_name = self.unit.unit_class_name
+        global classes
+        classes = {}
+        self.title_edit.clear()
+        for f in file_list:
+            if f.ext.strip() == ".tructf":
+                tmp_class = unitClass()
+                tmp_class.selfFromJSON(f.fullPath)
+                class_names.append(tmp_class.unit_class_name)
+                classes[tmp_class.unit_class_name] = tmp_class
+        self.title_edit.addItems(class_names)
+        self.title_edit.update()
+        try:
+            self.title_edit.setCurrentText(tmp_class_name)
+        except:
+            pass
