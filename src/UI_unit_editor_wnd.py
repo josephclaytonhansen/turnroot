@@ -16,8 +16,8 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
-from src.UI_Dialogs import confirmAction, popupInfo, infoClose, AIHelpDialog, editUniversalStats, editUniversalWeaponTypes
-from src.UI_unit_editor_dialogs import growthRateDialog, statBonusDialog
+from src.UI_Dialogs import confirmAction, popupInfo, infoClose
+from src.UI_unit_editor_dialogs import growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats, editUniversalWeaponTypes
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -532,10 +532,10 @@ class UnitEditorWnd(QWidget):
         self.class_name.returnPressed.connect(self.class_name_change)
         working_tab_layout.addWidget(self.class_name, 0,0,1,5)
 
-        allowed_weapons_label = QLabel("Allowed weapon types")
+        allowed_weapons_label = QLabel("Can use")
         working_tab_layout.addWidget(allowed_weapons_label, 1,1,1,1)
 
-        not_allowed_weapons_label = QLabel("Not allowed weapon types")
+        not_allowed_weapons_label = QLabel("Can't use")
         working_tab_layout.addWidget(not_allowed_weapons_label, 1,2,1,1)
 
         minimum_level_label = QLabel("Minimum level")
