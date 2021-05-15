@@ -320,8 +320,7 @@ class unit_initiates_combat(QWidget):
             self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
 
             self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 2
-            if self.n.inputs[0].reception == False:
-                self.chain+=1
+                #self.chain+=len(self.n.inputs[0].edges)-1
             self.n.content.eval_order.setValue(self.chain)
             self.n.content.eval_order.setEnabled(False)
         except:
@@ -364,8 +363,7 @@ class foe_initiates_combat(QWidget):
             self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
 
             self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 2
-            if self.n.inputs[0].reception == False:
-                self.chain+=1
+                #self.chain+=len(self.n.inputs[0].edges)-1
             self.n.content.eval_order.setValue(self.chain)
             self.n.content.eval_order.setEnabled(False)
         except:
@@ -423,8 +421,7 @@ class grant_bonus_to_unit(QWidget):
             self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
 
             self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 2
-            if self.n.inputs[0].reception == False:
-                self.chain+=1
+                #self.chain+=len(self.n.inputs[0].edges)-1
             self.n.content.eval_order.setValue(self.chain)
             self.n.content.eval_order.setEnabled(False)
         except:
@@ -516,8 +513,7 @@ class grant_bonus_to_ally(QWidget):
             self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
 
             self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 2
-            if self.n.inputs[0].reception == False:
-                self.chain+=1
+                #self.chain+=len(self.n.inputs[0].edges)-1
             self.n.content.eval_order.setValue(self.chain)
             self.n.content.eval_order.setEnabled(False)
         except:
@@ -597,8 +593,7 @@ class unit_is_close_to_ally(QWidget):
             self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
 
             self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 2
-            if self.n.inputs[0].reception == False:
-                self.chain+=1
+                #self.chain+=len(self.n.inputs[0].edges)-1
             self.n.content.eval_order.setValue(self.chain)
             self.n.content.eval_order.setEnabled(False)
         except:
@@ -669,6 +664,50 @@ class unit_is_near_ally(unit_is_close_to_ally):
     def __init__(self, scene, hexe="756161", spaces = "Within N of", l =True):
             super().__init__(scene, spaces, hexe, l)
  
+ 
+class bool_to_event(QWidget):
+    def __init__(self, scene):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title="Convert T/F to Event"
+        self.inputs = [S_BOOLEAN]
+        self.outputs=[S_TRIGGER]
+        self.hex_output = "637073"
+        self.chain = 1
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.line1.setLayout(self.line1_layout)
+
+        label2 = QLabel("From T/F to event")
+        label2.setAlignment(Qt.AlignRight)
+        self.line1_layout.addWidget(label2)
+        
+        self.contents = [self.line1]
+        self.socket_content_index = 0
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160)
+        self.n.node_preset = self
+    
+    def updateEmission(self):
+        try:
+            self.n.outputs[0].emission = self.hex_output
+        except:
+            pass
+    
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 2
+                #self.chain+=len(self.n.inputs[0].edges)-1
+            self.n.content.eval_order.setValue(self.chain)
+            self.n.content.eval_order.setEnabled(False)
+        except:
+            pass
+    
 NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat Start": combat_start,
          "Unit Initiates Combat": unit_initiates_combat, "Foe Initiates Combat": foe_initiates_combat,
          "Unit +Bonus Strength/Magic": grant_bonus_to_unit_atk, "Unit +Bonus Defense": grant_bonus_to_unit_def,
@@ -677,7 +716,8 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Unit is Adjacent to Ally": unit_is_adjacent_to_ally, "Unit is Within N of Ally": unit_is_near_ally,
          "Ally +Bonus Strength/Magic": grant_bonus_to_ally_atk, "Ally +Bonus Defense": grant_bonus_to_ally_def,
          "Ally +Bonus Resistance": grant_bonus_to_ally_res,"Ally +Bonus Charisma": grant_bonus_to_ally_chr,
-         "Ally +Bonus Dexterity": grant_bonus_to_ally_dex,"Ally +Bonus Luck": grant_bonus_to_ally_luc}
+         "Ally +Bonus Dexterity": grant_bonus_to_ally_dex,"Ally +Bonus Luck": grant_bonus_to_ally_luc,
+         "Convert T/F to Event": bool_to_event}
 
 NODE_KEYS = ["Math", "Compare Numbers", "Combat Start",
              "Unit Initiates Combat", "Foe Initiates Combat",
@@ -687,7 +727,8 @@ NODE_KEYS = ["Math", "Compare Numbers", "Combat Start",
              "Unit is Adjacent to Ally", "Unit is Within N of Ally",
              "Ally +Bonus Strength/Magic", "Ally +Bonus Defense",
              "Ally +Bonus Resistance", "Ally +Bonus Charisma",
-             "Ally +Bonus Dexterity", "Ally +Bonus Luck"]
+             "Ally +Bonus Dexterity", "Ally +Bonus Luck",
+             "Convert T/F to Event"]
     
 class Nodes():
     def __init__(self, scene, name):

@@ -129,7 +129,6 @@ class Scene(Serializable):
             orders[y.content.eval_order.value()] = y.node_preset.hex_output
         for key, value in sorted(orders.items()):
             hex_string += value
-        print(hex_string)
 
     def serialize(self):
         nodes, edges = [], []
