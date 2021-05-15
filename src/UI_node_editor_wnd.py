@@ -63,25 +63,13 @@ class NodeEditorWnd(QWidget):
         
         self.lower_half_outliner.setMaximumWidth(400)
         self.lower_half_outliner.setMinimumWidth(400)
-
         
         self.show()
         
     def addNodes(self):
-        node2 = Nodes(self.scene, "Unit Initiates Combat").node
-        node3 = Nodes(self.scene, "Combat Start").node
-        node4 = Nodes(self.scene, "Foe Initiates Combat").node
-        node5 = Nodes(self.scene, "Unit +Bonus Strength/Magic").node
-        self.scene.added_nodes.append(node2)
-        self.scene.added_nodes.append(node3)
-        self.scene.added_nodes.append(node4)
-        self.scene.added_nodes.append(node5)
-        node3.setPos(350,250)
-        node4.setPos(300,-400)
-        node5.setPos(-300, 100)
-        
-
-        
+        node = Nodes(self.scene, "Combat Start").node
+        self.scene.added_nodes.append(node)
+       
     def loadStyleSheet(self, filename):
         file = QFile(filename)
         file.open(QFile.ReadOnly | QFile.Text)
