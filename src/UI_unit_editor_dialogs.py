@@ -4,6 +4,7 @@ from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QFont
 from src.UI_updateJSON import updateJSON
 import src.UI_colorTheme
 import shutil, os, pickle, json, sys
+from src.UI_Dialogs import confirmAction
 
 class growthRateDialog(QDialog):
     def __init__(self, parent=None):

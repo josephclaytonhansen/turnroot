@@ -27,6 +27,8 @@ class Scene(Serializable):
         self.initUI()
         self.history = SceneHistory(self)
         self.clipboard = SceneClipboard(self)
+        
+        self.NodeEditorWnd = None
     
     @property
     def has_been_modified(self):

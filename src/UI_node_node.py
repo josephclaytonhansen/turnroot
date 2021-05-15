@@ -41,7 +41,7 @@ class QDMNodeContentWidget(QWidget, Serializable):
         self.layout.setSpacing(10)
         for widget in self.contents:
             self.layout.addWidget(widget)
-            widget.setStyleSheet("background-color: "+active_theme.node_background_color+"; color:"+active_theme.node_text_color+"; font-size: "+str(data["font_size"]))
+            widget.setStyleSheet("color:"+active_theme.node_text_color+"; font-size: "+str(data["font_size"]))
             
             self.font = widget.font()
             self.font.setPointSize(16)
@@ -53,9 +53,10 @@ class QDMNodeContentWidget(QWidget, Serializable):
         self.spacer_height -= NODE_TITLE_HEIGHT
         self.spacer_height -= NODE_PADDING
         
+        
         self.eval_order = QSpinBox()
         self.eval_order.valueChanged.connect(self.change_eval_order)
-        self.eval_order.setPrefix("Step: ")
+        self.eval_order.setPrefix("Order: ")
         self.eval_order.setMinimumHeight(42)
         self.eval_order.setStyleSheet("background-color: "+active_theme.node_background_color+"; color:"+active_theme.node_text_color)
 
@@ -227,6 +228,10 @@ class Node(Serializable):
         
         self._title = title
         self.title = title
+        
+        if self.title == "Combat Start":
+            self.content.eval_order.setValue(1)
+            self.content.eval_order.setEnabled(False)
         
         self.scene.addNode(self)
         self.scene.grScene.addItem(self.grNode)

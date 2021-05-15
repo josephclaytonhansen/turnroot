@@ -29,9 +29,11 @@ class NodeEditorWnd(QWidget):
         self.setLayout(self.layout)
         
         self.scene = Scene()
+        self.scene.NodeEditorWnd = self
         self.scene.added_nodes = []
         self.scene.node_presets = NODES
         self.grScene = self.scene.grScene
+        self.grScene.NodeEditorWnd = self
         
         self.addNodes()
                 
@@ -67,7 +69,16 @@ class NodeEditorWnd(QWidget):
         
     def addNodes(self):
         node1 = Nodes(self.scene, "Math").node
+        node2 = Nodes(self.scene, "Unit Initiates Combat").node
+        node3 = Nodes(self.scene, "Combat Start").node
+        node4 = Nodes(self.scene, "Foe Initiates Combat").node
+        self.scene.added_nodes.append(node1)
+        self.scene.added_nodes.append(node2)
+        self.scene.added_nodes.append(node3)
+        self.scene.added_nodes.append(node4)
         node1.setPos(-350*2,-250*2)
+        node3.setPos(350,250)
+        node4.setPos(300,-400)
         
 
         

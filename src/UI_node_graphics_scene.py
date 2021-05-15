@@ -428,6 +428,7 @@ class QDMGraphicsScene(QGraphicsScene):
         super().__init__(parent)
         
         self.scene = scene
+        self.NodeEditorWnd = None
         self.file_name = None
         
         self.active_theme = getattr(UI_colorTheme, data["active_theme"])
