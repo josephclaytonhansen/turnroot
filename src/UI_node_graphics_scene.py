@@ -11,6 +11,8 @@ from src.UI_node_graphics_cutline import QDMCutLine
 from src.UI_Dialogs import confirmAction
 from src.UI_node_preferences_dialog import NodePreferencesDialog
 
+from src.UI_node_dialogs import addNodePreset
+
 import math, json, pickle, sys
 
 with open("src/tmp/nesc.json", "r") as readfile:
@@ -295,6 +297,8 @@ class QDMGraphicsView(QGraphicsView):
                 self.grScene.scene.clear()
             else:
                 super().keyPressEvent(event)
+                n = addNodePreset(parent=self)
+                n.exec_()
                 
         elif event.key() == Qt.Key_Q:
             if event.modifiers() == Qt.ControlModifier:
@@ -308,7 +312,6 @@ class QDMGraphicsView(QGraphicsView):
                 #back
             else:
                 super().keyPressEvent(event)
-
                 
         elif event.key() == Qt.Key_Z and event.modifiers() == Qt.ControlModifier and self.editingFlag == False:
             self.grScene.scene.history.undo()

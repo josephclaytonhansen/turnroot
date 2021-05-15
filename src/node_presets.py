@@ -463,6 +463,12 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Unit +Bonus Strength/Magic": grant_bonus_to_unit_atk, "Unit +Bonus Defense": grant_bonus_to_unit_def,
          "Unit +Bonus Resistance": grant_bonus_to_unit_res,"Unit +Bonus Charisma": grant_bonus_to_unit_chr,
          "Unit +Bonus Dexterity": grant_bonus_to_unit_dex,"Unit +Bonus Luck": grant_bonus_to_unit_luc}
+
+NODE_KEYS = ["Math", "Compare Numbers", "Combat Start",
+             "Unit Initiates Combat", "Foe Initiates Combat",
+             "Unit +Bonus Strength/Magic", "Unit +Bonus Defense",
+             "Unit +Bonus Resistance", "Unit +Bonus Charisma",
+             "Unit +Bonus Dexterity", "Unit +Bonus Luck"]
     
 class Nodes():
     def __init__(self, scene, name):

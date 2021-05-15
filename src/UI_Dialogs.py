@@ -578,3 +578,4 @@ class popupInfo(QDialog):
         self.setLayout(layout)
         self.show()
 
+
