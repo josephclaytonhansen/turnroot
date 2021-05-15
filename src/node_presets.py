@@ -4,6 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from src.UI_node_socket import Socket, S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_LIST, S_BOOLEAN
 import math, random, pickle
+import binascii
 
 class NumberMathLineEdit(QDoubleSpinBox):
     def __init__(self,place,socket,parent=None):
@@ -363,9 +364,105 @@ class foe_initiates_combat(QWidget):
             self.n.content.eval_order.setEnabled(False)
         except:
             pass
+
+class grant_bonus_to_unit(QWidget):
+    def __init__(self, scene,full_name, short_name, desc, hexe):
+        QObject.__init__(self)
+        self.scene = scene
+        self.short_name = short_name
+        self.hexe = hexe
+        self.desc = desc
+        self.full_name = full_name
+        self.title="Unit +Bonus "+self.full_name
+        self.inputs = [S_TRIGGER]
+        self.outputs=[S_TRIGGER]
+        self.hex_output = self.hexe+"2e6164643a3a"
+        self.chain = 0
+        self.current_operation = "Add ("+self.short_name+"+X)"
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.line1.setLayout(self.line1_layout)
+
+        label2 = QLabel("Grant bonus to unit "+self.desc)
+        label2.setAlignment(Qt.AlignCenter)
+        self.line1_layout.addWidget(label2)
+        
+        self.bonus_type = QComboBox()
+        self.bonus_type.addItems(["Add ("+self.short_name+"+X)", "Multiply ("+self.short_name+" * X)"])
+        self.bonus_type.currentTextChanged.connect(self.change_op)
+        
+        self.bonus_amount = QDoubleSpinBox()
+        self.bonus_amount.setRange(-15,15)
+        self.bonus_amount.setValue(1.0)
+        self.bonus_amount.setSingleStep(1.0)
+        self.bonus_amount.valueChanged.connect(self.change_bonus)
+        
+        self.contents = [self.line1, self.bonus_type, self.bonus_amount]
+        self.socket_content_index = 0
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 240)
+        self.n.node_preset = self
     
+    def updateEmission(self):
+        try:
+            self.n.outputs[0].emission = self.hex_output
+        except:
+            pass
+    
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
+            self.n.content.eval_order.setValue(self.chain)
+            self.n.content.eval_order.setEnabled(False)
+        except:
+            pass
+    
+    def change_op(self,s):
+        self.current_operation = s
+        s_dict = {"Add ("+self.short_name+"+X)":"616464", "Multiply ("+self.short_name+" * X)":"6d756c"}
+        self.hex_output = self.hexe + "2e" + s_dict[s] + "3a" + float.hex(round(self.bonus_amount.value(),1)) + "3a"
+    
+    def change_bonus(self,i):
+        s_dict = {"Add ("+self.short_name+"+X)":"616464", "Multiply ("+self.short_name+" * X)":"6d756c"}
+        self.hex_output = self.hexe + "2e" + s_dict[self.current_operation] + "3a" +float.hex(round(self.bonus_amount.value(),1)) + "3a"
+ 
+class grant_bonus_to_unit_atk(grant_bonus_to_unit):
+    def __init__(self, scene,full_name="Str/Mag", short_name= "Atk", hexe="756261", desc = "attack"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+
+class grant_bonus_to_unit_spd(grant_bonus_to_unit):
+    def __init__(self, scene,full_name="Speed", short_name= "Spd", hexe="756273", desc = "speed"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+
+class grant_bonus_to_unit_def(grant_bonus_to_unit):
+    def __init__(self, scene,full_name="Defense", short_name= "Def", hexe="756264", desc = "defense"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+
+class grant_bonus_to_unit_res(grant_bonus_to_unit):
+    def __init__(self, scene,full_name="Resistance", short_name= "Res", hexe="756272", desc = "resistance"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+            
+class grant_bonus_to_unit_chr(grant_bonus_to_unit):
+    def __init__(self, scene,full_name="Charisma", short_name= "Chr", hexe="756263", desc = "charisma"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+
+class grant_bonus_to_unit_dex(grant_bonus_to_unit):
+    def __init__(self, scene,full_name="Dexterity", short_name= "Dex", hexe="756278", desc = "dexterity"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+            
+class grant_bonus_to_unit_luc(grant_bonus_to_unit):
+    def __init__(self, scene,full_name="Luck", short_name= "Luc", hexe="75626c", desc = "luck"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+ 
 NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat Start": combat_start,
-         "Unit Initiates Combat": unit_initiates_combat, "Foe Initiates Combat": foe_initiates_combat}
+         "Unit Initiates Combat": unit_initiates_combat, "Foe Initiates Combat": foe_initiates_combat,
+         "Unit +Bonus Strength/Magic": grant_bonus_to_unit_atk, "Unit +Bonus Defense": grant_bonus_to_unit_def,
+         "Unit +Bonus Resistance": grant_bonus_to_unit_res,"Unit +Bonus Charisma": grant_bonus_to_unit_chr,
+         "Unit +Bonus Dexterity": grant_bonus_to_unit_dex,"Unit +Bonus Luck": grant_bonus_to_unit_luc}
     
 class Nodes():
     def __init__(self, scene, name):
