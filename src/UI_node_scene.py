@@ -11,6 +11,9 @@ from src.UI_node_edge import Edge
 from src.UI_node_scene_history import SceneHistory
 from src.UI_node_scene_clipboard import SceneClipboard
 
+hex_string = ""
+orders = {}
+
 class Scene(Serializable):
     def __init__(self):
         super().__init__()
@@ -63,12 +66,12 @@ class Scene(Serializable):
         
     def removeNode(self, node):
         self.nodes.remove(node)
+        self.added_nodes.remove(node)
         
     def removeEdge(self, edge):
         self.edges.remove(edge)
     
     def saveToFile(self):
-        print(self.path)
         if self.path == None or self.path == '':
             self.saveFileDialog()
             if self.path == None or self.path == '':
@@ -89,7 +92,6 @@ class Scene(Serializable):
             self.path = fileName
 
     def loadFromFile(self, dialog=True):
-        print("loading")
         if dialog:
             self.openFileDialog()
             if self.path == None:
@@ -118,6 +120,16 @@ class Scene(Serializable):
     def clear(self):
         while len(self.nodes) > 0:
             self.nodes[0].remove()
+            self.added_nodes[0].remove()
+            
+    def update_hex(self):
+        hex_string = ""
+        orders = {}
+        for y in self.added_nodes:
+            orders[y.content.eval_order.value()] = y.node_preset.hex_output
+        for key, value in sorted(orders.items()):
+            hex_string += value
+        print(hex_string)
 
     def serialize(self):
         nodes, edges = [], []

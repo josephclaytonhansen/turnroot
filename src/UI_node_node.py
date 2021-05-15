@@ -55,6 +55,7 @@ class QDMNodeContentWidget(QWidget, Serializable):
         
         
         self.eval_order = QSpinBox()
+        self.eval_order.setButtonSymbols(2)
         self.eval_order.valueChanged.connect(self.change_eval_order)
         self.eval_order.setPrefix("Order: ")
         self.eval_order.setMinimumHeight(42)
@@ -64,8 +65,8 @@ class QDMNodeContentWidget(QWidget, Serializable):
         font.setPointSize(data["font_size"])
         self.eval_order.setFont(font)
 
-        self.spacer_height -= 42
-        self.layout.addWidget(self.eval_order)
+        #self.spacer_height -= 42
+        #self.layout.addWidget(self.eval_order)
         
         self.layout.addSpacerItem(QSpacerItem(2, self.spacer_height))
     

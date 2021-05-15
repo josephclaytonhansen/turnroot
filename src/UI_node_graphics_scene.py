@@ -245,6 +245,7 @@ class QDMGraphicsView(QGraphicsView):
         for x in self.grScene.scene.added_nodes:
             x.node_preset.updateEmission()
             x.node_preset.updateReception()
+            self.grScene.scene.update_hex()
             
         if self.mode == MODE_EDGE_DRAG:
             pos = self.mapToScene(event.pos())
