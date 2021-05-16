@@ -74,6 +74,14 @@ class main(QMainWindow):
         
         self.m = mainN(parent=self)
         
+        self.setGeometry(
+    QStyle.alignedRect(
+        Qt.LeftToRight,
+        Qt.AlignCenter,
+        self.m.size(),
+        app.desktop().availableGeometry()
+        ))
+        
         self.openButton = QAction("&Open", self)
         self.openButton.triggered.connect(self.m.loadFromFile)
         self.openButton.triggered.connect(self.nameChange)

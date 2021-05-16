@@ -57,6 +57,7 @@ class main(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle(title)
+
         self.toolbar = QToolBar("")
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
@@ -95,6 +96,14 @@ class main(QMainWindow):
         
         self.m = mainN()
         self.setCentralWidget(self.m)
+        
+        self.setGeometry(
+    QStyle.alignedRect(
+        Qt.LeftToRight,
+        Qt.AlignCenter,
+        self.m.size(),
+        app.desktop().availableGeometry()
+        ))
         
         self.saveButton = QAction("&Save\tCrtl+S", self)
         self.saveButton.triggered.connect(self.m.scene.saveToFile)
