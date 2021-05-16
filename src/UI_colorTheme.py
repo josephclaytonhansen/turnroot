@@ -164,8 +164,8 @@ class rainforest(colorTheme):
     name = "Rainforest Dusk"
     tag = "rainforest"
     workspace_background_color = "#789187"
-    list_background_color = "#85A687"
-    window_text_color = "#EFE4AE"
+    list_background_color = "#6d8f6f"
+    window_text_color = "#fff4be"
     window_background_color = "#5b6e49"
     button_alt_text_color = "#F8EDC0"
     button_alt_color = "#716754"
@@ -198,7 +198,10 @@ class rainforest(colorTheme):
     unit_editor_rule_2 = "#609480"
     unit_editor_rule_3 = "#527554"
     unit_editor_rule_4 = "#334f3d"
-    unit_editor_rule_5 = "#4a5c6d"
+    unit_editor_rule_5 = "#715754"
+    
+    unit_editor_slider_color_0 = "#D88552"
+    unit_editor_slider_color_1 = "#F2E396"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -215,7 +218,8 @@ class rainforest(colorTheme):
                  node_outliner_label_3]
     
     unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
-                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5]
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5,
+                   unit_editor_slider_color_0, unit_editor_slider_color_1]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -234,7 +238,8 @@ class rainforest(colorTheme):
                         "node_outliner_label_3"]
     
     unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
-                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5",
+                          "unit_editor_slider_color_0", "unit_editor_slider_color_1"]
 
     groups = [level_editor, node_grid, unit_editor]
 
@@ -606,3 +611,6 @@ class custom(colorTheme):
                    "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
     groups = [level_editor, node_grid, unit_editor]
+
+
+

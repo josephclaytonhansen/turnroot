@@ -20,13 +20,20 @@ class colorTheme:
     node_socket_object_color = ""
     node_socket_number_color = ""
     node_socket_text_color = ""
-    node_socket_event_color = "#000B73"
+    node_socket_list_color = "#000B73"
     node_socket_boolean_color = "#535353"
     node_wire_error_color = ""
     node_outliner_label_0 = ""
     node_outliner_label_1 = ""
     node_outliner_label_2 = ""
     node_outliner_label_3 = ""
+    
+    unit_editor_rule_0 = ""
+    unit_editor_rule_1 = ""
+    unit_editor_rule_2 = ""
+    unit_editor_rule_3 = ""
+    unit_editor_rule_4 = ""
+    unit_editor_rule_5 = ""
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -37,10 +44,13 @@ class colorTheme:
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
+    
+    unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -53,12 +63,15 @@ class colorTheme:
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
+    
+    unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
-    groups = [level_editor, node_grid]
+    groups = [level_editor, node_grid, unit_editor]
 
 class midnight_spark(colorTheme):
     name = "Midnight Spark"
@@ -106,7 +119,7 @@ class sand_dunes(colorTheme):
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#968080"
+    node_socket_list_color = "#968080"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#f74b20"
     
@@ -124,7 +137,7 @@ class sand_dunes(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
@@ -140,7 +153,7 @@ class sand_dunes(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
@@ -151,8 +164,8 @@ class rainforest(colorTheme):
     name = "Rainforest Dusk"
     tag = "rainforest"
     workspace_background_color = "#789187"
-    list_background_color = "#85A687"
-    window_text_color = "#EFE4AE"
+    list_background_color = "#6d8f6f"
+    window_text_color = "#fff4be"
     window_background_color = "#5b6e49"
     button_alt_text_color = "#F8EDC0"
     button_alt_color = "#716754"
@@ -171,7 +184,7 @@ class rainforest(colorTheme):
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#968080"
+    node_socket_list_color = "#968080"
     node_socket_boolean_color = "#2f3aa3"
 
     node_wire_error_color = "#7B2523"
@@ -179,6 +192,16 @@ class rainforest(colorTheme):
     node_outliner_label_1 = "#F2E396"
     node_outliner_label_2 = "#7BBAB3"
     node_outliner_label_3 = "#DACDA4"
+    
+    unit_editor_rule_0 = "#d4f59e"
+    unit_editor_rule_1 = "#92c47f"
+    unit_editor_rule_2 = "#609480"
+    unit_editor_rule_3 = "#527554"
+    unit_editor_rule_4 = "#334f3d"
+    unit_editor_rule_5 = "#715754"
+    
+    unit_editor_slider_color_0 = "#D88552"
+    unit_editor_slider_color_1 = "#F2E396"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -189,10 +212,14 @@ class rainforest(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
+    
+    unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5,
+                   unit_editor_slider_color_0, unit_editor_slider_color_1]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -205,12 +232,16 @@ class rainforest(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
+    
+    unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5",
+                          "unit_editor_slider_color_0", "unit_editor_slider_color_1"]
 
-    groups = [level_editor, node_grid]
+    groups = [level_editor, node_grid, unit_editor]
 
 class charcoal(colorTheme):
     name = "Charcoal"
@@ -234,13 +265,23 @@ class charcoal(colorTheme):
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#808080"
+    node_socket_list_color = "#808080"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#FF3333"
     node_outliner_label_0 = "#D95F80"
     node_outliner_label_1 = "#5a82d1"
     node_outliner_label_2 = "#F27B50"
     node_outliner_label_3 = "#D7D9D0"
+    
+    unit_editor_rule_0 = "#f5cc7f"
+    unit_editor_rule_1 = "#edceb7"
+    unit_editor_rule_2 = "#F2AE30"
+    unit_editor_rule_3 = "#d97904"
+    unit_editor_rule_4 = "#a35e07"
+    unit_editor_rule_5 = "#262523"
+    
+    unit_editor_slider_color_0 = "#D95F80"
+    unit_editor_slider_color_1 = "#5a82d1"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -251,10 +292,14 @@ class charcoal(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
+    
+    unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5,
+                   unit_editor_slider_color_0, unit_editor_slider_color_1]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -267,13 +312,17 @@ class charcoal(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
+    
+    unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5",
+                          "unit_editor_slider_color_0", "unit_editor_slider_color_1"]
 
-    groups = [level_editor, node_grid]
-
+    groups = [level_editor, node_grid, unit_editor]
+    
 class ocean_waves(colorTheme):
     name = "Ocean Waves"
     tag = "ocean_waves"
@@ -296,13 +345,23 @@ class ocean_waves(colorTheme):
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#FFFFFF"
+    node_socket_list_color = "#FFFFFF"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#C02D0C"
     node_outliner_label_0 = "#F29472"
     node_outliner_label_1 = "#5FE3E3"
     node_outliner_label_2 = "#009EFF"
     node_outliner_label_3 = "#F2D49B"
+    
+    unit_editor_rule_0 = "#D9D4D2"
+    unit_editor_rule_1 = "#9BBFB2"
+    unit_editor_rule_2 = "#60A69F"
+    unit_editor_rule_3 = "#4D6873"
+    unit_editor_rule_4 = "#1B4859"
+    unit_editor_rule_5 = "#0a1e26"
+    
+    unit_editor_slider_color_0 = "#F29472"
+    unit_editor_slider_color_1 = "#5FE3E3"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -313,10 +372,14 @@ class ocean_waves(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
+    
+    unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5,
+                   unit_editor_slider_color_0, unit_editor_slider_color_1]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -329,13 +392,17 @@ class ocean_waves(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
+    
+    unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5",
+                          "unit_editor_slider_color_0", "unit_editor_slider_color_1"]
 
-    groups = [level_editor, node_grid]
-
+    groups = [level_editor, node_grid, unit_editor]
+    
 class chocolate(colorTheme):
     name = "Chocolate"
     tag = "chocolate"
@@ -362,7 +429,7 @@ class chocolate(colorTheme):
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#968080"
+    node_socket_list_color = "#968080"
     node_socket_boolean_color = "#2f3aa3"
 
     node_wire_error_color = "#7B2523"
@@ -381,7 +448,7 @@ class chocolate(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
@@ -397,7 +464,7 @@ class chocolate(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
@@ -429,7 +496,7 @@ class chili_pepper(colorTheme):
     node_socket_object_color = "#FF7700"
     node_socket_number_color = "#009EFF"
     node_socket_text_color = "#FFE099"
-    node_socket_event_color = "#968080"
+    node_socket_list_color = "#968080"
     node_socket_boolean_color = "#2f3aa3"
     node_wire_error_color = "#b8304e"
     
@@ -447,7 +514,7 @@ class chili_pepper(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
@@ -463,7 +530,7 @@ class chili_pepper(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
@@ -492,13 +559,20 @@ class custom(colorTheme):
     node_socket_object_color = "#000000"
     node_socket_number_color = "#000000"
     node_socket_text_color = "#000000"
-    node_socket_event_color = "#000000"
+    node_socket_list_color = "#000000"
     node_socket_boolean_color = "#000000"
     node_wire_error_color = "#000000"
     node_outliner_label_0 = ""
     node_outliner_label_1 = ""
     node_outliner_label_2 = ""
     node_outliner_label_3 = ""
+
+    unit_editor_rule_0 = "#FFFFFF"
+    unit_editor_rule_1 = "#FFFFFF"
+    unit_editor_rule_2 = "#000000"
+    unit_editor_rule_3 = "#000000"
+    unit_editor_rule_4 = "#000000"
+    unit_editor_rule_5 = "#000000"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -509,10 +583,13 @@ class custom(colorTheme):
                  node_title_background_color, node_background_color,
                  node_text_color, node_wire_color, node_socket_trigger_color,
                  node_socket_file_color, node_socket_object_color,
-                 node_socket_number_color, node_socket_text_color, node_socket_event_color,
+                 node_socket_number_color, node_socket_text_color, node_socket_list_color,
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
+    
+    unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -525,16 +602,15 @@ class custom(colorTheme):
                  "node_title_background_color", "node_background_color",
                  "node_text_color", "node_wire_color", "node_socket_trigger_color",
                  "node_socket_file_color", "node_socket_object_color",
-                 "node_socket_number_color", "node_socket_text_color","node_socket_event_color",
+                 "node_socket_number_color", "node_socket_text_color","node_socket_list_color",
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
+    
+    unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
-    groups = [level_editor, node_grid]
-
-
-
-
+    groups = [level_editor, node_grid, unit_editor]
 
 
 

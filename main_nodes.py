@@ -250,7 +250,7 @@ class main(QMainWindow):
         self.tmp_pos = QCursor.pos()
         items_keys = self.m.scene.node_keys
         items = self.m.scene.node_presets
-        context.setStyleSheet("background-color: "+active_theme.list_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;font-size: "+str(data["font_size"]))
+        context.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         flow = QMenu("Events/Flow")
         nop = QMenu("Numbers/Operations")
         ub = QMenu("Unit Bonus")
@@ -260,7 +260,7 @@ class main(QMainWindow):
         
         submenus = [flow,nop,ub,ab,fp,se]
         for y in submenus:
-            y.setStyleSheet("background-color: "+active_theme.list_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;font-size: "+str(data["font_size"]))
+            y.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         
         nop_actions = [QAction("Math", self),QAction("Compare Numbers", self),QAction("Convert T/F to Event", self)]
         for n in nop_actions:
@@ -289,7 +289,7 @@ class main(QMainWindow):
             n.triggered.connect(self.submenu_item)
     
         for y in submenus:
-            y.setStyleSheet("background-color: "+active_theme.list_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;font-size: "+str(data["font_size"]))
+            y.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
             context.addMenu(y)
             
         context.exec_(self.mapToGlobal(pos))
