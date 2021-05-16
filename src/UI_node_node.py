@@ -41,7 +41,7 @@ class QDMNodeContentWidget(QWidget, Serializable):
         self.layout.setSpacing(10)
         for widget in self.contents:
             self.layout.addWidget(widget)
-            widget.setStyleSheet("color:"+active_theme.node_text_color+"; font-size: "+str(data["font_size"]))
+            widget.setStyleSheet("background-color: "+active_theme.node_background_color+"; color:"+active_theme.node_text_color+"; font-size: "+str(data["font_size"]))
             
             self.font = widget.font()
             self.font.setPointSize(16)

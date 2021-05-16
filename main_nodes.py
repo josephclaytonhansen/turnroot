@@ -271,13 +271,15 @@ class main(QMainWindow):
         for y in submenus:
             y.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         
-        nop_actions = [QAction("Math", self),QAction("Compare Numbers", self),QAction("Convert T/F to Event", self)]
+        nop_actions = [QAction("Math", self),QAction("Compare Numbers", self),QAction("Convert T/F to Event", self), QAction("And", self)]
         for n in nop_actions:
             nop.addAction(n)
             n.triggered.connect(self.submenu_item)
             
         flow_actions = [QAction("Combat Start", self),QAction("Unit Initiates Combat", self),QAction("Foe Initiates Combat", self),
-                        QAction("Unit is Adjacent to Ally", self), QAction("Unit is Within N of Ally", self)]
+                        QAction("Unit is Adjacent to Ally", self), QAction("Unit is Within N of Ally", self),
+                        QAction("Unit Using Weapon Type", self), QAction("Foe Using Weapon Type", self), QAction("Unit Health Percentage", self),
+                        QAction("Foe Health Percentage", self)]
         
         for n in flow_actions:
             flow.addAction(n)
