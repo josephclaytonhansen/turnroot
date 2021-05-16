@@ -24,9 +24,10 @@ class addNodePreset(QDialog):
         
         self.add_options = NODE_KEYS
         self.add_dd = QComboBox()
+        self.add_dd.setMaxVisibleItems(10)
         self.add_dd.textHighlighted.connect(self.add_enable)
         self.add_dd.currentTextChanged.connect(self.add_dd_changed)
-        self.add_dd.setStyleSheet("background-color: "+self.active_theme.list_background_color+"; selection-background-color:"+self.active_theme.window_background_color)
+        self.add_dd.setStyleSheet("QComboBox { combobox-popup: 0; };"+"background-color: "+self.active_theme.list_background_color+"; selection-background-color:"+self.active_theme.window_background_color)
         
         self.add_dd.addItem("--Select--")
         self.add_dd.addItems(self.add_options)
