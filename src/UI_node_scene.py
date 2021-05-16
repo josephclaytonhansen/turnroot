@@ -60,6 +60,7 @@ class Scene(Serializable):
     
     def addNode(self, node):
         self.nodes.append(node)
+        self.added_nodes.append(node)
     
     def addEdge(self, edge):
         self.edges.append(edge)
@@ -123,12 +124,27 @@ class Scene(Serializable):
             self.added_nodes[0].remove()
             
     def update_hex(self):
-        hex_string = ""
-        orders = {}
+        long_term_storage = ""
+        l = []
+        tmp_used_data = []
+        tmp_order = []
         for y in self.added_nodes:
-            orders[y.content.eval_order.value()] = y.node_preset.hex_output
-        for key, value in sorted(orders.items()):
-            hex_string += value
+            l.append([y.content.eval_order.value(), y.node_preset.hex_output])
+        for x in range(len(l)):
+            c = l[x][0]
+            tmp_order.append(c)
+        tmp_order = sorted(tmp_order)
+
+        for o in tmp_order:
+           for x in range(len(l)):
+               c = l[x][0]
+               d = l[x][1]
+               if c == o:
+                   if d not in tmp_used_data:
+                       tmp_used_data.append(d)
+                       
+        long_term_storage = "".join(tmp_used_data)
+        print(long_term_storage)
 
     def serialize(self):
         nodes, edges = [], []

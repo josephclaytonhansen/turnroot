@@ -319,7 +319,7 @@ class unit_initiates_combat(QWidget):
         try:
             self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
 
-            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 2
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
                 #self.chain+=len(self.n.inputs[0].edges)-1
             self.n.content.eval_order.setValue(self.chain)
             self.n.content.eval_order.setEnabled(False)
@@ -362,7 +362,7 @@ class foe_initiates_combat(QWidget):
         try:
             self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
 
-            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 2
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
                 #self.chain+=len(self.n.inputs[0].edges)-1
             self.n.content.eval_order.setValue(self.chain)
             self.n.content.eval_order.setEnabled(False)
@@ -420,7 +420,7 @@ class grant_bonus_to_unit(QWidget):
         try:
             self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
 
-            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 2
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
                 #self.chain+=len(self.n.inputs[0].edges)-1
             self.n.content.eval_order.setValue(self.chain)
             self.n.content.eval_order.setEnabled(False)
@@ -512,7 +512,7 @@ class grant_bonus_to_ally(QWidget):
         try:
             self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
 
-            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 2
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
                 #self.chain+=len(self.n.inputs[0].edges)-1
             self.n.content.eval_order.setValue(self.chain)
             self.n.content.eval_order.setEnabled(False)
@@ -592,7 +592,7 @@ class unit_is_close_to_ally(QWidget):
         try:
             self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
 
-            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 2
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
                 #self.chain+=len(self.n.inputs[0].edges)-1
             self.n.content.eval_order.setValue(self.chain)
             self.n.content.eval_order.setEnabled(False)
@@ -701,7 +701,7 @@ class bool_to_event(QWidget):
         try:
             self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
 
-            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 2
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
                 #self.chain+=len(self.n.inputs[0].edges)-1
             self.n.content.eval_order.setValue(self.chain)
             self.n.content.eval_order.setEnabled(False)
