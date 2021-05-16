@@ -6,7 +6,7 @@ from src.UI_node_node import Node
 from src.UI_node_scene import Scene
 from src.UI_node_socket import (Socket,S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_TEXT, S_LIST, S_BOOLEAN)
 from src.UI_node_edge import Edge, EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT
-from src.node_presets import Nodes, NODES
+from src.node_presets import Nodes, NODES, NODE_KEYS
 
 from src.UI_node_outliner import outlinerWnd, OutlinerScene
 
@@ -32,6 +32,7 @@ class NodeEditorWnd(QWidget):
         self.scene.NodeEditorWnd = self
         self.scene.added_nodes = []
         self.scene.node_presets = NODES
+        self.scene.node_keys = NODE_KEYS
         self.grScene = self.scene.grScene
         self.grScene.NodeEditorWnd = self
         

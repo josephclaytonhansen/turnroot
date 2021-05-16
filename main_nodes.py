@@ -3,12 +3,13 @@ import src.UI_colorTheme as UI_colorTheme
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QSize, Qt, pyqtSignal
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap
+from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor
 
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from src.UI_updateJSON import updateJSON
 from src.UI_Dialogs import confirmAction, infoClose, switchEditorDialog, REPLACE_WINDOW, NEW_WINDOW
 from src.UI_node_editor_wnd import NodeEditorWnd
+from src.node_presets import NODES, Nodes
 from src.UI_ProxyStyle import ProxyStyle
 from src.UI_node_preferences_dialog import NodePreferencesDialog
 import qtmodern.styles
@@ -60,6 +61,9 @@ class main(QMainWindow):
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
         self.toolbar.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.context_menu)
         
         self.optionsButton = QAction(QIcon("src/ui_icons/white/settings-17-32.png"),"Options (S)", self)
         self.helpButton = QAction(QIcon("src/ui_icons/white/question-mark-4-32.png"),"Read docs (H)", self)
@@ -240,7 +244,65 @@ class main(QMainWindow):
                             tmp_reason.write(OPEN_NEW_FILE)
                     
                 os.execl(sys.executable, sys.executable, *sys.argv)
+                
+    def context_menu(self, pos):
+        context = QMenu(self)
+        self.tmp_pos = QCursor.pos()
+        items_keys = self.m.scene.node_keys
+        items = self.m.scene.node_presets
+        context.setStyleSheet("background-color: "+active_theme.list_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;font-size: "+str(data["font_size"]))
+        flow = QMenu("Events/Flow")
+        nop = QMenu("Numbers/Operations")
+        ub = QMenu("Unit Bonus")
+        ab = QMenu("Ally Bonus")
+        fp = QMenu("Foe Penalties")
+        se = QMenu("Special Effects")
         
+        submenus = [flow,nop,ub,ab,fp,se]
+        for y in submenus:
+            y.setStyleSheet("background-color: "+active_theme.list_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;font-size: "+str(data["font_size"]))
+        
+        nop_actions = [QAction("Math", self),QAction("Compare Numbers", self),QAction("Convert T/F to Event", self)]
+        for n in nop_actions:
+            nop.addAction(n)
+            n.triggered.connect(self.submenu_item)
+            
+        flow_actions = [QAction("Combat Start", self),QAction("Unit Initiates Combat", self),QAction("Foe Initiates Combat", self),
+                        QAction("Unit is Adjacent to Ally", self), QAction("Unit is Within N of Ally", self)]
+        
+        for n in flow_actions:
+            flow.addAction(n)
+            n.triggered.connect(self.submenu_item)
+            
+        ub_actions = [QAction("Unit +Bonus Strength/Magic", self),QAction("Unit +Bonus Defense", self),QAction("Unit +Bonus Resistance", self),
+                        QAction("Unit +Bonus Charisma", self), QAction("Unit +Bonus Dexterity", self),QAction("Unit +Bonus Luck", self)]
+        
+        for n in ub_actions:
+            ub.addAction(n)
+            n.triggered.connect(self.submenu_item)
+        
+        ab_actions = [QAction("Ally +Bonus Strength/Magic", self),QAction("Ally +Bonus Defense", self),QAction("Ally +Bonus Resistance", self),
+                        QAction("Ally +Bonus Charisma", self), QAction("Ally +Bonus Dexterity", self),QAction("Ally +Bonus Luck", self)]
+        
+        for n in ab_actions:
+            ab.addAction(n)
+            n.triggered.connect(self.submenu_item)
+    
+        for y in submenus:
+            y.setStyleSheet("background-color: "+active_theme.list_background_color+"; color: "+active_theme.window_text_color+"; padding: 2px; font:bold;font-size: "+str(data["font_size"]))
+            context.addMenu(y)
+            
+        context.exec_(self.mapToGlobal(pos))
+    
+    def submenu_item(self):
+        s = self.sender().text()
+        self.chosen_node = NODES[s]
+        g = Nodes(self.m.scene, s).node
+        self.m.scene.added_nodes.append(g)
+        i = self.m.view.mapFromGlobal(self.tmp_pos)
+        h = self.m.view.mapToScene(i.x(), i.y())
+        g.setPos(h.x(), h.y())
+
 window = main()
 window.show()
 a = app.exec_()
