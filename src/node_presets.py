@@ -354,6 +354,103 @@ class and_event(QWidget):
             self.n.content.eval_order.setEnabled(False)
         except:
             pass
+
+class or_event(QWidget):
+    def __init__(self, scene):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title="A or B"
+        self.inputs = [S_BOOLEAN, S_BOOLEAN]
+        self.outputs=[S_TRIGGER]
+        self.hex_output = "6f7263"
+        self.chain = 1
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.line1.setLayout(self.line1_layout)
+
+        label1 = QLabel("If True")
+        label1.setAlignment(Qt.AlignLeft)
+        self.line1_layout.addWidget(label1)
+
+        label2 = QLabel("Event")
+        label2.setAlignment(Qt.AlignRight)
+        self.line1_layout.addWidget(label2)
+        
+        label3= QLabel("If True")
+        label3.setAlignment(Qt.AlignLeft)
+        
+        self.contents = [self.line1, label3]
+        self.socket_content_index = 0
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160)
+        self.n.node_preset = self
+    
+    def updateEmission(self):
+        try:
+            self.n.outputs[0].emission = self.hex_output
+        except:
+            pass
+    
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
+                #self.chain+=len(self.n.inputs[0].edges)-1
+            self.n.content.eval_order.setValue(self.chain)
+            self.n.content.eval_order.setEnabled(False)
+        except:
+            pass
+
+class not_event(QWidget):
+    def __init__(self, scene):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title="Not (If A is False, True)"
+        self.inputs = [S_BOOLEAN]
+        self.outputs=[S_BOOLEAN]
+        self.hex_output = "6e6f74"
+        self.chain = 1
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.line1.setLayout(self.line1_layout)
+
+        label1 = QLabel("If True")
+        label1.setAlignment(Qt.AlignLeft)
+        self.line1_layout.addWidget(label1)
+
+        label2 = QLabel("T/F")
+        label2.setAlignment(Qt.AlignRight)
+        self.line1_layout.addWidget(label2)
+        
+        self.contents = [self.line1]
+        self.socket_content_index = 0
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160)
+        self.n.node_preset = self
+    
+    def updateEmission(self):
+        try:
+            self.n.outputs[0].emission = self.hex_output
+        except:
+            pass
+    
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
+                #self.chain+=len(self.n.inputs[0].edges)-1
+            self.n.content.eval_order.setValue(self.chain)
+            self.n.content.eval_order.setEnabled(False)
+        except:
+            pass
     
 NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat Start": combat_start,
          "Unit Initiates Combat": unit_initiates_combat, "Foe Initiates Combat": foe_initiates_combat,
@@ -366,7 +463,7 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Ally +Bonus Dexterity": grant_bonus_to_ally_dex,"Ally +Bonus Luck": grant_bonus_to_ally_luc,
          "Convert T/F to Event": bool_to_event, "And": and_event, "Unit Using Weapon Type": unit_using_weapon_type,
          "Foe Using Weapon Type": foe_using_weapon_type, "Unit Health Percentage":unit_health_percentage,
-         "Foe Health Percentage":foe_health_percentage}
+         "Foe Health Percentage":foe_health_percentage, "A or B": or_event, "Not (If A is False, True)": not_event}
 
         
 NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
@@ -380,7 +477,8 @@ NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
              "Ally +Bonus Dexterity", "Ally +Bonus Luck",
              "Convert T/F to Event", "And", "Unit Using Weapon Type",
              "Foe Using Weapon Type", "Unit Health Percentage",
-                    "Foe Health Percentage"])
+                    "Foe Health Percentage", "Not (If A is False, True)",
+                    "A or B"])
     
 class Nodes():
     def __init__(self, scene, name):

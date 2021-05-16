@@ -523,7 +523,7 @@ class health_percentage(QWidget):
         self.direction_select.currentTextChanged.connect(self.change_direction)
         
         self.amount_set = QSpinBox()
-        self.amount_set.setSuffix("/%")
+        self.amount_set.setSuffix("%")
         self.amount_set.setRange(0,100)
         self.amount_set.setValue(100)
         self.amount_set.setSingleStep(1)
