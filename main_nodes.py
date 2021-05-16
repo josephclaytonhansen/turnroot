@@ -280,7 +280,9 @@ class main(QMainWindow):
         flow_actions = [QAction("Combat Start", self),QAction("Unit Initiates Combat", self),QAction("Foe Initiates Combat", self),
                         QAction("Unit is Adjacent to Ally", self), QAction("Unit is Within N of Ally", self),
                         QAction("Unit Using Weapon Type", self), QAction("Foe Using Weapon Type", self), QAction("Unit Health Percentage", self),
-                        QAction("Foe Health Percentage", self)]
+                        QAction("Foe Health Percentage", self), QAction("Unit is Mounted", self), QAction("Foe is Mounted", self),
+                        QAction("Foe has Bonus", self), QAction("Foe has Penalty", self), QAction("Unit has Bonus", self),
+                        QAction("Unit has Penalty", self)]
         
         for n in flow_actions:
             flow.addAction(n)

@@ -13,7 +13,9 @@ from src.node_presets_passive_skills import (combat_start, unit_initiates_combat
                                              grant_bonus_to_ally_res,grant_bonus_to_ally_chr,
                                              grant_bonus_to_ally_dex,grant_bonus_to_ally_luc,
                                              unit_using_weapon_type, foe_using_weapon_type,
-                                             unit_health_percentage, foe_health_percentage)
+                                             unit_health_percentage, foe_health_percentage,
+                                             foe_is_mounted, unit_is_mounted,foe_has_bonus,
+                                             foe_has_penalty,unit_has_bonus,unit_has_penalty)
 
 from src.skeletons.weapon_types import weaponTypes
 import math, random, pickle
@@ -463,7 +465,9 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Ally +Bonus Dexterity": grant_bonus_to_ally_dex,"Ally +Bonus Luck": grant_bonus_to_ally_luc,
          "Convert T/F to Event": bool_to_event, "And": and_event, "Unit Using Weapon Type": unit_using_weapon_type,
          "Foe Using Weapon Type": foe_using_weapon_type, "Unit Health Percentage":unit_health_percentage,
-         "Foe Health Percentage":foe_health_percentage, "A or B": or_event, "Not (If A is False, True)": not_event}
+         "Foe Health Percentage":foe_health_percentage, "A or B": or_event, "Not (If A is False, True)": not_event,
+         "Foe is Mounted":foe_is_mounted, "Unit is Mounted":unit_is_mounted, "Foe Has Bonus":foe_has_bonus,
+         "Foe Has Penalty":foe_has_penalty,"Unit Has Penalty":unit_has_bonus,"Unit has Penalty": unit_has_penalty}
 
         
 NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
@@ -478,7 +482,9 @@ NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
              "Convert T/F to Event", "And", "Unit Using Weapon Type",
              "Foe Using Weapon Type", "Unit Health Percentage",
                     "Foe Health Percentage", "Not (If A is False, True)",
-                    "A or B"])
+                    "A or B", "Foe is Mounted", "Unit is Mounted",
+                    "Unit Has Penalty", "Unit Has Bonus", "Foe Has Penalty",
+                    "Foe Has Bonus"])
     
 class Nodes():
     def __init__(self, scene, name):

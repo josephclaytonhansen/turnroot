@@ -561,3 +561,121 @@ class unit_health_percentage(health_percentage):
 class foe_health_percentage(health_percentage):
     def __init__(self, scene, hexe="666870", which = "Foe"):
             super().__init__(scene, which, hexe)
+
+class is_mounted(QWidget):
+    def __init__(self, scene, which, hexe):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title=which+" is Mounted"
+        self.inputs = [S_TRIGGER]
+        self.outputs=[S_BOOLEAN]
+        self.hex_output = hexe
+        self.hexe = hexe
+        self.chain = 1
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.line1.setLayout(self.line1_layout)
+
+        label1 = QLabel("Event")
+        label1.setAlignment(Qt.AlignLeft)
+        self.line1_layout.addWidget(label1)
+
+        label2 = QLabel("T/F")
+        label2.setAlignment(Qt.AlignRight)
+        self.line1_layout.addWidget(label2)
+        
+        self.contents = [self.line1]
+        self.socket_content_index = 0
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160)
+        self.n.node_preset = self
+    
+    def updateEmission(self):
+        try:
+            self.n.outputs[0].emission = self.hex_output
+        except:
+            pass
+    
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
+            self.n.content.eval_order.setValue(self.chain)
+            self.n.content.eval_order.setEnabled(False)
+        except:
+            pass
+
+class foe_is_mounted(is_mounted):
+    def __init__(self, scene, hexe="66696d", which = "Foe"):
+            super().__init__(scene, which, hexe)
+    
+class unit_is_mounted(is_mounted):
+    def __init__(self, scene, hexe="75696d", which = "Unit"):
+            super().__init__(scene, which, hexe)
+            
+class has_bonus_or_penalty(QWidget):
+    def __init__(self, scene, which, direction,hexe):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title=which+" has "+direction
+        self.inputs = [S_TRIGGER]
+        self.outputs=[S_BOOLEAN]
+        self.hex_output = hexe
+        self.hexe = hexe
+        self.chain = 1
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.line1.setLayout(self.line1_layout)
+
+        label1 = QLabel("Event")
+        label1.setAlignment(Qt.AlignLeft)
+        self.line1_layout.addWidget(label1)
+
+        label2 = QLabel("T/F")
+        label2.setAlignment(Qt.AlignRight)
+        self.line1_layout.addWidget(label2)
+        
+        self.contents = [self.line1]
+        self.socket_content_index = 0
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160)
+        self.n.node_preset = self
+    
+    def updateEmission(self):
+        try:
+            self.n.outputs[0].emission = self.hex_output
+        except:
+            pass
+    
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
+            self.n.content.eval_order.setValue(self.chain)
+            self.n.content.eval_order.setEnabled(False)
+        except:
+            pass
+
+class foe_has_bonus(has_bonus_or_penalty):
+    def __init__(self, scene, hexe="666862", which = "Foe", direction = "Bonus"):
+            super().__init__(scene, which, direction, hexe)
+    
+class foe_has_penalty(has_bonus_or_penalty):
+    def __init__(self, scene, hexe="666870", which = "Foe", direction = "Penalty"):
+            super().__init__(scene, which, direction, hexe)
+            
+class unit_has_bonus(has_bonus_or_penalty):
+    def __init__(self, scene, hexe="756862", which = "Unit", direction = "Bonus"):
+            super().__init__(scene, which, direction, hexe)
+    
+class unit_has_penalty(has_bonus_or_penalty):
+    def __init__(self, scene, hexe="756870", which = "Unit", direction = "Penalty"):
+            super().__init__(scene, which, direction, hexe)
