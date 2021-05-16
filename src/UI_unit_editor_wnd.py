@@ -1059,7 +1059,7 @@ class UnitEditorWnd(QWidget):
             else:
                 self.status.setCurrentText("Protagonist")
                 
-            for weapon_type in ["sword", "axe", "lance", "bow", "dagger", "hands", "radiant magic", "void magic", "elemental magic", "staff"]:
+            for weapon_type in weaponTypes().data:
                 if weapon_type in self.unit.affinities:
                     self.growth_multipliers_widgets[weapon_type].setValue(round(self.unit.affinities[weapon_type],1))
                 

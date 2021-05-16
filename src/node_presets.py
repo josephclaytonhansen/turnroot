@@ -672,7 +672,7 @@ class bool_to_event(QWidget):
         self.title="Convert T/F to Event"
         self.inputs = [S_BOOLEAN]
         self.outputs=[S_TRIGGER]
-        self.hex_output = "637073"
+        self.hex_output = "627465"
         self.chain = 1
         
         self.line1 = QWidget()

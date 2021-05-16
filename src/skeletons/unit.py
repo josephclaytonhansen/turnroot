@@ -67,6 +67,8 @@ class Unit():
         
         self.weapon_exps = {}
         self.current_weapon_levels = {}
+        for stat in universal_stats:
+            self.current_weapon_levels[stat] = None
         self.unit_classes_exps = {} 
         
         self.unit_class = None
