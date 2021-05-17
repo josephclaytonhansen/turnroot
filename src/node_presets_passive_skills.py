@@ -562,11 +562,12 @@ class foe_health_percentage(health_percentage):
     def __init__(self, scene, hexe="666870", which = "Foe"):
             super().__init__(scene, which, hexe)
 
-class is_mounted(QWidget):
-    def __init__(self, scene, which, hexe):
+class is_(QWidget):
+    def __init__(self, isa,scene, which, hexe):
         QObject.__init__(self)
         self.scene = scene
-        self.title=which+" is Mounted"
+        self.title=which+" is "+isa
+        self.isa = isa
         self.inputs = [S_TRIGGER]
         self.outputs=[S_BOOLEAN]
         self.hex_output = hexe
@@ -609,13 +610,25 @@ class is_mounted(QWidget):
         except:
             pass
 
-class foe_is_mounted(is_mounted):
-    def __init__(self, scene, hexe="66696d", which = "Foe"):
-            super().__init__(scene, which, hexe)
+class foe_is_mounted(is_):
+    def __init__(self, scene, hexe="66696d", which = "Foe", isa = "Mounted"):
+            super().__init__(isa, scene, which, hexe)
     
-class unit_is_mounted(is_mounted):
-    def __init__(self, scene, hexe="75696d", which = "Unit"):
-            super().__init__(scene, which, hexe)
+class unit_is_mounted(is_):
+    def __init__(self, scene, hexe="75696d", which = "Unit", isa = "Mounted"):
+            super().__init__(isa, scene, which, hexe)
+            
+class ally_is_mounted(is_):
+    def __init__(self, scene, hexe="61696d", which = "Ally", isa = "Mounted"):
+            super().__init__(isa, scene, which, hexe)
+
+class ally_is_male(is_):
+    def __init__(self, scene, hexe="616d6e", which = "Ally", isa = "Male"):
+            super().__init__(isa, scene, which, hexe)
+
+class ally_is_female(is_):
+    def __init__(self, scene, hexe="61776e", which = "Ally", isa = "Female"):
+            super().__init__(isa, scene, which, hexe)
             
 class has_bonus_or_penalty(QWidget):
     def __init__(self, scene, which, direction,hexe):

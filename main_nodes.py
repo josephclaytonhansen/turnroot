@@ -265,9 +265,10 @@ class main(QMainWindow):
         ub = QMenu("Unit Bonus")
         ab = QMenu("Ally Bonus")
         fp = QMenu("Foe Penalties")
+        ui = QMenu("Unit Improvements")
         se = QMenu("Special Effects")
         
-        submenus = [flow,nop,ub,ab,fp,se]
+        submenus = [flow,nop,ub,ab,fp,ui,se]
         for y in submenus:
             y.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         
@@ -282,7 +283,8 @@ class main(QMainWindow):
                         QAction("Unit Using Weapon Type", self), QAction("Foe Using Weapon Type", self), QAction("Unit Health Percentage", self),
                         QAction("Foe Health Percentage", self), QAction("Unit is Mounted", self), QAction("Foe is Mounted", self),
                         QAction("Foe has Bonus", self), QAction("Foe has Penalty", self), QAction("Unit has Bonus", self),
-                        QAction("Unit has Penalty", self)]
+                        QAction("Unit has Penalty", self), QAction("Ally is Mounted", self), QAction("Ally is Female", self),
+                        QAction("Ally is Male", self)]
         
         for n in flow_actions:
             flow.addAction(n)
@@ -290,7 +292,7 @@ class main(QMainWindow):
             
         ub_actions = [QAction("Unit +Bonus Strength/Magic", self),QAction("Unit +Bonus Defense", self),QAction("Unit +Bonus Resistance", self),
                         QAction("Unit +Bonus Charisma", self), QAction("Unit +Bonus Dexterity", self),QAction("Unit +Bonus Luck", self),
-                      QAction("Earn Extra Weapon EXP", self), QAction("Earn Extra Level EXP", self)]
+                      QAction("Earn Extra Weapon EXP", self), QAction("Earn Extra Level EXP", self), QAction("Unit +Bonus Critical",self)]
         
         for n in ub_actions:
             ub.addAction(n)
@@ -301,6 +303,11 @@ class main(QMainWindow):
         
         for n in ab_actions:
             ab.addAction(n)
+            n.triggered.connect(self.submenu_item)
+            
+        ui_actions = [QAction("Unit +Hit Chance", self),QAction("Unit +Dodge Chance", self),QAction("Unit +Critical Chance", self)]
+        for n in ui_actions:
+            ui.addAction(n)
             n.triggered.connect(self.submenu_item)
     
         for y in submenus:

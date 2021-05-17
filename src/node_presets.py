@@ -16,7 +16,11 @@ from src.node_presets_passive_skills import (combat_start, unit_initiates_combat
                                              unit_health_percentage, foe_health_percentage,
                                              foe_is_mounted, unit_is_mounted,foe_has_bonus,
                                              foe_has_penalty,unit_has_bonus,unit_has_penalty,
-                                             weapon_experience_extra, level_experience_extra)
+                                             weapon_experience_extra, level_experience_extra,
+                                             ally_is_mounted, ally_is_male, ally_is_female)
+
+from src.node_presets_combat_skills import (grant_bonus_to_unit_hit, grant_bonus_to_unit_avo,
+                                            grant_bonus_to_unit_crt)
 
 from src.skeletons.weapon_types import weaponTypes
 import math, random, pickle
@@ -469,7 +473,11 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Foe Health Percentage":foe_health_percentage, "A or B": or_event, "Not (If A is False, True)": not_event,
          "Foe is Mounted":foe_is_mounted, "Unit is Mounted":unit_is_mounted, "Foe Has Bonus":foe_has_bonus,
          "Foe Has Penalty":foe_has_penalty,"Unit Has Penalty":unit_has_bonus,"Unit has Penalty": unit_has_penalty,
-         "Earn Extra Level EXP":level_experience_extra, "Earn Extra Weapon EXP": weapon_experience_extra}
+         "Earn Extra Level EXP":level_experience_extra, "Earn Extra Weapon EXP": weapon_experience_extra,
+         "Unit +Critical Chance":grant_bonus_to_unit_crt,"Unit +Hit Chance":grant_bonus_to_unit_hit,
+         "Unit +Dodge Chance":grant_bonus_to_unit_avo,"Ally is Mounted":ally_is_mounted,
+         "Ally is Female":ally_is_female,"Ally is Male":ally_is_male,
+         }
 
         
 NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
@@ -487,7 +495,9 @@ NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
                     "A or B", "Foe is Mounted", "Unit is Mounted",
                     "Unit Has Penalty", "Unit Has Bonus", "Foe Has Penalty",
                     "Foe Has Bonus", "Earn Extra Level EXP", "Earn Extra Weapon EXP",
-                    ])
+                    "Unit +Bonus Critical","Unit +Critical Chance","Unit +Hit Chance",
+                    "Unit +Dodge Chance", "Ally is Mounted", "Ally is Female",
+                    "Ally is Male"])
     
 class Nodes():
     def __init__(self, scene, name):
