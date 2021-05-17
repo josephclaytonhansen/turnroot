@@ -289,7 +289,8 @@ class main(QMainWindow):
             n.triggered.connect(self.submenu_item)
             
         ub_actions = [QAction("Unit +Bonus Strength/Magic", self),QAction("Unit +Bonus Defense", self),QAction("Unit +Bonus Resistance", self),
-                        QAction("Unit +Bonus Charisma", self), QAction("Unit +Bonus Dexterity", self),QAction("Unit +Bonus Luck", self)]
+                        QAction("Unit +Bonus Charisma", self), QAction("Unit +Bonus Dexterity", self),QAction("Unit +Bonus Luck", self),
+                      QAction("Earn Extra Weapon EXP", self), QAction("Earn Extra Level EXP", self)]
         
         for n in ub_actions:
             ub.addAction(n)

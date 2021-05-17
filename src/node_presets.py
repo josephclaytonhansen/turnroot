@@ -15,7 +15,8 @@ from src.node_presets_passive_skills import (combat_start, unit_initiates_combat
                                              unit_using_weapon_type, foe_using_weapon_type,
                                              unit_health_percentage, foe_health_percentage,
                                              foe_is_mounted, unit_is_mounted,foe_has_bonus,
-                                             foe_has_penalty,unit_has_bonus,unit_has_penalty)
+                                             foe_has_penalty,unit_has_bonus,unit_has_penalty,
+                                             weapon_experience_extra, level_experience_extra)
 
 from src.skeletons.weapon_types import weaponTypes
 import math, random, pickle
@@ -467,7 +468,8 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Foe Using Weapon Type": foe_using_weapon_type, "Unit Health Percentage":unit_health_percentage,
          "Foe Health Percentage":foe_health_percentage, "A or B": or_event, "Not (If A is False, True)": not_event,
          "Foe is Mounted":foe_is_mounted, "Unit is Mounted":unit_is_mounted, "Foe Has Bonus":foe_has_bonus,
-         "Foe Has Penalty":foe_has_penalty,"Unit Has Penalty":unit_has_bonus,"Unit has Penalty": unit_has_penalty}
+         "Foe Has Penalty":foe_has_penalty,"Unit Has Penalty":unit_has_bonus,"Unit has Penalty": unit_has_penalty,
+         "Earn Extra Level EXP":level_experience_extra, "Earn Extra Weapon EXP": weapon_experience_extra}
 
         
 NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
@@ -484,7 +486,8 @@ NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
                     "Foe Health Percentage", "Not (If A is False, True)",
                     "A or B", "Foe is Mounted", "Unit is Mounted",
                     "Unit Has Penalty", "Unit Has Bonus", "Foe Has Penalty",
-                    "Foe Has Bonus"])
+                    "Foe Has Bonus", "Earn Extra Level EXP", "Earn Extra Weapon EXP",
+                    ])
     
 class Nodes():
     def __init__(self, scene, name):
