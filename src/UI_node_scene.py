@@ -1,6 +1,6 @@
 from src.UI_node_graphics_scene import QDMGraphicsScene
 from PyQt5.QtWidgets import *
-import json
+import json, os
 import qtmodern.styles
 import qtmodern.windows
 from collections import OrderedDict
@@ -32,6 +32,7 @@ class Scene(Serializable):
         self.clipboard = SceneClipboard(self)
         
         self.NodeEditorWnd = None
+        self.preview = None
     
     @property
     def has_been_modified(self):
@@ -66,24 +67,30 @@ class Scene(Serializable):
         self.edges.append(edge)
         
     def removeNode(self, node):
-        self.nodes.remove(node)
-        self.added_nodes.remove(node)
+        try:
+            self.nodes.remove(node)
+            self.added_nodes.remove(node)
+        except:
+            pass
         
     def removeEdge(self, edge):
         self.edges.remove(edge)
     
-    def saveToFile(self):
+    def saveToFile(self, dialog = True):
         if self.path == None or self.path == '':
-            self.saveFileDialog()
+            if dialog:
+                self.saveFileDialog()
             if self.path == None or self.path == '':
                 c = infoClose("No file selected")
                 c.exec_()
             else:
                 with open(self.path, "w") as file:
                     file.write( json.dumps( self.serialize(), indent=4 ) )
+                    self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
         else:
             with open(self.path, "w") as file:
                 file.write( json.dumps( self.serialize(), indent=4 ) )
+                self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
 
     def openFileDialog(self):
         options = QFileDialog.Options()
@@ -92,22 +99,28 @@ class Scene(Serializable):
         if fileName:
             self.path = fileName
 
-    def loadFromFile(self, dialog=True):
-        if dialog:
-            self.openFileDialog()
-            if self.path == None:
-                c = infoClose("No file selected")
-                c.exec_()
-            else:
-                with open(self.path, "r") as file:
-                    raw_data = file.read()
-                    data = json.loads(raw_data)
-                    self.deserialize(data)
+    def loadFromFile(self):
+        self.openFileDialog()
+        if self.path == None or self.path == '':
+            c = infoClose("No file selected")
+            c.exec_()
         else:
             with open(self.path, "r") as file:
                 raw_data = file.read()
                 data = json.loads(raw_data)
                 self.deserialize(data)
+                self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
+    
+    def loadFromFileNoDialog(self):
+        if self.path == None or self.path == '':
+            c = infoClose("No file selected")
+            c.exec_()
+        else:
+            with open(self.path, "r") as file:
+                raw_data = file.read()
+                data = json.loads(raw_data)
+                self.deserialize(data)
+                self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
         
     
     def saveFileDialog(self):

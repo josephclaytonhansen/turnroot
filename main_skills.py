@@ -26,7 +26,7 @@ app.setStyle(myStyle)
 screen = app.primaryScreen()
 size = screen.size()
 
-title = "Turnroot Node Editor" 
+title = "Turnroot Skill Editor" 
 
 if os.sep == "\\":
     font_string = "Lucida Sans Unicode"
@@ -156,7 +156,7 @@ class main(QMainWindow):
                     try:
                         self.m.scene.path = open_file.read()
                         #print(self.m.grScene.file_name)
-                        self.m.scene.loadFromFile()
+                        self.m.scene.loadFromFileNoDialog()
                     except:
                         c = infoClose("Last saved file not found\n(opening new file)")
                         c.exec_()

@@ -783,3 +783,11 @@ class level_is_raining(is_):
 class level_is_foggy(is_):
     def __init__(self, scene, hexe="lif", which = "Level", isa = "Foggy"):
             super().__init__(isa, scene, which, hexe)
+            
+class unit_is_flying(is_):
+    def __init__(self, scene, hexe="uif", which = "Unit", isa = "Flying"):
+            super().__init__(isa, scene, which, hexe)
+            
+class foe_is_flying(is_):
+    def __init__(self, scene, hexe="fif", which = "Foe", isa = "Flying"):
+            super().__init__(isa, scene, which, hexe)

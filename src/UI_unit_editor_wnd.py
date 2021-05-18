@@ -61,7 +61,7 @@ class UnitEditorWnd(QWidget):
         self.tscroll.setWidget(self.tabs)
         self.tscroll.setWidgetResizable(True)
         
-        self.tab_names = ["Basic", "AI", "Weapon Affinities", "Actions", "Classes", "Skills", "Objects", "Relationships", "Graphics/Sounds"]
+        self.tab_names = ["Basic", "AI", "Weapon Affinities", "Actions", "Classes", "Unique Skills/Tactics/Objects", "Relationships", "Graphics/Sounds"]
         
         self.tabs_dict = {}
         for tab in self.tab_names:
@@ -82,8 +82,7 @@ class UnitEditorWnd(QWidget):
         self.initWeaponAffinities()
         self.initActions()
         self.initClasses()
-        self.initSkills()
-        self.initObjects()
+        self.initUnique()
         self.initRelationships()
         
         self.layout.addWidget(self.tscroll)
@@ -577,6 +576,13 @@ class UnitEditorWnd(QWidget):
         self.class_type = QComboBox()
         self.class_type.currentTextChanged.connect(self.class_type_change)
         working_tab_layout.addWidget(self.class_type, 5,4,1,1)
+        
+        is_flying_label = QLabel("Flying?")
+        working_tab_layout.addWidget(is_flying_label, 6,3,1,1)
+
+        self.is_flying = QCheckBox()
+        self.is_flying.stateChanged.connect(self.is_flying_change)
+        working_tab_layout.addWidget(self.is_flying, 6,4,1,1)
 
         self.tactics = QPushButton("Tactics")
         self.tactics.clicked.connect(self.tactics_dialog)
@@ -635,13 +641,11 @@ class UnitEditorWnd(QWidget):
             working_tab_layout.setColumnStretch(3, 3)
             working_tab_layout.setColumnStretch(4, 1)
        
-    def initSkills(self):
-        working_tab = self.tabs_dict["Skills"]
+    def initUnique(self):
+        working_tab = self.tabs_dict["Unique Skills/Tactics/Objects"]
         working_tab_layout = working_tab.layout
         
-    def initObjects(self):
-        working_tab = self.tabs_dict["Objects"]
-        working_tab_layout = working_tab.layout
+        
     
     def initRelationships(self):
         working_tab = self.tabs_dict["Relationships"]
@@ -1225,6 +1229,10 @@ class UnitEditorWnd(QWidget):
 
     def is_mounted_change(self):
         self.unit.unit_class.is_mounted = self.is_mounted.isChecked()
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        
+    def is_flying_change(self):
+        self.unit.unit_class.is_flying = self.is_flying.isChecked()
         self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def mounted_m_change(self):

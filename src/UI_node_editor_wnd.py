@@ -9,6 +9,7 @@ from src.UI_node_edge import Edge, EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT
 from src.node_presets import Nodes, NODES, NODE_KEYS
 
 from src.UI_node_outliner import outlinerWnd, OutlinerScene
+from src.UI_skill_preview_wnd import skillPreview
 
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
@@ -43,7 +44,8 @@ class NodeEditorWnd(QWidget):
         
         self.lower_half = QWidget()
 
-        self.lower_half_preview = QTextEdit()
+        self.lower_half_preview = skillPreview(parent=self, scene = self.scene)
+        self.scene.preview = self.lower_half_preview
         self.lower_half_outliner = outlinerWnd(scene=OutlinerScene(),parent_scene=self.scene)
         
         self.scroll_area = QScrollArea()

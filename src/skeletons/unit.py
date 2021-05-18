@@ -63,6 +63,7 @@ class Unit():
         self.visibility_range = 0
         
         self.is_mounted = False
+        self.is_flying = False
         self.is_currently_mounted = False
         
         self.weapon_exps = {}
