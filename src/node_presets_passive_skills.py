@@ -14,7 +14,7 @@ class combat_start(QWidget):
         self.title="Combat Start"
         self.inputs = []
         self.outputs=[S_TRIGGER]
-        self.hex_output = "637073"
+        self.hex_output = "cps"
         self.chain = 1
         
         self.line1 = QWidget()
@@ -49,7 +49,7 @@ class unit_initiates_combat(QWidget):
         self.title="Unit Initiates Combat"
         self.inputs = [S_TRIGGER]
         self.outputs=[S_TRIGGER]
-        self.hex_output = "756963"
+        self.hex_output = "uic"
         self.chain = 0
         
         self.line1 = QWidget()
@@ -92,7 +92,7 @@ class foe_initiates_combat(QWidget):
         self.title="Foe Initiates Combat"
         self.inputs = [S_TRIGGER]
         self.outputs=[S_TRIGGER]
-        self.hex_output = "666963"
+        self.hex_output = "fic"
         self.chain = 0
         
         self.line1 = QWidget()
@@ -139,7 +139,7 @@ class grant_bonus_to_unit(QWidget):
         self.title="Unit +Bonus "+self.full_name
         self.inputs = [S_TRIGGER]
         self.outputs=[S_TRIGGER]
-        self.hex_output = self.hexe+"2e6164643a3a"
+        self.hex_output = self.hexe+".add::"
         self.chain = 0
         self.current_operation = "Add ("+self.short_name+"+X)"
         
@@ -188,12 +188,12 @@ class grant_bonus_to_unit(QWidget):
     
     def change_op(self,s):
         self.current_operation = s
-        s_dict = {"Add ("+self.short_name+"+X)":"616464", "Multiply ("+self.short_name+" * X)":"6d756c"}
-        self.hex_output = self.hexe + "2e" + s_dict[s] + "3a" + float.hex(round(self.bonus_amount.value(),1)) + "3a"
+        s_dict = {"Add ("+self.short_name+"+X)":"add", "Multiply ("+self.short_name+" * X)":"mul"}
+        self.hex_output = self.hexe + "." + s_dict[s] + ":" + str(round(self.bonus_amount.value(),1)) + ":"
     
     def change_bonus(self,i):
-        s_dict = {"Add ("+self.short_name+"+X)":"616464", "Multiply ("+self.short_name+" * X)":"6d756c"}
-        self.hex_output = self.hexe + "2e" + s_dict[self.current_operation] + "3a" +float.hex(round(self.bonus_amount.value(),1)) + "3a"
+        s_dict = {"Add ("+self.short_name+"+X)":"add", "Multiply ("+self.short_name+" * X)":"mul"}
+        self.hex_output = self.hexe + "." + s_dict[self.current_operation] + ":" +str(round(self.bonus_amount.value(),1)) + ":"
 
 class grant_bonus_to_ally(QWidget):
     def __init__(self, scene,full_name, short_name, desc, hexe):
@@ -206,7 +206,7 @@ class grant_bonus_to_ally(QWidget):
         self.title="Near Allies +Bonus "+self.full_name
         self.inputs = [S_BOOLEAN]
         self.outputs=[S_TRIGGER]
-        self.hex_output = self.hexe+"2e6164643a3a"
+        self.hex_output = self.hexe+".add::"
         self.chain = 0
         self.current_operation = "Add ("+self.short_name+"+X)"
         
@@ -280,16 +280,16 @@ class grant_bonus_to_ally(QWidget):
     
     def change_op(self,s):
         self.current_operation = s
-        s_dict = {"Add ("+self.short_name+"+X)":"616464", "Multiply ("+self.short_name+" * X)":"6d756c"}
-        self.hex_output = self.hexe + "2e" + s_dict[self.current_operation] + "3a" +float.hex(round(self.bonus_amount.value(),1)) + "3a" + "2e733a" + float.hex(float(self.spaces_amount.value())) + "3a"
+        s_dict = {"Add ("+self.short_name+"+X)":"add", "Multiply ("+self.short_name+" * X)":"mul"}
+        self.hex_output = self.hexe + "." + s_dict[self.current_operation] + ":" +str(round(self.bonus_amount.value(),1)) + ":" + ".s:" + str(self.spaces_amount.value()) + ":"
     
     def change_bonus(self,i):
-        s_dict = {"Add ("+self.short_name+"+X)":"616464", "Multiply ("+self.short_name+" * X)":"6d756c"}
-        self.hex_output = self.hexe + "2e" + s_dict[self.current_operation] + "3a" +float.hex(round(self.bonus_amount.value(),1)) + "3a" + "2e733a" + float.hex(float(self.spaces_amount.value())) + "3a"
+        s_dict = {"Add ("+self.short_name+"+X)":"add", "Multiply ("+self.short_name+" * X)":"mul"}
+        self.hex_output = self.hexe + "." + s_dict[self.current_operation] + ":" +str(round(self.bonus_amount.value(),1)) + ":" + ".s:" + str(self.spaces_amount.value()) + ":"
     
     def change_spaces(self):
-        s_dict = {"Add ("+self.short_name+"+X)":"616464", "Multiply ("+self.short_name+" * X)":"6d756c"}
-        self.hex_output = self.hexe + "2e" + s_dict[self.current_operation] + "3a" +float.hex(round(self.bonus_amount.value(),1)) + "3a" + "2e733a" + float.hex(float(self.spaces_amount.value())) + "3a"
+        s_dict = {"Add ("+self.short_name+"+X)":"add", "Multiply ("+self.short_name+" * X)":"mul"}
+        self.hex_output = self.hexe + "." + s_dict[self.current_operation] + ":" +str(round(self.bonus_amount.value(),1)) + ":" + ".s:" + str(self.spaces_amount.value()) + ":"
         
 class unit_is_close_to_ally(QWidget):
     def __init__(self, scene, spaces, hexe, l=False):
@@ -302,7 +302,7 @@ class unit_is_close_to_ally(QWidget):
         self.inputs = [S_TRIGGER]
         self.outputs=[S_BOOLEAN]
         if self.l:
-            self.hex_output = self.hexe + "2e6164643a3a"
+            self.hex_output = self.hexe + ".s::"
         else:
             self.hex_output = self.hexe
         self.chain = 0
@@ -339,7 +339,7 @@ class unit_is_close_to_ally(QWidget):
         self.n.node_preset = self
         
     def change_spaces(self):
-        self.hex_output = self.hexe + "3a" +float.hex(float(self.spaces_amount.value())) + "3a"
+        self.hex_output = self.hexe + ".s:" +str(self.spaces_amount.value()) + ":"
     
     def updateEmission(self):
         try:
@@ -360,67 +360,67 @@ class unit_is_close_to_ally(QWidget):
        
 
 class grant_bonus_to_unit_atk(grant_bonus_to_unit):
-    def __init__(self, scene,full_name="Str/Mag", short_name= "Atk", hexe="756261", desc = "attack"):
+    def __init__(self, scene,full_name="Str/Mag", short_name= "Atk", hexe="uba", desc = "attack"):
             super().__init__(scene, full_name, short_name, desc, hexe)
 
 class grant_bonus_to_unit_spd(grant_bonus_to_unit):
-    def __init__(self, scene,full_name="Speed", short_name= "Spd", hexe="756273", desc = "speed"):
+    def __init__(self, scene,full_name="Speed", short_name= "Spd", hexe="ubs", desc = "speed"):
             super().__init__(scene, full_name, short_name, desc, hexe)
 
 class grant_bonus_to_unit_def(grant_bonus_to_unit):
-    def __init__(self, scene,full_name="Defense", short_name= "Def", hexe="756264", desc = "defense"):
+    def __init__(self, scene,full_name="Defense", short_name= "Def", hexe="ubd", desc = "defense"):
             super().__init__(scene, full_name, short_name, desc, hexe)
 
 class grant_bonus_to_unit_res(grant_bonus_to_unit):
-    def __init__(self, scene,full_name="Resistance", short_name= "Res", hexe="756272", desc = "resistance"):
+    def __init__(self, scene,full_name="Resistance", short_name= "Res", hexe="ubr", desc = "resistance"):
             super().__init__(scene, full_name, short_name, desc, hexe)
             
 class grant_bonus_to_unit_chr(grant_bonus_to_unit):
-    def __init__(self, scene,full_name="Charisma", short_name= "Chr", hexe="756263", desc = "charisma"):
+    def __init__(self, scene,full_name="Charisma", short_name= "Chr", hexe="ubc", desc = "charisma"):
             super().__init__(scene, full_name, short_name, desc, hexe)
 
 class grant_bonus_to_unit_dex(grant_bonus_to_unit):
-    def __init__(self, scene,full_name="Dexterity", short_name= "Dex", hexe="756278", desc = "dexterity"):
+    def __init__(self, scene,full_name="Dexterity", short_name= "Dex", hexe="ubx", desc = "dexterity"):
             super().__init__(scene, full_name, short_name, desc, hexe)
             
 class grant_bonus_to_unit_luc(grant_bonus_to_unit):
-    def __init__(self, scene,full_name="Luck", short_name= "Luc", hexe="75626c", desc = "luck"):
+    def __init__(self, scene,full_name="Luck", short_name= "Luc", hexe="abl", desc = "luck"):
             super().__init__(scene, full_name, short_name, desc, hexe)
             
 class grant_bonus_to_ally_atk(grant_bonus_to_ally):
-    def __init__(self, scene,full_name="Str/Mag", short_name= "Atk", hexe="616261", desc = "attack"):
+    def __init__(self, scene,full_name="Str/Mag", short_name= "Atk", hexe="aba", desc = "attack"):
             super().__init__(scene, full_name, short_name, desc, hexe)
 
 class grant_bonus_to_ally_spd(grant_bonus_to_ally):
-    def __init__(self, scene,full_name="Speed", short_name= "Spd", hexe="616273", desc = "speed"):
+    def __init__(self, scene,full_name="Speed", short_name= "Spd", hexe="abs", desc = "speed"):
             super().__init__(scene, full_name, short_name, desc, hexe)
 
 class grant_bonus_to_ally_def(grant_bonus_to_ally):
-    def __init__(self, scene,full_name="Defense", short_name= "Def", hexe="616264", desc = "defense"):
+    def __init__(self, scene,full_name="Defense", short_name= "Def", hexe="abd", desc = "defense"):
             super().__init__(scene, full_name, short_name, desc, hexe)
 
 class grant_bonus_to_ally_res(grant_bonus_to_ally):
-    def __init__(self, scene,full_name="Resistance", short_name= "Res", hexe="616272", desc = "resistance"):
+    def __init__(self, scene,full_name="Resistance", short_name= "Res", hexe="abr", desc = "resistance"):
             super().__init__(scene, full_name, short_name, desc, hexe)
             
 class grant_bonus_to_ally_chr(grant_bonus_to_ally):
-    def __init__(self, scene,full_name="Charisma", short_name= "Chr", hexe="616263", desc = "charisma"):
+    def __init__(self, scene,full_name="Charisma", short_name= "Chr", hexe="abc", desc = "charisma"):
             super().__init__(scene, full_name, short_name, desc, hexe)
 
 class grant_bonus_to_ally_dex(grant_bonus_to_ally):
-    def __init__(self, scene,full_name="Dexterity", short_name= "Dex", hexe="616278", desc = "dexterity"):
+    def __init__(self, scene,full_name="Dexterity", short_name= "Dex", hexe="abx", desc = "dexterity"):
             super().__init__(scene, full_name, short_name, desc, hexe)
             
 class grant_bonus_to_ally_luc(grant_bonus_to_ally):
-    def __init__(self, scene,full_name="Luck", short_name= "Luc", hexe="61626c", desc = "luck"):
+    def __init__(self, scene,full_name="Luck", short_name= "Luc", hexe="abl", desc = "luck"):
             super().__init__(scene, full_name, short_name, desc, hexe)
             
 class unit_is_adjacent_to_ally(unit_is_close_to_ally):
-    def __init__(self, scene, hexe="756161", spaces = "Adjacent to"):
+    def __init__(self, scene, hexe="uaa", spaces = "Adjacent to"):
             super().__init__(scene, spaces, hexe)
 
 class unit_is_near_ally(unit_is_close_to_ally):
-    def __init__(self, scene, hexe="756161", spaces = "Within N of", l =True):
+    def __init__(self, scene, hexe="una", spaces = "Within N of", l =True):
             super().__init__(scene, spaces, hexe, l)
             
 class using_weapon_type(QWidget):
@@ -479,17 +479,17 @@ class using_weapon_type(QWidget):
         if s != "--Select--":
             s_dict = {}
             for x in range(len(weaponTypes().data)):
-                s_dict[x] = str(ord(str(x)))
-            self.hex_output = self.hexe + "2e" + s_dict[weaponTypes().data.index(s)]
+                s_dict[x] = x
+            self.hex_output = self.hexe + "." + s_dict[weaponTypes().data.index(s)]
         else:
-            self.hex_output = self.hexe + "2e00"
+            self.hex_output = self.hexe + ".na"
     
 class unit_using_weapon_type(using_weapon_type):
-    def __init__(self, scene, hexe="757774", which = "Unit"):
+    def __init__(self, scene, hexe="uiw", which = "Unit"):
             super().__init__(scene, which, hexe)
 
 class foe_using_weapon_type(using_weapon_type):
-    def __init__(self, scene, hexe="667774", which = "Foe"):
+    def __init__(self, scene, hexe="fiw", which = "Foe"):
             super().__init__(scene, which, hexe)
             
 class health_percentage(QWidget):
@@ -500,7 +500,8 @@ class health_percentage(QWidget):
         self.title=which+" Health Percentage"
         self.inputs = [S_TRIGGER]
         self.outputs=[S_BOOLEAN]
-        self.hex_output = self.hexe + "2e3c3a35303a"
+        self.hex_output = self.hexe + ".<:100:"
+        self.current_operation = "<"
         self.chain = 1
         
         self.line1 = QWidget()
@@ -525,7 +526,8 @@ class health_percentage(QWidget):
         self.amount_set = QSpinBox()
         self.amount_set.setSuffix("%")
         self.amount_set.setRange(0,100)
-        self.amount_set.setValue(100)
+        #self.amount_set.setValue(100)
+        self.amount_set.valueChanged.connect(self.change_amount)
         self.amount_set.setSingleStep(1)
         
         self.contents = [self.line1, self.direction_select, self.amount_set]
@@ -552,14 +554,18 @@ class health_percentage(QWidget):
     
     def change_direction(self, s):
         s_dict = {"--Select--":"00","<": "3c", ">":"3e","<=":"3c3d",">=":"3e3d"}
-        self.hex_output = self.hexe + "2e" + s_dict[s] + "3a" +float.hex(float(self.amount_set.value())) + "3a"
+        self.current_operation = s
+        self.hex_output = self.hexe + "." + s + ":" +str(self.amount_set.value()) + ":"
+    def change_amount(self, i):
+        s_dict = {"--Select--":"00","<": "3c", ">":"3e","<=":"3c3d",">=":"3e3d"}
+        self.hex_output = self.hexe + "." + self.current_operation + ":" +str(self.amount_set.value()) + ":"
 
 class unit_health_percentage(health_percentage):
-    def __init__(self, scene, hexe="756870", which = "Unit"):
+    def __init__(self, scene, hexe="uhp", which = "Unit"):
             super().__init__(scene, which, hexe)
 
 class foe_health_percentage(health_percentage):
-    def __init__(self, scene, hexe="666870", which = "Foe"):
+    def __init__(self, scene, hexe="fhp", which = "Foe"):
             super().__init__(scene, which, hexe)
 
 class is_(QWidget):
@@ -611,23 +617,23 @@ class is_(QWidget):
             pass
 
 class foe_is_mounted(is_):
-    def __init__(self, scene, hexe="66696d", which = "Foe", isa = "Mounted"):
+    def __init__(self, scene, hexe="fim", which = "Foe", isa = "Mounted"):
             super().__init__(isa, scene, which, hexe)
     
 class unit_is_mounted(is_):
-    def __init__(self, scene, hexe="75696d", which = "Unit", isa = "Mounted"):
+    def __init__(self, scene, hexe="uim", which = "Unit", isa = "Mounted"):
             super().__init__(isa, scene, which, hexe)
             
 class ally_is_mounted(is_):
-    def __init__(self, scene, hexe="61696d", which = "Ally", isa = "Mounted"):
+    def __init__(self, scene, hexe="aim", which = "Ally", isa = "Mounted"):
             super().__init__(isa, scene, which, hexe)
 
 class ally_is_male(is_):
-    def __init__(self, scene, hexe="616d6e", which = "Ally", isa = "Male"):
+    def __init__(self, scene, hexe="amn", which = "Ally", isa = "Male"):
             super().__init__(isa, scene, which, hexe)
 
 class ally_is_female(is_):
-    def __init__(self, scene, hexe="61776e", which = "Ally", isa = "Female"):
+    def __init__(self, scene, hexe="afn", which = "Ally", isa = "Female"):
             super().__init__(isa, scene, which, hexe)
             
 class has_bonus_or_penalty(QWidget):
@@ -678,19 +684,19 @@ class has_bonus_or_penalty(QWidget):
             pass
 
 class foe_has_bonus(has_bonus_or_penalty):
-    def __init__(self, scene, hexe="666862", which = "Foe", direction = "Bonus"):
+    def __init__(self, scene, hexe="fhb", which = "Foe", direction = "Bonus"):
             super().__init__(scene, which, direction, hexe)
     
 class foe_has_penalty(has_bonus_or_penalty):
-    def __init__(self, scene, hexe="666870", which = "Foe", direction = "Penalty"):
+    def __init__(self, scene, hexe="fhp", which = "Foe", direction = "Penalty"):
             super().__init__(scene, which, direction, hexe)
             
 class unit_has_bonus(has_bonus_or_penalty):
-    def __init__(self, scene, hexe="756862", which = "Unit", direction = "Bonus"):
+    def __init__(self, scene, hexe="uhb", which = "Unit", direction = "Bonus"):
             super().__init__(scene, which, direction, hexe)
     
 class unit_has_penalty(has_bonus_or_penalty):
-    def __init__(self, scene, hexe="756870", which = "Unit", direction = "Penalty"):
+    def __init__(self, scene, hexe="uhp", which = "Unit", direction = "Penalty"):
             super().__init__(scene, which, direction, hexe)
             
 class experience_extra(QWidget):
@@ -702,7 +708,7 @@ class experience_extra(QWidget):
         self.title="Earn Extra "+self.desc+" EXP"
         self.inputs = [S_TRIGGER]
         self.outputs=[S_TRIGGER]
-        self.hex_output = self.hexe+"2e6164643a3a"
+        self.hex_output = self.hexe+".add::"
         self.chain = 0
         self.current_operation = "Add"
         
@@ -751,17 +757,29 @@ class experience_extra(QWidget):
     
     def change_op(self,s):
         self.current_operation = s
-        s_dict = {"Add":"616464", "Multiply":"6d756c"}
-        self.hex_output = self.hexe + "2e" + s_dict[s] + "3a" + float.hex(round(self.bonus_amount.value(),1)) + "3a"
+        s_dict = {"Add":"add", "Multiply":"mul"}
+        self.hex_output = self.hexe + "." + s_dict[s] + ":" + round(self.bonus_amount.value(),1) + ":"
     
     def change_bonus(self,i):
-        s_dict = {"Add":"616464", "Multiply":"6d756c"}
-        self.hex_output = self.hexe + "2e" + s_dict[self.current_operation] + "3a" +float.hex(round(self.bonus_amount.value(),1)) + "3a"
+        s_dict = {"Add":"add", "Multiply":"mul"}
+        self.hex_output = self.hexe + "." + s_dict[s] + ":" + round(self.bonus_amount.value(),1) + ":"
         
 class level_experience_extra(experience_extra):
-    def __init__(self, scene, hexe="6c6565", desc = "Level"):
+    def __init__(self, scene, hexe="ele", desc = "Level"):
             super().__init__(scene, desc, hexe)
     
 class weapon_experience_extra(experience_extra):
-    def __init__(self, scene, hexe="776565", desc = "Weapon"):
+    def __init__(self, scene, hexe="ewe", desc = "Weapon"):
             super().__init__(scene, desc, hexe)
+
+class level_is_night(is_):
+    def __init__(self, scene, hexe="lin", which = "Level", isa = "Night"):
+            super().__init__(isa, scene, which, hexe)
+            
+class level_is_raining(is_):
+    def __init__(self, scene, hexe="lir", which = "Level", isa = "Raining"):
+            super().__init__(isa, scene, which, hexe)
+            
+class level_is_foggy(is_):
+    def __init__(self, scene, hexe="lif", which = "Level", isa = "Foggy"):
+            super().__init__(isa, scene, which, hexe)

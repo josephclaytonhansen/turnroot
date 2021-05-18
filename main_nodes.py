@@ -261,14 +261,16 @@ class main(QMainWindow):
         items = self.m.scene.node_presets
         context.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         flow = QMenu("Events/Flow")
+        con = QMenu("Conditions")
+        econ = QMenu("Environment Conditions")
         nop = QMenu("Numbers/Operations")
-        ub = QMenu("Unit Bonus")
-        ab = QMenu("Ally Bonus")
-        fp = QMenu("Foe Penalties")
-        ui = QMenu("Unit Improvements")
+        ub = QMenu("Unit Effects")
+        ab = QMenu("Ally Effects")
+        fp = QMenu("Foe Effects")
+        ui = QMenu("Combat Bonus")
         se = QMenu("Special Effects")
         
-        submenus = [flow,nop,ub,ab,fp,ui,se]
+        submenus = [flow,con,nop,ub,ab,fp,se]
         for y in submenus:
             y.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         
@@ -279,21 +281,36 @@ class main(QMainWindow):
             n.triggered.connect(self.submenu_item)
             
         flow_actions = [QAction("Combat Start", self),QAction("Unit Initiates Combat", self),QAction("Foe Initiates Combat", self),
-                        QAction("Unit is Adjacent to Ally", self), QAction("Unit is Within N of Ally", self),
+                        ]
+        
+        for n in flow_actions:
+            flow.addAction(n)
+            n.triggered.connect(self.submenu_item)
+        
+        econ_actions = [QAction("Level is Night", self), QAction("Level is Raining", self), QAction("Level is Foggy", self)]
+        econ.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
+        
+        for n in econ_actions:
+            econ.addAction(n)
+            n.triggered.connect(self.submenu_item)
+        
+        con.addMenu(econ)
+        
+        con_actions = [QAction("Unit is Adjacent to Ally", self), QAction("Unit is Within N of Ally", self),
                         QAction("Unit Using Weapon Type", self), QAction("Foe Using Weapon Type", self), QAction("Unit Health Percentage", self),
                         QAction("Foe Health Percentage", self), QAction("Unit is Mounted", self), QAction("Foe is Mounted", self),
                         QAction("Foe has Bonus", self), QAction("Foe has Penalty", self), QAction("Unit has Bonus", self),
                         QAction("Unit has Penalty", self), QAction("Ally is Mounted", self), QAction("Ally is Female", self),
                         QAction("Ally is Male", self)]
         
-        for n in flow_actions:
-            flow.addAction(n)
+        for n in con_actions:
+            con.addAction(n)
             n.triggered.connect(self.submenu_item)
             
         ub_actions = [QAction("Unit +Bonus Strength/Magic", self),QAction("Unit +Bonus Defense", self),QAction("Unit +Bonus Resistance", self),
                         QAction("Unit +Bonus Charisma", self), QAction("Unit +Bonus Dexterity", self),QAction("Unit +Bonus Luck", self),
                       QAction("Earn Extra Weapon EXP", self), QAction("Earn Extra Level EXP", self), QAction("Unit +Bonus Critical",self)]
-        
+        ub.addMenu(ui)
         for n in ub_actions:
             ub.addAction(n)
             n.triggered.connect(self.submenu_item)
@@ -305,10 +322,13 @@ class main(QMainWindow):
             ab.addAction(n)
             n.triggered.connect(self.submenu_item)
             
-        ui_actions = [QAction("Unit +Hit Chance", self),QAction("Unit +Dodge Chance", self),QAction("Unit +Critical Chance", self)]
+        ui_actions = [QAction("Unit +Hit Chance", self),QAction("Unit +Dodge Chance", self),QAction("Unit +Critical Chance", self),
+                      QAction("Unit Does Less/More Damage", self)]
+        ui.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         for n in ui_actions:
             ui.addAction(n)
             n.triggered.connect(self.submenu_item)
+        
     
         for y in submenus:
             y.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))

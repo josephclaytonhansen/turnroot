@@ -17,10 +17,12 @@ from src.node_presets_passive_skills import (combat_start, unit_initiates_combat
                                              foe_is_mounted, unit_is_mounted,foe_has_bonus,
                                              foe_has_penalty,unit_has_bonus,unit_has_penalty,
                                              weapon_experience_extra, level_experience_extra,
-                                             ally_is_mounted, ally_is_male, ally_is_female)
+                                             ally_is_mounted, ally_is_male, ally_is_female,
+                                             level_is_night, level_is_raining, level_is_foggy)
 
 from src.node_presets_combat_skills import (grant_bonus_to_unit_hit, grant_bonus_to_unit_avo,
-                                            grant_bonus_to_unit_crt)
+                                            grant_bonus_to_unit_crt, unit_does_less_more_damage,
+                                            )
 
 from src.skeletons.weapon_types import weaponTypes
 import math, random, pickle
@@ -49,7 +51,7 @@ class number_number_math(QWidget):
         self.title="Math"
         self.inputs = [S_NUMBER, S_NUMBER]
         self.outputs=[S_NUMBER]
-        self.hex_output = "6e6d6f2e616464"
+        self.hex_output = "nmo.add"
         self.chain = 0
         
         self.values = [0,0,0]
@@ -163,12 +165,12 @@ class number_number_math(QWidget):
     
     def change_op(self,s):
         self.current_operation = s
-        s_dict = {"Add":"616464", "Subtract":"737562", "Multiply":"6d756c",
-                  "Divide":"646976", "Power":"706f77","Modulo":"6d6f64",
-                  "A Percent of B":"706572", "Minimum":"6d696e", "Maximum":"6d6178",
-                  "Absolute Value A":"616273", "Round A":"726f75", "Ceiling A":"636569",
-                  "Floor A":"666c6f", "Sqrt A":"737172"}
-        self.hex_output = "6e6d6f" + "2e" + s_dict[s]
+        s_dict = {"Add":"add", "Subtract":"sub", "Multiply":"mul",
+                  "Divide":"div", "Power":"pow","Modulo":"mod",
+                  "A Percent of B":"per", "Minimum":"min", "Maximum":"max",
+                  "Absolute Value A":"abs", "Round A":"rou", "Ceiling A":"cei",
+                  "Floor A":"flo", "Sqrt A":"sqr"}
+        self.hex_output = "nmo" + "." + s_dict[s]
 
 class compare_numbers(QWidget):
     def __init__(self, scene):
@@ -177,7 +179,7 @@ class compare_numbers(QWidget):
         self.title="Compare Numbers"
         self.inputs = [S_NUMBER, S_NUMBER]
         self.outputs=[S_BOOLEAN]
-        self.hex_output = "636e6f2e657175"
+        self.hex_output = "cno.equ"
         self.chain = 0
         
         self.result = False
@@ -263,10 +265,10 @@ class compare_numbers(QWidget):
         
     def change_op(self,s):
         self.current_operation = s
-        s_dict = {"Equal":"657175", "Not Equal":"6e6571", "Greater Than":"677274",
-                  "Less Than":"6c7274", "Greater Than or Equal":"677465",
-                  "Less Than or Equal":"6c7465"}
-        self.hex_output = "636e6f" + "2e" + s_dict[s]
+        s_dict = {"Equal":"equ", "Not Equal":"neq", "Greater Than":"grt",
+                  "Less Than":"lrt", "Greater Than or Equal":"gte",
+                  "Less Than or Equal":"lte"}
+        self.hex_output = "cno" + "." + s_dict[s]
 
  
 class bool_to_event(QWidget):
@@ -276,7 +278,7 @@ class bool_to_event(QWidget):
         self.title="Convert T/F to Event"
         self.inputs = [S_BOOLEAN]
         self.outputs=[S_TRIGGER]
-        self.hex_output = "627465"
+        self.hex_output = "bte"
         self.chain = 1
         
         self.line1 = QWidget()
@@ -319,7 +321,7 @@ class and_event(QWidget):
         self.title="And (If X and Y are True)"
         self.inputs = [S_BOOLEAN, S_BOOLEAN]
         self.outputs=[S_TRIGGER]
-        self.hex_output = "616e64"
+        self.hex_output = "and"
         self.chain = 1
         
         self.line1 = QWidget()
@@ -369,7 +371,7 @@ class or_event(QWidget):
         self.title="A or B"
         self.inputs = [S_BOOLEAN, S_BOOLEAN]
         self.outputs=[S_TRIGGER]
-        self.hex_output = "6f7263"
+        self.hex_output = "ore"
         self.chain = 1
         
         self.line1 = QWidget()
@@ -419,7 +421,7 @@ class not_event(QWidget):
         self.title="Not (If A is False, True)"
         self.inputs = [S_BOOLEAN]
         self.outputs=[S_BOOLEAN]
-        self.hex_output = "6e6f74"
+        self.hex_output = "not"
         self.chain = 1
         
         self.line1 = QWidget()
@@ -476,8 +478,8 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Earn Extra Level EXP":level_experience_extra, "Earn Extra Weapon EXP": weapon_experience_extra,
          "Unit +Critical Chance":grant_bonus_to_unit_crt,"Unit +Hit Chance":grant_bonus_to_unit_hit,
          "Unit +Dodge Chance":grant_bonus_to_unit_avo,"Ally is Mounted":ally_is_mounted,
-         "Ally is Female":ally_is_female,"Ally is Male":ally_is_male,
-         }
+         "Ally is Female":ally_is_female,"Ally is Male":ally_is_male,"Unit Does Less/More Damage":unit_does_less_more_damage,
+         "Level is Night":level_is_night, "Level is Raining":level_is_raining, "Level is Foggy":level_is_foggy}
 
         
 NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
@@ -497,7 +499,8 @@ NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
                     "Foe Has Bonus", "Earn Extra Level EXP", "Earn Extra Weapon EXP",
                     "Unit +Bonus Critical","Unit +Critical Chance","Unit +Hit Chance",
                     "Unit +Dodge Chance", "Ally is Mounted", "Ally is Female",
-                    "Ally is Male"])
+                    "Ally is Male", "Unit Does Less/More Damage", "Level is Night",
+                    "Level is Raining", "Level is Foggy"])
     
 class Nodes():
     def __init__(self, scene, name):
