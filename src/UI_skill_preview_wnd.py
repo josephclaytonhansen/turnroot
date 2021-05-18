@@ -98,13 +98,16 @@ class skillPreview(QWidget):
                  "src/skill_graphics/inner_light_green.png","src/skill_graphics/inner_light_red.png",
                  "src/skill_graphics/inner_light_yellow.png","src/skill_graphics/inner_purple.png",
                  "src/skill_graphics/inner_red.png"]
-        self.inner2 = []
+        self.inner2 = ["src/skill_graphics/white_starburst.png","src/skill_graphics/dark_blue_starburst.png",
+                       "src/skill_graphics/pink_star.png", "src/skill_graphics/white_star.png",]
         
         self.or_index = 0
         self.ir_index = 0
+        self.ic_index = 0
         
         self.max_or_index = len(self.outer)
         self.max_ir_index = len(self.inner)
+        self.max_ic_index = len(self.inner2)
         
         r = iconDialog(self.outer,self.inner,self.inner2,parent=self)
         r.exec_()
@@ -121,12 +124,19 @@ class skillPreview(QWidget):
             self.ir_index -=1
             if self.ir_index < 0:
                 self.ir_index = self.max_ir_index-1
+        
+        elif self.sender().name == 2:
+            #icon
+            self.ic_index -=1
+            if self.ic_index < 0:
+                self.ic_index = self.max_ic_index-1
             
         pixmap = QPixmap(135,135)
         pixmap.fill(Qt.transparent)
         p = overlayTile(pixmap, self.outer[self.or_index], 135)
         g = overlayTile(p, self.inner[self.ir_index], 135)
-        self.d_image.setPixmap(g)
+        d = overlayTile(g, self.inner2[self.ic_index], 135)
+        self.d_image.setPixmap(d)
 
     def right_arrow(self):
         if self.sender().name == 0:
@@ -139,12 +149,18 @@ class skillPreview(QWidget):
             self.ir_index +=1
             if self.ir_index == self.max_ir_index:
                 self.ir_index = 0
+        elif self.sender().name == 2:
+            #icon
+            self.ic_index +=1
+            if self.ic_index == self.max_ic_index:
+                self.ic_index = 0
     
         pixmap = QPixmap(135,135)
         pixmap.fill(Qt.transparent)
         p = overlayTile(pixmap, self.outer[self.or_index], 135)
         g = overlayTile(p, self.inner[self.ir_index], 135)
-        self.d_image.setPixmap(g)
+        d = overlayTile(g, self.inner2[self.ic_index], 135)
+        self.d_image.setPixmap(d)
         
 class iconDialog(QDialog):
     def __init__(self,outer,inner,inner2,parent=None):
@@ -174,7 +190,8 @@ class iconDialog(QDialog):
         pixmap.fill(Qt.transparent)
         p = overlayTile(pixmap, "src/skill_graphics/outer_gold.png", 135)
         g = overlayTile(p, "src/skill_graphics/inner_blue.png", 135)
-        self.parent.d_image.setPixmap(g)
+        d = overlayTile(g, "src/skill_graphics/white_starburst.png", 135)
+        self.parent.d_image.setPixmap(d)
         
         self.layout.addWidget(self.parent.d_image)
         
@@ -239,7 +256,8 @@ class iconDialog(QDialog):
         pixmap.fill(Qt.transparent)
         p = overlayTile(pixmap, self.parent.outer[self.parent.or_index], 135)
         g = overlayTile(p, self.parent.inner[self.parent.ir_index], 135)
-        pixmap = QIcon(g)
+        d = overlayTile(g, self.parent.inner2[self.parent.ic_index], 135)
+        pixmap = QIcon(d)
         self.parent.image.setIcon(pixmap)
     
     def gfx(self):

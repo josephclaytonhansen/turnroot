@@ -643,9 +643,34 @@ class UnitEditorWnd(QWidget):
        
     def initUnique(self):
         working_tab = self.tabs_dict["Unique Skills/Tactics/Objects"]
-        working_tab_layout = working_tab.layout
+        working_tab_layout = working_tab.layout()
         
-        
+        columns = QWidget()
+        columns_layout = QHBoxLayout()
+        columns.setLayout(columns_layout)
+
+        skills_tactics_column = QWidget()
+        skills_tactics_layout = QVBoxLayout()
+        skills_tactics_column.setLayout(skills_tactics_layout)
+
+        skills_row = QWidget()
+        skills_layout = QHBoxLayout()
+        skills_row.setLayout(skills_layout)
+        skills_tactics_layout.addWidget(skills_row)
+
+        tactics_row = QWidget()
+        tactics_layout = QHBoxLayout()
+        tactics_row.setLayout(tactics_layout)
+        skills_tactics_layout.addWidget(tactics_row)
+
+        objects_column = QWidget()
+        objects_layout = QHBoxLayout()
+        objects_column.setLayout(objects_layout)
+
+        columns_layout.addWidget(skills_tactics_column)
+        columns_layout.addWidget(objects_column)
+
+        working_tab_layout.addWidget(columns)
     
     def initRelationships(self):
         working_tab = self.tabs_dict["Relationships"]
