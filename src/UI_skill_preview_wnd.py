@@ -97,9 +97,8 @@ class skillPreview(QWidget):
                  "src/skill_graphics/inner_gold.png","src/skill_graphics/inner_green.png",
                  "src/skill_graphics/inner_light_green.png","src/skill_graphics/inner_light_red.png",
                  "src/skill_graphics/inner_light_yellow.png","src/skill_graphics/inner_purple.png",
-                 "src/skill_graphics/inner_red.png"]
-        self.inner2 = ["src/skill_graphics/white_starburst.png","src/skill_graphics/dark_blue_starburst.png",
-                       "src/skill_graphics/pink_star.png", "src/skill_graphics/white_star.png",]
+                 "src/skill_graphics/inner_red.png", "src/skill_graphics/inner_dark_blue_radial.png"]
+        self.inner2 = ["src/skill_graphics/sword.png"]
         
         self.or_index = 0
         self.ir_index = 0
