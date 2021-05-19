@@ -49,20 +49,23 @@ class NodeEditorWnd(QWidget):
         self.lower_half_outliner = outlinerWnd(scene=OutlinerScene(),parent_scene=self.scene)
         
         self.scroll_area = QScrollArea()
-        self.scroll_area.setWidget(self.lower_half)
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
         self.scroll_area.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
-        
-        self.layout.addWidget(self.scroll_area, 25)
         
         self.lower_half_layout = QHBoxLayout()
         self.lower_half_layout.setContentsMargins(0,0,0,0)
         self.lower_half_layout.setSpacing(0)
         self.lower_half.setLayout(self.lower_half_layout)
         
+        self.scroll_area.setWidget(self.lower_half_outliner)
+        
         self.lower_half_layout.addWidget(self.lower_half_preview, 65)
-        self.lower_half_layout.addWidget(self.lower_half_outliner, 35)
+        self.lower_half_layout.addWidget(self.scroll_area, 35)
+        
+        self.scroll_area.setMaximumWidth(400)
+        
+        self.layout.addWidget(self.lower_half, 25)
         
         self.lower_half_outliner.setMaximumWidth(400)
         self.lower_half_outliner.setMinimumWidth(400)

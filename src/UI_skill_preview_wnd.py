@@ -30,7 +30,9 @@ def overlayTile(image, overlay, size):
 class skillPreview(QWidget):
     def __init__(self, scene, parent=None):
         super().__init__(parent)
+        self.parent = parent
         self.initUI()
+        self.setMaximumHeight(170)
         
     def initUI(self):
         self.path = None
@@ -89,6 +91,33 @@ class skillPreview(QWidget):
         text_area_layout.addWidget(desc_name)
         
         content_widget_layout.addWidget(text_area)
+        
+        connectedf = QWidget()
+        connectedf_layout = QVBoxLayout()
+        connectedf.setLayout(connectedf_layout)
+        
+        connected = QWidget()
+        connected_layout = QGridLayout()
+        connected.setLayout(connected_layout)
+        
+        self.radio_buttons = {}
+        
+        r = -1
+        c = 0
+        for y in ["Weapon Level D", "Weapon Level C","Weapon Level B","Weapon Level A","Weapon Level S","Class", "Unique to Unit"]:
+            r += 1
+            if r == 4:
+                r = 0
+                c +=1
+            self.radio_buttons[y] = QRadioButton(y)
+            self.radio_buttons[y].name = y
+            self.radio_buttons[y].toggled.connect(self.change_connection)
+            connected_layout.addWidget(self.radio_buttons[y], r, c)
+            
+        connectedf_layout.addWidget(QLabel("Skill is connected to:")) 
+        connectedf_layout.addWidget(connected)
+        
+        content_widget_layout.addWidget(connectedf)
 
     def change_icon(self):
         self.outer = ["src/skill_graphics/outer_gold.png", "src/skill_graphics/outer_blue.png", "src/skill_graphics/outer_silver.png"]
@@ -161,6 +190,9 @@ class skillPreview(QWidget):
         g = overlayTile(p, self.inner[self.ir_index], 135)
         d = overlayTile(g, self.inner2[self.ic_index], 135)
         self.d_image.setPixmap(d)
+    
+    def change_connection(self):
+        pass
         
 class iconDialog(QDialog):
     def __init__(self,outer,inner,inner2,parent=None):
