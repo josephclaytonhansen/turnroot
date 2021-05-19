@@ -223,6 +223,8 @@ class Node(Serializable):
         self.height = height
         self.node_preset = None
         
+        self.load_index = 0
+        
         self.contents = contents
         self.content = QDMNodeContentWidget(self, self.contents)
         self.grNode = QDMGraphicsNode(self)
@@ -310,6 +312,7 @@ class Node(Serializable):
         ])
 
     def deserialize(self, data, hashmap={}, restore_id=True):
+        
         if restore_id: self.id = data['id']
         hashmap[data['id']] = self
 

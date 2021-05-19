@@ -11,6 +11,8 @@ from src.UI_node_edge import Edge
 from src.UI_node_scene_history import SceneHistory
 from src.UI_node_scene_clipboard import SceneClipboard
 
+from src.node_save_load import Load
+
 hex_string = ""
 orders = {}
 
@@ -33,6 +35,10 @@ class Scene(Serializable):
         
         self.NodeEditorWnd = None
         self.preview = None
+        
+        self.connection_type = None
+        
+        self.save_data = None
     
     @property
     def has_been_modified(self):
@@ -78,18 +84,17 @@ class Scene(Serializable):
     
     def saveToFile(self, dialog = True):
         if self.path == None or self.path == '':
-            if dialog:
-                self.saveFileDialog()
+            self.saveFileDialog()
             if self.path == None or self.path == '':
                 c = infoClose("No file selected")
                 c.exec_()
             else:
                 with open(self.path, "w") as file:
-                    file.write( json.dumps( self.serialize(), indent=4 ) )
+                    file.write(json.dumps(self.save_data))
                     self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
         else:
             with open(self.path, "w") as file:
-                file.write( json.dumps( self.serialize(), indent=4 ) )
+                file.write(json.dumps(self.save_data))
                 self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
 
     def openFileDialog(self):
@@ -107,8 +112,7 @@ class Scene(Serializable):
         else:
             with open(self.path, "r") as file:
                 raw_data = file.read()
-                data = json.loads(raw_data)
-                self.deserialize(data)
+                Load().loadScene(scene=self,path=raw_data)
                 self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
     
     def loadFromFileNoDialog(self):
@@ -118,8 +122,7 @@ class Scene(Serializable):
         else:
             with open(self.path, "r") as file:
                 raw_data = file.read()
-                data = json.loads(raw_data)
-                self.deserialize(data)
+                Load().loadScene(scene=self,path=raw_data)
                 self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
         
     
@@ -137,7 +140,7 @@ class Scene(Serializable):
             self.added_nodes[0].remove()
             
     def update_hex(self):
-        long_term_storage = ""
+        self.long_term_storage = ""
         l = []
         tmp_used_data = []
         tmp_order = []
@@ -156,8 +159,7 @@ class Scene(Serializable):
                    if d not in tmp_used_data:
                        tmp_used_data.append(d)
                        
-        long_term_storage = "".join(tmp_used_data)
-        print(long_term_storage)
+        self.long_term_storage = "".join(tmp_used_data)
 
     def serialize(self):
         nodes, edges = [], []

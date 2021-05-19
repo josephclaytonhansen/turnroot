@@ -13,6 +13,8 @@ from src.UI_node_preferences_dialog import NodePreferencesDialog
 
 from src.UI_node_dialogs import addNodePreset
 
+from src.node_save_load import Save
+
 import math, json, pickle, sys
 
 with open("src/tmp/nesc.json", "r") as readfile:
@@ -117,6 +119,7 @@ class QDMGraphicsView(QGraphicsView):
     
     def leftMouseButtonPress(self, event):
         self.grScene.scene.update_hex()
+        self.grScene.scene.save_data = Save().saveScene(self.grScene.scene)
         item = self.getItemAtClick(event)
         self.last_lmb_click_scene_pos = self.mapToScene(event.pos())
         

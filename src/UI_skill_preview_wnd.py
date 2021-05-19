@@ -192,7 +192,8 @@ class skillPreview(QWidget):
         self.d_image.setPixmap(d)
     
     def change_connection(self):
-        pass
+        self.parent.scene.connection_type = self.sender().name
+        print(self.parent.scene.connection_type)
         
 class iconDialog(QDialog):
     def __init__(self,outer,inner,inner2,parent=None):
