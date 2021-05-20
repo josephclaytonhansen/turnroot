@@ -10,21 +10,25 @@ class Save():
         self.outputs = self.node.outputs
         self.contents = self.node.content.contents
         
-        incoming_edges = {}
-        outgoing_edges = {}
+        edges = []
         
         for x in self.inputs:
             for e in x.edges:
-                incoming_edges[x.index] = str(e)
+                edges.append(str(e.start_socket.node)[-5:-1] + ":" + str(e.start_socket.index)  + ":" + str(e.end_socket.node)[-5:-1]  + ":" + str(e.end_socket.index))
         
         for x in self.outputs:
             for e in x.edges:
-                outgoing_edges[x.index] = str(e)
+                try:
+                    edges.append( str(e.start_socket.node)[-5:-1]  + ":" + str(e.start_socket.index)  + ":" + str(e.end_socket.node)[-5:-1] + ":" + str(e.end_socket.index))
+                except:
+                    pass
         
-        data["outgoing edges"] = outgoing_edges
-        data["incoming edges"] = incoming_edges
+        data["edges"] = edges
+        data["id"] = str(self.node)[-5:-1]
+        
         data["preset"] = str(self.node.title)
         data["pos"] = (self.node.pos.x(), self.node.pos.y())
+        
         return data
     
     def saveScene(self, scene):
@@ -47,51 +51,30 @@ class Load():
     def loadScene(self,scene,path):
         s = json.loads(path)
         scene.clear()
-        outgoing_edges = {}
-        incoming_edges = {}
+        edges = []
         li = {}
         
         for n in s["nodes"]:
             g = Nodes(scene, s["nodes"][n]["preset"]).node
-            g.load_index = n
+            g.id = s["nodes"][n]["id"]
             scene.added_nodes.append(g)
-            li[g.load_index] = g
+            li[g.id] = g
             g.setPos(s["nodes"][n]["pos"][0], s["nodes"][n]["pos"][1])
-            
-            for socket in s["nodes"][n]["incoming edges"]:
-                incoming_edge = s["nodes"][n]["incoming edges"][socket]
-                
-                incoming_edges[n+"."+socket] = incoming_edge
-            
-            for socket in s["nodes"][n]["outgoing edges"]:
-                outgoing_edge = s["nodes"][n]["outgoing edges"][socket]
-                
-                outgoing_edges[n+"."+socket] = outgoing_edge
+            for k in s["nodes"][n]["edges"]:
+                edge = k
+                if edge not in edges:
+                    edges.append(edge)
         
-        for n in s["nodes"]:
-            
-            for socket in s["nodes"][n]["outgoing edges"]:
-                outgoing_edge = s["nodes"][n]["outgoing edges"][socket]
-                
-                if outgoing_edge in incoming_edges.values():
-                    in_ = list(incoming_edges.keys())[list(incoming_edges.values()).index(outgoing_edge)]
-                    out_ = list(outgoing_edges.keys())[list(outgoing_edges.values()).index(outgoing_edge)]
-                    in_ = in_.split(".")
-                    out_ = out_.split(".")
-            
-            in_node = li[in_[0]]
-            in_socket = li[in_[0]].inputs[int(in_[1])]
-            
-            print(in_, in_node, in_socket, out_)
-            
-            out_node = li[out_[0]]
-            out_socket = li[out_[0]].outputs[int(out_[1])]
-            
-            new_edge = Edge(scene, in_socket, out_socket, edge_type=EDGE_TYPE_BEZIER)
+        for edge in edges:
+            edge = edge.split(":")
+            start_node = li[edge[0]]
+            end_node = li[edge[2]]
+            start_socket = start_node.outputs[int(edge[1])]
+            end_socket = end_node.inputs[int(edge[3])]
+            new_edge = Edge(scene, start_socket, end_socket, edge_type=EDGE_TYPE_BEZIER)
             scene.edges.append(new_edge)
-        
-        
-        
+            
+
         
     
         
