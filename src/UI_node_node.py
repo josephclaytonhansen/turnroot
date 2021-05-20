@@ -229,6 +229,8 @@ class Node(Serializable):
         self.content = QDMNodeContentWidget(self, self.contents)
         self.grNode = QDMGraphicsNode(self)
         
+        self.storage = []
+        
         self._title = title
         self.title = title
         

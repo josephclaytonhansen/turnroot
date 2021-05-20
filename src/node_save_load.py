@@ -14,6 +14,7 @@ class Save():
         self.inputs = self.node.inputs
         self.outputs = self.node.outputs
         self.contents = self.node.content.contents
+        self.storage = self.node.storage
         
         edges = []
         
@@ -36,6 +37,8 @@ class Save():
         
         data["preset"] = str(self.node.title)
         data["pos"] = (self.node.pos.x(), self.node.pos.y())
+        
+        data["storage"] = self.storage
         
         return data
     

@@ -168,6 +168,8 @@ class grant_bonus_to_unit(QWidget):
         
         self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 200)
         self.n.node_preset = self
+        
+        self.n.storage = ["add", 0]
     
     def updateEmission(self):
         try:
@@ -190,10 +192,14 @@ class grant_bonus_to_unit(QWidget):
         self.current_operation = s
         s_dict = {"Add ("+self.short_name+"+X)":"add", "Multiply ("+self.short_name+" * X)":"mul"}
         self.hex_output = self.hexe + "." + s_dict[s] + ":" + str(round(self.bonus_amount.value(),1)) + ":"
+        
+        self.n.storage = [s_dict[s], round(self.bonus_amount.value(),1)]
     
     def change_bonus(self,i):
         s_dict = {"Add ("+self.short_name+"+X)":"add", "Multiply ("+self.short_name+" * X)":"mul"}
         self.hex_output = self.hexe + "." + s_dict[self.current_operation] + ":" +str(round(self.bonus_amount.value(),1)) + ":"
+        
+        self.n.storage = [s_dict[self.current_operation], round(self.bonus_amount.value(),1)]
 
 class grant_bonus_to_ally(QWidget):
     def __init__(self, scene,full_name, short_name, desc, hexe):
@@ -260,6 +266,8 @@ class grant_bonus_to_ally(QWidget):
         
         self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 320)
         self.n.node_preset = self
+        
+        self.n.storage = ["add", 0]
     
     def updateEmission(self):
         try:
@@ -282,14 +290,17 @@ class grant_bonus_to_ally(QWidget):
         self.current_operation = s
         s_dict = {"Add ("+self.short_name+"+X)":"add", "Multiply ("+self.short_name+" * X)":"mul"}
         self.hex_output = self.hexe + "." + s_dict[self.current_operation] + ":" +str(round(self.bonus_amount.value(),1)) + ":" + ".s:" + str(self.spaces_amount.value()) + ":"
+        self.n.storage = [s_dict[self.current_operation], round(self.bonus_amount.value(),1)]
     
     def change_bonus(self,i):
         s_dict = {"Add ("+self.short_name+"+X)":"add", "Multiply ("+self.short_name+" * X)":"mul"}
         self.hex_output = self.hexe + "." + s_dict[self.current_operation] + ":" +str(round(self.bonus_amount.value(),1)) + ":" + ".s:" + str(self.spaces_amount.value()) + ":"
+        self.n.storage = [s_dict[self.current_operation], round(self.bonus_amount.value(),1)]
     
     def change_spaces(self):
         s_dict = {"Add ("+self.short_name+"+X)":"add", "Multiply ("+self.short_name+" * X)":"mul"}
         self.hex_output = self.hexe + "." + s_dict[self.current_operation] + ":" +str(round(self.bonus_amount.value(),1)) + ":" + ".s:" + str(self.spaces_amount.value()) + ":"
+        self.n.storage = [s_dict[self.current_operation], round(self.bonus_amount.value(),1)]
         
 class unit_is_close_to_ally(QWidget):
     def __init__(self, scene, spaces, hexe, l=False):
@@ -338,8 +349,11 @@ class unit_is_close_to_ally(QWidget):
         self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160)
         self.n.node_preset = self
         
+        self.n.storage = [0]
+        
     def change_spaces(self):
         self.hex_output = self.hexe + ".s:" +str(self.spaces_amount.value()) + ":"
+        self.n.storage = [self.spaces_amount.value()]
     
     def updateEmission(self):
         try:
@@ -458,6 +472,8 @@ class using_weapon_type(QWidget):
         
         self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160)
         self.n.node_preset = self
+        
+        self.n.storage = []
     
     def updateEmission(self):
         try:
@@ -481,6 +497,7 @@ class using_weapon_type(QWidget):
             for x in range(len(weaponTypes().data)):
                 s_dict[x] = x
             self.hex_output = self.hexe + "." + s_dict[weaponTypes().data.index(s)]
+            self.n.storage = [s_dict[weaponTypes().data.index(s)]]
         else:
             self.hex_output = self.hexe + ".na"
     
@@ -535,6 +552,8 @@ class health_percentage(QWidget):
         
         self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 190)
         self.n.node_preset = self
+        
+        self.n.storage= [">", 50]
     
     def updateEmission(self):
         try:
@@ -556,9 +575,11 @@ class health_percentage(QWidget):
         s_dict = {"--Select--":"00","<": "3c", ">":"3e","<=":"3c3d",">=":"3e3d"}
         self.current_operation = s
         self.hex_output = self.hexe + "." + s + ":" +str(self.amount_set.value()) + ":"
+        self.n.storage = [s, self.amount_set.value()]
     def change_amount(self, i):
         s_dict = {"--Select--":"00","<": "3c", ">":"3e","<=":"3c3d",">=":"3e3d"}
         self.hex_output = self.hexe + "." + self.current_operation + ":" +str(self.amount_set.value()) + ":"
+        self.n.storage = [self.current_operation, self.amount_set.value()]
 
 class unit_health_percentage(health_percentage):
     def __init__(self, scene, hexe="uhp", which = "Unit"):
@@ -737,6 +758,8 @@ class experience_extra(QWidget):
         
         self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 200)
         self.n.node_preset = self
+        
+        self.n.storage = ["add", 0]
     
     def updateEmission(self):
         try:
@@ -759,10 +782,12 @@ class experience_extra(QWidget):
         self.current_operation = s
         s_dict = {"Add":"add", "Multiply":"mul"}
         self.hex_output = self.hexe + "." + s_dict[s] + ":" + round(self.bonus_amount.value(),1) + ":"
+        self.n.storage = [s_dict[s], self.bonus_amount.value()]
     
     def change_bonus(self,i):
         s_dict = {"Add":"add", "Multiply":"mul"}
         self.hex_output = self.hexe + "." + s_dict[s] + ":" + round(self.bonus_amount.value(),1) + ":"
+        self.n.storage = [s_dict[s], self.bonus_amount.value()]
         
 class level_experience_extra(experience_extra):
     def __init__(self, scene, hexe="ele", desc = "Level"):
