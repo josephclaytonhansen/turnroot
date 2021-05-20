@@ -15,6 +15,7 @@ class Save():
         self.outputs = self.node.outputs
         self.contents = self.node.content.contents
         self.storage = self.node.storage
+        self.sw = self.node.sw
         
         edges = []
         
@@ -39,6 +40,7 @@ class Save():
         data["pos"] = (self.node.pos.x(), self.node.pos.y())
         
         data["storage"] = self.storage
+        data["sw"] = self.sw
         
         return data
     
@@ -70,6 +72,24 @@ class Load():
         
         for n in s["nodes"]:
             g = Nodes(scene, s["nodes"][n]["preset"]).node
+            
+            for widget in s["nodes"][n]["sw"]:
+                w_index = s["nodes"][n]["sw"].index(widget)
+                widget = widget.replace("self.", "")
+
+                try:
+                    widget = getattr(g.node_preset, widget)
+                    try:
+                        widget.setValue(s["nodes"][n]["storage"][w_index])
+                    except:
+                        try:
+                            widget.setCurrentText(s["nodes"][n]["storage"][w_index])
+                        except:
+                            print("could not set text")
+                except:
+                    pass
+                    
+                
             g.id = s["nodes"][n]["id"]
             scene.added_nodes.append(g)
             li[g.id] = g
@@ -101,3 +121,13 @@ class Load():
         scene.preview.image.setIcon(pixmap)
         
         scene.preview.desc_name.setPlainText(s["desc"])
+        
+        for y in scene.preview.radio_buttons:
+            print(y, scene.preview.radio_buttons[y])
+            if y == s["connection"]:
+                print(True)
+                scene.preview.radio_buttons[y].setAutoExclusive(False)
+                scene.preview.radio_buttons[y].setCheckable(True)
+                scene.preview.radio_buttons[y].setChecked(True)
+                scene.preview.radio_buttons[y].setAutoExclusive(True)
+

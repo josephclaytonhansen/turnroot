@@ -48,6 +48,7 @@ class grant_to_unit(QWidget):
         self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 200)
         self.n.node_preset = self
         
+        self.n.sw = ["self.bonus_type", "self.bonus_amount"]
         self.n.storage = ["add", 0]
     
     def updateEmission(self):
@@ -72,13 +73,13 @@ class grant_to_unit(QWidget):
         s_dict = {"Add ("+self.short_name+"+X)":"add", "Multiply ("+self.short_name+" * X)":"mul"}
         self.hex_output = self.hexe + "." + s_dict[s] + ":" + str(round(self.bonus_amount.value(),1)) + ":"
         
-        self.n.storage = [s_dict[s], round(self.bonus_amount.value(),1)]
+        self.n.storage = [s, round(self.bonus_amount.value(),1)]
     
     def change_bonus(self,i):
         s_dict = {"Add ("+self.short_name+"+X)":"add", "Multiply ("+self.short_name+" * X)":"mul"}
         self.hex_output = self.hexe + "." + s_dict[self.current_operation] + ":" +str(round(self.bonus_amount.value(),1)) + ":"
         
-        self.n.storage = [s_dict[self.current_operation], round(self.bonus_amount.value(),1)]
+        self.n.storage = [self.current_operation, round(self.bonus_amount.value(),1)]
 
 class does_less_more_damage(QWidget):
     def __init__(self, scene, hexe):
@@ -116,6 +117,7 @@ class does_less_more_damage(QWidget):
         self.n.node_preset = self
         
         self.n.storage = ["umd", 0]
+        self.n.sw = ["", "self.bonus_amount"]
     
     def updateEmission(self):
         try:
@@ -138,7 +140,7 @@ class does_less_more_damage(QWidget):
         s_dict = {"More":"umd", "Less":"uld"}
         self.hex_output = self.hexe + "." + ":" +str(self.bonus_amount.value()) + ":"
         
-        self.n.storage = ["umd", self.bonus_amount.value()]
+        self.n.storage = ["", self.bonus_amount.value()]
 
 class grant_bonus_to_unit_hit(grant_to_unit):
     def __init__(self, scene,full_name="Hit Chance", short_name= "Hit", hexe="ubi", desc = "hit chance"):

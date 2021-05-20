@@ -230,6 +230,7 @@ class Node(Serializable):
         self.grNode = QDMGraphicsNode(self)
         
         self.storage = []
+        self.sw = []
         
         self._title = title
         self.title = title
