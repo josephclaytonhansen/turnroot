@@ -5,7 +5,7 @@ from src.skeletons.weapon_types import weaponTypes
 from src.skeletons.unit_class import unitClass
 from src.UI_TableModel import TableModel
 from src.node_backend import getFiles, File
-
+from src.img_overlay import overlayTile
 from src.UI_Dialogs import infoClose
 
 import json, math, random
@@ -15,27 +15,25 @@ from src.UI_updateJSON import updateJSON
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
-def overlayTile(image, overlay, size):
-    image = image.scaled(size,size, Qt.KeepAspectRatio)
-    overlay = QPixmap(overlay)
-    overlay = overlay.scaled(size,size, Qt.KeepAspectRatio)
-    painter = QPainter()
-    result = QPixmap(size, size)
-    result.fill(Qt.transparent)
-    painter.begin(result)
-    painter.drawPixmap(0, 0, image)
-    painter.drawPixmap(0, 0, overlay)
-    painter.end()
-    result = result.scaled(size, size, Qt.KeepAspectRatio)
-    return result
-
 class skillPreview(QWidget):
     def __init__(self, scene, parent=None):
         super().__init__(parent)
         self.parent = parent
         self.scene = scene
-        self.initUI()
+        
         self.setMaximumHeight(170)
+        
+        self.outer = ["src/skill_graphics/outer_gold.png", "src/skill_graphics/outer_blue.png", "src/skill_graphics/outer_silver.png"]
+        self.inner = ["src/skill_graphics/inner_blue.png", "src/skill_graphics/inner_dark_blue.png",
+                 "src/skill_graphics/inner_dark_purple.png","src/skill_graphics/inner_dark_teal.png",
+                 "src/skill_graphics/inner_gold.png","src/skill_graphics/inner_green.png",
+                 "src/skill_graphics/inner_light_green.png","src/skill_graphics/inner_light_red.png",
+                 "src/skill_graphics/inner_light_yellow.png","src/skill_graphics/inner_purple.png",
+                 "src/skill_graphics/inner_red.png",]
+        self.inner2 = ["src/skill_graphics/sword.png","src/skill_graphics/lance.png","src/skill_graphics/axe.png",
+                       "src/skill_graphics/bow.png", "src/skill_graphics/horse.png"]
+        
+        self.initUI()
         
     def initUI(self):
         self.path = None
@@ -63,9 +61,12 @@ class skillPreview(QWidget):
         self.image.setMaximumWidth(150)
         pixmap = QPixmap(135,135)
         pixmap.fill(Qt.transparent)
-        p = overlayTile(pixmap, "src/skill_graphics/outer_gold.png", 135)
-        g = overlayTile(p, "src/skill_graphics/inner_blue.png", 135)
-        pixmap = QIcon(g)
+        
+        p = overlayTile(pixmap, self.outer[self.scene.or_index], 135)
+        g = overlayTile(p, self.inner[self.scene.ir_index], 135)
+        d = overlayTile(g, self.inner2[self.scene.ic_index], 135)
+        pixmap = QIcon(d)
+        
         self.image.setIcon(pixmap)
         self.image.setIconSize(QSize(135,135))
         self.image.setToolTip("Edit icon")
@@ -84,15 +85,16 @@ class skillPreview(QWidget):
         
         text_area_layout.addWidget(self.skill_name)
         
-        desc_name = QLineEdit()
-        desc_name.setAlignment(Qt.AlignCenter)
-        desc_name.setPlaceholderText("Skill description")
-        desc_name.textChanged.connect(self.desc_changed)
-        desc_name_font = desc_name.font()
+        self.desc_name = QTextEdit()
+        self.desc_name.setMaximumHeight(50)
+        self.desc_name.setAlignment(Qt.AlignCenter)
+        self.desc_name.setPlaceholderText("Skill description")
+        self.desc_name.textChanged.connect(self.desc_changed)
+        desc_name_font = self.desc_name.font()
         desc_name_font.setPointSize(15)
-        desc_name.setFont(desc_name_font)
+        self.desc_name.setFont(desc_name_font)
         
-        text_area_layout.addWidget(desc_name)
+        text_area_layout.addWidget(self.desc_name)
         
         content_widget_layout.addWidget(text_area)
         
@@ -130,20 +132,6 @@ class skillPreview(QWidget):
             self.clabel.setText("Skill is connected to:")
     
     def change_icon(self):
-        self.outer = ["src/skill_graphics/outer_gold.png", "src/skill_graphics/outer_blue.png", "src/skill_graphics/outer_silver.png"]
-        self.inner = ["src/skill_graphics/inner_blue.png", "src/skill_graphics/inner_dark_blue.png",
-                 "src/skill_graphics/inner_dark_purple.png","src/skill_graphics/inner_dark_teal.png",
-                 "src/skill_graphics/inner_gold.png","src/skill_graphics/inner_green.png",
-                 "src/skill_graphics/inner_light_green.png","src/skill_graphics/inner_light_red.png",
-                 "src/skill_graphics/inner_light_yellow.png","src/skill_graphics/inner_purple.png",
-                 "src/skill_graphics/inner_red.png",]
-        self.inner2 = ["src/skill_graphics/sword.png","src/skill_graphics/lance.png","src/skill_graphics/axe.png",
-                       "src/skill_graphics/bow.png", "src/skill_graphics/horse.png"]
-        
-        self.or_index = 0
-        self.ir_index = 0
-        self.ic_index = 0
-        
         self.max_or_index = len(self.outer)
         self.max_ir_index = len(self.inner)
         self.max_ic_index = len(self.inner2)
@@ -154,58 +142,58 @@ class skillPreview(QWidget):
     def left_arrow(self):
         if self.sender().name == 0:
             #outer
-            self.or_index -=1
-            if self.or_index < 0:
-                self.or_index = self.max_or_index-1
+            self.scene.or_index -=1
+            if self.scene.or_index < 0:
+                self.scene.or_index = self.max_or_index-1
                 
         elif self.sender().name == 1:
             #inner
-            self.ir_index -=1
-            if self.ir_index < 0:
-                self.ir_index = self.max_ir_index-1
+            self.scene.ir_index -=1
+            if self.scene.ir_index < 0:
+                self.scene.ir_index = self.max_ir_index-1
         
         elif self.sender().name == 2:
             #icon
-            self.ic_index -=1
-            if self.ic_index < 0:
-                self.ic_index = self.max_ic_index-1
+            self.scene.ic_index -=1
+            if self.scene.ic_index < 0:
+                self.scene.ic_index = self.max_ic_index-1
             
         pixmap = QPixmap(135,135)
         pixmap.fill(Qt.transparent)
-        p = overlayTile(pixmap, self.outer[self.or_index], 135)
-        g = overlayTile(p, self.inner[self.ir_index], 135)
-        d = overlayTile(g, self.inner2[self.ic_index], 135)
+        p = overlayTile(pixmap, self.outer[self.scene.or_index], 135)
+        g = overlayTile(p, self.inner[self.scene.ir_index], 135)
+        d = overlayTile(g, self.inner2[self.scene.ic_index], 135)
         self.d_image.setPixmap(d)
 
     def right_arrow(self):
         if self.sender().name == 0:
             #outer
-            self.or_index +=1
-            if self.or_index == self.max_or_index:
-                self.or_index = 0
+            self.scene.or_index +=1
+            if self.scene.or_index == self.max_or_index:
+                self.scene.or_index = 0
         elif self.sender().name == 1:
             #inner
-            self.ir_index +=1
-            if self.ir_index == self.max_ir_index:
-                self.ir_index = 0
+            self.scene.ir_index +=1
+            if self.scene.ir_index == self.max_ir_index:
+                self.scene.ir_index = 0
         elif self.sender().name == 2:
             #icon
-            self.ic_index +=1
-            if self.ic_index == self.max_ic_index:
-                self.ic_index = 0
+            self.scene.ic_index +=1
+            if self.scene.ic_index == self.max_ic_index:
+                self.scene.ic_index = 0
     
         pixmap = QPixmap(135,135)
         pixmap.fill(Qt.transparent)
-        p = overlayTile(pixmap, self.outer[self.or_index], 135)
-        g = overlayTile(p, self.inner[self.ir_index], 135)
-        d = overlayTile(g, self.inner2[self.ic_index], 135)
+        p = overlayTile(pixmap, self.outer[self.scene.or_index], 135)
+        g = overlayTile(p, self.inner[self.scene.ir_index], 135)
+        d = overlayTile(g, self.inner2[self.scene.ic_index], 135)
         self.d_image.setPixmap(d)
     
     def change_connection(self):
         self.parent.scene.connection_type = self.sender().name
     
     def desc_changed(self):
-        self.parent.scene.desc = self.sender().text()
+        self.parent.scene.desc = self.sender().toPlainText()
 
         
 class iconDialog(QDialog):
@@ -234,9 +222,9 @@ class iconDialog(QDialog):
         self.parent.d_image.setMaximumWidth(150)
         pixmap = QPixmap(135,135)
         pixmap.fill(Qt.transparent)
-        p = overlayTile(pixmap, "src/skill_graphics/outer_gold.png", 135)
-        g = overlayTile(p, "src/skill_graphics/inner_blue.png", 135)
-        d = overlayTile(g, "src/skill_graphics/white_starburst.png", 135)
+        p = overlayTile(pixmap, self.parent.outer[self.parent.scene.or_index], 135)
+        g = overlayTile(p, self.parent.inner[self.parent.scene.ir_index], 135)
+        d = overlayTile(g, self.parent.inner2[self.parent.scene.ic_index], 135)
         self.parent.d_image.setPixmap(d)
         
         self.layout.addWidget(self.parent.d_image)
@@ -300,9 +288,9 @@ class iconDialog(QDialog):
         self.close()
         pixmap = QPixmap(135,135)
         pixmap.fill(Qt.transparent)
-        p = overlayTile(pixmap, self.parent.outer[self.parent.or_index], 135)
-        g = overlayTile(p, self.parent.inner[self.parent.ir_index], 135)
-        d = overlayTile(g, self.parent.inner2[self.parent.ic_index], 135)
+        p = overlayTile(pixmap, self.parent.outer[self.parent.scene.or_index], 135)
+        g = overlayTile(p, self.parent.inner[self.parent.scene.ir_index], 135)
+        d = overlayTile(g, self.parent.inner2[self.parent.scene.ic_index], 135)
         pixmap = QIcon(d)
         self.parent.image.setIcon(pixmap)
     

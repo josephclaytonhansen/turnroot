@@ -1,0 +1,1 @@
+{"nodes": {"0": {"edges": [], "id": "cca0", "preset": "Combat Start", "pos": [0.0, 0.0]}}, "string": "cps", "connection": "Unique to Unit", "desc": "If unit is mounted and foe initiates combat, unit does 3 extra damage and has -3 defense", "icon": [0, 10, 4]}

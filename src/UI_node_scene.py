@@ -39,6 +39,9 @@ class Scene(Serializable):
         self.connection_type = None
         self.desc = None
         self.long_term_storage = ""
+        self.or_index = 0
+        self.ir_index = 0
+        self.ic_index = 0
         
         self.save_data = Save().saveScene(scene=self)
     
@@ -107,6 +110,9 @@ class Scene(Serializable):
         fileName, _ = QFileDialog.getOpenFileName(None,"Open", "","Turnroot Node File (*.trnep)", options=options)
         if fileName:
             self.path = fileName
+            with open(self.path, "r") as file:
+                raw_data = file.read()
+                Load().loadScene(scene=self,path=raw_data)
 
     def loadFromFile(self):
         self.openFileDialog()
@@ -138,6 +144,8 @@ class Scene(Serializable):
         fileName, _ = q.getSaveFileName(None,"Save","","Turnroot Node File (*.trnep)", options=options)
         if fileName:
             self.path = fileName+".trnep"
+            with open(self.path, "w") as file:
+                file.write(json.dumps(self.save_data))
     
     def clear(self):
         while len(self.nodes) > 0:

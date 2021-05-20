@@ -478,7 +478,7 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Earn Extra Level EXP":level_experience_extra, "Earn Extra Weapon EXP": weapon_experience_extra,
          "Unit +Critical Chance":grant_bonus_to_unit_crt,"Unit +Hit Chance":grant_bonus_to_unit_hit,
          "Unit +Dodge Chance":grant_bonus_to_unit_avo,"Ally is Mounted":ally_is_mounted,
-         "Ally is Female":ally_is_female,"Ally is Male":ally_is_male,"Unit Does Less/More Damage":unit_does_less_more_damage,
+         "Ally is Female":ally_is_female,"Ally is Male":ally_is_male,"Unit does Less/More Damage":unit_does_less_more_damage,
          "Level is Night":level_is_night, "Level is Raining":level_is_raining, "Level is Foggy":level_is_foggy}
 
         
@@ -499,7 +499,7 @@ NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
                     "Foe Has Bonus", "Earn Extra Level EXP", "Earn Extra Weapon EXP",
                     "Unit +Bonus Critical","Unit +Critical Chance","Unit +Hit Chance",
                     "Unit +Dodge Chance", "Ally is Mounted", "Ally is Female",
-                    "Ally is Male", "Unit Does Less/More Damage", "Level is Night",
+                    "Ally is Male", "Unit does Less/More Damage", "Level is Night",
                     "Level is Raining", "Level is Foggy"])
     
 class Nodes():

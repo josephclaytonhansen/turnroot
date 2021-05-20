@@ -323,7 +323,7 @@ class main(QMainWindow):
             n.triggered.connect(self.submenu_item)
             
         ui_actions = [QAction("Unit +Hit Chance", self),QAction("Unit +Dodge Chance", self),QAction("Unit +Critical Chance", self),
-                      QAction("Unit Does Less/More Damage", self)]
+                      QAction("Unit does Less/More Damage", self)]
         ui.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         for n in ui_actions:
             ui.addAction(n)

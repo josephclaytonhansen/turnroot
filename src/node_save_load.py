@@ -1,6 +1,11 @@
 from src.node_presets import Nodes
 import json
 from src.UI_node_edge import QDMGraphicsEdge, Edge, EDGE_TYPE_BEZIER
+from src.img_overlay import overlayTile
+
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 class Save(): 
     def saveNode(self, node):
@@ -14,7 +19,10 @@ class Save():
         
         for x in self.inputs:
             for e in x.edges:
-                edges.append(str(e.start_socket.node)[-5:-1] + ":" + str(e.start_socket.index)  + ":" + str(e.end_socket.node)[-5:-1]  + ":" + str(e.end_socket.index))
+                try:
+                    edges.append(str(e.start_socket.node)[-5:-1] + ":" + str(e.start_socket.index)  + ":" + str(e.end_socket.node)[-5:-1]  + ":" + str(e.end_socket.index))
+                except:
+                    pass
         
         for x in self.outputs:
             for e in x.edges:
@@ -45,6 +53,7 @@ class Save():
         data["string"] = scene.long_term_storage
         data["connection"] = scene.connection_type
         data["desc"] = scene.desc
+        data["icon"] = [scene.or_index,scene.ir_index,scene.ic_index]
         
         scene.save_data = data
         return data
@@ -75,3 +84,17 @@ class Load():
             end_socket = end_node.inputs[int(edge[3])]
             new_edge = Edge(scene, start_socket, end_socket, edge_type=EDGE_TYPE_BEZIER)
             scene.edges.append(new_edge)
+        
+        scene.or_index = s["icon"][0]
+        scene.ir_index= s["icon"][1]
+        scene.ic_index= s["icon"][2]
+        
+        pixmap = QPixmap(135,135)
+        pixmap.fill(Qt.transparent)
+        p = overlayTile(pixmap, scene.preview.outer[scene.or_index], 135)
+        g = overlayTile(p, scene.preview.inner[scene.ir_index], 135)
+        d = overlayTile(g, scene.preview.inner2[scene.ic_index], 135)
+        pixmap = QIcon(d)
+        scene.preview.image.setIcon(pixmap)
+        
+        scene.preview.desc_name.setPlainText(s["desc"])
