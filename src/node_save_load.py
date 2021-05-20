@@ -43,6 +43,8 @@ class Save():
             
         data["nodes"] = all_nodes
         data["string"] = scene.long_term_storage
+        data["connection"] = scene.connection_type
+        data["desc"] = scene.desc
         
         scene.save_data = data
         return data
@@ -73,8 +75,3 @@ class Load():
             end_socket = end_node.inputs[int(edge[3])]
             new_edge = Edge(scene, start_socket, end_socket, edge_type=EDGE_TYPE_BEZIER)
             scene.edges.append(new_edge)
-            
-
-        
-    
-        

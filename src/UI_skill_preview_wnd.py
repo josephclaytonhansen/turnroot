@@ -6,6 +6,8 @@ from src.skeletons.unit_class import unitClass
 from src.UI_TableModel import TableModel
 from src.node_backend import getFiles, File
 
+from src.UI_Dialogs import infoClose
+
 import json, math, random
 
 import src.UI_colorTheme as UI_colorTheme
@@ -31,6 +33,7 @@ class skillPreview(QWidget):
     def __init__(self, scene, parent=None):
         super().__init__(parent)
         self.parent = parent
+        self.scene = scene
         self.initUI()
         self.setMaximumHeight(170)
         
@@ -84,6 +87,7 @@ class skillPreview(QWidget):
         desc_name = QLineEdit()
         desc_name.setAlignment(Qt.AlignCenter)
         desc_name.setPlaceholderText("Skill description")
+        desc_name.textChanged.connect(self.desc_changed)
         desc_name_font = desc_name.font()
         desc_name_font.setPointSize(15)
         desc_name.setFont(desc_name_font)
@@ -111,14 +115,20 @@ class skillPreview(QWidget):
                 c +=1
             self.radio_buttons[y] = QRadioButton(y)
             self.radio_buttons[y].name = y
+            self.radio_buttons[y].setCheckable(False)
             self.radio_buttons[y].toggled.connect(self.change_connection)
             connected_layout.addWidget(self.radio_buttons[y], r, c)
-            
-        connectedf_layout.addWidget(QLabel("Skill is connected to:")) 
+        self.clabel = QLabel("Skill is connected to: (file must be saved)")    
+        connectedf_layout.addWidget(self.clabel) 
         connectedf_layout.addWidget(connected)
         
         content_widget_layout.addWidget(connectedf)
 
+    def enable_radio_buttons(self):
+        for r in self.radio_buttons:
+            self.radio_buttons[r].setCheckable(True)
+            self.clabel.setText("Skill is connected to:")
+    
     def change_icon(self):
         self.outer = ["src/skill_graphics/outer_gold.png", "src/skill_graphics/outer_blue.png", "src/skill_graphics/outer_silver.png"]
         self.inner = ["src/skill_graphics/inner_blue.png", "src/skill_graphics/inner_dark_blue.png",
@@ -193,7 +203,10 @@ class skillPreview(QWidget):
     
     def change_connection(self):
         self.parent.scene.connection_type = self.sender().name
-        print(self.parent.scene.connection_type)
+    
+    def desc_changed(self):
+        self.parent.scene.desc = self.sender().text()
+
         
 class iconDialog(QDialog):
     def __init__(self,outer,inner,inner2,parent=None):

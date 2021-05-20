@@ -11,7 +11,7 @@ from src.UI_node_edge import Edge
 from src.UI_node_scene_history import SceneHistory
 from src.UI_node_scene_clipboard import SceneClipboard
 
-from src.node_save_load import Load
+from src.node_save_load import Load, Save
 
 hex_string = ""
 orders = {}
@@ -37,8 +37,10 @@ class Scene(Serializable):
         self.preview = None
         
         self.connection_type = None
+        self.desc = None
+        self.long_term_storage = ""
         
-        self.save_data = None
+        self.save_data = Save().saveScene(scene=self)
     
     @property
     def has_been_modified(self):
@@ -91,11 +93,13 @@ class Scene(Serializable):
             else:
                 with open(self.path, "w") as file:
                     file.write(json.dumps(self.save_data))
-                    self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
+                    self.preview.skill_name.setText(self.path[self.path.rfind("/")+1:self.path.find(".trnep")])
+                    self.preview.enable_radio_buttons()
         else:
             with open(self.path, "w") as file:
                 file.write(json.dumps(self.save_data))
-                self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
+                self.preview.skill_name.setText(self.path[self.path.rfind("/")+1:self.path.find(".trnep")])
+                self.preview.enable_radio_buttons()
 
     def openFileDialog(self):
         options = QFileDialog.Options()
@@ -114,6 +118,7 @@ class Scene(Serializable):
                 raw_data = file.read()
                 Load().loadScene(scene=self,path=raw_data)
                 self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
+                self.preview.enable_radio_buttons()
     
     def loadFromFileNoDialog(self):
         if self.path == None or self.path == '':
@@ -124,7 +129,7 @@ class Scene(Serializable):
                 raw_data = file.read()
                 Load().loadScene(scene=self,path=raw_data)
                 self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
-        
+                self.preview.enable_radio_buttons()        
     
     def saveFileDialog(self):
         q = QFileDialog()
@@ -140,7 +145,6 @@ class Scene(Serializable):
             self.added_nodes[0].remove()
             
     def update_hex(self):
-        self.long_term_storage = ""
         l = []
         tmp_used_data = []
         tmp_order = []
