@@ -107,7 +107,6 @@ class QDMGraphicsNode(QGraphicsItem):
         super().__init__(parent)
         self.node = node
         self.content = self.node.content
-        print(self.content.height())
         self.width = NODE_WIDTH
         if self.node.height == None:
             self.height = NODE_HEIGHT

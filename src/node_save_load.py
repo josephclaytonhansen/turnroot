@@ -7,6 +7,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
+data_string = ""
+
 class Save(): 
     def saveNode(self, node):
         data = dict()
@@ -37,7 +39,7 @@ class Save():
         data["id"] = str(self.node)[-5:-1]
         
         data["preset"] = str(self.node.title)
-        data["pos"] = (self.node.pos.x(), self.node.pos.y())
+        data["pos"] = (round(self.node.pos.x(),1), round(self.node.pos.y(),1))
         
         data["storage"] = self.storage
         data["sw"] = self.sw
@@ -55,7 +57,6 @@ class Save():
             all_nodes[count] = self.saveNode(n)
             
         data["nodes"] = all_nodes
-        data["string"] = scene.long_term_storage
         data["connection"] = scene.connection_type
         data["desc"] = scene.desc
         data["icon"] = [scene.or_index,scene.ir_index,scene.ic_index]
@@ -69,6 +70,10 @@ class Load():
         scene.clear()
         edges = []
         li = {}
+        
+        
+        global data_string
+        data_string = ""
         
         for n in s["nodes"]:
             g = Nodes(scene, s["nodes"][n]["preset"]).node
@@ -91,6 +96,7 @@ class Load():
                     
                 
             g.id = s["nodes"][n]["id"]
+            print(g.id)
             scene.added_nodes.append(g)
             li[g.id] = g
             g.setPos(s["nodes"][n]["pos"][0], s["nodes"][n]["pos"][1])
@@ -98,6 +104,7 @@ class Load():
                 edge = k
                 if edge not in edges:
                     edges.append(edge)
+                    data_string+="&"+edge+"&*"
         
         for edge in edges:
             edge = edge.split(":")
@@ -122,10 +129,11 @@ class Load():
         
         scene.preview.desc_name.setPlainText(s["desc"])
         
+        scene.data_string = data_string
+        print(scene.data_string)
+        
         for y in scene.preview.radio_buttons:
-            print(y, scene.preview.radio_buttons[y])
             if y == s["connection"]:
-                print(True)
                 scene.preview.radio_buttons[y].setAutoExclusive(False)
                 scene.preview.radio_buttons[y].setCheckable(True)
                 scene.preview.radio_buttons[y].setChecked(True)
