@@ -17,7 +17,7 @@ from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
-from src.UI_unit_editor_dialogs import growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats, editUniversalWeaponTypes
+from src.UI_unit_editor_dialogs import growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats, editUniversalWeaponTypes, classSkillDialog
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -1306,7 +1306,8 @@ class UnitEditorWnd(QWidget):
         pass
     
     def skills_dialog(self):
-        pass
+        y = classSkillDialog(parent=self)
+        y.exec_()
 
     def skilled_blows_dialog(self):
         pass
@@ -1314,7 +1315,7 @@ class UnitEditorWnd(QWidget):
     def next_classes_dialog(self):
         pass
             
-    def getClassesInFolder(self):
+    def getClassesInFolder(self, b = True):
         file_list = getFiles("src/skeletons/classes")[GET_FILES]
         class_names = []
         if hasattr(self.unit, "unit_class_name"):
@@ -1328,6 +1329,11 @@ class UnitEditorWnd(QWidget):
                 tmp_class.selfFromJSON(f.fullPath)
                 class_names.append(tmp_class.unit_class_name)
                 classes[tmp_class.unit_class_name] = tmp_class
+                
+        if b:
+            self.classesToDropDown(class_names)
+                
+    def classesToDropDown(self, class_names):
         self.title_edit.addItems(class_names)
         self.title_edit.update()
         try:

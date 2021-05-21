@@ -5,6 +5,8 @@ from src.UI_updateJSON import updateJSON
 import src.UI_colorTheme
 import shutil, os, pickle, json, sys
 from src.node_presets import NODE_KEYS, NODES, Nodes
+from src.skeletons.unit_class import unitClass
+from src.UI_nodes_backend import getFiles, GET_FILES
 
 class addNodePreset(QDialog):
     def __init__(self, parent=None):
@@ -59,3 +61,45 @@ class addNodePreset(QDialog):
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
         super().showEvent(event)
+
+class setSkillToClass(QDialog):
+    def __init__(self, parent=None):
+        data = updateJSON()
+        self.parent = parent
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        
+        self.layout.addWidget(QLabel("Choose class:"))
+        self.list = QComboBox()
+        self.list.addItem("--Select--")
+        self.list.addItems(self.getClassesInFolder())
+        self.list.currentTextChanged.connect(self.connect_class)
+        self.layout.addWidget(self.list)
+        
+        self.setLayout(self.layout)
+        
+    def connect_class(self, s):
+        file_list = getFiles("src/skeletons/classes")[GET_FILES]
+        for f in file_list:
+            if f.ext.strip() == ".tructf":
+                tmp_class = unitClass()
+                tmp_class.selfFromJSON(f.path)
+                if tmp_class.unit_class_name == s:
+                    if self.parent.skill_name not in tmp_class.skills:
+                        tmp_class.skills.append(self.parent.skill_name.text())
+                    tmp_class.selfToJSON(f.path)
+                    self.close()                        
+                    
+    def getClassesInFolder(self):
+        file_list = getFiles("src/skeletons/classes")[GET_FILES]
+        class_names = []
+        for f in file_list:
+            tmp_class = unitClass()
+            tmp_class.selfFromJSON(f.path)
+            class_names.append(tmp_class.unit_class_name)
+        print(class_names)
+        return class_names

@@ -7,6 +7,7 @@ from src.UI_TableModel import TableModel
 from src.node_backend import getFiles, File
 from src.img_overlay import overlayTile
 from src.UI_Dialogs import infoClose
+from src.UI_node_dialogs import setSkillToClass
 
 import json, math, random
 
@@ -188,6 +189,9 @@ class skillPreview(QWidget):
     
     def change_connection(self):
         self.parent.scene.connection_type = self.sender().name
+        if self.sender().name == "Class":
+            b = setSkillToClass(parent=self)
+            b.exec_()
     
     def desc_changed(self):
         self.parent.scene.desc = self.sender().toPlainText()

@@ -24,7 +24,7 @@ class unitClass():
         self.unit_class_name = None
         
         self.tactics = {}
-        self.skills = {}
+        self.skills = []
         self.skilled_blows = {}
         
         self.tactics_minimum_class_exp = {}

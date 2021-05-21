@@ -1,10 +1,12 @@
-from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QFont
 from src.UI_updateJSON import updateJSON
 import src.UI_colorTheme
 import shutil, os, pickle, json, sys
 from src.UI_Dialogs import confirmAction
+from src.node_backend import getFiles, GET_FILES
+from src.img_overlay import overlayTile
 
 class growthRateDialog(QDialog):
     def __init__(self, parent=None):
@@ -527,4 +529,119 @@ class editUniversalWeaponTypes(QDialog):
             self.parent.unit.removeUniversalWeaponsType(self.list.currentItem().text())
             self.close()
             self.restart = True
+
+class classSkillDialog(QDialog):
+    def __init__(self, parent=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QGridLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        self.setLayout(self.layout)
+        
+        print(self.parent.unit.unit_class.unit_class_name)
+        
+        #fromRow, int fromColumn, int rowSpan, int columnSpan
+        
+        self.skill_list = QListWidget()
+        self.skill_list.setIconSize(QSize(56,56))
+        self.skill_list.currentTextChanged.connect(self.skill_changed)
+        self.layout.addWidget(self.skill_list, 0,0,2,2)
+        
+        self.all_skills = self.getSkillsInFolder()
+        
+        with open("src/skill_graphics/skill_graphics.txt", "r") as f:
+            g_data = json.load(f)
+        
+        self.outer = g_data[0]
+        self.inner = g_data[1]
+        self.inner2 = g_data[2]
+        
+        self.fillList()
+            
+        if len(self.parent.unit.unit_class.skills) == 0:
+            self.skill_list.addItem("No skills connected to class")
+        
+        self.level_label = QLabel("Unlock Level")
+        self.level = QSpinBox()
+        self.level.setRange(0,30)
+        self.level.setValue(0)
+
+        self.layout.addWidget(self.level_label, 2, 0, 1, 1)
+        self.layout.addWidget(self.level, 2,1,1,1)
+        
+        self.remove = QPushButton()
+        self.remove.setToolTip("Unlink skill from class")
+        self.remove.setIcon(QIcon(QPixmap("src/ui_icons/white/dl.png").scaled(48,48, Qt.KeepAspectRatio)))
+        self.remove.setIconSize(QSize(32,32))
+        self.remove.setMinimumWidth(52)
+        self.remove.setMinimumHeight(52)
+        self.remove.setMaximumHeight(52)
+        self.remove.clicked.connect(self.remove_skill)
+        
+        self.layout.addWidget(self.remove, 3, 0, 1,1)
+        
+        self.add = QPushButton()
+        self.add.setToolTip("Create/Edit Skills")
+        self.add.setIcon(QIcon(QPixmap("src/ui_icons/white/add.png").scaled(48,48, Qt.KeepAspectRatio)))
+        self.add.setIconSize(QSize(32,32))
+        self.add.setMinimumWidth(52)
+        self.add.setMinimumHeight(52)
+        self.add.setMaximumHeight(52)
+        self.add.clicked.connect(self.add_skill)
+        
+        self.layout.addWidget(self.add, 3, 1, 1,1)
+        
+        
+    def skill_changed(self):
+        pass
+    
+    def remove_skill(self):
+        try:
+            self.parent.unit.unit_class.skills.remove(self.skill_list.currentItem().text())
+            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.parent.class_name.text()+".tructf")
+            self.fillList()
+        except:
+            pass
+    
+    def add_skill(self):
+       pass
+        
+
+    def getSkillsInFolder(self):
+        file_list = getFiles("src/")[GET_FILES]
+        skills = {}
+        for f in file_list:
+            if f.ext.strip() == ".trnep":
+                skills[f.path[f.path.rfind("/")+1:f.path.find(".trnep")]] = f.path
+        return skills
+
+    def fillList(self):
+        self.skill_list.clear()
+        for d in self.parent.unit.unit_class.skills:
+            list_item = QListWidgetItem()
+
+            with open(self.all_skills[d], "r") as f:
+                s = json.load(f)
+            or_index = s["icon"][0]
+            ir_index= s["icon"][1]
+            ic_index= s["icon"][2]
+            
+            pixmap = QPixmap(56,56)
+            pixmap.fill(Qt.transparent)
+            p = overlayTile(pixmap, self.outer[or_index], 56)
+            g = overlayTile(p, self.inner[ir_index], 56)
+            r = overlayTile(g, self.inner2[ic_index], 56)
+            pixmap = QIcon(r)
+            list_item.setIcon(pixmap)
+            
+            self.skill_list.addItem(list_item)
+            
+            list_item.setText(d)
+        
+        
         
