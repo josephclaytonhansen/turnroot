@@ -23,15 +23,12 @@ class skillPreview(QWidget):
         
         self.setMaximumHeight(170)
         
-        self.outer = ["src/skill_graphics/outer_gold.png", "src/skill_graphics/outer_blue.png", "src/skill_graphics/outer_silver.png"]
-        self.inner = ["src/skill_graphics/inner_blue.png", "src/skill_graphics/inner_dark_blue.png",
-                 "src/skill_graphics/inner_dark_purple.png","src/skill_graphics/inner_dark_teal.png",
-                 "src/skill_graphics/inner_gold.png","src/skill_graphics/inner_green.png",
-                 "src/skill_graphics/inner_light_green.png","src/skill_graphics/inner_light_red.png",
-                 "src/skill_graphics/inner_light_yellow.png","src/skill_graphics/inner_purple.png",
-                 "src/skill_graphics/inner_red.png",]
-        self.inner2 = ["src/skill_graphics/sword.png","src/skill_graphics/lance.png","src/skill_graphics/axe.png",
-                       "src/skill_graphics/bow.png", "src/skill_graphics/horse.png"]
+        with open("src/skill_graphics/skill_graphics.txt", "r") as f:
+            g_data = json.load(f)
+        
+        self.outer = g_data[0]
+        self.inner = g_data[1]
+        self.inner2 = g_data[2]
         
         self.initUI()
         
