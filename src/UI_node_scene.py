@@ -96,12 +96,12 @@ class Scene(Serializable):
             else:
                 with open(self.path, "w") as file:
                     file.write(json.dumps(self.save_data))
-                    self.preview.skill_name.setText(self.path[self.path.rfind("/")+1:self.path.find(".trnep")])
+                    self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
                     self.preview.enable_radio_buttons()
         else:
             with open(self.path, "w") as file:
                 file.write(json.dumps(self.save_data))
-                self.preview.skill_name.setText(self.path[self.path.rfind("/")+1:self.path.find(".trnep")])
+                self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
                 self.preview.enable_radio_buttons()
 
     def openFileDialog(self):
@@ -122,8 +122,9 @@ class Scene(Serializable):
         else:
             with open(self.path, "r") as file:
                 raw_data = file.read()
+                
+                self.preview.skill_name.setText(self.path[self.path.rfind("\\")+1:self.path.find(".trnep")])
                 Load().loadScene(scene=self,path=raw_data)
-                self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
                 self.preview.enable_radio_buttons()
     
     def loadFromFileNoDialog(self):
@@ -133,8 +134,9 @@ class Scene(Serializable):
         else:
             with open(self.path, "r") as file:
                 raw_data = file.read()
+
+                self.preview.skill_name.setText(self.path[self.path.rfind("\\")+1:self.path.find(".trnep")])
                 Load().loadScene(scene=self,path=raw_data)
-                self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
                 self.preview.enable_radio_buttons()        
     
     def saveFileDialog(self):

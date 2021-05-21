@@ -189,6 +189,7 @@ class skillPreview(QWidget):
     
     def change_connection(self):
         self.parent.scene.connection_type = self.sender().name
+        print(self.sender().name)
         if self.sender().name == "Class":
             b = setSkillToClass(parent=self)
             b.exec_()

@@ -549,7 +549,6 @@ class classSkillDialog(QDialog):
         
         self.skill_list = QListWidget()
         self.skill_list.setIconSize(QSize(56,56))
-        self.skill_list.currentTextChanged.connect(self.skill_changed)
         self.layout.addWidget(self.skill_list, 0,0,2,2)
         
         self.all_skills = self.getSkillsInFolder()
@@ -568,6 +567,7 @@ class classSkillDialog(QDialog):
         
         self.level_label = QLabel("Unlock Level")
         self.level = QSpinBox()
+        self.level.valueChanged.connect(self.skill_changed)
         self.level.setRange(0,30)
         self.level.setValue(0)
 
@@ -595,15 +595,15 @@ class classSkillDialog(QDialog):
         self.add.clicked.connect(self.add_skill)
         
         self.layout.addWidget(self.add, 3, 1, 1,1)
-        
-        
-    def skill_changed(self):
-        pass
+         
+    def skill_changed(self, i):
+        self.parent.unit.unit_class.skill_criteria[self.skill_list.currentItem().text()] = i
+        self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.parent.unit.unit_class.unit_class_name+".tructf")
     
     def remove_skill(self):
         try:
             self.parent.unit.unit_class.skills.remove(self.skill_list.currentItem().text())
-            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.parent.class_name.text()+".tructf")
+            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.parent.unit.unit_class.unit_class_name+".tructf")
             self.fillList()
         except:
             pass

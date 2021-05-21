@@ -2,29 +2,12 @@ import pickle
 
 class unitClass():
     def __init__(self):
-        self.help_dict = {
-            "tactics_minimum_class_exp": "how much class EXP must be gained for this tactic",
-            "skills_minimum_class_exp": "how much class EXP must be gained for this skill",
-            "skilled_blows_minimum_class_exp": "how much class EXP must be gained for this skilled blow",
-            "minimum_level": "what level the unit must reach to unlock this class",
-            "weak_against": "attack types that do more (or less) damage because of this class",
-            "weak_against_amount": "if greater than 1, attack type does more damage. If less than 1, it does less. 2.0 would do double damage, .5 would do half.",
-            "self.is_mounted": "If the unit has the Mount/Dismount command, which changes mobility",
-            "mounted_move_change": "how much the move stat is increased by when mounted",
-            "mounted_tile_changes": "how mounting changes the tile interactions",
-            "dismounted_tile_changes": "how movement changes if unit is dismounted, or is_mounted is False",
-            "exp_gained_multiplier": "how quickly or slowly the unit levels up- i.e., how much 1 EXP point is worth.",
-            "class_type": "if classes are split into categories, class category",
-            "growth_rates": "when leveling up, the chance of each stat getting an increase. 1 is 100% chance, 0 is 0, .5 is 50%",
-            "stat_bonuses": "stat bonuses given when changing to this class",
-            "stat_bonuses_criteria": "per stat_bonus, criteria for it. \n i.e.: If 'strength' + 5 is a stat_bonus, 'strength': self.unit.affinities['strength'] == 'B'",
-            "next_classes": "if classes branch, next options. Ignored if classes are in grid"
-            }
         
         self.unit_class_name = None
         
         self.tactics = {}
         self.skills = []
+        self.skill_criteria = {}
         self.skilled_blows = {}
         
         self.tactics_minimum_class_exp = {}
@@ -59,7 +42,7 @@ class unitClass():
                            "allowed_weapon_types", "disallowed_weapon_types", "minimum_level", "is_mounted",
                            "mounted_move_change", "mounted_tile_changes", "dismounted_tile_changes",
                            "weak_against", "weak_against_amount", "exp_gained_multiplier",
-                           "class_type", "stat_bonuses", "stat_bonuses_criteria", "next_classes"]
+                           "class_type", "stat_bonuses", "stat_bonuses_criteria", "next_classes", "skill_criteria"]
 
             
             basic_attrs_dict = {}
@@ -79,7 +62,7 @@ class unitClass():
                        "allowed_weapon_types", "disallowed_weapon_types", "minimum_level", "is_mounted",
                        "mounted_move_change", "mounted_tile_changes", "dismounted_tile_changes",
                        "weak_against", "weak_against_amount", "exp_gained_multiplier",
-                       "class_type", "stat_bonuses", "stat_bonuses_criteria", "next_classes"]
+                       "class_type", "stat_bonuses", "stat_bonuses_criteria", "next_classes", "skill_criteria"]
         
         with open(path, "rb") as rf:
             tmp_data = pickle.load(rf)
