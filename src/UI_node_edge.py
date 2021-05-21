@@ -231,18 +231,5 @@ class Edge(Serializable):
         except ValueError:
             pass
 
-    def serialize(self):
-        return OrderedDict([
-            ('id', self.id),
-            ('edge_type', self.edge_type),
-            ('start', self.start_socket.id),
-            ('end', self.end_socket.id),
-        ])
-
-    def deserialize(self, data, hashmap={}, restore_id=True):
-        if restore_id: self.id = data['id']
-        self.start_socket = hashmap[data['start']]
-        self.end_socket = hashmap[data['end']]
-        self.edge_type = data['edge_type']
 
 
