@@ -43,7 +43,6 @@ OPEN_NEW_FILE = const[1]
 class mainS(NodeEditorWnd):
     def __init__(self,parent=None):
         super().__init__(parent)
-        self.setMinimumSize(QSize(int(size.width()/3), int(size.height()/2.4)))
         self.setMaximumSize(QSize(int(size.width()), int(size.height())))
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.context_menu)
@@ -142,7 +141,7 @@ class mainS(NodeEditorWnd):
 class mainN(UnitEditorWnd):
     def __init__(self, parent):
         super().__init__(parent)
-        self.setMinimumSize(QSize(int(size.width()/1.40), int(size.height()*.72)))
+        self.resize(QSize(1500,900))
         self.setMaximumSize(QSize(int(size.width()*2), int(size.height()*2)))
 
 class main(QMainWindow):
@@ -225,6 +224,14 @@ class main(QMainWindow):
                 self.saveButton.triggered.disconnect() 
                 self.openButton.triggered.connect(self.skills_editor.scene.loadFromFile)
                 self.saveButton.triggered.connect(self.skills_editor.scene.saveToFile)
+                self.resize(QSize(1200,700))
+                self.setGeometry(
+    QStyle.alignedRect(
+        Qt.LeftToRight,
+        Qt.AlignCenter,
+        self.size(),
+        app.desktop().availableGeometry()
+        ))
                 self.setWindowTitle("Turnroot Skills Editor")
             elif new_editor == 2:
                 from main_world_editor import main
@@ -236,6 +243,14 @@ class main(QMainWindow):
                 self.saveButton.triggered.disconnect() 
                 self.openButton.triggered.connect(self.unit_editor.loadFromFile)
                 self.saveButton.triggered.connect(self.unit_editor.unitToJSON)
+                self.resize(QSize(1500,900))
+                self.setGeometry(
+    QStyle.alignedRect(
+        Qt.LeftToRight,
+        Qt.AlignCenter,
+        self.size(),
+        app.desktop().availableGeometry()
+        ))
                 self.setWindowTitle("Turnroot Unit/Class Editor")
             elif new_editor == 5:
                 from main_object_editor import main
