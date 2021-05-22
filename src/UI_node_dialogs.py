@@ -9,23 +9,27 @@ from src.skeletons.unit_class import unitClass
 from src.UI_nodes_backend import getFiles, GET_FILES
 
 class addNodePreset(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,font=None):
         self.chosen_node = None
         self.parent = parent
         self.add = False
         data = updateJSON()
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
+        self.body_font = font
         
         self.setWindowFlags(Qt.Popup)
         
-        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QHBoxLayout()
         self.layout.setContentsMargins(8,8,8,8)
-        self.layout.addWidget(QLabel("Add node: "))
+        l = QLabel("Add node: ")
+        l.setFont(self.body_font)
+        self.layout.addWidget(l)
         
         self.add_options = NODE_KEYS
         self.add_dd = QComboBox()
+        self.add_dd.setFont(self.body_font)
         self.add_dd.setMaxVisibleItems(10)
         self.add_dd.textHighlighted.connect(self.add_enable)
         self.add_dd.currentTextChanged.connect(self.add_dd_changed)
@@ -63,18 +67,21 @@ class addNodePreset(QDialog):
         super().showEvent(event)
 
 class setSkillToClass(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,font=None):
         data = updateJSON()
         self.parent = parent
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         
-        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(8,8,8,8)
         
-        self.layout.addWidget(QLabel("Choose class:"))
+        g = QLabel("Choose class: ")
+        g.setFont(self.body_font)
+        self.layout.addWidget(g)
         self.list = QComboBox()
+        self.list.setFont(self.body_font)
         self.list.addItem("--Select--")
         self.list.addItems(self.getClassesInFolder())
         self.list.currentTextChanged.connect(self.connect_class)

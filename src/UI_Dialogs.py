@@ -459,6 +459,7 @@ class editorDialogItem(QWidget):
         self.icon_widget.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.icon_widget.setPixmap(QPixmap(self.icon))
         self.label_widget = QPushButton(self.text)
+        self.label_widget.setFont(self.parent.body_font)
         self.label_widget.clicked.connect(self.changeEditor)
         
         self.layout.addWidget(self.icon_widget)
@@ -483,32 +484,18 @@ GAME_EDITOR = 10
 EDITORS = [TILE_EDITOR,NODE_EDITOR,WORLD_EDITOR,HUB_EDITOR,UNIT_EDITOR,OBJECT_EDITOR,PORTRAIT_EDITOR,CLASS_EDITOR,MENU_EDITOR,STORE_EDITOR,GAME_EDITOR]
 
 class switchEditorDialog(QDialog):
-    def __init__(self,parent=None):
+    def __init__(self,parent=None,font=None):
         data = updateJSON()
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.setWindowFlags(Qt.Popup)
+        self.body_font = font
         self.mode = NEW_WINDOW
-        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
         self.editor = None
         
         self.layout = QVBoxLayout()
-
-        self.radioGroup = QWidget()
-        self.radioGroup_layout = QHBoxLayout()
-        self.radioGroup.setLayout(self.radioGroup_layout)
-        
-        self.radio_new = QRadioButton("Open new window")
-        self.radio_new.setChecked(True)
-        self.radio_new.toggled.connect(self.newWindow)
-        
-        self.radio_replace = QRadioButton("Replace current window")
-        self.radio_new.setChecked(False)
-        self.radio_new.toggled.connect(self.replaceWindow)
-        
-        self.radioGroup_layout.addWidget(self.radio_new)
-        self.radioGroup_layout.addWidget(self.radio_replace)
         
         self.row_1 = QWidget()
         self.row_2 = QWidget()
@@ -527,12 +514,12 @@ class switchEditorDialog(QDialog):
         self.layout.addWidget(self.row_3)
         
         self.icons = [["src/ui_icons/white/e_tile.png", "src/ui_icons/white/e_node.png", "src/ui_icons/white/e_world.png","src/ui_icons/white/e_hub.png"],
-                      ["src/ui_icons/white/e_class.png","src/ui_icons/white/e_object.png","src/ui_icons/white/e_portrait.png"],
+                      ["src/ui_icons/white/e_class.png","src/ui_icons/white/e_object.png","src/ui_icons/white/e_portrait.png","src/ui_icons/white/e_node.png"],
                       ["src/ui_icons/white/e_menu.png", "src/ui_icons/white/e_store.png", "src/ui_icons/white/e_game.png"]]
-        self.labels = [["Tiles (level)", "Dialogue/Actions", "Tiles (world)", "Hub"],
-                       ["Units/Classes", "Objects", "Portraits"],
+        self.labels = [["Tiles (level)", "Skills", "Tiles (world)", "Hub"],
+                       ["Units/Classes", "Objects", "Portraits", "Dialogue"],
                        ["Menus", "Stores", "Game"]]
-        self.widgets = [[0,1,2,3],[0,1,2],[0,1,2]]
+        self.widgets = [[0,1,2,3],[0,1,2,3],[0,1,2]]
         self.rows = [self.row_1_layout, self.row_2_layout, self.row_3_layout]
         
         e = -1
@@ -545,18 +532,10 @@ class switchEditorDialog(QDialog):
                 current_label = self.labels[current_row][item]
                 w = editorDialogItem(current_icon, current_label, EDITORS[e], parent=self)
                 self.rows[current_row].addWidget(w)
-
-        #self.layout.addWidget(self.radioGroup)
         
         self.setLayout(self.layout)
         
         self.show()
-    
-    def newWindow(self):
-        self.mode = NEW_WINDOW
-    
-    def replaceWindow(self):
-        self.mode = REPLACE_WINDOW
 
 class popupInfo(QDialog):
     def __init__(self,s,parent=None):

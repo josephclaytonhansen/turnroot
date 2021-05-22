@@ -531,14 +531,15 @@ class editUniversalWeaponTypes(QDialog):
             self.restart = True
 
 class classSkillDialog(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,font=None):
         data = updateJSON()
         self.parent = parent
         self.restart = False
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
+        self.body_font = font
         
-        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QGridLayout()
         self.layout.setContentsMargins(8,8,8,8)
         self.setLayout(self.layout)
@@ -548,6 +549,7 @@ class classSkillDialog(QDialog):
         #fromRow, int fromColumn, int rowSpan, int columnSpan
         
         self.skill_list = QListWidget()
+        self.skill_list.setFont(self.body_font)
         self.skill_list.setIconSize(QSize(56,56))
         self.layout.addWidget(self.skill_list, 0,0,2,2)
         
@@ -566,7 +568,9 @@ class classSkillDialog(QDialog):
             self.skill_list.addItem("No skills connected to class")
         
         self.level_label = QLabel("Unlock Level")
+        self.level_label.setFont(self.body_font)
         self.level = QSpinBox()
+        self.level.setFont(self.body_font)
         self.level.valueChanged.connect(self.skill_changed)
         self.level.setRange(0,30)
         self.level.setValue(0)

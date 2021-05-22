@@ -300,7 +300,8 @@ class QDMGraphicsView(QGraphicsView):
                 self.grScene.scene.clear()
             else:
                 super().keyPressEvent(event)
-                n = addNodePreset(parent=self)
+                fontf = QFont("Lucida Grande", int(data["font_size"]))
+                n = addNodePreset(parent=self,font=fontf)
                 n.exec_()
                 
         elif event.key() == Qt.Key_Q:

@@ -51,7 +51,7 @@ else:
     active_index = 0
 
 class unitOptionsDialog(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,font=None):
         data = updateJSON()
         try:
             active_theme = getattr(src.UI_colorTheme, data["active_theme"])
@@ -61,28 +61,31 @@ class unitOptionsDialog(QDialog):
 
         #sizing options
         super().__init__()
-        self.font_size = data["font_size"]
+        self.body_font = font
         self.setWindowTitle("Preferences")
         self.setMinimumHeight(340)
         self.setMaximumHeight(780)
         self.setMaximumWidth(900)
-        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.ok_label = "Apply changes"
         QBtn = QPushButton(self.ok_label)
         self.buttonBox = QBtn
         self.buttonBox.clicked.connect(self.accept)
+        self.buttonBox.setFont(self.body_font)
         self.cancelBox = QPushButton("Cancel")
         self.cancelBox.clicked.connect(self.cancel)
+        self.cancelBox.setFont(self.body_font)
 
         #the overall layout is a grid
         layout = QGridLayout()
         self.pref_categories = QListWidget()
+        self.pref_categories.setFont(self.body_font)
         
         #list categories on the left
         self.pref_categories.addItems(entries)
         self.pref_categories.setMinimumWidth(120)
         self.pref_categories.setMaximumWidth(260)
-        self.pref_categories.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color)
+        self.pref_categories.setStyleSheet("background-color: "+self.active_theme.list_background_color)
         self.pref_categories.currentTextChanged.connect(self.category_change)
         
         #options on the right
@@ -98,6 +101,7 @@ class unitOptionsDialog(QDialog):
         self.aes_layout.setSpacing(25)
         
         self.mfs = QLabel("Label font size")
+        self.mfs.setFont(self.body_font)
         self.mfs.setAlignment(Qt.AlignVCenter)
         self.aes_layout.addWidget(self.mfs,0,0)
         self.font_slider = QSlider(Qt.Horizontal)
@@ -110,6 +114,7 @@ class unitOptionsDialog(QDialog):
         self.aes_layout.addWidget(self.font_slider,0,1)
         
         self.rfs = QLabel("Text editor font size")
+        self.rfs.setFont(self.body_font)
         self.rfs.setAlignment( Qt.AlignVCenter)
         self.aes_layout.addWidget(self.rfs,2,0)
         self.rfont_slider = QSlider(Qt.Horizontal)
@@ -122,9 +127,11 @@ class unitOptionsDialog(QDialog):
         self.aes_layout.addWidget(self.rfont_slider,2,1)
         
         self.ct = QLabel("Color theme\n (will automatically restart)")
+        self.ct.setFont(self.body_font)
         self.ct.setAlignment( Qt.AlignVCenter)
         self.aes_layout.addWidget(self.ct,4,0)
         self.color_theme_list = QListWidget()
+        self.color_theme_list.setFont(self.body_font)
         self.color_theme_list.setStyleSheet("background-color:"+self.active_theme.list_background_color+";")
         self.color_theme_list.addItems(color_themes)
         self.color_theme_list.setCurrentRow(active_index)
@@ -133,10 +140,12 @@ class unitOptionsDialog(QDialog):
         self.color_theme_list.currentTextChanged.connect(self.color_theme_changed)
         self.aes_layout.addWidget(self.color_theme_list,4,1)
         self.ct_edit = QPushButton("Edit color theme")
+        self.ct_edit.setFont(self.body_font)
         self.ct_edit.clicked.connect(self.colorThemeDialog)
         self.aes_layout.addWidget(self.ct_edit,5,1)
         
         self.tis = QLabel("Toolbar icon size")
+        self.tis.setFont(self.body_font)
         self.tis.setAlignment(Qt.AlignVCenter)
         self.aes_layout.addWidget(self.tis,11,0)
         self.tis_slider = QSlider(Qt.Horizontal)

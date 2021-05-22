@@ -43,7 +43,7 @@ class UnitEditorWnd(QWidget):
     def initUI(self):
         self.path = None
         
-        self.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        self.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: 16")
 
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
@@ -143,12 +143,13 @@ class UnitEditorWnd(QWidget):
         self.name_edit.setPlaceholderText("Name")
         self.name_edit.setStyleSheet("background-color: "+active_theme.window_background_color+";")
         name_font = self.name_edit.font()
-        name_font.setPointSize(16)
+        name_font.setPointSize(int(data["font_size"]))
         
         header_font = self.name_edit.font()
-        header_font.setPointSize(21)
+        header_font.setPointSize(int(data["font_size"])+5)
         body_font = self.name_edit.font()
-        body_font.setPointSize(16)
+        body_font.setPointSize(int(data["font_size"]))
+        self.body_font = body_font
         small_font = self.name_edit.font()
         small_font.setPointSize(12)
         
@@ -357,7 +358,9 @@ class UnitEditorWnd(QWidget):
         self.solider_lone_wolf_slider.setSingleStep(1)
         
         soldier_label = QLabel("Soldier")
+        soldier_label.setFont(self.body_font)
         lonewolf_label = QLabel("Lone Wolf")
+        lonewolf_label.setFont(self.body_font)
         
         personality_slider_row_1_layout.addWidget(soldier_label)
         personality_slider_row_1_layout.addWidget(self.solider_lone_wolf_slider)
@@ -372,7 +375,9 @@ class UnitEditorWnd(QWidget):
         self.strategic_mindless_slider.setSingleStep(1)
         
         strategic_label = QLabel("Strategic")
+        strategic_label.setFont(self.body_font)
         mindless_label = QLabel("Mindless")
+        mindless_label.setFont(self.body_font)
         
         personality_slider_row_layout_2.addWidget(strategic_label)
         personality_slider_row_layout_2.addWidget(self.strategic_mindless_slider)
@@ -387,7 +392,9 @@ class UnitEditorWnd(QWidget):
         self.cautious_brash_slider.setSingleStep(1)
         
         cautious_label = QLabel("Cautious")
+        cautious_label.setFont(self.body_font)
         brash_label = QLabel("Brash")
+        brash_label.setFont(self.body_font)
         
         personality_slider_row_layout_3.addWidget(cautious_label)
         personality_slider_row_layout_3.addWidget(self.cautious_brash_slider)
@@ -415,9 +422,11 @@ class UnitEditorWnd(QWidget):
         rules_row.setLayout(rules_row_layout)
         
         basic_principles = QPushButton("Overview")
+        basic_principles.setFont(self.body_font)
         basic_principles.clicked.connect(self.AIOverviewDialog)
         
         detailed_help = QPushButton("Rule Guidelines")
+        detailed_help.setFont(self.body_font)
         detailed_help.clicked.connect(self.AIHelpDialog)
 
         
@@ -431,6 +440,7 @@ class UnitEditorWnd(QWidget):
         default_values_row.setLayout(default_values_row_layout)
         
         self.default_values = QComboBox()
+        self.default_values.setFont(self.body_font)
         with open("src/skeletons/sheets/default_slider_values.json", "r") as file:
             self.dv_slider_from_sheet = json.load(file)
 
@@ -441,9 +451,11 @@ class UnitEditorWnd(QWidget):
         self.default_values.addItems(["--Select--", "Foot Soldier", "Pegasus (Flying) Knight", "Mindless Creature", "Cautious Healer", "Assassin", "Sniper", "Vengeful Demon",
                                       "Strategic Leader", "Armored Tank"])
         default_values_button = QPushButton("Load Preset")
+        default_values_button.setFont(self.body_font)
         default_values_button.clicked.connect(self.AILoadSheets)
         
-        save_values_button = QPushButton("Save")
+        save_values_button = QPushButton("Save Unit")
+        save_values_button.setFont(self.body_font)
         save_values_button.clicked.connect(self.unitToJSON)
         
         default_values_row_layout.addWidget(self.default_values)
@@ -480,7 +492,10 @@ class UnitEditorWnd(QWidget):
             self.weapon_type_widgets[weapon_type] = weapon_type_widget
             
             self.starting_level_labels[weapon_type] = QLabel("D")
-            weapon_type_layout.addWidget(QLabel("<b>"+weapon_type.upper()+"</b><br>Starting level"))
+            self.starting_level_labels[weapon_type].setFont(self.body_font)
+            lab = QLabel("<b>"+weapon_type.upper()+"</b><br>Starting level")
+            lab.setFont(self.body_font)
+            weapon_type_layout.addWidget(lab)
             weapon_type_layout.addWidget(self.starting_level_labels[weapon_type])
             
             self.starting_type_sliders[weapon_type] = QSlider(Qt.Vertical)
@@ -495,9 +510,11 @@ class UnitEditorWnd(QWidget):
             weapon_type_layout.addWidget(self.starting_type_sliders[weapon_type])
             
             growth_multiplier_labels[weapon_type] = QLabel("Growth Rate")
+            growth_multiplier_labels[weapon_type].setFont(self.body_font)
             weapon_type_layout.addWidget(growth_multiplier_labels[weapon_type])
             
             self.growth_multipliers_widgets[weapon_type] = QDoubleSpinBox()
+            self.growth_multipliers_widgets[weapon_type].setFont(self.body_font)
             self.growth_multipliers_widgets[weapon_type].name = weapon_type
             self.growth_multipliers_widgets[weapon_type].setRange(0.5,1.5)
             self.growth_multipliers_widgets[weapon_type].setValue(1.0)
@@ -511,6 +528,7 @@ class UnitEditorWnd(QWidget):
         column_layout.addWidget(column_inner)
             
         self.edit_weapon_types = QPushButton("Edit Weapon Types")
+        self.edit_weapon_types.setFont(self.body_font)
         self.edit_weapon_types.clicked.connect(self.weaponTypesChange)
         column_layout.addWidget(self.edit_weapon_types)
             
@@ -529,25 +547,31 @@ class UnitEditorWnd(QWidget):
         wt = weaponTypes().data
 
         self.class_name = QLineEdit()
+        self.class_name.setFont(self.body_font)
         self.class_name.setPlaceholderText("Class name")
         self.class_name.returnPressed.connect(self.class_name_change)
         working_tab_layout.addWidget(self.class_name, 0,0,1,5)
 
         allowed_weapons_label = QLabel("Can use")
+        allowed_weapons_label.setFont(self.body_font)
         working_tab_layout.addWidget(allowed_weapons_label, 1,1,1,1)
 
         not_allowed_weapons_label = QLabel("Can't use")
+        not_allowed_weapons_label.setFont(self.body_font)
         working_tab_layout.addWidget(not_allowed_weapons_label, 1,2,1,1)
 
         minimum_level_label = QLabel("Minimum level")
+        minimum_level_label.setFont(self.body_font)
         working_tab_layout.addWidget(minimum_level_label, 1,3,1,1)
 
         self.minimum_level = QSpinBox()
+        self.minimum_level.setFont(self.body_font)
         self.minimum_level.setRange(0,30)
         self.minimum_level.valueChanged.connect(self.minimum_level_change)
         working_tab_layout.addWidget(self.minimum_level, 1,4,1,1)
 
         is_mounted_label = QLabel("Mounted?")
+        is_mounted_label.setFont(self.body_font)
         working_tab_layout.addWidget(is_mounted_label, 2,3,1,1)
 
         self.is_mounted = QCheckBox()
@@ -555,29 +579,36 @@ class UnitEditorWnd(QWidget):
         working_tab_layout.addWidget(self.is_mounted, 2,4,1,1)
 
         mounted_m_label = QLabel("Mounted movement+")
+        mounted_m_label.setFont(self.body_font)
         working_tab_layout.addWidget(mounted_m_label, 3,3,1,1)
 
         self.mounted_m = QSpinBox()
+        self.mounted_m.setFont(self.body_font)
         self.mounted_m.setRange(0,10)
         self.mounted_m.valueChanged.connect(self.mounted_m_change)
         working_tab_layout.addWidget(self.mounted_m, 3,4,1,1)
 
         exp_m_label = QLabel("EXP growth X")
+        exp_m_label.setFont(self.body_font)
         working_tab_layout.addWidget(exp_m_label, 4,3,1,1)
 
         self.exp_m = QDoubleSpinBox()
+        self.exp_m.setFont(self.body_font)
         self.exp_m.setRange(0.1,1.5)
         self.exp_m.valueChanged.connect(self.exp_m_change)
         working_tab_layout.addWidget(self.exp_m, 4,4,1,1)
 
         class_type_label = QLabel("Class type")
+        class_type_label.setFont(self.body_font)
         working_tab_layout.addWidget(class_type_label, 5,3,1,1)
 
         self.class_type = QComboBox()
+        self.class_type.setFont(self.body_font)
         self.class_type.currentTextChanged.connect(self.class_type_change)
         working_tab_layout.addWidget(self.class_type, 5,4,1,1)
         
         is_flying_label = QLabel("Flying?")
+        is_flying_label.setFont(self.body_font)
         working_tab_layout.addWidget(is_flying_label, 6,3,1,1)
 
         self.is_flying = QCheckBox()
@@ -585,34 +616,42 @@ class UnitEditorWnd(QWidget):
         working_tab_layout.addWidget(self.is_flying, 6,4,1,1)
 
         self.tactics = QPushButton("Tactics")
+        self.tactics.setFont(self.body_font)
         self.tactics.clicked.connect(self.tactics_dialog)
         working_tab_layout.addWidget(self.tactics, len(wt)+2,0,1,1)
 
         self.skills = QPushButton("Skills")
+        self.skills.setFont(self.body_font)
         self.skills.clicked.connect(self.skills_dialog)
         working_tab_layout.addWidget(self.skills, len(wt)+2,1,1,1)
 
         self.skilled_blows = QPushButton("Skilled Blows")
+        self.skilled_blows.setFont(self.body_font)
         self.skilled_blows.clicked.connect(self.skilled_blows_dialog)
         working_tab_layout.addWidget(self.skilled_blows, len(wt)+2,2,1,1)
 
         self.growth_rates = QPushButton("Growth Rates")
+        self.growth_rates.setFont(self.body_font)
         self.growth_rates.clicked.connect(self.growth_rates_dialog)
         working_tab_layout.addWidget(self.growth_rates, len(wt)+2,3,1,1)
 
         self.tile_changes = QPushButton("Tile Changes")
+        self.tile_changes.setFont(self.body_font)
         self.tile_changes.clicked.connect(self.tile_changes_dialog)
         working_tab_layout.addWidget(self.tile_changes, len(wt)+3,0,1,2)
 
         self.weak_against = QPushButton("Weakness")
+        self.weak_against.setFont(self.body_font)
         self.weak_against.clicked.connect(self.weak_against_dialog)
         working_tab_layout.addWidget(self.weak_against, len(wt)+3,2,1,2)
 
         self.stat_bonuses = QPushButton("Stats+")
+        self.stat_bonuses.setFont(self.body_font)
         self.stat_bonuses.clicked.connect(self.stat_bonuses_dialog)
         working_tab_layout.addWidget(self.stat_bonuses, len(wt)+4,0,1,4)
 
         self.next_classes = QPushButton("Next Classes")
+        self.next_classes.setFont(self.body_font)
         self.next_classes.clicked.connect(self.next_classes_dialog)
         working_tab_layout.addWidget(self.next_classes, len(wt)+5,0,1,4)
 
@@ -630,6 +669,7 @@ class UnitEditorWnd(QWidget):
             self.wt_checkboxes_right[w].name = w
             self.wt_checkboxes_right[w].stateChanged.connect(self.right_weapon_type_toggle)
             label = QLabel(w)
+            label.setFont(self.body_font)
             
             working_tab_layout.addWidget(label, count, 0, 1, 1)
             working_tab_layout.addWidget(self.wt_checkboxes_left[w], count, 1, 1, 1)
@@ -685,8 +725,10 @@ class UnitEditorWnd(QWidget):
         team_supports_list.setLayout(team_supports_list_layout)
         
         team_member_list_label = QLabel("Team Members")
+        team_member_list_label.setFont(self.body_font)
         
         self.team_member_list = QListWidget()
+        self.team_member_list.setFont(self.body_font)
         self.team_member_list.setMinimumWidth(160)
         self.team_member_list.setMaximumWidth(260)
         self.team_member_list.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+active_theme.window_background_color)
@@ -702,10 +744,12 @@ class UnitEditorWnd(QWidget):
         self.supports_setup_layout = QVBoxLayout()
         
         self.relationship_label = QLabel("Relationship with team member")
+        self.relationship_label.setFont(self.body_font)
         self.relationship_label.setAlignment(Qt.AlignCenter)
         self.supports_setup_layout.addWidget(self.relationship_label)
         
         self.max_support_level_label = QLabel("Max support level")
+        self.max_support_level_label.setFont(self.body_font)
         self.max_support_level_label.setAlignment(Qt.AlignCenter)
         self.supports_setup_layout.addWidget(self.max_support_level_label)
         
@@ -726,6 +770,7 @@ class UnitEditorWnd(QWidget):
         
         for rb in self.max_support_radio_buttons:
             rb.clicked.connect(self.max_support_changed)
+            rb.setFont(self.body_font)
         
         self.max_support_level_widget_layout.addWidget(self.max_support_level_D)
         self.max_support_level_widget_layout.addWidget(self.max_support_level_C)
@@ -748,6 +793,8 @@ class UnitEditorWnd(QWidget):
         
         hate_label = QLabel("Intensely Dislikes \n(Builds support very slowly)")
         love_label = QLabel("Intensely Likes \n(Builds support very quickly)")
+        hate_label.setFont(self.body_font)
+        love_label.setFont(self.body_font)
         
         support_difficulty_layout.addWidget(hate_label)
         support_difficulty_layout.addWidget(self.support_difficulty_slider)
@@ -771,7 +818,9 @@ class UnitEditorWnd(QWidget):
         personal_enemy_widget.setLayout(personal_enemy_layout)
         
         self.personal_enemy_label = QLabel("Personal enemy\n--None--")
+        self.personal_enemy_label.setFont(self.body_font)
         self.personal_enemy = QListWidget()
+        self.personal_enemy.setFont(self.body_font)
         self.personal_enemy.setFixedWidth(300)
         self.personal_enemy.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+active_theme.window_background_color)
         self.personal_enemy.currentTextChanged.connect(self.personal_enemy_changed)
@@ -1306,7 +1355,7 @@ class UnitEditorWnd(QWidget):
         pass
     
     def skills_dialog(self):
-        y = classSkillDialog(parent=self)
+        y = classSkillDialog(parent=self,font=self.body_font)
         y.exec_()
 
     def skilled_blows_dialog(self):
