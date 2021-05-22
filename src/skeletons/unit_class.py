@@ -18,6 +18,7 @@ class unitClass():
         self.disallowed_weapon_types = []
         self.minimum_level = 0
         self.is_mounted = False
+        self.is_flying = False
         
         self.mounted_move_change = 0
         self.mounted_tile_changes = {}
@@ -42,7 +43,7 @@ class unitClass():
                            "allowed_weapon_types", "disallowed_weapon_types", "minimum_level", "is_mounted",
                            "mounted_move_change", "mounted_tile_changes", "dismounted_tile_changes",
                            "weak_against", "weak_against_amount", "exp_gained_multiplier",
-                           "class_type", "stat_bonuses", "stat_bonuses_criteria", "next_classes", "skill_criteria"]
+                           "class_type", "stat_bonuses", "stat_bonuses_criteria", "next_classes", "skill_criteria", "is_flying"]
 
             
             basic_attrs_dict = {}
@@ -62,7 +63,7 @@ class unitClass():
                        "allowed_weapon_types", "disallowed_weapon_types", "minimum_level", "is_mounted",
                        "mounted_move_change", "mounted_tile_changes", "dismounted_tile_changes",
                        "weak_against", "weak_against_amount", "exp_gained_multiplier",
-                       "class_type", "stat_bonuses", "stat_bonuses_criteria", "next_classes", "skill_criteria"]
+                       "class_type", "stat_bonuses", "stat_bonuses_criteria", "next_classes", "skill_criteria", "is_flying"]
         
         with open(path, "rb") as rf:
             tmp_data = pickle.load(rf)

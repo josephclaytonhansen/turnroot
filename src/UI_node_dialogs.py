@@ -72,6 +72,7 @@ class setSkillToClass(QDialog):
         self.parent = parent
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
+        self.body_font = font
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()

@@ -680,6 +680,8 @@ class UnitEditorWnd(QWidget):
             working_tab_layout.setColumnStretch(2, 3)
             working_tab_layout.setColumnStretch(3, 3)
             working_tab_layout.setColumnStretch(4, 1)
+        
+        self.loadClass()
        
     def initUnique(self):
         working_tab = self.tabs_dict["Unique Skills/Tactics/Objects"]
@@ -1144,6 +1146,8 @@ class UnitEditorWnd(QWidget):
                 number_to_value = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S"]
                 
                 self.starting_type_sliders[weapon_type].setValue(number_to_value.index(self.unit.current_weapon_levels[weapon_type]))
+            
+            self.loadClass()
                 
 
     def AIHelpDialog(self):
@@ -1319,7 +1323,7 @@ class UnitEditorWnd(QWidget):
 
     def class_type_change(self):
         self.unit.unit_class.class_type = self.class_type.value()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.currentText()+".tructf")
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def growth_rates_dialog(self):
         u = growthRateDialog(parent=self)
@@ -1342,6 +1346,10 @@ class UnitEditorWnd(QWidget):
             self.wt_checkboxes_right[w].setChecked(False)
         else:
             self.wt_checkboxes_right[w].setChecked(True)
+        if w in self.unit.unit_class.disallowed_weapon_types:
+            self.unit.unit_class.disallowed_weapon_types.remove(w)
+        self.unit.unit_class.allowed_weapon_types.append(w)
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
             
     def right_weapon_type_toggle(self):
         w = self.sender().name
@@ -1350,6 +1358,11 @@ class UnitEditorWnd(QWidget):
             self.wt_checkboxes_left[w].setChecked(False)
         else:
             self.wt_checkboxes_left[w].setChecked(True)
+        if w in self.unit.unit_class.allowed_weapon_types:
+            self.unit.unit_class.allowed_weapon_types.remove(w)
+        self.unit.unit_class.disallowed_weapon_types.append(w)
+        
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def tactics_dialog(self):
         pass
@@ -1357,6 +1370,7 @@ class UnitEditorWnd(QWidget):
     def skills_dialog(self):
         y = classSkillDialog(parent=self,font=self.body_font)
         y.exec_()
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.currentText()+".tructf")
 
     def skilled_blows_dialog(self):
         pass
@@ -1389,3 +1403,21 @@ class UnitEditorWnd(QWidget):
             self.title_edit.setCurrentText(tmp_class_name)
         except:
             pass
+    
+    def loadClass(self):
+        print(self.unit.unit_class)
+        ac = self.unit.unit_class
+        self.class_name.setText(ac.unit_class_name)
+        self.minimum_level.setValue(ac.minimum_level)
+        self.is_mounted.setChecked(ac.is_mounted)
+        self.mounted_m.setValue(ac.mounted_move_change)
+        self.exp_m.setValue(ac.exp_gained_multiplier)
+        self.class_type.setCurrentText(ac.class_type)
+        self.is_flying.setChecked(ac.is_flying)
+        
+        for w in weaponTypes().data:
+            if w in ac.allowed_weapon_types:
+                self.wt_checkboxes_left[w].setChecked(True)
+            elif w in ac.disallowed_weapon_types:
+                self.wt_checkboxes_right[w].setChecked(True)
+            

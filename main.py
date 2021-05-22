@@ -208,8 +208,7 @@ class main(QMainWindow):
         self.setCentralWidget(self.m)
         
     def nameChange(self):
-        if self.unit_editor.path is not None:
-            self.setWindowTitle(title + " - "+self.m.path)
+        pass
     
     def editorSelect(self):
         e = switchEditorDialog(parent=self,font=self.unit_editor.body_font)

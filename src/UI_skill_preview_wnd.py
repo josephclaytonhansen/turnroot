@@ -191,7 +191,7 @@ class skillPreview(QWidget):
         self.parent.scene.connection_type = self.sender().name
         print(self.sender().name)
         if self.sender().name == "Class":
-            b = setSkillToClass(parent=self)
+            b = setSkillToClass(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
             b.exec_()
     
     def desc_changed(self):
