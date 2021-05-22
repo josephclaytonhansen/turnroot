@@ -74,6 +74,7 @@ class NodeEditorWnd(QWidget):
         
     def addNodes(self):
         node = Nodes(self.scene, "Combat Start").node
+        node.setPos(-600,-250)
         self.scene.added_nodes.append(node)
        
     def loadStyleSheet(self, filename):

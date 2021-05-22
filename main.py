@@ -141,7 +141,7 @@ class mainS(NodeEditorWnd):
 class mainN(UnitEditorWnd):
     def __init__(self, parent):
         super().__init__(parent)
-        self.resize(QSize(1500,900))
+        self.resize(QSize(1500,850))
         self.setMaximumSize(QSize(int(size.width()*2), int(size.height()*2)))
 
 class main(QMainWindow):
@@ -243,7 +243,7 @@ class main(QMainWindow):
                 self.saveButton.triggered.disconnect() 
                 self.openButton.triggered.connect(self.unit_editor.loadFromFile)
                 self.saveButton.triggered.connect(self.unit_editor.unitToJSON)
-                self.resize(QSize(1500,900))
+                self.resize(QSize(1500,850))
                 self.setGeometry(
     QStyle.alignedRect(
         Qt.LeftToRight,
