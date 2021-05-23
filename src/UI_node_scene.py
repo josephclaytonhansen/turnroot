@@ -42,8 +42,6 @@ class Scene(Serializable):
         self.or_index = 0
         self.ir_index = 0
         self.ic_index = 0
-        
-        self.save_data = Save().saveScene(scene=self)
     
     @property
     def has_been_modified(self):
@@ -100,7 +98,11 @@ class Scene(Serializable):
                     self.preview.enable_radio_buttons()
         else:
             with open(self.path, "w") as file:
-                file.write(json.dumps(self.save_data))
+                if hasattr(self, "save_data"):
+                    file.write(json.dumps(self.save_data))
+                else:
+                    self.save_data = Save().saveScene(scene=self)
+                    file.write(json.dumps(self.save_data))
                 self.preview.skill_name.setText(self.path[self.path.rfind(os.sep)+1:self.path.find(".trnep")])
                 self.preview.enable_radio_buttons()
 
@@ -148,6 +150,8 @@ class Scene(Serializable):
             self.path = fileName+".trnep"
             with open(self.path, "w") as file:
                 file.write(json.dumps(self.save_data))
+                d = infoClose("Saved as "+self.path+"\nAll changes will now autosave")
+                d.exec_()
     
     def clear(self):
         while len(self.nodes) > 0:

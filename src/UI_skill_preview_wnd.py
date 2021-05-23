@@ -114,8 +114,9 @@ class skillPreview(QWidget):
             self.radio_buttons[y] = QRadioButton(y)
             self.radio_buttons[y].name = y
             self.radio_buttons[y].setCheckable(False)
-            self.radio_buttons[y].toggled.connect(self.change_connection)
+            
             connected_layout.addWidget(self.radio_buttons[y], r, c)
+        self.radio_buttons["Class"].toggled.connect(self.change_connection_class)
         self.clabel = QLabel("Skill is connected to: (file must be saved)")    
         connectedf_layout.addWidget(self.clabel) 
         connectedf_layout.addWidget(connected)
@@ -134,6 +135,7 @@ class skillPreview(QWidget):
         
         r = iconDialog(self.outer,self.inner,self.inner2,parent=self)
         r.exec_()
+        self.parent.scene.saveToFile()
     
     def left_arrow(self):
         if self.sender().name == 0:
@@ -185,15 +187,15 @@ class skillPreview(QWidget):
         d = overlayTile(g, self.inner2[self.scene.ic_index], 135)
         self.d_image.setPixmap(d)
     
-    def change_connection(self):
+    def change_connection_class(self):
         self.parent.scene.connection_type = self.sender().name
-        print(self.sender().name)
-        if self.sender().name == "Class":
-            b = setSkillToClass(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
-            b.exec_()
+        b = setSkillToClass(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
+        b.exec_()
+        self.parent.scene.saveToFile()
     
     def desc_changed(self):
         self.parent.scene.desc = self.sender().toPlainText()
+        self.parent.scene.saveToFile()
 
         
 class iconDialog(QDialog):
@@ -293,6 +295,7 @@ class iconDialog(QDialog):
         d = overlayTile(g, self.parent.inner2[self.parent.scene.ic_index], 135)
         pixmap = QIcon(d)
         self.parent.image.setIcon(pixmap)
+        self.parent.scene.saveToFile()
     
     def gfx(self):
         pass

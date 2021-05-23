@@ -103,14 +103,16 @@ class mainS(NodeEditorWnd):
             
         ub_actions = [QAction("Unit +Bonus Strength/Magic", self),QAction("Unit +Bonus Defense", self),QAction("Unit +Bonus Resistance", self),
                         QAction("Unit +Bonus Charisma", self), QAction("Unit +Bonus Dexterity", self),QAction("Unit +Bonus Luck", self),
-                      QAction("Earn Extra Weapon EXP", self), QAction("Earn Extra Level EXP", self), QAction("Unit +Bonus Critical",self)]
+                      QAction("Earn Extra Weapon EXP", self), QAction("Earn Extra Level EXP", self), QAction("Unit +Bonus Critical",self),
+                      QAction("Unit +Bonus Speed",self)]
         ub.addMenu(ui)
         for n in ub_actions:
             ub.addAction(n)
             n.triggered.connect(self.submenu_item)
         
         ab_actions = [QAction("Ally +Bonus Strength/Magic", self),QAction("Ally +Bonus Defense", self),QAction("Ally +Bonus Resistance", self),
-                        QAction("Ally +Bonus Charisma", self), QAction("Ally +Bonus Dexterity", self),QAction("Ally +Bonus Luck", self)]
+                        QAction("Ally +Bonus Charisma", self), QAction("Ally +Bonus Dexterity", self),QAction("Ally +Bonus Luck", self),
+                      QAction("Ally +Bonus Speed",self)]
         
         for n in ab_actions:
             ab.addAction(n)
@@ -256,6 +258,7 @@ class main(QMainWindow):
                 self.openButton.triggered.connect(self.unit_editor.loadFromFile)
                 self.saveButton.triggered.connect(self.unit_editor.unitToJSON)
                 self.resize(QSize(1500,850))
+                self.unit_editor.loadClass()
                 self.newButton.setVisible(False)
                 self.deleteButton.setVisible(False)
                 self.setGeometry(

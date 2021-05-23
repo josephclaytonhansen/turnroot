@@ -18,7 +18,8 @@ from src.node_presets_passive_skills import (combat_start, unit_initiates_combat
                                              foe_has_penalty,unit_has_bonus,unit_has_penalty,
                                              weapon_experience_extra, level_experience_extra,
                                              ally_is_mounted, ally_is_male, ally_is_female,
-                                             level_is_night, level_is_raining, level_is_foggy)
+                                             level_is_night, level_is_raining, level_is_foggy,
+                                             grant_bonus_to_unit_spd, grant_bonus_to_ally_spd)
 
 from src.node_presets_combat_skills import (grant_bonus_to_unit_hit, grant_bonus_to_unit_avo,
                                             grant_bonus_to_unit_crt, unit_does_less_more_damage,
@@ -479,7 +480,8 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Unit +Critical Chance":grant_bonus_to_unit_crt,"Unit +Hit Chance":grant_bonus_to_unit_hit,
          "Unit +Dodge Chance":grant_bonus_to_unit_avo,"Ally is Mounted":ally_is_mounted,
          "Ally is Female":ally_is_female,"Ally is Male":ally_is_male,"Unit does Less/More Damage":unit_does_less_more_damage,
-         "Level is Night":level_is_night, "Level is Raining":level_is_raining, "Level is Foggy":level_is_foggy}
+         "Level is Night":level_is_night, "Level is Raining":level_is_raining, "Level is Foggy":level_is_foggy,
+         "Unit +Bonus Speed":grant_bonus_to_unit_spd, "Ally +Bonus Speed":grant_bonus_to_ally_spd}
 
         
 NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
@@ -500,7 +502,8 @@ NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
                     "Unit +Bonus Critical","Unit +Critical Chance","Unit +Hit Chance",
                     "Unit +Dodge Chance", "Ally is Mounted", "Ally is Female",
                     "Ally is Male", "Unit does Less/More Damage", "Level is Night",
-                    "Level is Raining", "Level is Foggy"])
+                    "Level is Raining", "Level is Foggy", "Unit +Bonus Speed",
+                    "Ally +Bonus Speed"])
     
 class Nodes():
     def __init__(self, scene, name):

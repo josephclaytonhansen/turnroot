@@ -94,6 +94,7 @@ class setSkillToClass(QDialog):
         file_list = getFiles("src/skeletons/classes")[GET_FILES]
         for f in file_list:
             if f.ext.strip() == ".tructf":
+                f.path = f.path.replace("\\", "/") 
                 tmp_class = unitClass()
                 tmp_class.selfFromJSON(f.path)
                 if tmp_class.unit_class_name == s:

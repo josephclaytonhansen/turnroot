@@ -62,15 +62,16 @@ class Save():
         data["icon"] = [scene.or_index,scene.ir_index,scene.ic_index]
         
         scene.save_data = data
+        
         return data
     
 class Load():
     def loadScene(self,scene,path):
         s = json.loads(path)
+        scene.save_data = s
         scene.clear()
         edges = []
         li = {}
-        
         
         global data_string
         data_string = ""
@@ -108,12 +109,15 @@ class Load():
         
         for edge in edges:
             edge = edge.split(":")
-            start_node = li[edge[0]]
-            end_node = li[edge[2]]
-            start_socket = start_node.outputs[int(edge[1])]
-            end_socket = end_node.inputs[int(edge[3])]
-            new_edge = Edge(scene, start_socket, end_socket, edge_type=EDGE_TYPE_BEZIER)
-            scene.edges.append(new_edge)
+            try:
+                start_node = li[edge[0]]
+                end_node = li[edge[2]]
+                start_socket = start_node.outputs[int(edge[1])]
+                end_socket = end_node.inputs[int(edge[3])]
+                new_edge = Edge(scene, start_socket, end_socket, edge_type=EDGE_TYPE_BEZIER)
+                scene.edges.append(new_edge)
+            except:
+                print("invalid edge")
         
         scene.or_index = s["icon"][0]
         scene.ir_index= s["icon"][1]

@@ -118,8 +118,8 @@ class QDMGraphicsView(QGraphicsView):
         self.setDragMode(QGraphicsView.NoDrag)
     
     def leftMouseButtonPress(self, event):
-        self.grScene.scene.update_hex()
         self.grScene.scene.save_data = Save().saveScene(self.grScene.scene)
+        self.grScene.scene.saveToFile()
         item = self.getItemAtClick(event)
         self.last_lmb_click_scene_pos = self.mapToScene(event.pos())
         
@@ -387,10 +387,12 @@ class QDMGraphicsView(QGraphicsView):
         for ix in range(len(self.cutline.line_points) - 1):
             p1 = self.cutline.line_points[ix]
             p2 = self.cutline.line_points[ix + 1]
-
-            for edge in self.grScene.scene.edges:
-                if edge.grEdge.intersectsWith(p1, p2):
-                    edge.remove()
+            try:
+                for edge in self.grScene.scene.edges:
+                    if edge.grEdge.intersectsWith(p1, p2):
+                        edge.remove()
+            except:
+                pass
         self.grScene.scene.history.storeHistory("Delete cutted edges")
             
     def deleteSelected(self):

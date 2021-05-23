@@ -872,6 +872,7 @@ class UnitEditorWnd(QWidget):
         global classes
         if s != "":
             self.unit.unit_class = classes[s]
+            self.loadClass()
     
     def statusChange(self, s):
         if s == "Enemy":
@@ -1386,11 +1387,13 @@ class UnitEditorWnd(QWidget):
             tmp_class_name = self.unit.unit_class_name
         global classes
         classes = {}
+        self.paths = {}
         self.title_edit.clear()
         for f in file_list:
             if f.ext.strip() == ".tructf":
                 tmp_class = unitClass()
                 tmp_class.selfFromJSON(f.fullPath)
+                self.paths[tmp_class.unit_class_name] = f.fullPath
                 class_names.append(tmp_class.unit_class_name)
                 classes[tmp_class.unit_class_name] = tmp_class
                 
@@ -1406,24 +1409,32 @@ class UnitEditorWnd(QWidget):
             pass
     
     def loadClass(self):
-        print(self.unit.unit_class)
         ac = self.unit.unit_class
-        self.class_name.setText(ac.unit_class_name)
-        self.minimum_level.setValue(ac.minimum_level)
-        self.is_mounted.setChecked(ac.is_mounted)
-        self.mounted_m.setValue(ac.mounted_move_change)
-        self.exp_m.setValue(ac.exp_gained_multiplier)
-        self.class_type.setCurrentText(ac.class_type)
-        self.is_flying.setChecked(ac.is_flying)
-        
-        for w in weaponTypes().data:
-            if w in ac.allowed_weapon_types:
-                self.wt_checkboxes_left[w].setChecked(True)
-            elif w in ac.disallowed_weapon_types:
-                self.wt_checkboxes_right[w].setChecked(True)
+        try:
+            ac.selfFromJSON(self.paths[ac.unit_class_name])
+        except:
+            pass
+        try:
+            self.class_name.setText(ac.unit_class_name)
+            self.minimum_level.setValue(ac.minimum_level)
+            self.is_mounted.setChecked(ac.is_mounted)
+            self.mounted_m.setValue(ac.mounted_move_change)
+            self.exp_m.setValue(ac.exp_gained_multiplier)
+            self.class_type.setCurrentText(ac.class_type)
+            self.is_flying.setChecked(ac.is_flying)
+            
+            for w in weaponTypes().data:
+                if w in ac.allowed_weapon_types:
+                    self.wt_checkboxes_left[w].setChecked(True)
+                elif w in ac.disallowed_weapon_types:
+                    self.wt_checkboxes_right[w].setChecked(True)
+        except:
+            pass
     
     def createClass(self):
+        self.unit.unit_class = None
         self.unit.unit_class = unitClass()
+        ac = self.unit.unit_class
         
         self.class_name.setText("")
         self.minimum_level.setValue(0)
