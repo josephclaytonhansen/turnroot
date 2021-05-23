@@ -21,6 +21,7 @@ class skillPreview(QWidget):
         super().__init__(parent)
         self.parent = parent
         self.scene = scene
+        self.overlayTile = overlayTile
         
         with open("src/skill_graphics/skill_graphics.txt", "r") as f:
             g_data = json.load(f)
@@ -111,12 +112,12 @@ class skillPreview(QWidget):
             if r == 4:
                 r = 0
                 c +=1
-            self.radio_buttons[y] = QRadioButton(y)
+            self.radio_buttons[y] = QCheckBox(y)
             self.radio_buttons[y].name = y
             self.radio_buttons[y].setCheckable(False)
-            
+            self.radio_buttons[y].stateChanged.connect(self.clear_other_radio_buttons)
             connected_layout.addWidget(self.radio_buttons[y], r, c)
-        self.radio_buttons["Class"].toggled.connect(self.change_connection_class)
+        
         self.clabel = QLabel("Skill is connected to: (file must be saved)")    
         connectedf_layout.addWidget(self.clabel) 
         connectedf_layout.addWidget(connected)
@@ -127,6 +128,18 @@ class skillPreview(QWidget):
         for r in self.radio_buttons:
             self.radio_buttons[r].setCheckable(True)
             self.clabel.setText("Skill is connected to:")
+    
+    def clear_other_radio_buttons(self, s):
+        if s == Qt.Checked:
+            for y in self.radio_buttons:
+                if self.radio_buttons[y] != self.sender():
+                    self.radio_buttons[y].setChecked(False)
+            self.sender().setChecked(True)
+            if self.sender() == self.radio_buttons["Class"]:
+                self.parent.scene.connection_type = self.sender().name
+                b = setSkillToClass(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
+                b.exec_()
+            self.parent.scene.saveToFile()
     
     def change_icon(self):
         self.max_or_index = len(self.outer)
@@ -186,12 +199,6 @@ class skillPreview(QWidget):
         g = overlayTile(p, self.inner[self.scene.ir_index], 135)
         d = overlayTile(g, self.inner2[self.scene.ic_index], 135)
         self.d_image.setPixmap(d)
-    
-    def change_connection_class(self):
-        self.parent.scene.connection_type = self.sender().name
-        b = setSkillToClass(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
-        b.exec_()
-        self.parent.scene.saveToFile()
     
     def desc_changed(self):
         self.parent.scene.desc = self.sender().toPlainText()

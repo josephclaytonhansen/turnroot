@@ -23,7 +23,10 @@ from src.node_presets_passive_skills import (combat_start, unit_initiates_combat
 
 from src.node_presets_combat_skills import (grant_bonus_to_unit_hit, grant_bonus_to_unit_avo,
                                             grant_bonus_to_unit_crt, unit_does_less_more_damage,
-                                            )
+                                            foe_cannot_counterattack, unit_counterattack_first,
+                                            unit_counterattack_distance, unit_will_followup,
+                                            unit_cannot_followup, unit_attacks_twice,
+                                            foe_cannot_attack_twice)
 
 from src.skeletons.weapon_types import weaponTypes
 import math, random, pickle
@@ -481,10 +484,17 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Unit +Dodge Chance":grant_bonus_to_unit_avo,"Ally is Mounted":ally_is_mounted,
          "Ally is Female":ally_is_female,"Ally is Male":ally_is_male,"Unit does Less/More Damage":unit_does_less_more_damage,
          "Level is Night":level_is_night, "Level is Raining":level_is_raining, "Level is Foggy":level_is_foggy,
-         "Unit +Bonus Speed":grant_bonus_to_unit_spd, "Ally +Bonus Speed":grant_bonus_to_ally_spd}
+         "Unit +Bonus Speed":grant_bonus_to_unit_spd, "Ally +Bonus Speed":grant_bonus_to_ally_spd,
+         "Foe Cannot Counter-Attack":foe_cannot_counterattack, "Counter-Attacks Before Foe Attacks": unit_counterattack_first,
+         "Counter-Attacks from Any Distance":unit_counterattack_distance, "Will Follow-Up Attack":unit_will_followup,
+         "Cannot Follow-Up":unit_cannot_followup, "Will Attack Twice":unit_attacks_twice,
+         "Foe Cannot Attack Twice":foe_cannot_attack_twice}
 
         
-NODE_KEYS = sorted(["Math", "Compare Numbers", "Combat Start",
+NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Attacks",
+                    "Counter-Attacks from Any Distance","Will Follow-Up Attack",
+                    "Cannot Follow-Up","Will Attack Twice","Foe Cannot Attack Twice",
+                    "Math", "Compare Numbers", "Combat Start",
              "Unit Initiates Combat", "Foe Initiates Combat",
              "Unit +Bonus Strength/Magic", "Unit +Bonus Defense",
              "Unit +Bonus Resistance", "Unit +Bonus Charisma",

@@ -157,3 +157,83 @@ class grant_bonus_to_unit_crt(grant_to_unit):
 class unit_does_less_more_damage(does_less_more_damage):
     def __init__(self, scene,hexe="udc"):
             super().__init__(scene, hexe)
+            
+class can_cannot(QWidget):
+    def __init__(self, scene, action, which, direction, hexe):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title=which+direction+action
+        self.inputs = [S_TRIGGER]
+        self.outputs=[S_TRIGGER]
+        self.hex_output = hexe
+        self.hexe = hexe
+        self.chain = 1
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.line1.setLayout(self.line1_layout)
+
+        label1 = QLabel("Event")
+        label1.setAlignment(Qt.AlignLeft)
+        self.line1_layout.addWidget(label1)
+
+        label2 = QLabel("Event")
+        label2.setAlignment(Qt.AlignRight)
+        self.line1_layout.addWidget(label2)
+        
+        self.contents = [self.line1]
+        self.socket_content_index = 0
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160, 560)
+        self.n.node_preset = self
+    
+    def updateEmission(self):
+        try:
+            self.n.outputs[0].emission = self.hex_output
+        except:
+            pass
+    
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
+            self.n.content.eval_order.setValue(self.chain)
+            self.n.content.eval_order.setEnabled(False)
+        except:
+            pass
+        
+class foe_cannot_counterattack(can_cannot):
+    def __init__(self, scene, hexe="fcc", which = "Foe", direction=" Cannot ", action = " Counter-Attack "):
+            super().__init__(scene, action, which, direction, hexe)
+
+class unit_counterattack_first(can_cannot):
+    def __init__(self, scene, hexe="ucf", which = "", direction="Counter-Attacks ", action = "Before Foe Attack"):
+            super().__init__(scene, action, which, direction, hexe)
+
+class unit_counterattack_distance(can_cannot):
+    def __init__(self, scene, hexe="ucd", which = "", direction="Counter-Attacks ", action = "From Any Distance"):
+            super().__init__(scene, action, which, direction, hexe)
+
+class unit_will_followup(can_cannot):
+    def __init__(self, scene, hexe="uwu", which = "", direction="Will ", action = "Follow-Up Attack"):
+            super().__init__(scene, action, which, direction, hexe)
+
+class foe_cannot_followup(can_cannot):
+    def __init__(self, scene, hexe="fcu", which = "Foe", direction=" Cannot ", action = "Follow-Up Attack"):
+            super().__init__(scene, action, which, direction, hexe)
+
+class unit_cannot_followup(can_cannot):
+    def __init__(self, scene, hexe="ucu", which = "", direction="Cannot ", action = " Follow-Up Attack"):
+            super().__init__(scene, action, which, direction, hexe)
+            
+class unit_attacks_twice(can_cannot):
+    def __init__(self, scene, hexe="ugt", which = "", direction="Attacks ", action = "Twice"):
+            super().__init__(scene, action, which, direction, hexe)
+
+class foe_cannot_attack_twice(can_cannot):
+    def __init__(self, scene, hexe="fgo", which = "Foe", direction=" Cannot Attack ", action = "Twice"):
+            super().__init__(scene, action, which, direction, hexe)
+            

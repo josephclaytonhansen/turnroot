@@ -100,6 +100,12 @@ class mainS(NodeEditorWnd):
         for n in con_actions:
             con.addAction(n)
             n.triggered.connect(self.submenu_item)
+        
+        fp_actions = [QAction("Foe Cannot Attack Twice", self),QAction("Foe Cannot Counter-Attack", self)]
+        
+        for n in fp_actions:
+            fp.addAction(n)
+            n.triggered.connect(self.submenu_item)
             
         ub_actions = [QAction("Unit +Bonus Strength/Magic", self),QAction("Unit +Bonus Defense", self),QAction("Unit +Bonus Resistance", self),
                         QAction("Unit +Bonus Charisma", self), QAction("Unit +Bonus Dexterity", self),QAction("Unit +Bonus Luck", self),
@@ -119,7 +125,9 @@ class mainS(NodeEditorWnd):
             n.triggered.connect(self.submenu_item)
             
         ui_actions = [QAction("Unit +Hit Chance", self),QAction("Unit +Dodge Chance", self),QAction("Unit +Critical Chance", self),
-                      QAction("Unit does Less/More Damage", self)]
+                      QAction("Unit does Less/More Damage", self), QAction("Will Attack Twice", self), QAction("Cannot Follow-Up", self),
+                      QAction("Will Follow-Up Attack", self), QAction("Counter-Attacks from Any Distance", self),
+                       QAction("Counter-Attacks Before Foe Attacks", self)]
         ui.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         for n in ui_actions:
             ui.addAction(n)
@@ -152,6 +160,7 @@ class main(QMainWindow):
         super().__init__()
         self.setWindowTitle(title)
         self.toolbar = QToolBar("")
+        self.toolbar.setContextMenuPolicy(Qt.PreventContextMenu)
         
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
@@ -176,6 +185,8 @@ class main(QMainWindow):
         font.setPointSize(data["font_size"])
         self.menubar.setNativeMenuBar(False)
         self.bar = self.menuBar()
+        self.bar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color)
+        self.bar.setFont(font)
         
         self.m = QStackedWidget(parent=self)
         self.unit_editor = mainN(parent=self)

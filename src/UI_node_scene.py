@@ -1,5 +1,7 @@
 from src.UI_node_graphics_scene import QDMGraphicsScene
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 import json, os
 import qtmodern.styles
 import qtmodern.windows
@@ -160,7 +162,23 @@ class Scene(Serializable):
     
     def new(self):
         self.clear()
+        self.preview.desc_name.setText("")
+        self.or_index = 0
+        self.ir_index = 0
+        self.ic_index = 0
+        pixmap = QPixmap(135,135)
+        pixmap.fill(Qt.transparent)
+        p = self.preview.overlayTile(pixmap, self.preview.outer[self.or_index], 135)
+        g = self.preview.overlayTile(p, self.preview.inner[self.ir_index], 135)
+        d = self.preview.overlayTile(g, self.preview.inner2[self.ic_index], 135)
+        pixmap = QIcon(d)
+        self.preview.image.setIcon(pixmap)
+        for y in self.preview.radio_buttons:
+            self.preview.radio_buttons[y].setCheckable(True)
+            self.preview.radio_buttons[y].setChecked(False)
         self.path = ""
+        self.preview.skill_name.setText("Skill Name")
+        Save().saveScene(self)
             
     def update_hex(self):
         l = []

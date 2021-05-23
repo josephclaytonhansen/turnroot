@@ -107,11 +107,15 @@ class QDMGraphicsNode(QGraphicsItem):
         super().__init__(parent)
         self.node = node
         self.content = self.node.content
-        self.width = NODE_WIDTH
+
         if self.node.height == None:
             self.height = NODE_HEIGHT
         else:
             self.height = self.node.height
+        if self.node.width == None:
+            self.width = NODE_WIDTH
+        else:
+            self.width = self.node.width
         self.title_height = NODE_TITLE_HEIGHT
         self.padding = NODE_PADDING
         self.edge_size = EDGE_SIZE
@@ -215,11 +219,12 @@ class QDMGraphicsNode(QGraphicsItem):
         painter.drawPath(path_outline.simplified())
               
 class Node(Serializable):
-    def __init__(self, scene, title="node item", inputs = [], outputs=[], contents = [], socket_content_index = 0, height = None):
+    def __init__(self, scene, title="node item", inputs = [], outputs=[], contents = [], socket_content_index = 0, height = None,width=None):
         super().__init__()
         self.scene = scene
         self.socket_content_index = socket_content_index
         self.height = height
+        self.width = width
         self.node_preset = None
         
         self.load_index = 0

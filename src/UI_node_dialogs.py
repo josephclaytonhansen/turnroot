@@ -78,7 +78,8 @@ class setSkillToClass(QDialog):
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(8,8,8,8)
         
-        g = QLabel("Choose class: ")
+        g = QLabel("Choose new class: ")
+        g.setToolTip("Ignore and close this dialog if there's already a class assigned")
         g.setFont(self.body_font)
         self.layout.addWidget(g)
         self.list = QComboBox()
