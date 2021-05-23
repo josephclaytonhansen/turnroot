@@ -237,3 +237,104 @@ class foe_cannot_attack_twice(can_cannot):
     def __init__(self, scene, hexe="fgo", which = "Foe", direction=" Cannot Attack ", action = "Twice"):
             super().__init__(scene, action, which, direction, hexe)
             
+class penalize_foe(QWidget):
+    def __init__(self, scene,full_name, short_name, desc, hexe):
+        QObject.__init__(self)
+        self.scene = scene
+        self.short_name = short_name
+        self.hexe = hexe
+        self.desc = desc
+        self.full_name = full_name
+        self.title="Foe -"+self.full_name
+        self.inputs = [S_TRIGGER]
+        self.outputs=[S_TRIGGER]
+        self.hex_output = self.hexe+".sub::"
+        self.chain = 0
+        self.current_operation = "Subtract ("+self.short_name+"-X)"
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.line1.setLayout(self.line1_layout)
+
+        label2 = QLabel("Foe suffers penalty on "+self.desc)
+        label2.setAlignment(Qt.AlignCenter)
+        self.line1_layout.addWidget(label2)
+        
+        self.bonus_type = QComboBox()
+        self.bonus_type.addItems(["Subtract ("+self.short_name+"-X)", "Divide ("+self.short_name+" / X)"])
+        self.bonus_type.currentTextChanged.connect(self.change_op)
+        
+        self.bonus_amount = QDoubleSpinBox()
+        self.bonus_amount.setRange(-30,30)
+        self.bonus_amount.setValue(0.0)
+        self.bonus_amount.setSingleStep(1.0)
+        self.bonus_amount.valueChanged.connect(self.change_bonus)
+        
+        self.contents = [self.line1, self.bonus_type, self.bonus_amount]
+        self.socket_content_index = 0
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 200)
+        self.n.node_preset = self
+        
+        self.n.sw = ["self.bonus_type", "self.bonus_amount"]
+        self.n.storage = ["sub", 0]
+    
+    def updateEmission(self):
+        try:
+            self.n.outputs[0].emission = self.hex_output
+        except:
+            pass
+    
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
+                #self.chain+=len(self.n.inputs[0].edges)-1
+            self.n.content.eval_order.setValue(self.chain)
+            self.n.content.eval_order.setEnabled(False)
+        except:
+            pass
+    
+    def change_op(self,s):
+        self.current_operation = s
+        s_dict = {"Subtract ("+self.short_name+"-X)":"sub", "Divide ("+self.short_name+" / X)":"div"}
+        self.hex_output = self.hexe + "." + s_dict[s] + ":" + str(round(self.bonus_amount.value(),1)) + ":"
+        
+        self.n.storage = [s, round(self.bonus_amount.value(),1)]
+    
+    def change_bonus(self,i):
+        s_dict = {"Subtract ("+self.short_name+"-X)":"sub", "Divide ("+self.short_name+" / X)":"div"}
+        self.hex_output = self.hexe + "." + s_dict[self.current_operation] + ":" +str(round(self.bonus_amount.value(),1)) + ":"
+        
+        self.n.storage = [self.current_operation, round(self.bonus_amount.value(),1)]
+
+class penalize_foe_spd(penalize_foe):
+    def __init__(self, scene,full_name="Speed", short_name= "Spd", hexe="pfs", desc = "speed"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+
+class penalize_foe_atk(penalize_foe):
+    def __init__(self, scene,full_name="Str/Mag", short_name= "Atk", hexe="pfa", desc = "attack"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+
+class penalize_foe_def(penalize_foe):
+    def __init__(self, scene,full_name="Defense", short_name= "Def", hexe="pfd", desc = "defense"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+
+class penalize_foe_res(penalize_foe):
+    def __init__(self, scene,full_name="Resistance", short_name= "Res", hexe="pfr", desc = "resistance"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+    
+class penalize_foe_chr(penalize_foe):
+    def __init__(self, scene,full_name="Charisma", short_name= "Chr", hexe="pfc", desc = "charisma"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+        
+class penalize_foe_dex(penalize_foe):
+    def __init__(self, scene,full_name="Dexterity", short_name= "Dex", hexe="pfx", desc = "dexterity"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+            
+class penalize_foe_luc(penalize_foe):
+    def __init__(self, scene,full_name="Luck", short_name= "Luc", hexe="pfl", desc = "luck"):
+            super().__init__(scene, full_name, short_name, desc, hexe)

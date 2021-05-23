@@ -101,7 +101,10 @@ class mainS(NodeEditorWnd):
             con.addAction(n)
             n.triggered.connect(self.submenu_item)
         
-        fp_actions = [QAction("Foe Cannot Attack Twice", self),QAction("Foe Cannot Counter-Attack", self)]
+        fp_actions = [QAction("Foe Cannot Attack Twice", self),QAction("Foe Cannot Counter-Attack", self),
+                      QAction("Foe -Speed",self),QAction("Foe -Str/Mag",self),QAction("Foe -Defense",self),
+                      QAction("Foe -Resistance",self),QAction("Foe -Charisma",self),QAction("Foe -Dexterity",self),
+                      QAction("Foe -Luck",self)]
         
         for n in fp_actions:
             fp.addAction(n)
