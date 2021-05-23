@@ -204,6 +204,11 @@ class main(QMainWindow):
         self.saveButton.triggered.connect(self.nameChange)
         self.menubar.addAction(self.saveButton)
         
+        self.deleteButton = QAction("Delete Selection", self)
+        self.deleteButton.triggered.connect(self.skills_editor.view.deleteSelected)
+        self.menubar.addAction(self.deleteButton)
+        self.deleteButton.setVisible(False)
+        
         self.quitButton = QAction("&Quit", self)
         self.quitButton.triggered.connect(self.quitWindow)
         self.menubar.addAction(self.quitButton)
@@ -230,6 +235,7 @@ class main(QMainWindow):
                 self.saveButton.triggered.connect(self.skills_editor.scene.saveToFile)
                 self.resize(QSize(1200,700))
                 self.newButton.setVisible(True)
+                self.deleteButton.setVisible(True)
                 self.newButton.triggered.connect(self.skills_editor.scene.new)
                 self.setGeometry(
     QStyle.alignedRect(
@@ -251,6 +257,7 @@ class main(QMainWindow):
                 self.saveButton.triggered.connect(self.unit_editor.unitToJSON)
                 self.resize(QSize(1500,850))
                 self.newButton.setVisible(False)
+                self.deleteButton.setVisible(False)
                 self.setGeometry(
     QStyle.alignedRect(
         Qt.LeftToRight,

@@ -172,7 +172,7 @@ class UnitEditorWnd(QWidget):
         
         self.gender_edit = QComboBox()
         self.gender_edit.currentTextChanged.connect(self.genderChange)
-        self.gender_edit.addItems(["Male", "Female", "Non-Binary", "Custom"])
+        self.gender_edit.addItems(["Male", "Female", "Non-Binary"])
         self.gender_edit.setFont(small_font)
         identity_row_layout.addWidget(self.gender_edit)
         
@@ -291,8 +291,6 @@ class UnitEditorWnd(QWidget):
         self.basic_center_layout.addWidget(text_row)
         
         self.working_tab_layout.addWidget(self.basic_center)
-        
-        #name, title, gender, pronouns, friendly/enemy, recruitable, protagonist, mounted, stats, portraits
         
     def initAI(self):
         self.sheets = {}
@@ -850,9 +848,6 @@ class UnitEditorWnd(QWidget):
             self.unit.gender = genders().FEMALE
         elif s == "Non-Binary":
             self.unit.gender = genders().OTHER
-        else:
-            #custom gender
-            pass
         self.unit.pronoun_string = ""
         for k in (self.unit.pronouns):
             self.unit.pronoun_string += k[0].upper()+k[1:]
