@@ -9,15 +9,16 @@ from src.node_backend import getFiles, GET_FILES
 from src.img_overlay import overlayTile
 
 class growthRateDialog(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,font=None):
         data = updateJSON()
         self.parent = parent
         self.restart = False
+        self.body_font = font
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.setMinimumWidth(500)
         
-        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(8,8,8,8)
         
@@ -28,8 +29,9 @@ class growthRateDialog(QDialog):
             self.parent.unit.unit_class.growth_rates[s] = 60
         
         self.list = QListWidget()
+        self.list.setFont(self.body_font)
         self.list.currentTextChanged.connect(self.list_change)
-        self.list.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.list.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
         self.list.addItems(universal_stats)
         
         self.layout.addWidget(self.list)
@@ -38,7 +40,9 @@ class growthRateDialog(QDialog):
         row_layout = QHBoxLayout()
         row.setLayout(row_layout)
         
-        row_layout.addWidget(QLabel("0%\n(never increase)"))
+        r0 = QLabel("0%\n(never increase)")
+        r0.setFont(self.body_font)
+        row_layout.addWidget(r0)
         
         self.rate_slider = QSlider(Qt.Horizontal)
         self.rate_slider.name = 1
@@ -49,7 +53,9 @@ class growthRateDialog(QDialog):
         
         row_layout.addWidget(self.rate_slider)
         
-        row_layout.addWidget(QLabel("100%\n(always increase)"))
+        r1 = QLabel("100%\n(always increase)")
+        r1.setFont(self.body_font)
+        row_layout.addWidget(r1)
         
         self.layout.addWidget(row)
         
@@ -85,15 +91,16 @@ class growthRateDialog(QDialog):
         self.rate_slider.setValue(self.parent.unit.unit_class.growth_rates[self.list.currentItem().text()])
         
 class statBonusDialog(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,font=None):
         data = updateJSON()
         self.parent = parent
         self.restart = False
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.setMinimumWidth(200)
+        self.body_font = font
         
-        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(8,8,8,8)
         
@@ -114,10 +121,12 @@ class statBonusDialog(QDialog):
             self.rows[s] = row
             
             label = QLabel(s)
+            label.setFont(self.body_font)
             self.labels[s] = label
             row_layout.addWidget(label)
             
             value = QSpinBox()
+            value.setFont(self.body_font)
             value.name = s
             value.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
             value.setRange(0,10)
@@ -613,7 +622,8 @@ class classSkillDialog(QDialog):
             pass
     
     def add_skill(self):
-       pass
+       self.parent.parent().setCurrentWidget(self.parent.parent().parent().skills_editor)
+       self.close()
         
 
     def getSkillsInFolder(self):

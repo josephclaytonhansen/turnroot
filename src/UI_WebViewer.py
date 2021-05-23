@@ -46,7 +46,7 @@ class webView(QDialog):
         
         #options on the right
         self.help = QWebEngineView()
-        self.help.setMinimumWidth(800)
+        self.help.setMinimumWidth(950)
         
         #options are stacked
         self.help_layout = QStackedLayout()

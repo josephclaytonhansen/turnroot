@@ -22,8 +22,6 @@ class skillPreview(QWidget):
         self.parent = parent
         self.scene = scene
         
-        self.setMaximumHeight(170)
-        
         with open("src/skill_graphics/skill_graphics.txt", "r") as f:
             g_data = json.load(f)
         
@@ -84,7 +82,7 @@ class skillPreview(QWidget):
         text_area_layout.addWidget(self.skill_name)
         
         self.desc_name = QTextEdit()
-        self.desc_name.setMaximumHeight(50)
+        self.desc_name.setMinimumHeight(68)
         self.desc_name.setAlignment(Qt.AlignCenter)
         self.desc_name.setPlaceholderText("Skill description")
         self.desc_name.textChanged.connect(self.desc_changed)

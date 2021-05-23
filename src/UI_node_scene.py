@@ -153,6 +153,10 @@ class Scene(Serializable):
         while len(self.nodes) > 0:
             self.nodes[0].remove()
             self.added_nodes[0].remove()
+    
+    def new(self):
+        self.clear()
+        self.path = ""
             
     def update_hex(self):
         l = []

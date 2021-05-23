@@ -13,6 +13,7 @@ from src.UI_unit_editor_wnd import UnitEditorWnd
 from src.UI_node_editor_wnd import NodeEditorWnd
 from src.UI_node_preferences_dialog import NodePreferencesDialog
 from src.node_presets import NODES, Nodes
+from src.UI_WebViewer import webView
 import qtmodern.styles
 import qtmodern.windows, json
 
@@ -164,6 +165,7 @@ class main(QMainWindow):
         
         self.optionsButton.triggered.connect(self.OptionsMenu)
         self.backButton.triggered.connect(self.editorSelect)
+        self.helpButton.triggered.connect((self.helpView))
         
         self.addToolBar(self.toolbar)
         
@@ -188,14 +190,16 @@ class main(QMainWindow):
         app.desktop().availableGeometry()
         ))
         
+        self.newButton = QAction("&New", self)
+        self.newButton.setVisible(False)
+        self.menubar.addAction(self.newButton)
+        
         self.openButton = QAction("&Open", self)
-
         self.openButton.triggered.connect(self.unit_editor.loadFromFile)
         self.openButton.triggered.connect(self.nameChange)
         self.menubar.addAction(self.openButton)
         
         self.saveButton = QAction("&Save", self)
-
         self.saveButton.triggered.connect(self.unit_editor.unitToJSON)
         self.saveButton.triggered.connect(self.nameChange)
         self.menubar.addAction(self.saveButton)
@@ -225,6 +229,8 @@ class main(QMainWindow):
                 self.openButton.triggered.connect(self.skills_editor.scene.loadFromFile)
                 self.saveButton.triggered.connect(self.skills_editor.scene.saveToFile)
                 self.resize(QSize(1200,700))
+                self.newButton.setVisible(True)
+                self.newButton.triggered.connect(self.skills_editor.scene.new)
                 self.setGeometry(
     QStyle.alignedRect(
         Qt.LeftToRight,
@@ -244,6 +250,7 @@ class main(QMainWindow):
                 self.openButton.triggered.connect(self.unit_editor.loadFromFile)
                 self.saveButton.triggered.connect(self.unit_editor.unitToJSON)
                 self.resize(QSize(1500,850))
+                self.newButton.setVisible(False)
                 self.setGeometry(
     QStyle.alignedRect(
         Qt.LeftToRight,
@@ -318,6 +325,10 @@ class main(QMainWindow):
             quit_reason.write(OPEN_NEW_FILE)
         if(c.return_confirm):
             sys.exit()
+            
+    def helpView(self):
+        h = webView(page = 3, parent=self)
+        h.exec_()
 
 window = main()
 window.show()

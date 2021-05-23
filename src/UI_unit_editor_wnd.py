@@ -143,10 +143,10 @@ class UnitEditorWnd(QWidget):
         self.name_edit.setPlaceholderText("Name")
         self.name_edit.setStyleSheet("background-color: "+active_theme.window_background_color+";")
         name_font = self.name_edit.font()
-        name_font.setPointSize(int(data["font_size"]))
+        name_font.setPointSize(21)
         
         header_font = self.name_edit.font()
-        header_font.setPointSize(int(data["font_size"])+5)
+        header_font.setPointSize(21)
         body_font = self.name_edit.font()
         body_font.setPointSize(int(data["font_size"]))
         self.body_font = body_font
@@ -550,7 +550,12 @@ class UnitEditorWnd(QWidget):
         self.class_name.setFont(self.body_font)
         self.class_name.setPlaceholderText("Class name")
         self.class_name.returnPressed.connect(self.class_name_change)
-        working_tab_layout.addWidget(self.class_name, 0,0,1,5)
+        working_tab_layout.addWidget(self.class_name, 0,0,1,3)
+        
+        self.new_class = QPushButton("New Class")
+        self.new_class.setFont(self.body_font)
+        self.new_class.clicked.connect(self.createClass)
+        working_tab_layout.addWidget(self.new_class, 0,3,1,2)
 
         allowed_weapons_label = QLabel("Can use")
         allowed_weapons_label.setFont(self.body_font)
@@ -667,6 +672,7 @@ class UnitEditorWnd(QWidget):
             self.wt_checkboxes_left[w].stateChanged.connect(self.left_weapon_type_toggle)
             self.wt_checkboxes_right[w] = QCheckBox()
             self.wt_checkboxes_right[w].name = w
+            self.wt_checkboxes_right[w].setChecked(True)
             self.wt_checkboxes_right[w].stateChanged.connect(self.right_weapon_type_toggle)
             label = QLabel(w)
             label.setFont(self.body_font)
@@ -842,7 +848,7 @@ class UnitEditorWnd(QWidget):
             self.unit.gender = genders().MALE
         elif s == "Female":
             self.unit.gender = genders().FEMALE
-        elif s == "Other/Non-Binary":
+        elif s == "Non-Binary":
             self.unit.gender = genders().OTHER
         else:
             #custom gender
@@ -1326,7 +1332,7 @@ class UnitEditorWnd(QWidget):
         self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def growth_rates_dialog(self):
-        u = growthRateDialog(parent=self)
+        u = growthRateDialog(parent=self,font=self.body_font)
         u.exec_()
 
     def tile_changes_dialog(self):
@@ -1336,7 +1342,7 @@ class UnitEditorWnd(QWidget):
         pass
 
     def stat_bonuses_dialog(self):
-        i = statBonusDialog(parent=self)
+        i = statBonusDialog(parent=self,font=self.body_font)
         i.exec_()
 
     def left_weapon_type_toggle(self):
@@ -1370,7 +1376,7 @@ class UnitEditorWnd(QWidget):
     def skills_dialog(self):
         y = classSkillDialog(parent=self,font=self.body_font)
         y.exec_()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.currentText()+".tructf")
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def skilled_blows_dialog(self):
         pass
@@ -1420,4 +1426,18 @@ class UnitEditorWnd(QWidget):
                 self.wt_checkboxes_left[w].setChecked(True)
             elif w in ac.disallowed_weapon_types:
                 self.wt_checkboxes_right[w].setChecked(True)
-            
+    
+    def createClass(self):
+        self.unit.unit_class = unitClass()
+        
+        self.class_name.setText("")
+        self.minimum_level.setValue(0)
+        self.is_mounted.setChecked(False)
+        self.mounted_m.setValue(0)
+        self.exp_m.setValue(0)
+        self.class_type.setCurrentText("")
+        self.is_flying.setChecked(False)
+        
+        for w in weaponTypes().data:
+            self.wt_checkboxes_left[w].setChecked(False)
+            self.wt_checkboxes_right[w].setChecked(True)
