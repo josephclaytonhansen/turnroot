@@ -340,6 +340,29 @@ class main(QMainWindow):
         h = webView(page = 3, parent=self)
         h.exec_()
 
+    def keyPressEvent(self, e):
+        modifiers = QApplication.keyboardModifiers()
+        if modifiers == Qt.ControlModifier:
+            if e.key() == Qt.Key_Q:
+                self.quitWindow()
+            elif e.key() == Qt.Key_O:
+                self.openButton.trigger()
+            elif e.key() == Qt.Key_S:
+                self.saveButton.trigger()
+            elif e.key() == Qt.Key_E:
+                self.editorSelect()
+            elif e.key() == Qt.Key_N:
+                if self.newButton.isVisible() == True:
+                    self.newButton.trigger()
+        else:
+            if e.key() == Qt.Key_S:
+                self.OptionsMenu()
+            elif e.key() == Qt.Key_H:
+                self.helpView()
+            elif e.key() == Qt.Key_Escape:
+                self.editorSelect()
+            
+
 window = main()
 window.show()
 a = app.exec_()
