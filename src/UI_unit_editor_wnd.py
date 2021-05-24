@@ -1350,6 +1350,7 @@ class UnitEditorWnd(QWidget):
     def growth_rates_dialog(self):
         u = growthRateDialog(parent=self,font=self.body_font)
         u.exec_()
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def tile_changes_dialog(self):
         pass
@@ -1360,6 +1361,7 @@ class UnitEditorWnd(QWidget):
     def stat_bonuses_dialog(self):
         i = statBonusDialog(parent=self,font=self.body_font)
         i.exec_()
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def left_weapon_type_toggle(self):
         w = self.sender().name
@@ -1371,6 +1373,10 @@ class UnitEditorWnd(QWidget):
         if w in self.unit.unit_class.disallowed_weapon_types:
             self.unit.unit_class.disallowed_weapon_types.remove(w)
         self.unit.unit_class.allowed_weapon_types.append(w)
+        
+        for t in self.unit.unit_class.allowed_weapon_types:
+            if t in self.unit.unit_class.disallowed_weapon_types:
+                self.unit.unit_class.disallowed_weapon_types.remove(t)
 
         self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
             
@@ -1384,6 +1390,10 @@ class UnitEditorWnd(QWidget):
         if w in self.unit.unit_class.allowed_weapon_types:
             self.unit.unit_class.allowed_weapon_types.remove(w)
         self.unit.unit_class.disallowed_weapon_types.append(w)
+        
+        for t in self.unit.unit_class.allowed_weapon_types:
+            if t in self.unit.unit_class.disallowed_weapon_types:
+                self.unit.unit_class.disallowed_weapon_types.remove(t)
 
         self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 

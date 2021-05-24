@@ -26,7 +26,10 @@ class growthRateDialog(QDialog):
             universal_stats =  json.load(stats_file)
         
         for s in universal_stats:
-            self.parent.unit.unit_class.growth_rates[s] = 60
+            try:
+                self.parent.unit.unit_class.growth_rates[s] = self.parent.unit.unit_class.growth_rates[s]
+            except:
+                self.parent.unit.unit_class.growth_rates[s] = 60
         
         self.list = QListWidget()
         self.list.setFont(self.body_font)
@@ -64,7 +67,7 @@ class growthRateDialog(QDialog):
     def colorizeSlider(self, v):
         try:
             self.parent.unit.unit_class.growth_rates[self.list.currentItem().text()] = v
-            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.currentText()+".tructf")
+            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
         except:
             pass
             
@@ -142,7 +145,7 @@ class statBonusDialog(QDialog):
     def value_changed(self):
         try:
             self.parent.unit.unit_class.stat_bonuses[self.sender().name] = self.sender().value()
-            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.currentText()+".tructf")
+            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
         except:
             pass
 

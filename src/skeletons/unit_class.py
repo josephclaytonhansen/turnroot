@@ -4,15 +4,14 @@ class unitClass():
     def __init__(self):
         
         self.unit_class_name = None
+        self.desc = ""
         
-        self.tactics = {}
+        self.tactics = []
+        self.tactics_criteria = []
         self.skills = []
         self.skill_criteria = {}
-        self.skilled_blows = {}
-        
-        self.tactics_minimum_class_exp = {}
-        self.skills_minimum_class_exp = {}
-        self.skilled_blows_minimum_class_exp = {}
+        self.skilled_blows = []
+        self.skilled_blows_criteria = {}
         
         self.allowed_weapon_types = []
         self.disallowed_weapon_types = []
@@ -32,18 +31,22 @@ class unitClass():
         
         self.growth_rates = {}
         self.stat_bonuses = {}
-        self.stat_bonuses_criteria = {}
         
         self.next_classes = {}
+        
+        self.portrait_changes = {}
+        self.sprite_changes = {}
+        self.gfx_changes = {}
         
     def selfToJSON(self, path, p = True):
         if self.unit_class_name != None:
             basic_attrs = ["unit_class_name", "tactics", "skills", "skilled_blows", "growth_rates",
-                           "tactics_minimum_class_exp", "skills_minimum_class_exp", "skilled_blows_minimum_class_exp",
+                           "tactics_criteria", "skilled_blows_criteria", "desc", "portrait_changes",
                            "allowed_weapon_types", "disallowed_weapon_types", "minimum_level", "is_mounted",
                            "mounted_move_change", "mounted_tile_changes", "dismounted_tile_changes",
                            "weak_against", "weak_against_amount", "exp_gained_multiplier",
-                           "class_type", "stat_bonuses", "stat_bonuses_criteria", "next_classes", "skill_criteria", "is_flying"]
+                           "class_type", "stat_bonuses", "next_classes", "skill_criteria", "is_flying",
+                           "sprite_changes", "gfx_changes"]
 
             
             basic_attrs_dict = {}
@@ -59,11 +62,12 @@ class unitClass():
     
     def selfFromJSON(self, path):
         basic_attrs = ["unit_class_name", "tactics", "skills", "skilled_blows", "growth_rates",
-                       "tactics_minimum_class_exp", "skills_minimum_class_exp", "skilled_blows_minimum_class_exp",
-                       "allowed_weapon_types", "disallowed_weapon_types", "minimum_level", "is_mounted",
-                       "mounted_move_change", "mounted_tile_changes", "dismounted_tile_changes",
-                       "weak_against", "weak_against_amount", "exp_gained_multiplier",
-                       "class_type", "stat_bonuses", "stat_bonuses_criteria", "next_classes", "skill_criteria", "is_flying"]
+                           "tactics_criteria", "skilled_blows_criteria", "desc", "portrait_changes",
+                           "allowed_weapon_types", "disallowed_weapon_types", "minimum_level", "is_mounted",
+                           "mounted_move_change", "mounted_tile_changes", "dismounted_tile_changes",
+                           "weak_against", "weak_against_amount", "exp_gained_multiplier",
+                           "class_type", "stat_bonuses", "next_classes", "skill_criteria", "is_flying",
+                           "sprite_changes", "gfx_changes"]
         
         with open(path, "rb") as rf:
             tmp_data = pickle.load(rf)

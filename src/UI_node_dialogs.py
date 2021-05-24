@@ -110,8 +110,11 @@ class setSkillToClass(QDialog):
         class_names = []
         for f in file_list:
             tmp_class = unitClass()
-            tmp_class.selfFromJSON(f.path)
-            class_names.append(tmp_class.unit_class_name)
+            try:
+                tmp_class.selfFromJSON(f.path)
+                class_names.append(tmp_class.unit_class_name)
+            except:
+                print(f.path)
         print(class_names)
         return class_names
 
