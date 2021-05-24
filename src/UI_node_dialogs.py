@@ -100,7 +100,7 @@ class setSkillToClass(QDialog):
                 tmp_class = unitClass()
                 tmp_class.selfFromJSON(f.path)
                 if tmp_class.unit_class_name == s:
-                    if self.parent.skill_name not in tmp_class.skills:
+                    if self.parent.skill_name.text() not in tmp_class.skills:
                         tmp_class.skills.append(self.parent.skill_name.text())
                     tmp_class.selfToJSON(f.path)
                     self.close()                        

@@ -9,6 +9,11 @@ from PyQt5.QtGui import *
 
 data_string = ""
 
+import src.UI_colorTheme as UI_colorTheme
+from src.UI_updateJSON import updateJSON
+d = updateJSON()
+active_theme = getattr(UI_colorTheme, d["active_theme"])
+
 class Save(): 
     def saveNode(self, node):
         data = dict()
@@ -137,9 +142,8 @@ class Load():
         print(scene.data_string)
         
         for y in scene.preview.radio_buttons:
-            if y == s["connection"]:
-                scene.preview.radio_buttons[y].setAutoExclusive(False)
-                scene.preview.radio_buttons[y].setCheckable(True)
-                scene.preview.radio_buttons[y].setChecked(True)
-                scene.preview.radio_buttons[y].setAutoExclusive(True)
+            if scene.preview.radio_buttons[y].name == s["connection"]:
+                scene.preview.radio_buttons[y].setStyleSheet("background-color: "+active_theme.button_alt_color+"; color:"+active_theme.button_alt_text_color)
+            else:
+                scene.preview.radio_buttons[y].setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color)
 

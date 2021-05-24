@@ -112,10 +112,11 @@ class skillPreview(QWidget):
             if r == 4:
                 r = 0
                 c +=1
-            self.radio_buttons[y] = QCheckBox(y)
+            self.rb_toggle = False
+            self.radio_buttons[y] = QPushButton(y)
+            self.radio_buttons[y].setEnabled(False)
             self.radio_buttons[y].name = y
-            self.radio_buttons[y].setCheckable(False)
-            self.radio_buttons[y].stateChanged.connect(self.clear_other_radio_buttons)
+            self.radio_buttons[y].clicked.connect(self.clear_other_radio_buttons)
             connected_layout.addWidget(self.radio_buttons[y], r, c)
         
         self.clabel = QLabel("Skill is connected to: (file must be saved)")    
@@ -123,31 +124,31 @@ class skillPreview(QWidget):
         connectedf_layout.addWidget(connected)
         
         content_widget_layout.addWidget(connectedf)
-
+        
     def enable_radio_buttons(self):
         for r in self.radio_buttons:
-            self.radio_buttons[r].setCheckable(True)
+            self.radio_buttons[r].setEnabled(True)
             self.clabel.setText("Skill is connected to:")
     
     def clear_other_radio_buttons(self, s):
-        if s == Qt.Checked:
-            for y in self.radio_buttons:
-                if self.radio_buttons[y] != self.sender():
-                    self.radio_buttons[y].setChecked(False)
-            self.sender().setChecked(True)
-            if self.sender() == self.radio_buttons["Class"]:
-                self.parent.scene.connection_type = self.sender().name
-                b = setSkillToClass(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
-                b.exec_()
-            if self.sender() == self.radio_buttons["Unique to Unit"]:
-                self.parent.scene.connection_type = self.sender().name
-                b = setSkillToUnit(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
-                b.exec_()
-            else:
-                self.parent.scene.connection_type = self.sender().name
-                b = setSkillToWeapon(parent=self,font=self.parent.parent().parent().unit_editor.body_font,n=self.sender().name)
-                b.exec_()
-            self.parent.scene.saveToFile()
+        l = ["Weapon Level D", "Weapon Level C","Weapon Level B","Weapon Level A","Weapon Level S"]
+        self.sender().setStyleSheet("background-color: "+active_theme.button_alt_color+"; color:"+active_theme.button_alt_text_color)
+        for y in ["Weapon Level D", "Weapon Level C","Weapon Level B","Weapon Level A","Weapon Level S","Class", "Unique to Unit"]:
+            if self.radio_buttons[y] != self.sender():
+               self.radio_buttons[y].setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color)
+        if self.sender() == self.radio_buttons["Class"]:
+            self.parent.scene.connection_type = self.sender().name
+            b = setSkillToClass(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
+            b.exec_()
+        elif self.sender() == self.radio_buttons["Unique to Unit"]:
+            self.parent.scene.connection_type = self.sender().name
+            b = setSkillToUnit(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
+            b.exec_()
+        elif self.sender().name in l:
+            self.parent.scene.connection_type = self.sender().name
+            b = setSkillToWeapon(parent=self,font=self.parent.parent().parent().unit_editor.body_font,n=self.sender().name)
+            b.exec_()
+        self.parent.scene.saveToFile()
     
     def change_icon(self):
         self.max_or_index = len(self.outer)
