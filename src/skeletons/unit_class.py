@@ -52,6 +52,8 @@ class unitClass():
             basic_attrs_dict = {}
             for b in basic_attrs:
                 basic_attrs_dict[b] = getattr(self,b)
+            if "Skill Name" in basic_attrs_dict["skills"]:
+                basic_attrs_dict["skills"].remove("Skill Name")
                 
             with open(path, "wb") as wf:
                 #print(basic_attrs_dict)
@@ -76,3 +78,5 @@ class unitClass():
         
         for a in basic_attrs:
             setattr(self, a, tmp_data[a])
+            if "Skill Name" in self.skills:
+                    self.skills.remove("Skill Name")

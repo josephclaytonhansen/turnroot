@@ -566,6 +566,7 @@ class classSkillDialog(QDialog):
         #fromRow, int fromColumn, int rowSpan, int columnSpan
         
         self.skill_list = QListWidget()
+        self.skill_list.currentTextChanged.connect(self.row_changed)
         self.skill_list.setFont(self.body_font)
         self.skill_list.setIconSize(QSize(56,56))
         self.layout.addWidget(self.skill_list, 0,0,2,2)
@@ -623,11 +624,14 @@ class classSkillDialog(QDialog):
     def skill_changed(self, i):
         try:
             self.parent.unit.unit_class.skill_criteria[self.skill_list.currentItem().text()] = i
-            self.level.setValue(self.level_values[i])
+            self.level_values[self.skill_list.currentItem().text()] = self.level.value()
             self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.parent.unit.unit_class.unit_class_name+".tructf")
         except:
             print("no skills in list")
     
+    def row_changed(self,s):
+        self.level.setValue(self.level_values[self.skill_list.currentItem().text()])
+        
     def remove_skill(self):
         try:
             self.parent.unit.unit_class.skills.remove(self.skill_list.currentItem().text())
@@ -653,12 +657,16 @@ class classSkillDialog(QDialog):
         self.skill_list.clear()
         count = 0
         for d in self.parent.unit.unit_class.skills:
+            print(d)
             count +=1
-            self.level_values[d] = self.parent.unit.unit_class.skill_criteria[d]
+            if d in self.parent.unit.unit_class.skill_criteria:
+                self.level_values[d] = self.parent.unit.unit_class.skill_criteria[d]
+            else:
+                self.level_values[d] = 0
             if count == 1:
                 self.level_values[count] = self.level_values[d]
-                print(count, self.level_values[count])
             list_item = QListWidgetItem()
+            print(self.level_values)
 
             with open(self.all_skills[d], "r") as f:
                 s = json.load(f)
