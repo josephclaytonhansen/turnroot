@@ -7,7 +7,7 @@ from src.UI_TableModel import TableModel
 from src.node_backend import getFiles, File
 from src.img_overlay import overlayTile
 from src.UI_Dialogs import infoClose
-from src.UI_node_dialogs import setSkillToClass
+from src.UI_node_dialogs import setSkillToClass, setSkillToWeapon
 
 import json, math, random
 
@@ -138,6 +138,14 @@ class skillPreview(QWidget):
             if self.sender() == self.radio_buttons["Class"]:
                 self.parent.scene.connection_type = self.sender().name
                 b = setSkillToClass(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
+                b.exec_()
+            if self.sender() == self.radio_buttons["Unique to Unit"]:
+                self.parent.scene.connection_type = self.sender().name
+                b = setSkillToUnit(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
+                b.exec_()
+            else:
+                self.parent.scene.connection_type = self.sender().name
+                b = setSkillToWeapon(parent=self,font=self.parent.parent().parent().unit_editor.body_font,n=self.sender().name)
                 b.exec_()
             self.parent.scene.saveToFile()
     

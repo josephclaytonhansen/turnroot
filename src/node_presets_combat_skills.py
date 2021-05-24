@@ -226,7 +226,7 @@ class foe_cannot_followup(can_cannot):
             super().__init__(scene, action, which, direction, hexe)
 
 class unit_cannot_followup(can_cannot):
-    def __init__(self, scene, hexe="ucu", which = "", direction="Cannot ", action = " Follow-Up Attack"):
+    def __init__(self, scene, hexe="ucu", which = "", direction="Cannot ", action = "Follow-Up Attack"):
             super().__init__(scene, action, which, direction, hexe)
             
 class unit_attacks_twice(can_cannot):

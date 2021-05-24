@@ -490,7 +490,7 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Unit +Bonus Speed":grant_bonus_to_unit_spd, "Ally +Bonus Speed":grant_bonus_to_ally_spd,
          "Foe Cannot Counter-Attack":foe_cannot_counterattack, "Counter-Attacks Before Foe Attacks": unit_counterattack_first,
          "Counter-Attacks from Any Distance":unit_counterattack_distance, "Will Follow-Up Attack":unit_will_followup,
-         "Cannot Follow-Up":unit_cannot_followup, "Will Attack Twice":unit_attacks_twice,
+         "Cannot Follow-Up":unit_cannot_followup, "Attacks Twice":unit_attacks_twice,
          "Foe Cannot Attack Twice":foe_cannot_attack_twice,"Foe -Speed":penalize_foe_spd,
          "Foe -Str/Mag":penalize_foe_atk,"Foe -Defense":penalize_foe_def,"Foe -Resistance":penalize_foe_res,
          "Foe -Charisma":penalize_foe_chr,"Foe -Dexterity":penalize_foe_dex,"Foe -Luck":penalize_foe_luc}
@@ -498,7 +498,7 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
         
 NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Attacks",
                     "Counter-Attacks from Any Distance","Will Follow-Up Attack",
-                    "Cannot Follow-Up","Will Attack Twice","Foe Cannot Attack Twice",
+                    "Cannot Follow-Up","Attacks Twice","Foe Cannot Attack Twice",
                     "Math", "Compare Numbers", "Combat Start",
              "Unit Initiates Combat", "Foe Initiates Combat",
              "Unit +Bonus Strength/Magic", "Unit +Bonus Defense",

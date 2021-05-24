@@ -151,6 +151,7 @@ class Scene(Serializable):
         if fileName:
             self.path = fileName+".trnep"
             with open(self.path, "w") as file:
+                self.save_data = Save().saveScene(self)
                 file.write(json.dumps(self.save_data))
                 d = infoClose("Saved as "+self.path+"\nAll changes will now autosave")
                 d.exec_()
