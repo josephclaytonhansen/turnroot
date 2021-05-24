@@ -578,20 +578,23 @@ class classSkillDialog(QDialog):
         self.outer = g_data[0]
         self.inner = g_data[1]
         self.inner2 = g_data[2]
-        
+        self.level_values = {}
+        self.level = QSpinBox()
+        self.level.setValue(0)
         self.fillList()
             
         if len(self.parent.unit.unit_class.skills) == 0:
             self.skill_list.addItem("No skills connected to class")
+            self.level_values["No skills connected to class"] = 0
         
         self.level_label = QLabel("Unlock Level")
         self.level_label.setFont(self.body_font)
-        self.level = QSpinBox()
+        
         self.level.setFont(self.body_font)
         self.level.valueChanged.connect(self.skill_changed)
         self.level.setRange(0,30)
-        self.level.setValue(0)
 
+        
         self.layout.addWidget(self.level_label, 2, 0, 1, 1)
         self.layout.addWidget(self.level, 2,1,1,1)
         
@@ -618,8 +621,12 @@ class classSkillDialog(QDialog):
         self.layout.addWidget(self.add, 3, 1, 1,1)
          
     def skill_changed(self, i):
-        self.parent.unit.unit_class.skill_criteria[self.skill_list.currentItem().text()] = i
-        self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.parent.unit.unit_class.unit_class_name+".tructf")
+        try:
+            self.parent.unit.unit_class.skill_criteria[self.skill_list.currentItem().text()] = i
+            self.level.setValue(self.level_values[i])
+            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.parent.unit.unit_class.unit_class_name+".tructf")
+        except:
+            print("no skills in list")
     
     def remove_skill(self):
         try:
@@ -644,7 +651,13 @@ class classSkillDialog(QDialog):
 
     def fillList(self):
         self.skill_list.clear()
+        count = 0
         for d in self.parent.unit.unit_class.skills:
+            count +=1
+            self.level_values[d] = self.parent.unit.unit_class.skill_criteria[d]
+            if count == 1:
+                self.level_values[count] = self.level_values[d]
+                print(count, self.level_values[count])
             list_item = QListWidgetItem()
 
             with open(self.all_skills[d], "r") as f:
@@ -664,6 +677,8 @@ class classSkillDialog(QDialog):
             self.skill_list.addItem(list_item)
             
             list_item.setText(d)
+        self.level.setValue(self.level_values[1])
+        self.level.update()
         
         
         

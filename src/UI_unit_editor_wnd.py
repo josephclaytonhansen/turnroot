@@ -550,13 +550,20 @@ class UnitEditorWnd(QWidget):
         self.class_name.setPlaceholderText("Class name")
         self.class_name.setToolTip("Press enter to save class as 'class name.tructf' in game folder.\nOnce a class is named, changes will autosave.")
         self.class_name.returnPressed.connect(self.class_name_change)
-        working_tab_layout.addWidget(self.class_name, 0,0,1,3)
+        working_tab_layout.addWidget(self.class_name, 0,0,1,1)
+        
+        self.class_desc = QLineEdit()
+        self.class_desc.setFont(self.body_font)
+        self.class_desc.setPlaceholderText("Class description")
+        self.class_desc.setToolTip("In-game class description.")
+        self.class_desc.textChanged.connect(self.class_desc_change)
+        working_tab_layout.addWidget(self.class_desc, 0,1,1,3)
         
         self.new_class = QPushButton("New Class")
         self.new_class.setToolTip("Create a new, blank, class (will not save until named)")
         self.new_class.setFont(self.body_font)
         self.new_class.clicked.connect(self.createClass)
-        working_tab_layout.addWidget(self.new_class, 0,3,1,2)
+        working_tab_layout.addWidget(self.new_class, 0,4,1,2)
 
         allowed_weapons_label = QLabel("Can use")
         allowed_weapons_label.setFont(self.body_font)
@@ -1441,12 +1448,10 @@ class UnitEditorWnd(QWidget):
     
     def loadClass(self):
         ac = self.unit.unit_class
-        try:
-            ac.selfFromJSON(self.paths[ac.unit_class_name])
-        except:
-            pass
+        ac.selfFromJSON(self.paths[ac.unit_class_name])
         try:
             self.class_name.setText(ac.unit_class_name)
+            self.class_desc.setText(ac.desc)
             self.minimum_level.setValue(ac.minimum_level)
             self.is_mounted.setChecked(ac.is_mounted)
             self.mounted_m.setValue(ac.mounted_move_change)
@@ -1461,6 +1466,7 @@ class UnitEditorWnd(QWidget):
                     self.wt_checkboxes_right[w].setChecked(True)
         except:
             pass
+
     
     def createClass(self):
         self.unit.unit_class = None
@@ -1468,6 +1474,7 @@ class UnitEditorWnd(QWidget):
         ac = self.unit.unit_class
         
         self.class_name.setText("")
+        self.class_desc.setText("")
         self.minimum_level.setValue(0)
         self.is_mounted.setChecked(False)
         self.mounted_m.setValue(0)
@@ -1478,3 +1485,8 @@ class UnitEditorWnd(QWidget):
         for w in weaponTypes().data:
             self.wt_checkboxes_left[w].setChecked(False)
             self.wt_checkboxes_right[w].setChecked(True)
+    
+    def class_desc_change(self):
+        self.unit.unit_class.desc = self.sender().text()
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        

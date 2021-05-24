@@ -54,6 +54,7 @@ class unitClass():
                 basic_attrs_dict[b] = getattr(self,b)
                 
             with open(path, "wb") as wf:
+                #print(basic_attrs_dict)
                 pickle.dump(basic_attrs_dict, wf)
                 
             if p == True:
@@ -71,6 +72,7 @@ class unitClass():
         
         with open(path, "rb") as rf:
             tmp_data = pickle.load(rf)
+            #print(tmp_data)
         
         for a in basic_attrs:
             setattr(self, a, tmp_data[a])
