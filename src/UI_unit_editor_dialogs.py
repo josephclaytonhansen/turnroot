@@ -535,7 +535,12 @@ class editUniversalWeaponTypes(QDialog):
         c = confirmAction("#This will remove this weapon type from all units in the game, do you want to continue?",parent=self)
         c.exec_()
         if(c.return_confirm):
-            self.parent.unit.removeUniversalWeaponsType(self.list.currentItem().text())
+            y = self.list.currentItem().text()
+            self.parent.unit.removeUniversalWeaponsType(y)
+            
+            if os.path.exists("src/skeletons/weapon_types/"+y+".json"):
+                os.remove("src/skeletons/weapon_types/"+y+".json")
+            
             self.close()
             self.restart = True
 

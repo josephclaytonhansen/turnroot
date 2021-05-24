@@ -6,6 +6,10 @@ class weaponTypes():
         self.data = weapon_types
         for wt in self.data:
             w = weaponType(wt)
+            try:
+                w.Load()
+            except:
+                print("no existing data for type" + wt)
             with open("src/skeletons/weapon_types/"+w.name+".json", "w") as f:
                 json.dump(w.data,f)
 
