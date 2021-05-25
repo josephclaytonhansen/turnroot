@@ -9,11 +9,6 @@ from src.UI_updateJSON import updateJSON
 
 ind = 0
 entries = ["Keyboard Shortcuts", "Quickstart", "Creation Checklists", "Turnroot Documentation (Read the Docs)", "Turnroot Forums"]
-data = {"font_size": 15, "rfont_size": 15,
-        "active_theme": "midnight_spark_yellow",
-        "active_layout": "right_lower", "icon_size": "26",
-        "ah_rte": True, "ah_tasks": True, "ah_taskss": True,
-        "ah_overlays": False, "theme_changed": False}
 
 data = updateJSON()
 import src.UI_colorTheme

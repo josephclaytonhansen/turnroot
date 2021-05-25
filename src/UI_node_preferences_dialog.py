@@ -15,14 +15,14 @@ EDGE_TYPE_BEZIER = 2
 
 #update below when importing more color themes!
 from src.UI_colorTheme import (
-    midnight_spark, midnight_spark_yellow,
+    midnight_spark,
     sand_dunes,
     rainforest,charcoal,
     ocean_waves
     ,chocolate,
     chili_pepper,custom)
 
-color_themes_dict = [midnight_spark, midnight_spark_yellow,
+color_themes_dict = [midnight_spark,
     sand_dunes,
     rainforest,charcoal,
     ocean_waves
