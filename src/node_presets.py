@@ -470,7 +470,7 @@ class not_event(QWidget):
     
 NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat Start": combat_start,
          "Unit Initiates Combat": unit_initiates_combat, "Foe Initiates Combat": foe_initiates_combat,
-         "Unit +Bonus Strength/Magic": grant_bonus_to_unit_atk, "Unit +Bonus Defense": grant_bonus_to_unit_def,
+         "Unit +Bonus Str/Mag": grant_bonus_to_unit_atk, "Unit +Bonus Defense": grant_bonus_to_unit_def,
          "Unit +Bonus Resistance": grant_bonus_to_unit_res,"Unit +Bonus Charisma": grant_bonus_to_unit_chr,
          "Unit +Bonus Dexterity": grant_bonus_to_unit_dex,"Unit +Bonus Luck": grant_bonus_to_unit_luc,
          "Unit is Adjacent to Ally": unit_is_adjacent_to_ally, "Unit is Within N of Ally": unit_is_near_ally,
@@ -505,7 +505,7 @@ NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Atta
              "Unit +Bonus Resistance", "Unit +Bonus Charisma",
              "Unit +Bonus Dexterity", "Unit +Bonus Luck",
              "Unit is Adjacent to Ally", "Unit is Within N of Ally",
-             "Ally +Bonus Strength/Magic", "Ally +Bonus Defense",
+             "Ally +Bonus Str/Mag", "Ally +Bonus Defense",
              "Ally +Bonus Resistance", "Ally +Bonus Charisma",
              "Ally +Bonus Dexterity", "Ally +Bonus Luck",
              "Convert T/F to Event", "And", "Unit Using Weapon Type",

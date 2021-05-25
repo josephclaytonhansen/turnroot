@@ -685,7 +685,10 @@ class classSkillDialog(QDialog):
             self.skill_list.addItem(list_item)
             
             list_item.setText(d)
-        self.level.setValue(self.level_values[1])
+        try:
+            self.level.setValue(self.level_values[1])
+        except:
+            pass
         self.level.update()
         
         

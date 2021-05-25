@@ -1103,13 +1103,11 @@ class UnitEditorWnd(QWidget):
                     json.dump(self.unit.AI_sheets, w)
                 self.unit.parent = self
                 self.unit.selfToJSON(self.path)
-                self.parent().nameChange()
 
         else:
             with open(self.path+".trui", "w") as w:
                 json.dump(self.unit.AI_sheets, w)
             self.unit.selfToJSON(self.path)
-            self.parent().nameChange()
 
     
     def openFileDialog(self):

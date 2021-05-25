@@ -37,6 +37,11 @@ class weaponType():
         self.data = {"name":self.type,"skills":self.skills,"objects":self.objects,"desc":self.desc,"icon":self.icon}
         self.Save()
     
+    def removeSkill(self,name):
+        self.skills.pop(name)
+        self.data = {"name":self.type,"skills":self.skills,"objects":self.objects,"desc":self.desc,"icon":self.icon}
+        self.Save()
+    
     def changeIcon(self,icon):
         self.icon = icon
         self.data = {"name":self.type,"skills":self.skills,"objects":self.objects,"desc":self.desc,"icon":self.icon}
