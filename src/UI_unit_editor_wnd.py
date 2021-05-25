@@ -17,7 +17,7 @@ from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
-from src.UI_unit_editor_dialogs import growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats, editUniversalWeaponTypes, classSkillDialog
+from src.UI_unit_editor_dialogs import growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats, editUniversalWeaponTypes, classSkillDialog,loadSavedClass
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -557,13 +557,19 @@ class UnitEditorWnd(QWidget):
         self.class_desc.setPlaceholderText("Class description")
         self.class_desc.setToolTip("In-game class description.")
         self.class_desc.textChanged.connect(self.class_desc_change)
-        working_tab_layout.addWidget(self.class_desc, 0,1,1,3)
+        working_tab_layout.addWidget(self.class_desc, 0,1,1,2)
         
         self.new_class = QPushButton("New Class")
         self.new_class.setToolTip("Create a new, blank, class (will not save until named)")
         self.new_class.setFont(self.body_font)
         self.new_class.clicked.connect(self.createClass)
         working_tab_layout.addWidget(self.new_class, 0,4,1,2)
+        
+        self.new_class = QPushButton("Load Class")
+        self.new_class.setToolTip("Load a saved class for editing")
+        self.new_class.setFont(self.body_font)
+        self.new_class.clicked.connect(self.loadClassDialog)
+        working_tab_layout.addWidget(self.new_class, 0,3,1,1)
 
         allowed_weapons_label = QLabel("Can use")
         allowed_weapons_label.setFont(self.body_font)
@@ -712,7 +718,7 @@ class UnitEditorWnd(QWidget):
             working_tab_layout.setColumnStretch(3, 3)
             working_tab_layout.setColumnStretch(4, 1)
         
-        self.loadClass()
+        self.createClass()
        
     def initUnique(self):
         working_tab = self.tabs_dict["Unique Skills/Tactics/Objects"]
@@ -1444,9 +1450,13 @@ class UnitEditorWnd(QWidget):
         except:
             pass
     
-    def loadClass(self):
-        ac = self.unit.unit_class
-        ac.selfFromJSON(self.paths[ac.unit_class_name])
+    def loadClass(self,name = None):
+        if name == None:
+            ac = self.unit.unit_class
+            ac.selfFromJSON(self.paths[ac.unit_class_name])
+        else:
+            ac = unitClass()
+            ac.selfFromJSON(self.paths[name])
         try:
             self.class_name.setText(ac.unit_class_name)
             self.class_desc.setText(ac.desc)
@@ -1464,6 +1474,15 @@ class UnitEditorWnd(QWidget):
                     self.wt_checkboxes_right[w].setChecked(True)
         except:
             pass
+    
+    def loadClassDialog(self):
+        y = loadSavedClass(parent=self,font=self.body_font)
+        y.exec_()
+        if hasattr(y,"returns"):
+            self.loadClass(name = y.returns)
+        else:
+            c = infoClose("No class selected")
+            c.exec_()
 
     
     def createClass(self):

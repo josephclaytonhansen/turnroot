@@ -196,19 +196,14 @@ class setSkillToUnit(QDialog):
         self.setLayout(self.layout)
         
     def connect_unit(self, s):
-        print(s)
         file_list = getFiles("src/skeletons/units")[GET_FILES]
         for f in file_list:
             if "trui" not in f.path:
                 f.path = f.path.replace("\\", "/") 
                 tmp_weapon = Unit()
-                print(f.path)
                 tmp_weapon.selfFromJSON(f.path)
-                print("loaded", tmp_weapon.name)
-                print(tmp_weapon.name,s)
                 if tmp_weapon.name == s:
                     if self.parent.skill_name not in tmp_weapon.skills:
-                        print("not in skills!")
                         tmp_weapon.addSkill(self.parent.skill_name.text())
                     tmp_weapon.selfToJSON(f.path,p=False)
         self.close()
@@ -219,11 +214,10 @@ class setSkillToUnit(QDialog):
         for f in file_list:
             f.path = f.path.replace("\\", "/") 
             tmp_weapon = Unit()
-            print(f.path)
             try:
                 tmp_weapon.selfFromJSON(f.path)
                 weapons.append(tmp_weapon.name)
             except:
-                print(".trui")
+                pass
         print(weapons)
         return weapons
