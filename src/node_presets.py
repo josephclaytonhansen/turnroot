@@ -497,8 +497,8 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Foe -Str/Mag":penalize_foe_atk,"Foe -Defense":penalize_foe_def,"Foe -Resistance":penalize_foe_res,
          "Foe -Charisma":penalize_foe_chr,"Foe -Dexterity":penalize_foe_dex,"Foe -Luck":penalize_foe_luc,
          "Turn is Odd":turn_is_odd, "Turn is Even":turn_is_even,
-         "Disable Foe's 'Can Counter-Attack From Any Distance'":disable_counterattack_from_any_distance,
-         "Reset Attack Priority":reset_attack_priority,"Disable Foe's 'Effective Against X'":disable_effective_against}
+         "Disable Foe‘s 'Can Counter-Attack From Any Distance'":disable_counterattack_from_any_distance,
+         "Reset Attack Priority":reset_attack_priority,"Disable Foe‘s 'Effective Against X'":disable_effective_against}
 
         
 NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Attacks",
@@ -507,12 +507,10 @@ NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Atta
                     "Math", "Compare Numbers", "Combat Start",
              "Unit Initiates Combat", "Foe Initiates Combat",
              "Unit +Bonus Strength/Magic", "Unit +Bonus Defense",
-             "Unit +Bonus Resistance", "Unit +Bonus Charisma",
-             "Unit +Bonus Dexterity", "Unit +Bonus Luck",
+             "Unit +Bonus Resistance", "Unit +Bonus Charisma", "Unit +Bonus Luck",
              "Unit is Adjacent to Ally", "Unit is Within N of Ally",
              "Ally +Bonus Str/Mag", "Ally +Bonus Defense",
-             "Ally +Bonus Resistance", "Ally +Bonus Charisma",
-             "Ally +Bonus Dexterity", "Ally +Bonus Luck",
+             "Ally +Bonus Resistance", "Ally +Bonus Charisma", "Ally +Bonus Luck",
              "Convert T/F to Event", "And", "Unit Using Weapon Type",
              "Foe Using Weapon Type", "Unit Health Percentage",
                     "Foe Health Percentage", "Not (If A is False, True)",
@@ -524,9 +522,8 @@ NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Atta
                     "Ally is Male", "Unit does Less/More Damage", "Level is Night",
                     "Level is Raining", "Level is Foggy", "Unit +Bonus Speed",
                     "Ally +Bonus Speed","Foe -Speed","Foe -Str/Mag",
-                    "Foe -Defense","Foe -Resistance","Foe -Charisma",
-                    "Foe -Dexterity","Foe -Luck", "Turn is Odd", "Turn is Even",
-                    "Disable Foe's 'Effective Against X'", "Disable Foe's 'Can Counter-Attack From Any Distance'",
+                    "Foe -Defense","Foe -Resistance","Foe -Charisma","Foe -Luck", "Turn is Odd", "Turn is Even",
+                    "Disable Foe‘s 'Effective Against X'", "Disable Foe‘s 'Can Counter-Attack From Any Distance'",
                     "Reset Attack Priority"])
     
 class Nodes():

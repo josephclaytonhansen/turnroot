@@ -221,17 +221,30 @@ class UnitEditorWnd(QWidget):
         
         self.working_tab_layout.addWidget(self.basic_left)
         
-        stat_label = QPushButton("Stats")
-        stat_label.clicked.connect(self.universalStats)
-        stat_label.setToolTip("Edit universal stats")
+        stat_label = QLabel("Stats")
+        stat_label.setToolTip("How much of each universal stat unit has at level 1")
         stat_label.setFont(body_font)
         self.basic_center_layout.addWidget(stat_label)
         
         self.stat_row = {}
         self.stat_values = {}
         self.stat_spins = {}
+        self.stat_tooltips = [
+            "Damage dealt in physical attacks\nActual damage = (strength + weapon damage) minus foe‘s defense",
+            "Unit‘s health points",
+            "Determines chance of attacking twice, and affects evasion (Avo)\nIf speed minus weapon speed penalty (if enabled for game) is 5 more than foe‘s speed, unit attacks twice. \nEvasion = (.5 x luck) + speed + bonuses",
+            "Defense against physical attack\nSee Strength for damage formula",
+            "Depending on game settings, this may be ignored, or it may affect tactics‘ durability and ability to learn new tactics/skilled blows\nMay also affect ability to use emplacements",
+            "Damage dealt in magical attacks\nActual damage = (magic + weapon damage) minus foe‘s resistance",
+            "Defense against magical attack\nSee Magic for damage formula",
+            "Affects evasion and critical chance.\nIf class growth is learned, also affects success.\nSee Speed for evasion formula.\nCritical = luck + weapon critical",
+            "Affects support building and tactics‘ effectiveness.",
+            "Depending on game settings, this may be ignored.\n If enabled, affects weapon speed penalties."
+            ]
+        
         for s in universal_stats:
             self.stat_row[s] = QWidget()
+            self.stat_row[s].setToolTip(self.stat_tooltips[universal_stats.index(s)])
             self.stat_row_layout = QHBoxLayout()
             self.stat_row[s].setLayout(self.stat_row_layout)
             
