@@ -104,16 +104,17 @@ class mainS(NodeEditorWnd):
         
         fp_actions = [QAction("Foe Cannot Attack Twice", self),QAction("Foe Cannot Counter-Attack", self),
                       QAction("Foe -Speed",self),QAction("Foe -Str/Mag",self),QAction("Foe -Defense",self),
-                      QAction("Foe -Resistance",self),QAction("Foe -Charisma",self),QAction("Foe -Luck",self)]
+                      QAction("Foe -Resistance",self),QAction("Foe -Charisma",self),QAction("Foe -Luck",self),
+                      QAction("Foe -Dexterity",self)]
         
         for n in fp_actions:
             fp.addAction(n)
             n.triggered.connect(self.submenu_item)
             
-        ub_actions = [QAction("Unit +Bonus Strength/Magic", self),QAction("Unit +Bonus Defense", self),QAction("Unit +Bonus Resistance", self),
+        ub_actions = [QAction("Unit +Bonus Str/Mag", self),QAction("Unit +Bonus Defense", self),QAction("Unit +Bonus Resistance", self),
                         QAction("Unit +Bonus Charisma", self),QAction("Unit +Bonus Luck", self),
                       QAction("Earn Extra Weapon EXP", self), QAction("Earn Extra Level EXP", self), QAction("Unit +Bonus Critical",self),
-                      QAction("Unit +Bonus Speed",self)]
+                      QAction("Unit +Bonus Speed",self),QAction("Unit +Bonus Dexterity",self)]
         ub.addMenu(ui)
         for n in ub_actions:
             ub.addAction(n)
@@ -121,7 +122,7 @@ class mainS(NodeEditorWnd):
         
         ab_actions = [QAction("Ally +Bonus Strength/Magic", self),QAction("Ally +Bonus Defense", self),QAction("Ally +Bonus Resistance", self),
                         QAction("Ally +Bonus Charisma", self),QAction("Ally +Bonus Luck", self),
-                      QAction("Ally +Bonus Speed",self)]
+                      QAction("Ally +Bonus Speed",self), QAction("Ally +Bonus Dexterity", self)]
         
         for n in ab_actions:
             ab.addAction(n)

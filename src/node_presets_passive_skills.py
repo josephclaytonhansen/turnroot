@@ -497,10 +497,7 @@ class using_weapon_type(QWidget):
     
     def change_weapon(self, s):
         if s != "--Select--":
-            s_dict = {}
-            for x in range(len(weaponTypes().data)):
-                s_dict[x] = x
-            self.hex_output = self.hexe + "." + s_dict[weaponTypes().data.index(s)]
+            self.hex_output = self.hexe + "." + s
             self.n.storage = [s]
         else:
             self.hex_output = self.hexe + ".na"

@@ -479,8 +479,8 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Ally +Bonus Strength/Magic": grant_bonus_to_ally_atk, "Ally +Bonus Defense": grant_bonus_to_ally_def,
          "Ally +Bonus Resistance": grant_bonus_to_ally_res,"Ally +Bonus Charisma": grant_bonus_to_ally_chr,
          "Ally +Bonus Dexterity": grant_bonus_to_ally_dex,"Ally +Bonus Luck": grant_bonus_to_ally_luc,
-         "Convert T/F to Event": bool_to_event, "And": and_event, "Unit Using Weapon Type": unit_using_weapon_type,
-         "Foe Using Weapon Type": foe_using_weapon_type, "Unit Health Percentage":unit_health_percentage,
+         "Convert T/F to Event": bool_to_event, "And": and_event, "Unit is Using Weapon Type": unit_using_weapon_type,
+         "Foe is Using Weapon Type": foe_using_weapon_type, "Unit Health Percentage":unit_health_percentage,
          "Foe Health Percentage":foe_health_percentage, "A or B": or_event, "Not (If A is False, True)": not_event,
          "Foe is Mounted":foe_is_mounted, "Unit is Mounted":unit_is_mounted, "Foe Has Bonus":foe_has_bonus,
          "Foe Has Penalty":foe_has_penalty,"Unit Has Penalty":unit_has_bonus,"Unit has Penalty": unit_has_penalty,
@@ -511,8 +511,8 @@ NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Atta
              "Unit is Adjacent to Ally", "Unit is Within N of Ally",
              "Ally +Bonus Str/Mag", "Ally +Bonus Defense",
              "Ally +Bonus Resistance", "Ally +Bonus Charisma", "Ally +Bonus Luck",
-             "Convert T/F to Event", "And", "Unit Using Weapon Type",
-             "Foe Using Weapon Type", "Unit Health Percentage",
+             "Convert T/F to Event", "And", "Unit is Using Weapon Type",
+             "Foe is Using Weapon Type", "Unit Health Percentage",
                     "Foe Health Percentage", "Not (If A is False, True)",
                     "A or B", "Foe is Mounted", "Unit is Mounted",
                     "Unit Has Penalty", "Unit Has Bonus", "Foe Has Penalty",
@@ -524,7 +524,8 @@ NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Atta
                     "Ally +Bonus Speed","Foe -Speed","Foe -Str/Mag",
                     "Foe -Defense","Foe -Resistance","Foe -Charisma","Foe -Luck", "Turn is Odd", "Turn is Even",
                     "Disable Foe‘s 'Effective Against X'", "Disable Foe‘s 'Can Counter-Attack From Any Distance'",
-                    "Reset Attack Priority"])
+                    "Reset Attack Priority","Unit +Bonus Dexterity","Ally +Bonus Dexterity",
+                    "Foe -Dexterity"])
     
 class Nodes():
     def __init__(self, scene, name):

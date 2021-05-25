@@ -232,14 +232,15 @@ class UnitEditorWnd(QWidget):
         self.stat_tooltips = [
             "Damage dealt in physical attacks\nActual damage = (strength + weapon damage) minus foe‘s defense",
             "Unit‘s health points",
-            "Determines chance of attacking twice, and affects evasion (Avo)\nIf speed minus weapon speed penalty (if enabled for game) is 5 more than foe‘s speed, unit attacks twice. \nEvasion = (.5 x luck) + speed + bonuses",
+            "Determines chance of attacking twice, and affects evasion (Avo)\nIf speed minus weapon speed penalty (if enabled for game) is 5 more than foe‘s speed, unit attacks twice. \nEvasion = (luck + dexterity) / 2 + speed",
             "Defense against physical attack\nSee Strength for damage formula",
             "Depending on game settings, this may be ignored, or it may affect tactics‘ durability and ability to learn new tactics/skilled blows\nMay also affect ability to use emplacements",
             "Damage dealt in magical attacks\nActual damage = (magic + weapon damage) minus foe‘s resistance",
             "Defense against magical attack\nSee Magic for damage formula",
             "Affects evasion and critical chance.\nIf class growth is learned, also affects success.\nSee Speed for evasion formula.\nCritical = luck + weapon critical",
             "Affects support building and tactics‘ effectiveness.",
-            "Depending on game settings, this may be ignored.\n If enabled, affects weapon speed penalties."
+            "Depending on game settings, this may be ignored.\n If enabled, affects weapon speed penalties.",
+            "Affects evasion and weapon hit chance.\nSee Speed for evasion formula.\nHit chance = dexterity + weapon hit"
             ]
         
         for s in universal_stats:
@@ -1445,12 +1446,15 @@ class UnitEditorWnd(QWidget):
         self.paths = {}
         self.title_edit.clear()
         for f in file_list:
+            print(class_names)
             if f.ext.strip() == ".tructf":
                 tmp_class = unitClass()
                 tmp_class.selfFromJSON(f.fullPath)
                 self.paths[tmp_class.unit_class_name] = f.fullPath
-                class_names.append(tmp_class.unit_class_name)
-                classes[tmp_class.unit_class_name] = tmp_class
+                if tmp_class.unit_class_name not in class_names:
+                    class_names.append(tmp_class.unit_class_name)
+                    classes[tmp_class.unit_class_name] = tmp_class
+                    print(class_names)
                 
         if b:
             self.classesToDropDown(class_names)

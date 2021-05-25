@@ -727,11 +727,13 @@ class loadSavedClass(QDialog):
             if f.ext.strip() == ".tructf":
                 tmp_class = unitClass()
                 tmp_class.selfFromJSON(f.fullPath)
-                class_names.append(tmp_class.unit_class_name)
-                classes[tmp_class.unit_class_name] = tmp_class
+                if tmp_class.unit_class_name not in class_names:
+                    class_names.append(tmp_class.unit_class_name)
+                    classes[tmp_class.unit_class_name] = tmp_class
             self.classesToDropDown(class_names)
                 
     def classesToDropDown(self, class_names):
+        self.class_list.clear()
         self.class_list.addItems(class_names)
         self.class_list.update()
     
