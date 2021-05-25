@@ -28,9 +28,9 @@ class growthRateDialog(QDialog):
         
         for s in universal_stats:
             try:
-                self.parent.unit.unit_class.growth_rates[s] = self.parent.unit.unit_class.growth_rates[s]
+                self.parent.loaded_class.growth_rates[s] = self.parent.loaded_class.growth_rates[s]
             except:
-                self.parent.unit.unit_class.growth_rates[s] = 60
+                self.parent.loaded_class.growth_rates[s] = 60
         
         self.list = QListWidget()
         self.list.setFont(self.body_font)
@@ -67,8 +67,8 @@ class growthRateDialog(QDialog):
     
     def colorizeSlider(self, v):
         try:
-            self.parent.unit.unit_class.growth_rates[self.list.currentItem().text()] = v
-            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+            self.parent.loaded_class.growth_rates[self.list.currentItem().text()] = v
+            self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
         except:
             pass
             
@@ -92,7 +92,7 @@ class growthRateDialog(QDialog):
             )
     
     def list_change(self):
-        self.rate_slider.setValue(self.parent.unit.unit_class.growth_rates[self.list.currentItem().text()])
+        self.rate_slider.setValue(self.parent.loaded_class.growth_rates[self.list.currentItem().text()])
         
 class statBonusDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -116,8 +116,8 @@ class statBonusDialog(QDialog):
         self.values = {}
         
         for s in universal_stats:
-            if s not in self.parent.unit.unit_class.stat_bonuses:
-                self.parent.unit.unit_class.stat_bonuses[s] = 0
+            if s not in self.parent.loaded_class.stat_bonuses:
+                self.parent.loaded_class.stat_bonuses[s] = 0
             row = QWidget()
             row_layout = QHBoxLayout()
             row.setLayout(row_layout)
@@ -134,7 +134,7 @@ class statBonusDialog(QDialog):
             value.name = s
             value.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
             value.setRange(0,10)
-            value.setValue(self.parent.unit.unit_class.stat_bonuses[s])
+            value.setValue(self.parent.loaded_class.stat_bonuses[s])
             value.valueChanged.connect(self.value_changed)
             self.values[s] = value
             row_layout.addWidget(value)
@@ -145,8 +145,8 @@ class statBonusDialog(QDialog):
         
     def value_changed(self):
         try:
-            self.parent.unit.unit_class.stat_bonuses[self.sender().name] = self.sender().value()
-            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+            self.parent.loaded_class.stat_bonuses[self.sender().name] = self.sender().value()
+            self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
         except:
             pass
 
@@ -562,7 +562,7 @@ class classSkillDialog(QDialog):
         self.layout.setContentsMargins(8,8,8,8)
         self.setLayout(self.layout)
         
-        print(self.parent.unit.unit_class.unit_class_name)
+        print(self.parent.loaded_class.unit_class_name)
         
         #fromRow, int fromColumn, int rowSpan, int columnSpan
         
@@ -585,7 +585,7 @@ class classSkillDialog(QDialog):
         self.level.setValue(0)
         self.fillList()
             
-        if len(self.parent.unit.unit_class.skills) == 0:
+        if len(self.parent.loaded_class.skills) == 0:
             self.skill_list.addItem("No skills connected to class")
             self.level_values["No skills connected to class"] = 0
         
@@ -624,9 +624,9 @@ class classSkillDialog(QDialog):
          
     def skill_changed(self, i):
         try:
-            self.parent.unit.unit_class.skill_criteria[self.skill_list.currentItem().text()] = i
+            self.parent.loaded_class.skill_criteria[self.skill_list.currentItem().text()] = i
             self.level_values[self.skill_list.currentItem().text()] = self.level.value()
-            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.parent.unit.unit_class.unit_class_name+".tructf")
+            self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
         except:
             print("no skills in list")
     
@@ -635,8 +635,8 @@ class classSkillDialog(QDialog):
         
     def remove_skill(self):
         try:
-            self.parent.unit.unit_class.skills.remove(self.skill_list.currentItem().text())
-            self.parent.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.parent.unit.unit_class.unit_class_name+".tructf")
+            self.parent.loaded_class.skills.remove(self.skill_list.currentItem().text())
+            self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
             self.fillList()
         except:
             pass
@@ -657,11 +657,11 @@ class classSkillDialog(QDialog):
     def fillList(self):
         self.skill_list.clear()
         count = 0
-        for d in self.parent.unit.unit_class.skills:
+        for d in self.parent.loaded_class.skills:
             print(d)
             count +=1
-            if d in self.parent.unit.unit_class.skill_criteria:
-                self.level_values[d] = self.parent.unit.unit_class.skill_criteria[d]
+            if d in self.parent.loaded_class.skill_criteria:
+                self.level_values[d] = self.parent.loaded_class.skill_criteria[d]
             else:
                 self.level_values[d] = 0
             if count == 1:

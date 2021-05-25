@@ -551,6 +551,7 @@ class UnitEditorWnd(QWidget):
         working_tab_layout = working_tab.layout
     
     def initClasses(self):
+        self.loaded_class = None
         working_tab = self.tabs_dict["Classes"]
         working_tab_layout = working_tab.layout()
         
@@ -1192,8 +1193,7 @@ class UnitEditorWnd(QWidget):
                 number_to_value = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S"]
                 
                 self.starting_type_sliders[weapon_type].setValue(number_to_value.index(self.unit.current_weapon_levels[weapon_type]))
-            
-            self.loadClass()
+        
                 
 
     def AIHelpDialog(self):
@@ -1465,11 +1465,15 @@ class UnitEditorWnd(QWidget):
     
     def loadClass(self,name = None):
         if name == None:
-            ac = self.unit.unit_class
-            ac.selfFromJSON(self.paths[ac.unit_class_name])
+            try:
+                ac = self.loaded_class
+                ac.selfFromJSON(self.paths[ac.unit_class_name])
+            except:
+                pass
         else:
             ac = unitClass()
             ac.selfFromJSON(self.paths[name])
+            self.loaded_class = ac
         try:
             self.class_name.setText(ac.unit_class_name)
             self.class_desc.setText(ac.desc)
@@ -1499,9 +1503,9 @@ class UnitEditorWnd(QWidget):
 
     
     def createClass(self):
-        self.unit.unit_class = None
-        self.unit.unit_class = unitClass()
-        ac = self.unit.unit_class
+        self.loaded_class = None
+        self.loaded_class = unitClass()
+        ac = self.loaded_class
         
         self.class_name.setText("")
         self.class_desc.setText("")
