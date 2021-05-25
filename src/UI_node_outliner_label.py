@@ -13,8 +13,10 @@ RIGHT = 2
 
 if os.sep == "\\":
     point_size = 11
+    font_string = "Lucida Sans Unicode"
 else:
     point_size = 15
+    font_string = "Lucida Grande"
 
 class FlagColor():
     def __init__(self, pos):
@@ -94,7 +96,7 @@ class FilterButton():
     def initTitle(self):
         active_theme = getattr(UI_colorTheme, data["active_theme"])
         self._title_color = QColor(active_theme.node_text_color)
-        self._title_font = QFont("Lucida Sans Unicode")
+        self._title_font = QFont(font_string)
         self._title_font.setPointSize(point_size)
 
         self.title_item = filterButtonText(self.grButton)

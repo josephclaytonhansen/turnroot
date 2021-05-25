@@ -7,7 +7,7 @@ from src.UI_node_socket import *
 from collections import OrderedDict
 from src.UI_node_serializable import Serializable
 
-import json
+import json, os
 data = updateJSON()
 
 with open("src/tmp/nenc.json", "r") as readfile:
@@ -20,6 +20,11 @@ NODE_PADDING = const[3]
 EDGE_SIZE = const[4]
 NODE_FONT = const[5]
 FONT_SIZE = const[6]
+
+if os.sep == "\\":
+    NODE_FONT = "Lucida Sans Unicode"
+else:
+    NODE_FONT = "Lucida Grande"
 
 class QDMNodeContentWidget(QWidget, Serializable):
     def __init__(self, node, contents, parent = None):

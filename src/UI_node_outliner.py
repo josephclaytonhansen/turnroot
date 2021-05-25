@@ -15,7 +15,7 @@ if os.sep != "\\":
     stylesheet_path = "src/node_outliner_style.qss"
     with open(const_path, "r") as readfile:
         const = json.load(readfile)
-    NODE_FONT = const[5]
+    NODE_FONT = "Lucida Grande"
 else:
     const_path = "src\\tmp\\nenc.json"
     filter_icon_path = "src\\ui_icons\\white\\filter.png"
@@ -23,7 +23,7 @@ else:
     stylesheet_path = "src\\node_outliner_style.qss"
     with open(const_path, "r") as readfile:
         const = json.load(readfile)
-    NODE_FONT = "Lucida Grande"
+    NODE_FONT = "Lucida Sans Unicode"
 
 FONT_SIZE = int(const[6]) / 2
 
