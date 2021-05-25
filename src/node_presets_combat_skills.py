@@ -159,7 +159,7 @@ class unit_does_less_more_damage(does_less_more_damage):
             super().__init__(scene, hexe)
             
 class can_cannot(QWidget):
-    def __init__(self, scene, action, which, direction, hexe):
+    def __init__(self, scene, action, which, direction, hexe, width=None):
         QObject.__init__(self)
         self.scene = scene
         self.title=which+direction+action
@@ -168,6 +168,10 @@ class can_cannot(QWidget):
         self.hex_output = hexe
         self.hexe = hexe
         self.chain = 1
+        if width != None:
+            self.width = width
+        else:
+            self.width = 560
         
         self.line1 = QWidget()
         self.line1_layout = QHBoxLayout()
@@ -186,7 +190,7 @@ class can_cannot(QWidget):
         self.contents = [self.line1]
         self.socket_content_index = 0
         
-        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160, 560)
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160, self.width)
         self.n.node_preset = self
     
     def updateEmission(self):
@@ -338,3 +342,23 @@ class penalize_foe_dex(penalize_foe):
 class penalize_foe_luc(penalize_foe):
     def __init__(self, scene,full_name="Luck", short_name= "Luc", hexe="pfl", desc = "luck"):
             super().__init__(scene, full_name, short_name, desc, hexe)
+
+class turn_is_odd(can_cannot):
+    def __init__(self, scene, hexe="gio", which = "Turn", direction=" is ", action = "Odd"):
+            super().__init__(scene, action, which, direction, hexe, width=400)
+
+class turn_is_even(can_cannot):
+    def __init__(self, scene, hexe="gie", which = "Turn", direction=" is ", action = "Even"):
+            super().__init__(scene, action, which, direction, hexe,width=400)
+            
+class disable_effective_against(can_cannot):
+    def __init__(self, scene, hexe="dea", which = "Disable", direction=" Foe's 'Effective Against X'", action = ""):
+            super().__init__(scene, action, which, direction, hexe,width=500)
+            
+class reset_attack_priority(can_cannot):
+    def __init__(self, scene, hexe="rap", which = "Reset", direction=" Attack Priority", action = ""):
+            super().__init__(scene, action, which, direction, hexe,width=440)
+
+class disable_counterattack_from_any_distance(can_cannot):
+    def __init__(self, scene, hexe="nlc", which = "Disable", direction=" Foe's 'Can Counter-Attack From Any Distance'", action = ""):
+            super().__init__(scene, action, which, direction, hexe,width=780)

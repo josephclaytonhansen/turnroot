@@ -56,7 +56,7 @@ class mainS(NodeEditorWnd):
         context.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         flow = QMenu("Events/Flow")
         con = QMenu("Conditions")
-        econ = QMenu("Environment Conditions")
+        econ = QMenu("Combat/Map Conditions")
         nop = QMenu("Numbers/Operations")
         ub = QMenu("Unit Effects")
         ab = QMenu("Ally Effects")
@@ -81,7 +81,8 @@ class mainS(NodeEditorWnd):
             flow.addAction(n)
             n.triggered.connect(self.submenu_item)
         
-        econ_actions = [QAction("Level is Night", self), QAction("Level is Raining", self), QAction("Level is Foggy", self)]
+        econ_actions = [QAction("Level is Night", self), QAction("Level is Raining", self), QAction("Level is Foggy", self),
+                        QAction("Turn is Odd", self), QAction("Turn is Even", self)]
         econ.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         
         for n in econ_actions:
@@ -136,6 +137,12 @@ class mainS(NodeEditorWnd):
             ui.addAction(n)
             n.triggered.connect(self.submenu_item)
         
+        se_actions = [QAction("Disable Foe's 'Effective Against X'", self),QAction("Reset Attack Priority", self),QAction("Disable Foe's 'Can Counter-Attack From Any Distance'", self),
+                        ]
+        
+        for n in se_actions:
+            se.addAction(n)
+            n.triggered.connect(self.submenu_item)
     
         for y in submenus:
             y.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))

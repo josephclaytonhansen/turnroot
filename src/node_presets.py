@@ -29,7 +29,9 @@ from src.node_presets_combat_skills import (grant_bonus_to_unit_hit, grant_bonus
                                             foe_cannot_attack_twice,penalize_foe_spd,
                                             penalize_foe_atk,penalize_foe_def,
                                             penalize_foe_res,penalize_foe_chr,
-                                            penalize_foe_dex,penalize_foe_luc)
+                                            penalize_foe_dex,penalize_foe_luc,turn_is_odd,
+                                            turn_is_even, disable_counterattack_from_any_distance,
+                                            reset_attack_priority,disable_effective_against)
 
 from src.skeletons.weapon_types import weaponTypes
 import math, random, pickle
@@ -493,7 +495,10 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Cannot Follow-Up":unit_cannot_followup, "Attacks Twice":unit_attacks_twice,
          "Foe Cannot Attack Twice":foe_cannot_attack_twice,"Foe -Speed":penalize_foe_spd,
          "Foe -Str/Mag":penalize_foe_atk,"Foe -Defense":penalize_foe_def,"Foe -Resistance":penalize_foe_res,
-         "Foe -Charisma":penalize_foe_chr,"Foe -Dexterity":penalize_foe_dex,"Foe -Luck":penalize_foe_luc}
+         "Foe -Charisma":penalize_foe_chr,"Foe -Dexterity":penalize_foe_dex,"Foe -Luck":penalize_foe_luc,
+         "Turn is Odd":turn_is_odd, "Turn is Even":turn_is_even,
+         "Disable Foe's 'Can Counter-Attack From Any Distance'":disable_counterattack_from_any_distance,
+         "Reset Attack Priority":reset_attack_priority,"Disable Foe's 'Effective Against X'":disable_effective_against}
 
         
 NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Attacks",
@@ -520,7 +525,9 @@ NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Atta
                     "Level is Raining", "Level is Foggy", "Unit +Bonus Speed",
                     "Ally +Bonus Speed","Foe -Speed","Foe -Str/Mag",
                     "Foe -Defense","Foe -Resistance","Foe -Charisma",
-                    "Foe -Dexterity","Foe -Luck"])
+                    "Foe -Dexterity","Foe -Luck", "Turn is Odd", "Turn is Even",
+                    "Disable Foe's 'Effective Against X'", "Disable Foe's 'Can Counter-Attack From Any Distance'",
+                    "Reset Attack Priority"])
     
 class Nodes():
     def __init__(self, scene, name):
