@@ -1446,7 +1446,6 @@ class UnitEditorWnd(QWidget):
         self.paths = {}
         self.title_edit.clear()
         for f in file_list:
-            print(class_names)
             if f.ext.strip() == ".tructf":
                 tmp_class = unitClass()
                 tmp_class.selfFromJSON(f.fullPath)
@@ -1454,7 +1453,6 @@ class UnitEditorWnd(QWidget):
                 if tmp_class.unit_class_name not in class_names:
                     class_names.append(tmp_class.unit_class_name)
                     classes[tmp_class.unit_class_name] = tmp_class
-                    print(class_names)
                 
         if b:
             self.classesToDropDown(class_names)

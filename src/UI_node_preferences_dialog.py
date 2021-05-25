@@ -250,7 +250,6 @@ class NodePreferencesDialog(QDialog):
         self.close()
     
     def changeWireType(self):
-        print(self.sender().edge_type)
         node_data["edge_type"] = self.sender().edge_type
         with open("src/tmp/node_preferences.json", "w") as wf:
             json.dump(node_data, wf)

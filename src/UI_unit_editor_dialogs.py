@@ -562,8 +562,6 @@ class classSkillDialog(QDialog):
         self.layout.setContentsMargins(8,8,8,8)
         self.setLayout(self.layout)
         
-        print(self.parent.loaded_class.unit_class_name)
-        
         #fromRow, int fromColumn, int rowSpan, int columnSpan
         
         self.skill_list = QListWidget()
@@ -658,7 +656,6 @@ class classSkillDialog(QDialog):
         self.skill_list.clear()
         count = 0
         for d in self.parent.loaded_class.skills:
-            print(d)
             count +=1
             if d in self.parent.loaded_class.skill_criteria:
                 self.level_values[d] = self.parent.loaded_class.skill_criteria[d]
@@ -667,7 +664,6 @@ class classSkillDialog(QDialog):
             if count == 1:
                 self.level_values[count] = self.level_values[d]
             list_item = QListWidgetItem()
-            print(self.level_values)
 
             with open(self.all_skills[d], "r") as f:
                 s = json.load(f)

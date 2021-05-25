@@ -104,7 +104,6 @@ class outlinerWnd(QWidget):
 
     def leftMouseButtonPress(self, event):
         if self.grScene.filter_view_update and self.filter_rect.contains(event.pos()):
-            print(self.grScene.filter_mode)
             self.Filter(flags=self.header.flags_status,AO=self.grScene.filter_mode)
             print("FILTERING: ", self.header.flags_status)
         
@@ -135,7 +134,6 @@ class outlinerWnd(QWidget):
                 x += 1
     
     def Filter(self, flags={0: False, 1: False, 2: False, 3: False}, AO=ALL):
-        print("CURRENT FILTER: ", AO)
         #if ao = AND; get and matches. if ao = OR; get or matches
         match_flags = flags
         
