@@ -147,7 +147,7 @@ class UnitEditorWnd(QWidget):
         name_font.setPointSize(21)
         
         header_font = self.name_edit.font()
-        header_font.setPointSize(21)
+        header_font.setPointSize(18)
         body_font = self.name_edit.font()
         body_font.setPointSize(int(data["font_size"]))
         self.body_font = body_font
@@ -160,7 +160,7 @@ class UnitEditorWnd(QWidget):
         self.title_edit = QComboBox()
         self.title_edit.currentTextChanged.connect(self.classChange)
         self.title_edit.setToolTip("Choose assigned class from existing classes (edit or create new in the Classes tab)")
-        self.title_edit.setFont(body_font)
+        self.title_edit.setFont(header_font)
         name_row_layout.addWidget(self.title_edit)
         
         self.getClassesInFolder()
@@ -227,9 +227,9 @@ class UnitEditorWnd(QWidget):
         
         self.working_tab_layout.addWidget(self.basic_left)
         
-        stat_label = QLabel("Stats")
+        stat_label = QLabel("Base Stats")
         stat_label.setToolTip("How much of each universal stat unit has at level 1\nStat growth rates are determined by class")
-        stat_label.setFont(body_font)
+        stat_label.setFont(header_font)
         self.basic_center_layout.addWidget(stat_label)
         
         self.stat_row = {}
@@ -289,7 +289,7 @@ class UnitEditorWnd(QWidget):
         self.notes.setFont(small_font)
         notes_label = QLabel("Notes")
         notes_label.setToolTip("only seen by you")
-        notes_label.setFont(body_font)
+        notes_label.setFont(header_font)
         
         self.description = QTextEdit()
         self.description.setStyleSheet("background-color: "+active_theme.window_background_color+";")
@@ -297,7 +297,7 @@ class UnitEditorWnd(QWidget):
         self.description.setFont(small_font)
         description_label = QLabel("Description")
         description_label.setToolTip("Added to game")
-        description_label.setFont(body_font)
+        description_label.setFont(header_font)
         
         notes_column_layout.addWidget(notes_label)
         notes_column_layout.addWidget(self.notes)
@@ -1227,7 +1227,7 @@ class UnitEditorWnd(QWidget):
                 
 
     def AIHelpDialog(self):
-        a = AIHelpDialog()
+        a = AIHelpDialog(parent=self,font=self.body_font)
         a.exec_()
         
     def getUnitsInFolder(self):
@@ -1367,7 +1367,7 @@ class UnitEditorWnd(QWidget):
             self.parent().parent().restart()
 
     def weaponTypesChange(self):
-        f =editUniversalWeaponTypes(parent=self)
+        f =editUniversalWeaponTypes(parent=self,font=self.body_font)
         f.exec_()
         if f.restart:
             self.parent().parent().restart()

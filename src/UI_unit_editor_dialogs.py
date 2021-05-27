@@ -151,15 +151,16 @@ class statBonusDialog(QDialog):
             pass
 
 class AIHelpDialog(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,font=None):
         data = updateJSON()
+        self.font=font
 
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         
         self.setMinimumWidth(1080)
         self.setMinimumHeight(600)
-        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
 
         self.setLayout(self.layout)
@@ -228,6 +229,7 @@ class AIHelpDialog(QDialog):
                      int(color_left.blue()+ v * distances[2])]
             
             g = QLabel(t)
+            g.setFont(self.font)
             g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
             self.working_tab_layout.addWidget(g)
 
@@ -262,6 +264,7 @@ class AIHelpDialog(QDialog):
                      int(color_left.blue()+ v * distances[2])]
             
             g = QLabel(t)
+            g.setFont(self.font)
             g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
             self.working_tab_layout.addWidget(g)
     
@@ -298,6 +301,7 @@ class AIHelpDialog(QDialog):
                      int(color_left.blue()+ v * distances[2])]
             
             g = QLabel(t)
+            g.setFont(self.font)
             g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
             self.working_tab_layout.addWidget(g)
 
@@ -329,6 +333,7 @@ class AIHelpDialog(QDialog):
                      int(color_left.blue()+ v * distances[2])]
             
             g = QLabel(t)
+            g.setFont(self.font)
             g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
             self.working_tab_layout.addWidget(g)
             
@@ -367,6 +372,7 @@ class AIHelpDialog(QDialog):
                      int(color_left.blue()+ v * distances[2])]
             
             g = QLabel(t)
+            g.setFont(self.font)
             g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
             self.working_tab_layout.addWidget(g)
             
@@ -411,6 +417,7 @@ class AIHelpDialog(QDialog):
                      int(color_left.blue()+ v * distances[2])]
             
             g = QLabel(t)
+            g.setFont(self.font)
             g.setStyleSheet("color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name()))
             self.working_tab_layout.addWidget(g)
 
@@ -480,14 +487,15 @@ class editUniversalStats(QDialog):
             self.close()
             
 class editUniversalWeaponTypes(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,font=None):
         data = updateJSON()
         self.parent = parent
         self.restart = False
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
+        self.font = font
         
-        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(8,8,8,8)
         
@@ -497,15 +505,10 @@ class editUniversalWeaponTypes(QDialog):
         
         with open("src/skeletons/universal_weapon_types.json", "r") as weapons_file:
             weapon_types = json.load(weapons_file)
-            
-        for s in universal_stats:
-            try:
-                self.parent.loaded_class.generic_stat_randomness[s] = self.parent.loaded_class.generic_stat_randomness[s]
-            except:
-                self.parent.loaded_class.generic_stat_randomness[s] = 4.5
         
         self.list = QListWidget()
-        self.list.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.list.setFont(self.font)
+        self.list.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
         self.list.addItems(weapon_types)
     
         row_layout.addWidget(self.list)
@@ -515,13 +518,16 @@ class editUniversalWeaponTypes(QDialog):
         row2.setLayout(row2_layout)
         
         self.add_stat_name = QLineEdit()
-        self.add_stat_name.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.add_stat_name.setFont(self.font)
+        self.add_stat_name.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.add_stat_name.setPlaceholderText("New weapon type name")
         
         self.add_stat = QPushButton("+Add Weapon Type")
+        self.add_stat.setFont(self.font)
         self.add_stat.clicked.connect(self.addType)
         
         self.remove_stat = QPushButton("-Remove Selected Weapon Type")
+        self.remove_stat.setFont(self.font)
         self.remove_stat.clicked.connect(self.removeType)
         
         row2_layout.addWidget(self.add_stat_name)
