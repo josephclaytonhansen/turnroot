@@ -5,11 +5,11 @@ class colorTheme:
 class midnight_spark(colorTheme):
     name = "Midnight Spark"
     tag = "midnight_spark"
-    window_background_color = "#1E2D48"
+    window_background_color = "#26385a"
     node_grid_background_color = "#0a1c3d"
     node_grid_lines_color = "#112c5c"
     node_grid_alt_lines_color = "#234f9e"
-    list_background_color = "#0a1c3d"
+    list_background_color = "#234f9e"
     window_text_color = "#8bdfc7"
     button_alt_color = "#93edd3"
     button_alt_text_color = "#30403b"
@@ -621,6 +621,8 @@ class custom(colorTheme):
                    "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
     groups = [level_editor, node_grid, unit_editor]
+
+
 
 
 

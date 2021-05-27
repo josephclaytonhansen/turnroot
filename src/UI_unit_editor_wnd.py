@@ -141,6 +141,7 @@ class UnitEditorWnd(QWidget):
         self.name_edit.returnPressed.connect(self.nameChange)
         self.name_edit.setAlignment(Qt.AlignCenter)
         self.name_edit.setPlaceholderText("Name")
+        self.name_edit.setToolTip("Change unit name.\nIf unit is Generic, name should also be generic.\nProtagonist name is the default if player doesn't change it.")
         self.name_edit.setStyleSheet("background-color: "+active_theme.window_background_color+";")
         name_font = self.name_edit.font()
         name_font.setPointSize(21)
@@ -158,7 +159,7 @@ class UnitEditorWnd(QWidget):
         
         self.title_edit = QComboBox()
         self.title_edit.currentTextChanged.connect(self.classChange)
-        self.title_edit.setToolTip("Choose from existing classes (edit or create new in the Classes tab)")
+        self.title_edit.setToolTip("Choose assigned class from existing classes (edit or create new in the Classes tab)")
         self.title_edit.setFont(body_font)
         name_row_layout.addWidget(self.title_edit)
         
@@ -171,6 +172,7 @@ class UnitEditorWnd(QWidget):
         identity_row.setLayout(identity_row_layout)
         
         self.gender_edit = QComboBox()
+        self.gender_edit.setToolTip("Set unit gender. This will also change pronouns for dialogue")
         self.gender_edit.currentTextChanged.connect(self.genderChange)
         self.gender_edit.addItems(["Male", "Female", "Non-Binary"])
         self.gender_edit.setFont(small_font)
@@ -188,6 +190,7 @@ class UnitEditorWnd(QWidget):
         checkbox_row.setLayout(checkbox_row_layout)
         
         protag_label = QLabel("Protagonist")
+        protag_label.setToolTip("The protagonist, or avatar, is the unit that stands in for the player.\nIf protagonist is enabled in game settings, player can customize this unit")
         self.protag = QCheckBox()
         
         self.generic_label = QPushButton("Generic")
@@ -204,6 +207,7 @@ class UnitEditorWnd(QWidget):
         self.generic.setFont(checkbox_font)
         
         self.status = QComboBox()
+        self.status.setToolTip("Change status. You can only have one protagonist.\nEnemies and Allies can be generic, Recruitable Enemies/Allies or Team members cannot")
         self.status.currentTextChanged.connect(self.statusChange)
         self.status.addItems(["Enemy", "Team", "Ally", "Protagonist", "Recruitable Enemy", "Recruitable Ally"])
         self.status.setFont(checkbox_font)
@@ -224,7 +228,7 @@ class UnitEditorWnd(QWidget):
         self.working_tab_layout.addWidget(self.basic_left)
         
         stat_label = QLabel("Stats")
-        stat_label.setToolTip("How much of each universal stat unit has at level 1")
+        stat_label.setToolTip("How much of each universal stat unit has at level 1\nStat growth rates are determined by class")
         stat_label.setFont(body_font)
         self.basic_center_layout.addWidget(stat_label)
         
@@ -307,6 +311,7 @@ class UnitEditorWnd(QWidget):
         self.basic_center_layout.addWidget(text_row)
         
         self.working_tab_layout.addWidget(self.basic_center)
+        self.generic_label.setEnabled(False)
         
     def initAI(self):
         self.sheets = {}
@@ -927,12 +932,20 @@ class UnitEditorWnd(QWidget):
     def statusChange(self, s):
         if s == "Enemy":
             self.unit.is_friendly = False
+            self.generic.setEnabled(True)
+            self.generic_label.setEnabled(True)
+            
         elif s == "Team":
             self.unit.is_friendly = True
             self.has_dialogue = True
+            self.generic.setEnabled(False)
+            self.generic_label.setEnabled(False)
+            self.generic.setChecked(False)
         elif s == "Ally":
             self.unit.is_friendly = False
             self.unit.is_ally = True
+            self.generic.setEnabled(True)
+            self.generic_label.setEnabled(True)
         elif s == "Protagonist":
             k = confirmAction("#You can only have one!\nThis will clear the existing protagonist.\nContinue?")
             k.exec_()
@@ -940,14 +953,23 @@ class UnitEditorWnd(QWidget):
                 self.unit.is_friendly = True
                 self.unit.is_ally = False
                 self.unit.is_lord = True
+                self.generic.setEnabled(False)
+                self.generic_label.setEnabled(False)
+                self.generic.setChecked(False)
                 #clear other units of lord flag
         elif s == "Recruitable Enemy":
             self.unit.is_friendly = False
             self.unit.is_recruitable = True
+            self.generic.setEnabled(False)
+            self.generic_label.setEnabled(False)
+            self.generic.setChecked(False)
         elif s == "Recruitable Ally":
             self.unit.is_friendly = False
             self.unit.is_ally = True
             self.unit.is_recruitable = True
+            self.generic.setEnabled(False)
+            self.generic_label.setEnabled(False)
+            self.generic.setChecked(False)
         
         if self.path != None:
             self.unit.selfToJSON(self.path)

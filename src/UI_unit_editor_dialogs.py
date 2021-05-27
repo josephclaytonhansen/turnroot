@@ -756,6 +756,7 @@ class instanceStatDialog(QDialog):
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(8,8,8,8)
         self.setLayout(self.layout)
+        self.setMinimumWidth(700)
         
         with open("src/skeletons/universal_stats.json", "r") as stats_file:
             universal_stats =  json.load(stats_file)
@@ -780,7 +781,7 @@ class instanceStatDialog(QDialog):
         row_layout = QHBoxLayout()
         row.setLayout(row_layout)
         
-        r0 = QLabel("0%\n(never change)")
+        r0 = QLabel("0%\n(never change from base stat)")
         r0.setFont(self.body_font)
         row_layout.addWidget(r0)
         
@@ -793,7 +794,7 @@ class instanceStatDialog(QDialog):
         
         row_layout.addWidget(self.rate_slider)
         
-        r1 = QLabel("100%\n(always change)")
+        r1 = QLabel("100%\n(always change from base stat)")
         r1.setFont(self.body_font)
         row_layout.addWidget(r1)
         
@@ -803,9 +804,9 @@ class instanceStatDialog(QDialog):
         row2_layout = QHBoxLayout()
         row2.setLayout(row2_layout)
         
-        r3 = QLabel("Maximum amount stat can vary by\n(hover for example)")
+        r3 = QLabel("Maximum amount stat can vary by (+/-)")
         r3.setFont(self.body_font)
-        r3.setToolTip("If the base stat is 5, and this is set to 2, an instance could have between 3 and 6 (+/2)")
+        r3.setToolTip("For example: If the base stat is 5, and this is set to 2, an instance could have between 3 and 6 (+/-2)")
         self.amount = QSpinBox()
         self.amount.valueChanged.connect(self.changeAmount)
         r3.setFont(self.body_font)

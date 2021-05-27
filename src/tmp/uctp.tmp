@@ -1,39 +1,49 @@
 class colorTheme:
-    name = ""
-    tag= ""
-    window_background_color = ""
-    list_background_color = ""
-    button_alt_color = ""
-    button_alt_text_color = ""
-    window_text_color = ""
-    node_grid_background_color = ""
-    node_grid_lines_color = ""
-    node_grid_alt_lines_color = ""
-    node_selected_color = ""
-    node_title_color = ""
-    node_title_background_color = ""
-    node_background_color = ""
-    node_text_color = ""
-    node_wire_color = ""
-    node_socket_trigger_color = ""
-    node_socket_file_color = ""
-    node_socket_object_color = ""
-    node_socket_number_color = ""
-    node_socket_text_color = ""
-    node_socket_list_color = "#000B73"
-    node_socket_boolean_color = "#535353"
-    node_wire_error_color = ""
-    node_outliner_label_0 = ""
-    node_outliner_label_1 = ""
-    node_outliner_label_2 = ""
-    node_outliner_label_3 = ""
+    def __init__(self):
+        pass
+
+class midnight_spark(colorTheme):
+    name = "Midnight Spark"
+    tag = "midnight_spark"
+    window_background_color = "#26385a"
+    node_grid_background_color = "#0a1c3d"
+    node_grid_lines_color = "#112c5c"
+    node_grid_alt_lines_color = "#234f9e"
+    list_background_color = "#234f9e"
+    window_text_color = "#8bdfc7"
+    button_alt_color = "#93edd3"
+    button_alt_text_color = "#30403b"
     
-    unit_editor_rule_0 = ""
-    unit_editor_rule_1 = ""
-    unit_editor_rule_2 = ""
-    unit_editor_rule_3 = ""
-    unit_editor_rule_4 = ""
-    unit_editor_rule_5 = ""
+    node_selected_color = "#FF729F"
+    node_socket_trigger_color = "#00EE88"
+    node_socket_file_color = "#FF57A2"
+    node_socket_object_color = "#FF7700"
+    node_socket_number_color = "#009EFF"
+    node_socket_text_color = "#FFE099"
+    node_socket_list_color = "#968080"
+    node_socket_boolean_color = "#2f3aa3"
+    node_wire_error_color = "#EF3054"
+    
+    node_title_color = "#8bdfc7"
+    node_title_background_color = "#0f3c91"
+    node_background_color = "#144db8"
+    node_text_color = "#8bdfc7"
+    node_wire_color = "#f6faa7"
+    
+    unit_editor_rule_0 = "#E1E1B4"
+    unit_editor_rule_1 = "#A5A960"
+    unit_editor_rule_2 = "#377560"
+    unit_editor_rule_3 = "#325066"
+    unit_editor_rule_4 = "#306173"
+    unit_editor_rule_5 = "#37715F"
+    
+    node_outliner_label_0 = "#AE462B"
+    node_outliner_label_1 = "#534E70"
+    node_outliner_label_2 = "#DDA448"
+    node_outliner_label_3 = "#E2C044"
+    
+    unit_editor_slider_color_0 = "#f6faa7"
+    unit_editor_slider_color_1 = "#EF3054"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -50,7 +60,8 @@ class colorTheme:
                  node_outliner_label_3]
     
     unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
-                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5]
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5,
+                   unit_editor_slider_color_0, unit_editor_slider_color_1]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -69,29 +80,10 @@ class colorTheme:
                         "node_outliner_label_3"]
     
     unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
-                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5",
+                          "unit_editor_slider_color_0", "unit_editor_slider_color_1"]
 
     groups = [level_editor, node_grid, unit_editor]
-
-class midnight_spark(colorTheme):
-    name = "Midnight Spark"
-    tag = "midnight_spark"
-    window_background_color = "#1E2D48"
-    node_grid_background_color = "#0a1c3d"
-    node_grid_lines_color = "#112c5c"
-    node_grid_alt_lines_color = "#234f9e"
-    list_background_color = "#252C31"
-    window_text_color = "#8bdfc7"
-    button_alt_color = "#93edd3"
-    button_alt_text_color = "#30403b"
-
-class midnight_spark_yellow(colorTheme):
-    tag = "midnight_spark_yellow"
-    name = "Midnight Spark Yellow"
-    window_background_color = "#37464a"
-    list_background_color = "#272e35"
-    window_text_color = "#efef8f"
-    workspace_background_color = "#95A3B3"
 
 class sand_dunes(colorTheme):
     name = "Sand Dunes"
@@ -127,6 +119,16 @@ class sand_dunes(colorTheme):
     node_outliner_label_1 = "#294273"
     node_outliner_label_2 = "#F27B50"
     node_outliner_label_3 = "#D7D9D0"
+    
+    unit_editor_rule_0 = "#C3A995"
+    unit_editor_rule_1 = "#3CDBD3"
+    unit_editor_rule_2 = "#60A69F"
+    unit_editor_rule_3 = "#648DE5"
+    unit_editor_rule_4 = "#304C89"
+    unit_editor_rule_5 = "#353535"
+
+    unit_editor_slider_color_0 = "#D95F80"
+    unit_editor_slider_color_1 = "#294273"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -141,6 +143,10 @@ class sand_dunes(colorTheme):
                  node_socket_boolean_color, node_wire_error_color,
                  node_outliner_label_0,node_outliner_label_1,node_outliner_label_2,
                  node_outliner_label_3]
+    
+    unit_editor = ["unit_editor", unit_editor_rule_0, unit_editor_rule_1, unit_editor_rule_2,
+                   unit_editor_rule_3, unit_editor_rule_4, unit_editor_rule_5,
+                   unit_editor_slider_color_0, unit_editor_slider_color_1]
 
     level_editor_labels = ["level_editor", "window_background_color",
                            "list_background_color",
@@ -157,8 +163,12 @@ class sand_dunes(colorTheme):
                  "node_socket_boolean_color", "node_wire_error_color",
                         "node_outliner_label_0","node_outliner_label_1","node_outliner_label_2",
                         "node_outliner_label_3"]
+    
+    unit_editor_labels = ["unit_editor", "unit_editor_rule_0", "unit_editor_rule_1", "unit_editor_rule_2",
+                   "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5",
+                          "unit_editor_slider_color_0", "unit_editor_slider_color_1"]
 
-    groups = [level_editor, node_grid]
+    groups = [level_editor, node_grid, unit_editor]
 
 class rainforest(colorTheme):
     name = "Rainforest Dusk"
@@ -611,6 +621,8 @@ class custom(colorTheme):
                    "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
     groups = [level_editor, node_grid, unit_editor]
+
+
 
 
 
