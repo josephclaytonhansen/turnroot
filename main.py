@@ -175,6 +175,11 @@ class main(QMainWindow):
         self.setStatusBar(self.status_bar)
         self.status_bar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         
+        self.save_status = QLabel()
+        self.save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+        self.save_status.setToolTip("Unit file not saved")
+        self.status_bar.addWidget(self.save_status)
+        
         self.toolbar.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.toolbar.setIconSize(QSize(int(data["icon_size"]), int(data["icon_size"])))
         self.toolbar.setToolButtonStyle(Qt.ToolButtonIconOnly)

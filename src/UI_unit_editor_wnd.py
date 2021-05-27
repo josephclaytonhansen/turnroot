@@ -1152,11 +1152,15 @@ class UnitEditorWnd(QWidget):
                     json.dump(self.unit.AI_sheets, w)
                 self.unit.parent = self
                 self.unit.selfToJSON(self.path)
+                self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+                self.parent().parent().save_status.setToolTip("Unit file saved")
 
         else:
             with open(self.path+".trui", "w") as w:
                 json.dump(self.unit.AI_sheets, w)
             self.unit.selfToJSON(self.path)
+            self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+            self.parent().parent().save_status.setToolTip("Unit file saved")
 
     
     def openFileDialog(self):
