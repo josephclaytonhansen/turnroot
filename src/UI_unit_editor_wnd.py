@@ -43,7 +43,7 @@ class UnitEditorWnd(QWidget):
     def initUI(self):
         self.path = None
         
-        self.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: 16")
+        self.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: 16")
 
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
@@ -142,7 +142,7 @@ class UnitEditorWnd(QWidget):
         self.name_edit.setAlignment(Qt.AlignCenter)
         self.name_edit.setPlaceholderText("Name")
         self.name_edit.setToolTip("Change unit name.\nIf unit is Generic, name should also be generic.\nProtagonist name is the default if player doesn't change it.")
-        self.name_edit.setStyleSheet("background-color: "+active_theme.window_background_color+";")
+        self.name_edit.setStyleSheet("background-color: "+active_theme.list_background_color+";")
         name_font = self.name_edit.font()
         name_font.setPointSize(21)
         
@@ -261,7 +261,7 @@ class UnitEditorWnd(QWidget):
             self.stat_values[s] = getattr(self.unit, s)
             stat_value = ValuedSpinBox()
             self.stat_spins[s] = stat_value
-            stat_value.setStyleSheet("background-color: "+active_theme.window_background_color+";")
+            stat_value.setStyleSheet("background-color: "+active_theme.list_background_color+";")
             stat_value.setRange(0,900)
             stat_value.index = universal_stats.index(s)
             stat_value.valueChanged.connect(self.statChange)
@@ -284,7 +284,7 @@ class UnitEditorWnd(QWidget):
         desc_column.setLayout(desc_column_layout)
         
         self.notes = QTextEdit()
-        self.notes.setStyleSheet("background-color: "+active_theme.window_background_color+";")
+        self.notes.setStyleSheet("background-color: "+active_theme.list_background_color+";")
         self.notes.textChanged.connect(self.notesChange)
         self.notes.setFont(small_font)
         notes_label = QLabel("Notes")
@@ -292,7 +292,7 @@ class UnitEditorWnd(QWidget):
         notes_label.setFont(header_font)
         
         self.description = QTextEdit()
-        self.description.setStyleSheet("background-color: "+active_theme.window_background_color+";")
+        self.description.setStyleSheet("background-color: "+active_theme.list_background_color+";")
         self.description.textChanged.connect(self.descriptionChange)
         self.description.setFont(small_font)
         description_label = QLabel("Description")
@@ -432,6 +432,7 @@ class UnitEditorWnd(QWidget):
         for tab in self.basic_table_categories:
             tab_title = tab
             c_tab = self.tables[tab]
+            c_tab.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
             basic_table_tabs.addTab(c_tab, tab_title)
         
         self.basic_layout.addWidget(basic_table_tabs)
@@ -500,6 +501,7 @@ class UnitEditorWnd(QWidget):
         column.setLayout(column_layout)
         
         column_inner = QWidget()
+        column_inner.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         column_inner_layout = QHBoxLayout()
         column_inner.setLayout(column_inner_layout)
         
@@ -792,7 +794,7 @@ class UnitEditorWnd(QWidget):
         self.team_member_list.setFont(self.body_font)
         self.team_member_list.setMinimumWidth(160)
         self.team_member_list.setMaximumWidth(260)
-        self.team_member_list.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+active_theme.window_background_color)
+        self.team_member_list.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+active_theme.list_background_color)
         self.team_member_list.currentTextChanged.connect(self.team_member_change)
         
         team_supports_list_layout.addWidget(team_member_list_label)
@@ -866,7 +868,7 @@ class UnitEditorWnd(QWidget):
         self.supports_setup_layout.addSpacerItem(QSpacerItem(1, 200))
         
         spacer_label = QLabel("--------------------------------------------------------------------------------")
-        d_color = QColor(active_theme.list_background_color).darker(125).name()
+        d_color = QColor(active_theme.window_background_color).darker(125).name()
 
         spacer_label.setStyleSheet("font-size: "+str(data["font_size"])+"px; color: "+str(d_color))
         spacer_label.setAlignment(Qt.AlignCenter)
@@ -883,7 +885,7 @@ class UnitEditorWnd(QWidget):
         self.personal_enemy = QListWidget()
         self.personal_enemy.setFont(self.body_font)
         self.personal_enemy.setFixedWidth(300)
-        self.personal_enemy.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+active_theme.window_background_color)
+        self.personal_enemy.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+active_theme.list_background_color)
         self.personal_enemy.currentTextChanged.connect(self.personal_enemy_changed)
         
         personal_enemy_layout.addWidget(self.personal_enemy_label)
