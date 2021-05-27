@@ -17,7 +17,7 @@ from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
-from src.UI_unit_editor_dialogs import growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats, editUniversalWeaponTypes, classSkillDialog,loadSavedClass
+from src.UI_unit_editor_dialogs import growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats, editUniversalWeaponTypes, classSkillDialog,loadSavedClass, instanceStatDialog
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -190,15 +190,17 @@ class UnitEditorWnd(QWidget):
         protag_label = QLabel("Protagonist")
         self.protag = QCheckBox()
         
-        generic_label = QLabel("Generic")
-        generic_label.setToolTip("If checked, there can be copies of this unit- i.e., a basic soldier. If unchecked, unit is unique and cannot be copied")
+        self.generic_label = QPushButton("Generic")
+        self.generic_label.setToolTip("If checked, there can be instances of this unit- i.e., a basic soldier.\n If unchecked, unit is unique and cannot be instanced\nClick to edit instance randomness")
+        self.generic_label.clicked.connect(self.instance_stat_edit)
+        self.generic_label.setEnabled(False)
         self.generic = QCheckBox()
         
         checkbox_font = protag_label.font()
         checkbox_font.setPointSize(12)
         protag_label.setFont(checkbox_font)
         self.protag.setFont(checkbox_font)
-        generic_label.setFont(checkbox_font)
+        self.generic_label.setFont(checkbox_font)
         self.generic.setFont(checkbox_font)
         
         self.status = QComboBox()
@@ -206,7 +208,7 @@ class UnitEditorWnd(QWidget):
         self.status.addItems(["Enemy", "Team", "Ally", "Protagonist", "Recruitable Enemy", "Recruitable Ally"])
         self.status.setFont(checkbox_font)
         
-        checkbox_row_layout.addWidget(generic_label)
+        checkbox_row_layout.addWidget(self.generic_label)
         checkbox_row_layout.addWidget(self.generic)
         self.generic.stateChanged.connect(self.genericChange)
         
@@ -953,8 +955,10 @@ class UnitEditorWnd(QWidget):
     def genericChange(self, s):
         if s == 0:
             self.unit.unique = True
+            self.generic_label.setEnabled(False)
         else:
             self.unit.unique = False
+            self.generic_label.setEnabled(True)
             
         if self.path != None:
             self.unit.selfToJSON(self.path)
@@ -1161,6 +1165,9 @@ class UnitEditorWnd(QWidget):
             
             if self.unit.unique != True:
                 self.generic.setCheckState(2)
+                self.generic_label.setEnabled(True)
+            else:
+                self.generic_label.setEnabled(False)
             
             for s in universal_stats:
                 self.stat_spins[s].setValue(getattr(self.unit,s))
@@ -1525,4 +1532,9 @@ class UnitEditorWnd(QWidget):
     def class_desc_change(self):
         self.unit.unit_class.desc = self.sender().text()
         self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+    
+    def instance_stat_edit(self):
+        u = instanceStatDialog(parent=self,font=self.body_font)
+        u.exec_()
+                               
         

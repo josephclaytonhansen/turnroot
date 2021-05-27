@@ -99,6 +99,11 @@ class Unit():
         self.AI_cautious = 0
         
         self.AI_sheets = {}
+        
+        self.generic_stat_randomness = {}
+        self.generic_stat_randomness_amount = {}
+        self.generic_sprite_options = {}
+        self.generic_gfx_options = {}
     
     @property
     def gender(self):
@@ -145,7 +150,8 @@ class Unit():
                        "skilled_blows","inventory_objects","attacks","actions","support_difficulty",
                        "max_support_levels","support_levels","description","notes","AI_soldier",
                        "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range",
-                       "folder_index", "current_weapon_levels"]
+                       "folder_index", "current_weapon_levels", "generic_stat_randomness", "generic_sprite_options",
+                           "generic_gfx_options", "generic_stat_randomness_amount"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
@@ -170,7 +176,8 @@ class Unit():
                        "skilled_blows","inventory_objects","attacks","actions","support_difficulty",
                        "max_support_levels","support_levels","description","notes","AI_soldier",
                        "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range",
-                       "folder_index", "current_weapon_levels"]
+                       "folder_index", "current_weapon_levels", "generic_stat_randomness", "generic_sprite_options",
+                           "generic_gfx_options", "generic_stat_randomness_amount"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
