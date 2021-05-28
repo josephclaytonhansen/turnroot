@@ -170,6 +170,8 @@ class main(QMainWindow):
         super().__init__()
         self.setWindowTitle(title)
         self.toolbar = QToolBar("")
+        self.setWindowFlags(Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
+        self.fulls = False
         
         t= self.toolbar
         t.setOrientation(Qt.Vertical)
@@ -256,7 +258,12 @@ class main(QMainWindow):
         self.quitButton.triggered.connect(self.quitWindow)
         self.menubar.addAction(self.quitButton)
         
+        self.fullButton = QAction("&Full Screen", self)
+        self.fullButton.triggered.connect(self.fullScreenToggle)
+        self.menubar.addAction(self.fullButton)
+        
         self.setCentralWidget(self.m)
+        self.old_pos = self.geometry()
         
     def nameChange(self):
         pass
@@ -276,7 +283,9 @@ class main(QMainWindow):
                 self.saveButton.triggered.disconnect() 
                 self.openButton.triggered.connect(self.skills_editor.scene.loadFromFile)
                 self.saveButton.triggered.connect(self.skills_editor.scene.saveToFile)
+                self.fulls = True
                 self.resize(QSize(1200,710))
+                self.fullScreenToggle()
                 self.newButton.setVisible(True)
                 self.deleteButton.setVisible(True)
                 self.newButton.triggered.connect(self.skills_editor.scene.new)
@@ -287,8 +296,10 @@ class main(QMainWindow):
         self.size(),
         app.desktop().availableGeometry()
         ))
+                self.old_pos = self.geometry()
                 self.toolbar.move(self.geometry().topLeft().x() - self.toolbar.width() - 20, self.geometry().topLeft().y() - 30)
                 self.setWindowTitle("Turnroot Skills Editor")
+                
             elif new_editor == 2:
                 from main_world_editor import main
             elif new_editor == 3:
@@ -303,6 +314,8 @@ class main(QMainWindow):
                 self.unit_editor.loadClass()
                 self.newButton.setVisible(False)
                 self.deleteButton.setVisible(False)
+                self.fulls = True
+                self.fullScreenToggle()
                 self.setGeometry(
     QStyle.alignedRect(
         Qt.LeftToRight,
@@ -310,8 +323,10 @@ class main(QMainWindow):
         self.size(),
         app.desktop().availableGeometry()
         ))
+                self.old_pos = self.geometry()
                 self.toolbar.move(self.geometry().topLeft().x() - self.toolbar.width() - 20, self.geometry().topLeft().y() - 30)
                 self.setWindowTitle("Turnroot Unit/Class Editor")
+                
             elif new_editor == 5:
                 from main_object_editor import main
             elif new_editor == 6:
@@ -394,6 +409,8 @@ class main(QMainWindow):
                 self.saveButton.trigger()
             elif e.key() == Qt.Key_E:
                 self.editorSelect()
+            elif e.key() == Qt.Key_F:
+                self.fullScreenToggle()
             elif e.key() == Qt.Key_N:
                 if self.newButton.isVisible() == True:
                     self.newButton.trigger()
@@ -404,6 +421,24 @@ class main(QMainWindow):
                 self.helpView()
             elif e.key() == Qt.Key_Escape:
                 self.editorSelect()
+        
+    def fullScreen(self):
+        self.old_pos = self.geometry()
+        self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint)
+        self.showMaximized()
+        self.fulls = True
+    
+    def normal(self):
+        self.setWindowFlags(self.windowFlags() & ~Qt.FramelessWindowHint)
+        self.showNormal()
+        self.setGeometry(self.old_pos)
+        self.fulls = False
+    
+    def fullScreenToggle(self):
+        if self.fulls:
+            self.normal()
+        else:
+            self.fullScreen()
             
 
 window = main()
