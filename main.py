@@ -162,7 +162,7 @@ class mainS(NodeEditorWnd):
 class mainN(UnitEditorWnd):
     def __init__(self, parent):
         super().__init__(parent)
-        self.resize(QSize(1500,850))
+        self.resize(QSize(1500,860))
         self.setMaximumSize(QSize(int(size.width()*2), int(size.height()*2)))
 
 class main(QMainWindow):
@@ -170,6 +170,19 @@ class main(QMainWindow):
         super().__init__()
         self.setWindowTitle(title)
         self.toolbar = QToolBar("")
+        
+        t= self.toolbar
+        t.setOrientation(Qt.Vertical)
+        self.addToolBar(Qt.LeftToolBarArea,t)
+        t.setAllowedAreas(Qt.TopToolBarArea | Qt.LeftToolBarArea | Qt.RightToolBarArea | Qt.BottomToolBarArea)
+        p = t.mapToGlobal(QPoint(0, 0))
+        t.setWindowFlags(Qt.Tool | Qt.FramelessWindowHint | Qt.X11BypassWindowManagerHint)
+        t.move(p.x() + 30, p.y() + 50)
+        t.setMinimumHeight(int(data["icon_size"])*3 + 46)
+        t.setMinimumWidth(int(data["icon_size"]))
+        t.setToolTip("Movable toolbar- can be detached or attached, drag to an edge to attach")
+        t.show()
+        
         self.toolbar.setContextMenuPolicy(Qt.PreventContextMenu)
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
@@ -196,8 +209,6 @@ class main(QMainWindow):
         self.backButton.triggered.connect(self.editorSelect)
         self.helpButton.triggered.connect((self.helpView))
         
-        self.addToolBar(self.toolbar)
-        
         self.menubar = self.menuBar()
         font = self.menubar.font()
         font.setPointSize(data["font_size"])
@@ -220,6 +231,8 @@ class main(QMainWindow):
         self.unit_editor.size(),
         app.desktop().availableGeometry()
         ))
+        
+        self.toolbar.move(self.geometry().topLeft().x() - t.width() - 26, self.geometry().topLeft().y() - 30)
         
         self.newButton = QAction("&New", self)
         self.newButton.setVisible(False)
@@ -264,7 +277,7 @@ class main(QMainWindow):
                 self.saveButton.triggered.disconnect() 
                 self.openButton.triggered.connect(self.skills_editor.scene.loadFromFile)
                 self.saveButton.triggered.connect(self.skills_editor.scene.saveToFile)
-                self.resize(QSize(1200,700))
+                self.resize(QSize(1200,710))
                 self.newButton.setVisible(True)
                 self.deleteButton.setVisible(True)
                 self.newButton.triggered.connect(self.skills_editor.scene.new)
@@ -275,6 +288,7 @@ class main(QMainWindow):
         self.size(),
         app.desktop().availableGeometry()
         ))
+                self.toolbar.move(self.geometry().topLeft().x() - t.width() - 26, self.geometry().topLeft().y() - 30)
                 self.setWindowTitle("Turnroot Skills Editor")
             elif new_editor == 2:
                 from main_world_editor import main
@@ -286,7 +300,7 @@ class main(QMainWindow):
                 self.saveButton.triggered.disconnect() 
                 self.openButton.triggered.connect(self.unit_editor.loadFromFile)
                 self.saveButton.triggered.connect(self.unit_editor.unitToJSON)
-                self.resize(QSize(1500,850))
+                self.resize(QSize(1500,860))
                 self.unit_editor.loadClass()
                 self.newButton.setVisible(False)
                 self.deleteButton.setVisible(False)
@@ -297,6 +311,7 @@ class main(QMainWindow):
         self.size(),
         app.desktop().availableGeometry()
         ))
+                self.toolbar.move(self.geometry().topLeft().x() - t.width() - 26, self.geometry().topLeft().y() - 30)
                 self.setWindowTitle("Turnroot Unit/Class Editor")
             elif new_editor == 5:
                 from main_object_editor import main
