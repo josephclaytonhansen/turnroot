@@ -8,6 +8,7 @@ from src.UI_Dialogs import confirmAction
 from src.node_backend import getFiles, GET_FILES
 from src.img_overlay import overlayTile
 from src.skeletons.unit_class import unitClass
+from src.UI_TableModel import TableModel
 
 class growthRateDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -862,6 +863,63 @@ class instanceStatDialog(QDialog):
         except:
             pass
         
+class tileChangesDialog(QDialog):
+    def __init__(self, parent=None,font=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        active_theme = self.active_theme
+        super().__init__(parent)
+        self.body_font = font
         
+        self.setMinimumWidth(600)
+        self.setMinimumHeight(300)
+        self.resize(780,800)
+        
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        self.setLayout(self.layout)
+        
+        self.sheets = {}
+        self.sheetsFromJSON()
+
+        #default values- basic foot soldier
+        self.table_data = self.sheets["Foot Soldier"]
+        self.dv_slider_dv = [15,35,40]
+
+        self.basic_table_categories = ["Move Towards", "Move Goals", "Targeting", "Targeting Change", "Avoid", "Tiles"]
+        self.column_colors_dict = [[active_theme.unit_editor_rule_0, "black"],
+                                   [active_theme.unit_editor_rule_1, "black"],
+                                   [active_theme.unit_editor_rule_2, "white"],
+                                   [active_theme.unit_editor_rule_3, "white"],
+                                   [active_theme.unit_editor_rule_4, "white"],
+                                   [active_theme.unit_editor_rule_5, "white"]]
+        
+        self.tables = {}
+
+        for t in self.basic_table_categories:
+            if t == "Tiles":
+                table = QTableView()
+                table_font = QFont("Menlo")
+                table_font.setPointSize(14)
+                table_font.setStyleHint(QFont.TypeWriter)
+                table.setFont(table_font)
+                table.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Expanding)
+                table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+                table.horizontalHeader().setVisible(False)
+                table.verticalHeader().setVisible(False)
+                self.tables[t] = table
+                table_data = self.table_data[self.basic_table_categories.index(t)]
+                model = TableModel(table_data)
+                self.tables[t].setModel(model)
+                self.tables[t].model().column_colors = self.column_colors_dict[self.basic_table_categories.index(t)]
+                
+                self.layout.addWidget(table)
+            
+    def sheetsFromJSON(self):
+            with open("src/skeletons/sheets/basic_foot_soldier.json", "r") as rf:
+                self.sheets["Foot Soldier"] = json.load(rf)
 
         

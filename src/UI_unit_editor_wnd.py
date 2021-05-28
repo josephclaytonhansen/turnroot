@@ -17,7 +17,8 @@ from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
-from src.UI_unit_editor_dialogs import growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats, editUniversalWeaponTypes, classSkillDialog,loadSavedClass, instanceStatDialog
+from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats,
+editUniversalWeaponTypes, classSkillDialog,loadSavedClass, instanceStatDialog,tileChangesDialog)
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -691,11 +692,17 @@ class UnitEditorWnd(QWidget):
         self.growth_rates.clicked.connect(self.growth_rates_dialog)
         working_tab_layout.addWidget(self.growth_rates, len(wt)+2,3,1,1)
 
-        self.tile_changes = QPushButton("Tile Changes")
-        self.tile_changes.setToolTip("If this class interacts with tiles in a unique way, set those rules.\nFor example, a mounted unit will move slowly (or not at all) on stairs.")
+        self.tile_changes = QPushButton("Universal Tile Changes")
+        self.tile_changes.setToolTip("If this class interacts with tiles in a unique way, set those rules.\nFor example, a magic unit may not take damage from terrain.")
         self.tile_changes.setFont(self.body_font)
         self.tile_changes.clicked.connect(self.tile_changes_dialog)
-        working_tab_layout.addWidget(self.tile_changes, len(wt)+3,0,1,2)
+        working_tab_layout.addWidget(self.tile_changes, len(wt)+3,0,1,1)
+        
+        self.mtile_changes = QPushButton("Mounted Tile Changes")
+        self.mtile_changes.setToolTip("If this class interacts with tiles in a unique way when mounted, set those rules.\nFor example, a mounted unit will move slowly (or not at all) on stairs.")
+        self.mtile_changes.setFont(self.body_font)
+        self.mtile_changes.clicked.connect(self.mtile_changes_dialog)
+        working_tab_layout.addWidget(self.mtile_changes, len(wt)+3,1,1,1)
 
         self.weak_against = QPushButton("Weakness")
         self.weak_against.setToolTip("Allows for unit weaknesses- for example, armored knights are often weak against magic.\nNote that Flying units already are weak against arrows.")
@@ -1426,7 +1433,8 @@ class UnitEditorWnd(QWidget):
         self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def tile_changes_dialog(self):
-        pass
+        o = tileChangesDialog(parent=self,font=self.body_font)
+        o.exec_()
 
     def weak_against_dialog(self):
         pass
@@ -1602,3 +1610,6 @@ class UnitEditorWnd(QWidget):
             else:
                 self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
                 self.parent().parent().save_status.setToolTip("Unit file saved")
+    
+    def mtile_changes_dialog(self):
+        pass
