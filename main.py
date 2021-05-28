@@ -177,7 +177,6 @@ class main(QMainWindow):
         t.setAllowedAreas(Qt.TopToolBarArea | Qt.LeftToolBarArea | Qt.RightToolBarArea | Qt.BottomToolBarArea)
         p = t.mapToGlobal(QPoint(0, 0))
         t.setWindowFlags(Qt.Tool | Qt.FramelessWindowHint | Qt.X11BypassWindowManagerHint)
-        t.move(p.x() + 30, p.y() + 50)
         t.setMinimumHeight(int(data["icon_size"])*3 + 46)
         t.setMinimumWidth(int(data["icon_size"]))
         t.setToolTip("Movable toolbar- can be detached or attached, drag to an edge to attach")
@@ -232,7 +231,7 @@ class main(QMainWindow):
         app.desktop().availableGeometry()
         ))
         
-        self.toolbar.move(self.geometry().topLeft().x() - t.width() - 26, self.geometry().topLeft().y() - 30)
+        self.toolbar.move(self.geometry().topLeft().x() - self.toolbar.width() - 30, self.geometry().topLeft().y() - 30)
         
         self.newButton = QAction("&New", self)
         self.newButton.setVisible(False)
@@ -288,7 +287,7 @@ class main(QMainWindow):
         self.size(),
         app.desktop().availableGeometry()
         ))
-                self.toolbar.move(self.geometry().topLeft().x() - t.width() - 26, self.geometry().topLeft().y() - 30)
+                self.toolbar.move(self.geometry().topLeft().x() - self.toolbar.width() - 20, self.geometry().topLeft().y() - 30)
                 self.setWindowTitle("Turnroot Skills Editor")
             elif new_editor == 2:
                 from main_world_editor import main
@@ -311,7 +310,7 @@ class main(QMainWindow):
         self.size(),
         app.desktop().availableGeometry()
         ))
-                self.toolbar.move(self.geometry().topLeft().x() - t.width() - 26, self.geometry().topLeft().y() - 30)
+                self.toolbar.move(self.geometry().topLeft().x() - self.toolbar.width() - 20, self.geometry().topLeft().y() - 30)
                 self.setWindowTitle("Turnroot Unit/Class Editor")
             elif new_editor == 5:
                 from main_object_editor import main
