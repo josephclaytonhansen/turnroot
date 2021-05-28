@@ -48,7 +48,6 @@ class unitClass():
                            "class_type", "stat_bonuses", "next_classes", "skill_criteria", "is_flying",
                            "sprite_changes", "gfx_changes"]
 
-            
             basic_attrs_dict = {}
             for b in basic_attrs:
                 basic_attrs_dict[b] = getattr(self,b)

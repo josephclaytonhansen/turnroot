@@ -565,6 +565,8 @@ class UnitEditorWnd(QWidget):
     
     def initClasses(self):
         self.loaded_class = None
+        self.d_tile_changes = {}
+        self.m_tile_changes = {}
         working_tab = self.tabs_dict["Classes"]
         working_tab_layout = working_tab.layout()
         
@@ -1399,9 +1401,11 @@ class UnitEditorWnd(QWidget):
             self.parent().parent().restart()
     
     def class_name_change(self):
+        s = self.class_name.text()
         self.unit.unit_class.unit_class_name = self.class_name.text()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+s+".tructf")
         self.getClassesInFolder()
+        self.loadClass(s)
 
     def minimum_level_change(self):
         self.unit.unit_class.minimum_level = self.minimum_level.value()
@@ -1435,6 +1439,9 @@ class UnitEditorWnd(QWidget):
     def tile_changes_dialog(self):
         o = tileChangesDialog(parent=self,font=self.body_font)
         o.exec_()
+        self.d_tile_changes = o.table_data[5]
+        self.loaded_class.dismounted_tile_changes = self.d_tile_changes
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def weak_against_dialog(self):
         pass
@@ -1470,7 +1477,8 @@ class UnitEditorWnd(QWidget):
             self.wt_checkboxes_left[w].setChecked(True)
         if w in self.unit.unit_class.allowed_weapon_types:
             self.unit.unit_class.allowed_weapon_types.remove(w)
-        self.unit.unit_class.disallowed_weapon_types.append(w)
+        if w not in self.unit.unit_class.disallowed_weapon_types:
+            self.unit.unit_class.disallowed_weapon_types.append(w)
         
         for t in self.unit.unit_class.allowed_weapon_types:
             if t in self.unit.unit_class.disallowed_weapon_types:
@@ -1612,4 +1620,8 @@ class UnitEditorWnd(QWidget):
                 self.parent().parent().save_status.setToolTip("Unit file saved")
     
     def mtile_changes_dialog(self):
-        pass
+        o = tileChangesDialog(parent=self,font=self.body_font)
+        o.exec_()
+        self.m_tile_changes = o.table_data[5]
+        self.loaded_class.mounted_tile_changes = self.m_tile_changes
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")

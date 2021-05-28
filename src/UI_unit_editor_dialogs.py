@@ -864,7 +864,7 @@ class instanceStatDialog(QDialog):
             pass
         
 class tileChangesDialog(QDialog):
-    def __init__(self, parent=None,font=None):
+    def __init__(self, parent=None,font=None,r="dismounted"):
         data = updateJSON()
         self.parent = parent
         self.restart = False
