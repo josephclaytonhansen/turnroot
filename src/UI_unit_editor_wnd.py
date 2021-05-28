@@ -75,6 +75,8 @@ class UnitEditorWnd(QWidget):
             self.tabs_dict[tab] = self.c_tab
             self.tabs.addTab(self.c_tab, self.tab_title)
         
+        self.tabs.currentChanged.connect(self.ctab_changed)
+        
         self.initUnit()
         
         self.initBasic()
@@ -1127,15 +1129,21 @@ class UnitEditorWnd(QWidget):
             
     def saveFileDialog(self):
         q = QFileDialog(self)
+        self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saving.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+        self.parent().parent().save_status.setToolTip("Unit file saving")
         options = q.Options()
         options |= q.DontUseNativeDialog
         fileName, _ = q.getSaveFileName(None,"Save","","Turnroot Unit (*.truf)", options=options)
         if fileName:
             self.path = fileName+".truf"
             g = infoClose("Saved unit as "+self.path+"\nAll changes to this unit will now autosave")
+            self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+            self.parent().parent().save_status.setToolTip("Unit file saved")
             g.exec_()
             
     def unitToJSON(self):
+        self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saving.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+        self.parent().parent().save_status.setToolTip("Unit file saving")
         self.unit.AI_sheets = self.table_data
         if self.unit.AI_sheets[len(self.unit.AI_sheets)-1] == (self.dv_slider_dv):
             pass
@@ -1176,6 +1184,8 @@ class UnitEditorWnd(QWidget):
             c = infoClose("No file selected")
             c.exec_()
         else:
+            self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saving.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+            self.parent().parent().save_status.setToolTip("Unit file saving")
             self.unit.selfFromJSON(self.path)
             self.unit.parent = self
             #update graphics
@@ -1229,6 +1239,9 @@ class UnitEditorWnd(QWidget):
                 number_to_value = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S"]
                 
                 self.starting_type_sliders[weapon_type].setValue(number_to_value.index(self.unit.current_weapon_levels[weapon_type]))
+                
+            self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+            self.parent().parent().save_status.setToolTip("Unit file saved")
         
                 
 
@@ -1534,12 +1547,21 @@ class UnitEditorWnd(QWidget):
         y.exec_()
         if hasattr(y,"returns"):
             self.loadClass(name = y.returns)
+            self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+            self.parent().parent().save_status.setToolTip("Class file saved")
         else:
             c = infoClose("No class selected")
             c.exec_()
+            self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+            self.parent().parent().save_status.setToolTip("Class file not saved")
 
     
     def createClass(self):
+        try:
+            self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+            self.parent().parent().save_status.setToolTip("Class file not saved")
+        except:
+            pass
         self.loaded_class = None
         self.loaded_class = unitClass()
         ac = self.loaded_class
@@ -1564,5 +1586,19 @@ class UnitEditorWnd(QWidget):
     def instance_stat_edit(self):
         u = instanceStatDialog(parent=self,font=self.body_font)
         u.exec_()
-                               
-        
+    
+    def ctab_changed(self,s):
+        if s == 4:
+            if self.loaded_class.unit_class_name == None:
+                self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+                self.parent().parent().save_status.setToolTip("Class file not saved")
+            else:
+                self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+                self.parent().parent().save_status.setToolTip("Class file saved")
+        else:
+            if self.path == None:
+                self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+                self.parent().parent().save_status.setToolTip("Unit file not saved")
+            else:
+                self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+                self.parent().parent().save_status.setToolTip("Unit file saved")
