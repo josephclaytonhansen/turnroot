@@ -1396,11 +1396,26 @@ class UnitEditorWnd(QWidget):
             self.parent().parent().restart()
     
     def class_name_change(self):
+        tmp_data = self.loaded_class
+        self.loaded_class = unitClass() 
+        self.class_desc.setText("")
+        self.minimum_level.setValue(0)
+        self.is_mounted.setChecked(False)
+        self.mounted_m.setValue(0)
+        self.exp_m.setValue(0)
+        self.class_type.setCurrentText("")
+        self.is_flying.setChecked(False)
+        
+        for w in weaponTypes().data:
+            self.wt_checkboxes[w].setChecked(False)
+            
         s = self.class_name.text()
         self.loaded_class.unit_class_name = self.class_name.text()
         self.loaded_class.selfToJSON("src/skeletons/classes/"+s+".tructf")
         self.getClassesInFolder()
         self.loadClass(s)
+        
+        print(getattr(self.loaded_class, "allowed_weapon_types"))
 
     def minimum_level_change(self):
         self.loaded_class.minimum_level = self.minimum_level.value()
@@ -1509,6 +1524,10 @@ class UnitEditorWnd(QWidget):
             pass
     
     def loadClass(self,name = None):
+        try:
+            self.class_name.setEnabled(False)
+        except:
+            pass
         if name == None:
             try:
                 ac = self.loaded_class
@@ -1521,6 +1540,7 @@ class UnitEditorWnd(QWidget):
             self.loaded_class = ac
         try:
             self.class_name.setText(ac.unit_class_name)
+            self.class_name.setToolTip("Class will autosave as "+self.loaded_class.unit_class_name+".tructf")
             self.class_desc.setText(ac.desc)
             self.minimum_level.setValue(ac.minimum_level)
             self.is_mounted.setChecked(ac.is_mounted)
@@ -1532,8 +1552,10 @@ class UnitEditorWnd(QWidget):
             for w in weaponTypes().data:
                 if w in ac.allowed_weapon_types:
                     self.wt_checkboxes[w].setChecked(True)
-                elif w in ac.disallowed_weapon_types:
-                    self.wt_checkboxes[w].setChecked(True)
+                else:
+                    self.wt_checkboxes[w].setChecked(False)
+                if w in ac.disallowed_weapon_types:
+                    self.wt_checkboxes[w].setChecked(False)
         except:
             pass
     
@@ -1552,6 +1574,8 @@ class UnitEditorWnd(QWidget):
 
     
     def createClass(self):
+        self.class_name.setEnabled(True)
+        self.class_name.setToolTip("Press enter to save class as 'class name.tructf' in game folder.\nOnce a class is named, changes will autosave.")
         try:
             self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
             self.parent().parent().save_status.setToolTip("Class file not saved")
