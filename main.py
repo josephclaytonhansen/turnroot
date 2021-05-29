@@ -284,8 +284,8 @@ class main(QMainWindow):
                 self.openButton.triggered.connect(self.skills_editor.scene.loadFromFile)
                 self.saveButton.triggered.connect(self.skills_editor.scene.saveToFile)
                 self.fulls = True
-                self.fullScreenToggle()
                 self.resize(QSize(1200,710))
+                self.fullScreenToggle()
                 self.newButton.setVisible(True)
                 self.deleteButton.setVisible(True)
                 self.newButton.triggered.connect(self.skills_editor.scene.new)
@@ -310,12 +310,12 @@ class main(QMainWindow):
                 self.saveButton.triggered.disconnect() 
                 self.openButton.triggered.connect(self.unit_editor.loadFromFile)
                 self.saveButton.triggered.connect(self.unit_editor.unitToJSON)
+                self.resize(QSize(1500,860))
                 self.unit_editor.loadClass()
                 self.newButton.setVisible(False)
                 self.deleteButton.setVisible(False)
                 self.fulls = True
                 self.fullScreenToggle()
-                self.resize(QSize(1500,860))
                 self.setGeometry(
     QStyle.alignedRect(
         Qt.LeftToRight,
