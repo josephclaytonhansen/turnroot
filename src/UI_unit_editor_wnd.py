@@ -564,7 +564,7 @@ class UnitEditorWnd(QWidget):
         working_tab_layout = working_tab.layout
     
     def initClasses(self):
-        self.loaded_class = None
+        self.loaded_class = unitClass()
         self.d_tile_changes = {}
         self.m_tile_changes = {}
         working_tab = self.tabs_dict["Classes"]
@@ -724,28 +724,23 @@ class UnitEditorWnd(QWidget):
         self.next_classes.clicked.connect(self.next_classes_dialog)
         working_tab_layout.addWidget(self.next_classes, len(wt)+5,0,1,4)
 
-        self.wt_checkboxes_left = {}
+        self.wt_checkboxes = {}
         self.wt_checkboxes_right = {}
         count = 1
 
         for w in wt:
             count += 1
-            self.wt_checkboxes_left[w] = QCheckBox()
-            self.wt_checkboxes_left[w].setToolTip("Click to toggle (both for type "+w+" cannot be checked)")
-            self.wt_checkboxes_left[w].name = w
-            self.wt_checkboxes_left[w].stateChanged.connect(self.left_weapon_type_toggle)
-            self.wt_checkboxes_right[w] = QCheckBox()
-            self.wt_checkboxes_right[w].name = w
-            self.wt_checkboxes_right[w].setToolTip("Click to toggle (both for type "+w+" cannot be checked)")
-            self.wt_checkboxes_right[w].setChecked(True)
-            self.unit.unit_class.disallowed_weapon_types.append(w)
-            self.wt_checkboxes_right[w].stateChanged.connect(self.right_weapon_type_toggle)
+            self.wt_checkboxes[w] = QCheckBox()
+            self.wt_checkboxes[w].setToolTip("Click to toggle type "+w)
+            self.wt_checkboxes[w].name = w
+            self.wt_checkboxes[w].stateChanged.connect(self.weapon_type_toggle)
+            
+            self.loaded_class.disallowed_weapon_types.append(w)
             label = QLabel(w)
             label.setFont(self.body_font)
             
             working_tab_layout.addWidget(label, count, 0, 1, 1)
-            working_tab_layout.addWidget(self.wt_checkboxes_left[w], count, 1, 1, 1)
-            working_tab_layout.addWidget(self.wt_checkboxes_right[w], count, 2, 1, 1)
+            working_tab_layout.addWidget(self.wt_checkboxes[w], count, 1, 1, 1)
             
             working_tab_layout.setColumnStretch(0, 3)
             working_tab_layout.setColumnStretch(1, 3)
@@ -1402,39 +1397,39 @@ class UnitEditorWnd(QWidget):
     
     def class_name_change(self):
         s = self.class_name.text()
-        self.unit.unit_class.unit_class_name = self.class_name.text()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+s+".tructf")
+        self.loaded_class.unit_class_name = self.class_name.text()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+s+".tructf")
         self.getClassesInFolder()
         self.loadClass(s)
 
     def minimum_level_change(self):
-        self.unit.unit_class.minimum_level = self.minimum_level.value()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.minimum_level = self.minimum_level.value()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def is_mounted_change(self):
-        self.unit.unit_class.is_mounted = self.is_mounted.isChecked()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.is_mounted = self.is_mounted.isChecked()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
         
     def is_flying_change(self):
-        self.unit.unit_class.is_flying = self.is_flying.isChecked()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.is_flying = self.is_flying.isChecked()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def mounted_m_change(self):
-        self.unit.unit_class.mounted_move_change = self.mounted_m.value()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.mounted_move_change = self.mounted_m.value()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def exp_m_change(self):
-        self.unit.unit_class.exp_gained_multiplier = self.exp_m.value()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.exp_gained_multiplier = self.exp_m.value()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def class_type_change(self):
-        self.unit.unit_class.class_type = self.class_type.value()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.class_type = self.class_type.value()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def growth_rates_dialog(self):
         u = growthRateDialog(parent=self,font=self.body_font)
         u.exec_()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def tile_changes_dialog(self):
         o = tileChangesDialog(parent=self,font=self.body_font)
@@ -1449,42 +1444,26 @@ class UnitEditorWnd(QWidget):
     def stat_bonuses_dialog(self):
         i = statBonusDialog(parent=self,font=self.body_font)
         i.exec_()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
-    def left_weapon_type_toggle(self):
+    def weapon_type_toggle(self):
         w = self.sender().name
         s = self.sender().isChecked()
-        if s:
-            self.wt_checkboxes_right[w].setChecked(False)
-        else:
-            self.wt_checkboxes_right[w].setChecked(True)
-        if w in self.unit.unit_class.disallowed_weapon_types:
-            self.unit.unit_class.disallowed_weapon_types.remove(w)
-        self.unit.unit_class.allowed_weapon_types.append(w)
-        
-        for t in self.unit.unit_class.allowed_weapon_types:
-            if t in self.unit.unit_class.disallowed_weapon_types:
-                self.unit.unit_class.disallowed_weapon_types.remove(t)
-
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        if not s:
+            self.wt_checkboxes[w].setChecked(False)
+            if w not in self.loaded_class.disallowed_weapon_types:
+                self.loaded_class.disallowed_weapon_types.append(w)
+            if w in self.loaded_class.allowed_weapon_types:
+                self.loaded_class.allowed_weapon_types.remove(w)
             
-    def right_weapon_type_toggle(self):
-        w = self.sender().name
-        s = self.sender().isChecked()
-        if s:
-            self.wt_checkboxes_left[w].setChecked(False)
         else:
-            self.wt_checkboxes_left[w].setChecked(True)
-        if w in self.unit.unit_class.allowed_weapon_types:
-            self.unit.unit_class.allowed_weapon_types.remove(w)
-        if w not in self.unit.unit_class.disallowed_weapon_types:
-            self.unit.unit_class.disallowed_weapon_types.append(w)
-        
-        for t in self.unit.unit_class.allowed_weapon_types:
-            if t in self.unit.unit_class.disallowed_weapon_types:
-                self.unit.unit_class.disallowed_weapon_types.remove(t)
+            self.wt_checkboxes[w].setChecked(True)
+            if w not in self.loaded_class.allowed_weapon_types:
+                self.loaded_class.allowed_weapon_types.append(w)
+            if w in self.loaded_class.disallowed_weapon_types:
+                self.loaded_class.disallowed_weapon_types.remove(w)
 
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def tactics_dialog(self):
         pass
@@ -1492,7 +1471,7 @@ class UnitEditorWnd(QWidget):
     def skills_dialog(self):
         y = classSkillDialog(parent=self,font=self.body_font)
         y.exec_()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def skilled_blows_dialog(self):
         pass
@@ -1504,7 +1483,7 @@ class UnitEditorWnd(QWidget):
         file_list = getFiles("src/skeletons/classes")[GET_FILES]
         class_names = []
         if hasattr(self.unit, "unit_class_name"):
-            tmp_class_name = self.unit.unit_class_name
+            tmp_class_name = self.loaded_class_name
         global classes
         classes = {}
         self.paths = {}
@@ -1552,9 +1531,9 @@ class UnitEditorWnd(QWidget):
             
             for w in weaponTypes().data:
                 if w in ac.allowed_weapon_types:
-                    self.wt_checkboxes_left[w].setChecked(True)
+                    self.wt_checkboxes[w].setChecked(True)
                 elif w in ac.disallowed_weapon_types:
-                    self.wt_checkboxes_right[w].setChecked(True)
+                    self.wt_checkboxes[w].setChecked(True)
         except:
             pass
     
@@ -1592,12 +1571,11 @@ class UnitEditorWnd(QWidget):
         self.is_flying.setChecked(False)
         
         for w in weaponTypes().data:
-            self.wt_checkboxes_left[w].setChecked(False)
-            self.wt_checkboxes_right[w].setChecked(True)
+            self.wt_checkboxes[w].setChecked(False)
     
     def class_desc_change(self):
-        self.unit.unit_class.desc = self.sender().text()
-        self.unit.unit_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.desc = self.sender().text()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
     
     def instance_stat_edit(self):
         u = instanceStatDialog(parent=self,font=self.body_font)
