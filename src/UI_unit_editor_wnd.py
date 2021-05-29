@@ -474,16 +474,12 @@ class UnitEditorWnd(QWidget):
         self.default_values.addItems(["--Select--", "Foot Soldier", "Pegasus (Flying) Knight", "Mindless Creature", "Cautious Healer", "Assassin", "Sniper", "Vengeful Demon",
                                       "Strategic Leader", "Armored Tank"])
         default_values_button = QPushButton("Load Preset")
+        default_values_button.setStyleSheet("background-color: "+active_theme.button_alt_color+"; color:"+active_theme.button_alt_text_color+"; font-size: "+str(data["font_size"]))
         default_values_button.setFont(self.body_font)
         default_values_button.clicked.connect(self.AILoadSheets)
         
-        save_values_button = QPushButton("Save Unit")
-        save_values_button.setFont(self.body_font)
-        save_values_button.clicked.connect(self.unitToJSON)
-        
         default_values_row_layout.addWidget(self.default_values)
         default_values_row_layout.addWidget(default_values_button)
-        default_values_row_layout.addWidget(save_values_button)
         
         self.basic_layout.addWidget(default_values_row)
 
@@ -570,6 +566,7 @@ class UnitEditorWnd(QWidget):
         working_tab = self.tabs_dict["Classes"]
         working_tab_layout = working_tab.layout()
         
+        working_tab_layout.setContentsMargins(20,20,20,20)
         working_tab_layout.setSpacing(2)
         
         wt = weaponTypes().data
@@ -586,89 +583,87 @@ class UnitEditorWnd(QWidget):
         self.class_desc.setPlaceholderText("Class description")
         self.class_desc.setToolTip("In-game class description.")
         self.class_desc.textChanged.connect(self.class_desc_change)
-        working_tab_layout.addWidget(self.class_desc, 0,1,1,2)
+        working_tab_layout.addWidget(self.class_desc, 0,1,1,1)
         
         self.new_class = QPushButton("New Class")
+        self.new_class.setStyleSheet("background-color: "+active_theme.button_alt_color+"; color:"+active_theme.button_alt_text_color+"; font-size: "+str(data["font_size"]))
         self.new_class.setToolTip("Create a new, blank, class (will not save until named)")
         self.new_class.setFont(self.body_font)
         self.new_class.clicked.connect(self.createClass)
-        working_tab_layout.addWidget(self.new_class, 0,4,1,2)
-        
-        self.new_class = QPushButton("Load Class")
-        self.new_class.setToolTip("Load a saved class for editing")
-        self.new_class.setFont(self.body_font)
-        self.new_class.clicked.connect(self.loadClassDialog)
         working_tab_layout.addWidget(self.new_class, 0,3,1,1)
+        
+        self.load_class = QPushButton("Load Class")
+        self.load_class.setToolTip("Load a saved class for editing")
+        self.load_class.setFont(self.body_font)
+        self.load_class.setStyleSheet("background-color: "+active_theme.button_alt_color+"; color:"+active_theme.button_alt_text_color+"; font-size: "+str(data["font_size"]))
+        self.load_class.clicked.connect(self.loadClassDialog)
+        working_tab_layout.addWidget(self.load_class, 0,2,1,1)
 
         allowed_weapons_label = QLabel("Can use")
         allowed_weapons_label.setFont(self.body_font)
         working_tab_layout.addWidget(allowed_weapons_label, 1,1,1,1)
 
-        not_allowed_weapons_label = QLabel("Can't use")
-        not_allowed_weapons_label.setFont(self.body_font)
-        working_tab_layout.addWidget(not_allowed_weapons_label, 1,2,1,1)
-
         minimum_level_label = QLabel("Minimum level")
         minimum_level_label.setFont(self.body_font)
-        working_tab_layout.addWidget(minimum_level_label, 1,3,1,1)
+        working_tab_layout.addWidget(minimum_level_label, 1,2,1,1)
         minimum_level_label.setToolTip("Minimum unit level to have this class.\n If classes reset to level 1, this should be low (10,20), whereas if growth is continous, this can be high (30,40)")
 
         self.minimum_level = QSpinBox()
         self.minimum_level.setFont(self.body_font)
         self.minimum_level.setRange(0,40)
         self.minimum_level.valueChanged.connect(self.minimum_level_change)
-        working_tab_layout.addWidget(self.minimum_level, 1,4,1,1)
+        working_tab_layout.addWidget(self.minimum_level, 1,3,1,1)
 
         is_mounted_label = QLabel("Mounted?")
         is_mounted_label.setToolTip("If unit is mounted, they gain increased movement.\nTile changes such as stairs can be added with the Tile Changes button.\nUnit will have the option to Dismount/Mount")
         is_mounted_label.setFont(self.body_font)
-        working_tab_layout.addWidget(is_mounted_label, 2,3,1,1)
+        working_tab_layout.addWidget(is_mounted_label, 2,2,1,1)
 
         self.is_mounted = QCheckBox()
         self.is_mounted.stateChanged.connect(self.is_mounted_change)
-        working_tab_layout.addWidget(self.is_mounted, 2,4,1,1)
+        working_tab_layout.addWidget(self.is_mounted, 2,3,1,1)
 
         mounted_m_label = QLabel("Mounted movement+")
         mounted_m_label.setToolTip("How many more tiles are added to movement radius when mounted")
         mounted_m_label.setFont(self.body_font)
-        working_tab_layout.addWidget(mounted_m_label, 3,3,1,1)
+        working_tab_layout.addWidget(mounted_m_label, 3,2,1,1)
 
         self.mounted_m = QSpinBox()
         self.mounted_m.setFont(self.body_font)
         self.mounted_m.setRange(0,10)
         self.mounted_m.valueChanged.connect(self.mounted_m_change)
-        working_tab_layout.addWidget(self.mounted_m, 3,4,1,1)
+        working_tab_layout.addWidget(self.mounted_m, 3,3,1,1)
 
         exp_m_label = QLabel("EXP growth X")
         exp_m_label.setToolTip("How quickly this class levels up.\n Low level classes should have a value higher than 1, advanced classes should be lower.")
         exp_m_label.setFont(self.body_font)
-        working_tab_layout.addWidget(exp_m_label, 4,3,1,1)
+        working_tab_layout.addWidget(exp_m_label, 4,2,1,1)
 
         self.exp_m = QDoubleSpinBox()
         self.exp_m.setFont(self.body_font)
         self.exp_m.setRange(0.1,2.0)
         self.exp_m.setSingleStep(0.1)
         self.exp_m.valueChanged.connect(self.exp_m_change)
-        working_tab_layout.addWidget(self.exp_m, 4,4,1,1)
+        working_tab_layout.addWidget(self.exp_m, 4,3,1,1)
 
         class_type_label = QLabel("Item growth type")
         class_type_label.setToolTip("If using items such as seals for class growth, set type needed.\nYou can set these in the Game Editor")
         class_type_label.setFont(self.body_font)
-        working_tab_layout.addWidget(class_type_label, 5,3,1,1)
+        working_tab_layout.addWidget(class_type_label, 5,2,1,1)
 
         self.class_type = QComboBox()
         self.class_type.setFont(self.body_font)
         self.class_type.currentTextChanged.connect(self.class_type_change)
-        working_tab_layout.addWidget(self.class_type, 5,4,1,1)
+        working_tab_layout.addWidget(self.class_type, 5,3,1,1)
         
         is_flying_label = QLabel("Flying?")
         is_flying_label.setToolTip("If unit can fly, they have the same options as a mounted unit (including Movement+), but they are weak to arrows/projectiles")
         is_flying_label.setFont(self.body_font)
-        working_tab_layout.addWidget(is_flying_label, 6,3,1,1)
+        working_tab_layout.addWidget(is_flying_label, 6,2,1,1)
 
         self.is_flying = QCheckBox()
         self.is_flying.stateChanged.connect(self.is_flying_change)
-        working_tab_layout.addWidget(self.is_flying, 6,4,1,1)
+        working_tab_layout.addWidget(self.is_flying, 6,3,1,1)
 
         self.tactics = QPushButton("Tactics")
         self.tactics.setToolTip("Tactics are limited use attacks with special effects that can target multiple tiles.\nThis allows Tactics to be class-specific")
@@ -746,7 +741,6 @@ class UnitEditorWnd(QWidget):
             working_tab_layout.setColumnStretch(1, 3)
             working_tab_layout.setColumnStretch(2, 3)
             working_tab_layout.setColumnStretch(3, 3)
-            working_tab_layout.setColumnStretch(4, 1)
         
         self.createClass()
        
