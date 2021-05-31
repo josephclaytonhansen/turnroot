@@ -61,6 +61,14 @@ class Unit():
         self.move = 0
         self.size = 1
         self.visibility_range = 0
+        self.armored = False
+        
+        self.status = None
+        self.status_duration = 0
+        self.in_battle_dialogues = {}
+        
+        self.current_bonuses = {}
+        self.current_penalties = {}
         
         self.is_mounted = False
         self.is_flying = False
@@ -69,11 +77,12 @@ class Unit():
         self.weapon_exps = {}
         self.current_weapon_levels = {}
         for stat in universal_stats:
-            self.current_weapon_levels[stat] = None
+            self.current_weapon_levels[stat] = "E"
         self.unit_classes_exps = {} 
         
         self.unit_class = None
         self.mastered_unit_classes = {}
+        self.past_classes = {}
         self.future_unit_classes = {}
         self.unique_classes = {}
         self.unique_objects = {}
@@ -109,7 +118,6 @@ class Unit():
         self.current_goals = {}
         self.future_goals = {}
         
-    
     @property
     def gender(self):
         return self._gender
@@ -157,7 +165,8 @@ class Unit():
                        "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range",
                        "folder_index", "current_weapon_levels", "generic_stat_randomness", "generic_sprite_options",
                            "generic_gfx_options", "generic_stat_randomness_amount", "growth_rates", "current_goals",
-                       "future_goals"]
+                       "future_goals","past_classes", "armored", "status", "in_battle_dialogues", "status_duration",
+                       "current_bonuses", "current_penalties", "is_flying"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
@@ -184,7 +193,8 @@ class Unit():
                        "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range",
                        "folder_index", "current_weapon_levels", "generic_stat_randomness", "generic_sprite_options",
                            "generic_gfx_options", "generic_stat_randomness_amount", "growth_rates","current_goals",
-                       "future_goals"]
+                       "future_goals", "past_classes", "armored", "status", "in_battle_dialogues", "status_duration",
+                       "current_bonuses","current_penalties", "is_flying"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)

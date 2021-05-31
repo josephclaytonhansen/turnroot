@@ -31,6 +31,8 @@ class unitClass():
         self.class_mastery_amount = 0
         self.class_criteria_weapon_levels = {}
         self.class_criteria_stats = {}
+        self.unique_to_unit = None
+        self.secret = False
         
         self.growth_rates = {}
         self.stat_bonuses = {}
@@ -50,7 +52,7 @@ class unitClass():
                            "weak_against", "weak_against_amount", "exp_gained_multiplier",
                            "class_type", "stat_bonuses", "next_classes", "skill_criteria", "is_flying",
                            "sprite_changes", "gfx_changes","class_mastery_amount","class_criteria_weapon_levels",
-                           "class_criteria_stats"]
+                           "class_criteria_stats", "unique_to_unit", "visible"]
 
             basic_attrs_dict = {}
             for b in basic_attrs:
@@ -74,7 +76,7 @@ class unitClass():
                            "weak_against", "weak_against_amount", "exp_gained_multiplier",
                            "class_type", "stat_bonuses", "next_classes", "skill_criteria", "is_flying",
                            "sprite_changes", "gfx_changes", "class_mastery_amount","class_criteria_weapon_levels",
-                       "class_criteria_stats"]
+                       "class_criteria_stats", "unique_to_unit", "visible"]
         
         with open(path, "rb") as rf:
             tmp_data = pickle.load(rf)
