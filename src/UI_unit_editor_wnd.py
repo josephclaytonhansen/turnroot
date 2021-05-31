@@ -18,7 +18,8 @@ from src.skeletons.identities import orientations, genders, pronouns
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
 from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats,
-editUniversalWeaponTypes, classSkillDialog,loadSavedClass, instanceStatDialog,tileChangesDialog)
+                                        editUniversalWeaponTypes, classSkillDialog, loadSavedClass,
+                                        instanceStatDialog, tileChangesDialog, unitGrowthRateDialog)
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -230,10 +231,23 @@ class UnitEditorWnd(QWidget):
         
         self.working_tab_layout.addWidget(self.basic_left)
         
+        stats_header_growth = QWidget()
+        shg_layout = QHBoxLayout()
+        stats_header_growth.setLayout(shg_layout)
+        
         stat_label = QLabel("Base Stats")
-        stat_label.setToolTip("How much of each universal stat unit has at level 1\nStat growth rates are determined by class")
+        stat_label.setToolTip("How much of each universal stat unit has at level 1\nStat growth rate = (unit growth rate + class growth rate / 2)")
         stat_label.setFont(header_font)
-        self.basic_center_layout.addWidget(stat_label)
+        
+        growth_rates = QPushButton("Stat Growth Rates")
+        growth_rates.clicked.connect(self.unit_growth_rates_dialog)
+        growth_rates.setToolTip("Set natural affinity for different stats. \nIf growth chance for Strength for a unit is 60, and the class growth rate is 80, the actual growth rate is 70")
+        growth_rates.setFont(self.body_font)
+        
+        shg_layout.addWidget(stat_label)
+        shg_layout.addWidget(growth_rates)
+        
+        self.basic_center_layout.addWidget(stats_header_growth)
         
         self.stat_row = {}
         self.stat_values = {}
@@ -1439,6 +1453,12 @@ class UnitEditorWnd(QWidget):
         u = growthRateDialog(parent=self,font=self.body_font)
         u.exec_()
         self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        
+    def unit_growth_rates_dialog(self):
+        u = unitGrowthRateDialog(parent=self,font=self.body_font)
+        u.exec_()
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
 
     def tile_changes_dialog(self):
         o = tileChangesDialog(parent=self,font=self.body_font)

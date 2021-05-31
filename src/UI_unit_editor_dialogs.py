@@ -31,7 +31,9 @@ class growthRateDialog(QDialog):
             try:
                 self.parent.loaded_class.growth_rates[s] = self.parent.loaded_class.growth_rates[s]
             except:
-                self.parent.loaded_class.growth_rates[s] = 60
+                with open("src/tmp/dugc.tsgr") as f:
+                    f_data = json.load(f)
+                self.parent.unit.growth_rates[s] = f_data[s]
         
         self.list = QListWidget()
         self.list.setFont(self.body_font)
@@ -921,5 +923,93 @@ class tileChangesDialog(QDialog):
     def sheetsFromJSON(self):
             with open("src/skeletons/sheets/basic_foot_soldier.json", "r") as rf:
                 self.sheets["Foot Soldier"] = json.load(rf)
+
+class unitGrowthRateDialog(QDialog):
+    def __init__(self, parent=None,font=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.body_font = font
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        self.setMinimumWidth(500)
+        
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        
+        with open("src/skeletons/universal_stats.json", "r") as stats_file:
+            universal_stats =  json.load(stats_file)
+        
+        for s in universal_stats:
+            try:
+                self.parent.unit.growth_rates[s] = self.parent.unit.growth_rates[s]
+            except:
+                with open("src/tmp/dugc.tsgr") as f:
+                    f_data = json.load(f)
+                self.parent.unit.growth_rates[s] = f_data[s]
+        
+        self.list = QListWidget()
+        self.list.setFont(self.body_font)
+        self.list.currentTextChanged.connect(self.list_change)
+        self.list.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.list.addItems(universal_stats)
+        
+        self.layout.addWidget(self.list)
+        
+        row = QWidget()
+        row_layout = QHBoxLayout()
+        row.setLayout(row_layout)
+        
+        r0 = QLabel("0%\n(never increase)")
+        r0.setFont(self.body_font)
+        row_layout.addWidget(r0)
+        
+        self.rate_slider = QSlider(Qt.Horizontal)
+        self.rate_slider.name = 1
+        self.rate_slider.valueChanged.connect(self.colorizeSlider)
+        self.rate_slider.setValue(50)
+        self.rate_slider.setRange(0,99)
+        self.rate_slider.setSingleStep(1)
+        
+        row_layout.addWidget(self.rate_slider)
+        
+        r1 = QLabel("100%\n(always increase)")
+        r1.setFont(self.body_font)
+        row_layout.addWidget(r1)
+        
+        self.layout.addWidget(row)
+        
+        self.setLayout(self.layout)
+    
+    def colorizeSlider(self, v):
+        try:
+            self.parent.unit.growth_rates[self.list.currentItem().text()] = v
+            if self.parent.path != None:
+                self.unit.selfToJSON(self.parent.path)
+        except:
+            pass
+            
+        v = v / 100
+        color_left = QColor(self.active_theme.unit_editor_slider_color_0)
+        color_right = QColor(self.active_theme.unit_editor_slider_color_1)
+        color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
+        color_right_c = [color_right.red(), color_right.green(), color_right.blue()]
+        
+        distances = [(color_right.red() - color_left.red()),
+                     (color_right.green() - color_left.green()),
+                     (color_right.blue() - color_left.blue())]
+        
+        
+        new_color = [int(color_left.red() + v * distances[0]),
+                     int(color_left.green() + v * distances[1]),
+                     int(color_left.blue()+ v * distances[2])]
+        
+        self.sender().setStyleSheet(
+            "QSlider::handle:horizontal {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;width:40px;height:40px;}"
+            )
+    
+    def list_change(self):
+        self.rate_slider.setValue(self.parent.unit.growth_rates[self.list.currentItem().text()])
 
         

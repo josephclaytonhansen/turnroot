@@ -104,6 +104,11 @@ class Unit():
         self.generic_stat_randomness_amount = {}
         self.generic_sprite_options = {}
         self.generic_gfx_options = {}
+        
+        self.growth_rates = {}
+        self.current_goals = {}
+        self.future_goals = {}
+        
     
     @property
     def gender(self):
@@ -151,7 +156,8 @@ class Unit():
                        "max_support_levels","support_levels","description","notes","AI_soldier",
                        "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range",
                        "folder_index", "current_weapon_levels", "generic_stat_randomness", "generic_sprite_options",
-                           "generic_gfx_options", "generic_stat_randomness_amount"]
+                           "generic_gfx_options", "generic_stat_randomness_amount", "growth_rates", "current_goals",
+                       "future_goals"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
@@ -177,7 +183,8 @@ class Unit():
                        "max_support_levels","support_levels","description","notes","AI_soldier",
                        "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range",
                        "folder_index", "current_weapon_levels", "generic_stat_randomness", "generic_sprite_options",
-                           "generic_gfx_options", "generic_stat_randomness_amount"]
+                           "generic_gfx_options", "generic_stat_randomness_amount", "growth_rates","current_goals",
+                       "future_goals"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
