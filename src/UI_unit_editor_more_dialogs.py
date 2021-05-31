@@ -103,12 +103,13 @@ class testGrowthDialog(QDialog):
                 actual_rate = (ugr[s] + cgr[s]) / 2
             except:
                 actual_rate = ugr[s]
-            expected_outcomes[s] = ugr[s]
+
+            expected_outcomes[s] = actual_rate / 100
             actual_outcomes[s] = 0
-            rate = int(random.random() * 100)
+            rate = int(random.random() * 99)+1
             if rate <= actual_rate:
                 self.stat_amounts[s] +=1
-                actual_outcomes[s] = ugr[s]
+                actual_outcomes[s] = 1
                 self.amounts[s].setText("+"+str(self.stat_amounts[s]))
                 self.amounts[s].setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
             else:
@@ -118,14 +119,14 @@ class testGrowthDialog(QDialog):
         
         prob = 0
         for s in actual_outcomes:
-            if actual_outcomes[s] == expected_outcomes[s]:
+            if actual_outcomes[s] >= expected_outcomes[s]:
                 prob += 1
+                self.rolls += 1
         
         prob = prob / len(actual_outcomes)
         prob = int(prob * 100)
         self.l = prob
-        self.rolls += self.l
-        self.total_l = int(self.rolls / self.rt)
+        self.total_l = int((self.rolls / self.rt*len(actual_outcomes)))
         
         self.likely.setText("This level up is ~"+str(self.l)+"% likely")
         self.total_likely.setText("The chance of "+str(self.rt)+" level ups having these total values is "+str(self.total_l)+"%")
