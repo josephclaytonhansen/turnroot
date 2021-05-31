@@ -57,7 +57,7 @@ class Unit():
         
         self.level = 1
         self.exp = 0
-        self.exp_to_next_level = 0
+        self.exp_to_next_level = 100
         self.move = 0
         self.size = 1
         self.visibility_range = 0

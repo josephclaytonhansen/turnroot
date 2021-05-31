@@ -28,6 +28,9 @@ class unitClass():
         
         self.exp_gained_multiplier = 1.0
         self.class_type = None
+        self.class_mastery_amount = 0
+        self.class_criteria_weapon_levels = {}
+        self.class_criteria_stats = {}
         
         self.growth_rates = {}
         self.stat_bonuses = {}
@@ -46,7 +49,8 @@ class unitClass():
                            "mounted_move_change", "mounted_tile_changes", "dismounted_tile_changes",
                            "weak_against", "weak_against_amount", "exp_gained_multiplier",
                            "class_type", "stat_bonuses", "next_classes", "skill_criteria", "is_flying",
-                           "sprite_changes", "gfx_changes"]
+                           "sprite_changes", "gfx_changes""class_mastery_amount","class_criteria_weapon_levels",
+                           "class_criteria_stats"]
 
             basic_attrs_dict = {}
             for b in basic_attrs:
@@ -69,7 +73,8 @@ class unitClass():
                            "mounted_move_change", "mounted_tile_changes", "dismounted_tile_changes",
                            "weak_against", "weak_against_amount", "exp_gained_multiplier",
                            "class_type", "stat_bonuses", "next_classes", "skill_criteria", "is_flying",
-                           "sprite_changes", "gfx_changes"]
+                           "sprite_changes", "gfx_changes", "class_mastery_amount","class_criteria_weapon_levels",
+                       "class_criteria_stats"]
         
         with open(path, "rb") as rf:
             tmp_data = pickle.load(rf)
