@@ -624,9 +624,10 @@ class UnitEditorWnd(QWidget):
         minimum_level_label = QLabel("Minimum level")
         minimum_level_label.setFont(self.body_font)
         working_tab_layout.addWidget(minimum_level_label, 1,2,1,1)
-        minimum_level_label.setToolTip("Minimum unit level to have this class.\n If classes are criteria based, set this to 0.\nIf level resets when changing class, bear this in mind")
+        minimum_level_label.setToolTip("Minimum unit level to have this class.\n If classes are criteria based, set this to 0.\nCriteria vs Level can be set in the Game Editor")
 
         self.minimum_level = QSpinBox()
+        self.minimum_level.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.minimum_level.setFont(self.body_font)
         self.minimum_level.setRange(0,40)
         self.minimum_level.valueChanged.connect(self.minimum_level_change)
@@ -647,6 +648,7 @@ class UnitEditorWnd(QWidget):
         working_tab_layout.addWidget(mounted_m_label, 3,2,1,1)
 
         self.mounted_m = QSpinBox()
+        self.mounted_m.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.mounted_m.setFont(self.body_font)
         self.mounted_m.setRange(0,10)
         self.mounted_m.valueChanged.connect(self.mounted_m_change)
@@ -658,8 +660,9 @@ class UnitEditorWnd(QWidget):
         working_tab_layout.addWidget(exp_m_label, 4,2,1,1)
 
         self.exp_m = QDoubleSpinBox()
+        self.exp_m.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.exp_m.setFont(self.body_font)
-        self.exp_m.setRange(0.1,2.0)
+        self.exp_m.setRange(0.1,3.0)
         self.exp_m.setSingleStep(0.1)
         self.exp_m.valueChanged.connect(self.exp_m_change)
         working_tab_layout.addWidget(self.exp_m, 4,3,1,1)
@@ -670,6 +673,7 @@ class UnitEditorWnd(QWidget):
         working_tab_layout.addWidget(class_type_label, 5,2,1,1)
 
         self.class_type = QComboBox()
+        self.class_type.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.class_type.setFont(self.body_font)
         self.class_type.currentTextChanged.connect(self.class_type_change)
         working_tab_layout.addWidget(self.class_type, 5,3,1,1)
@@ -706,7 +710,7 @@ class UnitEditorWnd(QWidget):
 
         self.growth_rates = QPushButton("Growth Rates")
         self.growth_rates.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
-        self.growth_rates.setToolTip("When a unit of this class levels up, their stats increase randomly.\n This allows the \% growth chance to be changed for each stat.")
+        self.growth_rates.setToolTip("When a unit of this class levels up, their stats increase randomly.\n This allows the % growth chance to be changed for each stat.\nActual growth rate = (unit growth rate + class growth rate) / 2")
         self.growth_rates.setFont(self.body_font)
         self.growth_rates.clicked.connect(self.growth_rates_dialog)
         working_tab_layout.addWidget(self.growth_rates, len(wt)+2,3,1,1)
