@@ -530,6 +530,7 @@ class UnitEditorWnd(QWidget):
             self.weapon_type_widgets[weapon_type] = weapon_type_widget
             
             self.starting_level_labels[weapon_type] = QLabel("D")
+            self.starting_level_labels[weapon_type].setToolTip("At level one, unit's proficiency with weapon")
             self.starting_level_labels[weapon_type].setFont(self.body_font)
             lab = QLabel("<b>"+weapon_type.upper()+"</b><br>Starting level")
             lab.setFont(self.body_font)
@@ -549,12 +550,13 @@ class UnitEditorWnd(QWidget):
             
             growth_multiplier_labels[weapon_type] = QLabel("Growth Rate")
             growth_multiplier_labels[weapon_type].setFont(self.body_font)
+            growth_multiplier_labels[weapon_type].setToolTip("How quickly/slowly unit gains weapon experience.\nFor instance, values less than 1 are a weakness- unit will learn slowly.")
             weapon_type_layout.addWidget(growth_multiplier_labels[weapon_type])
             
             self.growth_multipliers_widgets[weapon_type] = QDoubleSpinBox()
             self.growth_multipliers_widgets[weapon_type].setFont(self.body_font)
             self.growth_multipliers_widgets[weapon_type].name = weapon_type
-            self.growth_multipliers_widgets[weapon_type].setRange(0.5,1.5)
+            self.growth_multipliers_widgets[weapon_type].setRange(0.5,2)
             self.growth_multipliers_widgets[weapon_type].setValue(1.0)
             self.growth_multipliers_widgets[weapon_type].setSingleStep(0.1)
             self.growth_multipliers_widgets[weapon_type].valueChanged.connect(self.growth_multiplier_changed)
@@ -667,6 +669,7 @@ class UnitEditorWnd(QWidget):
         self.exp_m.setFont(self.body_font)
         self.exp_m.setRange(0.1,3.0)
         self.exp_m.setSingleStep(0.1)
+        self.exp_m.setValue(1.25)
         self.exp_m.valueChanged.connect(self.exp_m_change)
         working_tab_layout.addWidget(self.exp_m, 4,3,1,1)
 
@@ -718,6 +721,7 @@ class UnitEditorWnd(QWidget):
         self.class_worth.setFont(self.body_font)
         self.class_worth.setRange(0.1,3.0)
         self.class_worth.setSingleStep(0.1)
+        self.class_worth.setValue(1.0)
         self.class_worth.valueChanged.connect(self.class_worth_change)
         working_tab_layout.addWidget(self.class_worth, 9,3,1,1)
 
@@ -1642,6 +1646,9 @@ class UnitEditorWnd(QWidget):
             self.exp_m.setValue(ac.exp_gained_multiplier)
             self.class_type.setCurrentText(ac.class_type)
             self.is_flying.setChecked(ac.is_flying)
+            self.class_worth.setValue(ac.class_worth)
+            self.is_visible.setChecked(ac.secret)
+            self.is_unique.setChecked(ac.unique_to_unit)
             
             for w in weaponTypes().data:
                 if w in ac.allowed_weapon_types:
@@ -1684,9 +1691,12 @@ class UnitEditorWnd(QWidget):
         self.minimum_level.setValue(0)
         self.is_mounted.setChecked(False)
         self.mounted_m.setValue(0)
-        self.exp_m.setValue(0)
+        self.exp_m.setValue(1)
         self.class_type.setCurrentText("")
         self.is_flying.setChecked(False)
+        self.class_worth.setValue(1)
+        self.is_visible.setChecked(False)
+        self.is_unique.setChecked(False)
         
         for w in weaponTypes().data:
             self.wt_checkboxes[w].setChecked(False)
