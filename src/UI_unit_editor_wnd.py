@@ -707,6 +707,19 @@ class UnitEditorWnd(QWidget):
         self.is_visible = QCheckBox()
         self.is_visible.stateChanged.connect(self.is_visible_change)
         working_tab_layout.addWidget(self.is_visible, 8,3,1,1)
+        
+        class_worth_label = QLabel("Class Value EXP X")
+        class_worth_label.setToolTip("How much EXP this class gives when defeated.\nAdvanced classes could give more EXP- bosses and thieves often do as well.")
+        class_worth_label.setFont(self.body_font)
+        working_tab_layout.addWidget(class_worth_label, 9,2,1,1)
+
+        self.class_worth = QDoubleSpinBox()
+        self.class_worth.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        self.class_worth.setFont(self.body_font)
+        self.class_worth.setRange(0.1,3.0)
+        self.class_worth.setSingleStep(0.1)
+        self.class_worth.valueChanged.connect(self.class_worth_change)
+        working_tab_layout.addWidget(self.class_worth, 9,3,1,1)
 
         self.tactics = QPushButton("Tactics")
         self.tactics.setMinimumHeight(40)
@@ -1498,6 +1511,10 @@ class UnitEditorWnd(QWidget):
 
     def exp_m_change(self):
         self.loaded_class.exp_gained_multiplier = self.exp_m.value()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+    
+    def class_worth_change(self):
+        self.loaded_class.class_worth = self.class_worth.value()
         self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def class_type_change(self):

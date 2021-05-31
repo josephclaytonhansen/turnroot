@@ -69,12 +69,14 @@ class testGrowthDialog(QDialog):
         self.likely.setFont(self.body_font)
         
         self.total_likely = QLabel("Variation score: "+str(self.total_l)+"%")
+        self.total_likely.setToolTip("You should run a test 5+ times to get an accurate variation score")
         self.total_likely.setFont(self.h_font)
         
         self.good_bad = QLabel()
         self.good_bad.setPixmap(QPixmap("src/ui_icons/white/bad.png"))
+        self.good_bad.setToolTip("This variation score means that most level ups will be similar or the same.\nIf your score is low after repeated testing, add more variance to your growth rates")
         
-        self.layout.addWidget(test, row_count+1,  0)
+        self.layout.addWidget(test, row_count+1,0)
         self.layout.addWidget(clear,row_count+4,0)
         self.layout.addWidget(self.test_runs,row_count+1,1)
         self.layout.addWidget(self.likely,row_count+2,0,1,2)
@@ -144,15 +146,15 @@ class testGrowthDialog(QDialog):
         
         if self.total_l >= 65:
             self.good_bad.setPixmap(QPixmap("src/ui_icons/white/good.png"))
-            self.good_bad.setToolTip("This variation score means level ups will be unique.\nMore variance is not needed")
+            self.good_bad.setToolTip("This variation score means level ups will be unique.\nIf this persists after repeated testing, more variance is not needed")
         
         elif self.total_l >= 45 and self.total_l < 65:
             self.good_bad.setPixmap(QPixmap("src/ui_icons/white/medium.png"))
-            self.good_bad.setToolTip("This variation score means many level ups will be similar.\nIf this is unwanted, consider adding more variance to your growth rates")
+            self.good_bad.setToolTip("This variation score means many level ups will be similar.\nIf this persists after repeated testing, consider adding more variance to your growth rates")
         
         else:
             self.good_bad.setPixmap(QPixmap("src/ui_icons/white/bad.png"))
-            self.good_bad.setToolTip("This variation score means that most level ups will be the same.\nIf your score is low after repeated testing, add more variance to your growth rates")
+            self.good_bad.setToolTip("This variation score means that most level ups will be similar or the same.\nIf your score is low after repeated testing, add more variance to your growth rates")
         
         self.likely.setText("This level up is ~"+str(self.l)+"% likely")
         self.total_likely.setText("Variation score: "+str(self.total_l)+"%")
