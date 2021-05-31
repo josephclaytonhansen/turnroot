@@ -459,10 +459,12 @@ class UnitEditorWnd(QWidget):
         rules_row.setLayout(rules_row_layout)
         
         basic_principles = QPushButton("Overview")
+        basic_principles.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         basic_principles.setFont(self.body_font)
         basic_principles.clicked.connect(self.AIOverviewDialog)
         
         detailed_help = QPushButton("Rule Guidelines")
+        detailed_help.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         detailed_help.setFont(self.body_font)
         detailed_help.clicked.connect(self.AIHelpDialog)
 
@@ -487,6 +489,7 @@ class UnitEditorWnd(QWidget):
         
         self.default_values.addItems(["--Select--", "Foot Soldier", "Pegasus (Flying) Knight", "Mindless Creature", "Cautious Healer", "Assassin", "Sniper", "Vengeful Demon",
                                       "Strategic Leader", "Armored Tank"])
+        self.default_values.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         default_values_button = QPushButton("Load Preset")
         default_values_button.setStyleSheet("background-color: "+active_theme.button_alt_color+"; color:"+active_theme.button_alt_text_color+"; font-size: "+str(data["font_size"]))
         default_values_button.setFont(self.body_font)
@@ -620,7 +623,7 @@ class UnitEditorWnd(QWidget):
         minimum_level_label = QLabel("Minimum level")
         minimum_level_label.setFont(self.body_font)
         working_tab_layout.addWidget(minimum_level_label, 1,2,1,1)
-        minimum_level_label.setToolTip("Minimum unit level to have this class.\n If classes reset to level 1, this should be low (10,20), whereas if growth is continous, this can be high (30,40)")
+        minimum_level_label.setToolTip("Minimum unit level to have this class.\n If classes are criteria based, set this to 0.\nIf level resets when changing class, bear this in mind")
 
         self.minimum_level = QSpinBox()
         self.minimum_level.setFont(self.body_font)
@@ -680,54 +683,70 @@ class UnitEditorWnd(QWidget):
         working_tab_layout.addWidget(self.is_flying, 6,3,1,1)
 
         self.tactics = QPushButton("Tactics")
+        self.tactics.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.tactics.setToolTip("Tactics are limited use attacks with special effects that can target multiple tiles.\nThis allows Tactics to be class-specific")
         self.tactics.setFont(self.body_font)
         self.tactics.clicked.connect(self.tactics_dialog)
         working_tab_layout.addWidget(self.tactics, len(wt)+2,0,1,1)
 
         self.skills = QPushButton("Skills")
+        self.skills.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.skills.setToolTip("Skills are unique abilities that incur bonuses or penalties.\nThis allows Skills to be class-specific")
         self.skills.setFont(self.body_font)
         self.skills.clicked.connect(self.skills_dialog)
         working_tab_layout.addWidget(self.skills, len(wt)+2,1,1,1)
 
         self.skilled_blows = QPushButton("Skilled Blows")
+        self.skilled_blows.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.skilled_blows.setToolTip("Skilled Blows are special attacks that use extra weapon durability (\nor, if weapon durability is disabled, have a set number of uses).\nThis allows Skilled Blows to be class-specific")
         self.skilled_blows.setFont(self.body_font)
         self.skilled_blows.clicked.connect(self.skilled_blows_dialog)
         working_tab_layout.addWidget(self.skilled_blows, len(wt)+2,2,1,1)
 
         self.growth_rates = QPushButton("Growth Rates")
+        self.growth_rates.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.growth_rates.setToolTip("When a unit of this class levels up, their stats increase randomly.\n This allows the \% growth chance to be changed for each stat.")
         self.growth_rates.setFont(self.body_font)
         self.growth_rates.clicked.connect(self.growth_rates_dialog)
         working_tab_layout.addWidget(self.growth_rates, len(wt)+2,3,1,1)
 
         self.tile_changes = QPushButton("Universal Tile Changes")
+        self.tile_changes.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.tile_changes.setToolTip("If this class interacts with tiles in a unique way, set those rules.\nFor example, a magic unit may not take damage from terrain.")
         self.tile_changes.setFont(self.body_font)
         self.tile_changes.clicked.connect(self.tile_changes_dialog)
         working_tab_layout.addWidget(self.tile_changes, len(wt)+3,0,1,1)
         
         self.mtile_changes = QPushButton("Mounted Tile Changes")
+        self.mtile_changes.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.mtile_changes.setToolTip("If this class interacts with tiles in a unique way when mounted, set those rules.\nFor example, a mounted unit will move slowly (or not at all) on stairs.")
         self.mtile_changes.setFont(self.body_font)
         self.mtile_changes.clicked.connect(self.mtile_changes_dialog)
         working_tab_layout.addWidget(self.mtile_changes, len(wt)+3,1,1,1)
 
         self.weak_against = QPushButton("Weakness")
+        self.weak_against.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.weak_against.setToolTip("Allows for unit weaknesses- for example, armored knights are often weak against magic.\nNote that Flying units already are weak against arrows.")
         self.weak_against.setFont(self.body_font)
         self.weak_against.clicked.connect(self.weak_against_dialog)
-        working_tab_layout.addWidget(self.weak_against, len(wt)+3,2,1,2)
+        working_tab_layout.addWidget(self.weak_against, len(wt)+3,2,1,1)
+        
+        self.class_criteria = QPushButton("Class Criteria")
+        self.class_criteria.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        self.class_criteria.setToolTip("If classes are criteria based (%) instead of level based, set Minimum Level to 0 and use this instead.")
+        self.class_criteria.setFont(self.body_font)
+        #self.class_criteria.clicked.connect(self.criteria_dialog)
+        working_tab_layout.addWidget(self.class_criteria, len(wt)+3,3,1,1)
 
         self.stat_bonuses = QPushButton("Stats+")
+        self.stat_bonuses.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.stat_bonuses.setToolTip("When a unit switches to this class, they can gain a set stat bonus.")
         self.stat_bonuses.setFont(self.body_font)
         self.stat_bonuses.clicked.connect(self.stat_bonuses_dialog)
         working_tab_layout.addWidget(self.stat_bonuses, len(wt)+4,0,1,4)
 
         self.next_classes = QPushButton("Next Classes")
+        self.next_classes.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.next_classes.setToolTip("If using Branching Classes, set what classes come after this one.\nOtherwise, this can be ignored.\n(Set Branching Classes in the Game Editor)")
         self.next_classes.setFont(self.body_font)
         self.next_classes.clicked.connect(self.next_classes_dialog)

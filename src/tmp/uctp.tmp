@@ -258,8 +258,8 @@ class charcoal(colorTheme):
     tag = "charcoal"
     window_background_color = "#222222"
     list_background_color = "#545454"
-    button_alt_color = "#666666"
-    button_alt_text_color = "#e6e6e6"
+    button_alt_color = "#e6e6e6"
+    button_alt_text_color = "#232323"
     node_grid_background_color = "#363636"
     node_selected_color = "#ffa754"
     window_text_color = "#c4c4c4"
@@ -621,6 +621,8 @@ class custom(colorTheme):
                    "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
     groups = [level_editor, node_grid, unit_editor]
+
+
 
 
 

@@ -18,7 +18,7 @@ class growthRateDialog(QDialog):
         self.body_font = font
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
-        self.setMinimumWidth(500)
+        self.setMinimumWidth(600)
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
@@ -52,6 +52,8 @@ class growthRateDialog(QDialog):
         row_layout.addWidget(r0)
         
         self.rate_slider = QSlider(Qt.Horizontal)
+        self.rate_slider.setTickPosition(3)
+        self.rate_slider.setTickInterval(10)
         self.rate_slider.name = 1
         self.rate_slider.valueChanged.connect(self.colorizeSlider)
         self.rate_slider.setValue(50)
@@ -95,7 +97,10 @@ class growthRateDialog(QDialog):
             )
     
     def list_change(self):
-        self.rate_slider.setValue(self.parent.loaded_class.growth_rates[self.list.currentItem().text()])
+        try:
+            self.rate_slider.setValue(self.parent.loaded_class.growth_rates[self.list.currentItem().text()])
+        except:
+            self.rate_slider.setValue(50)
         
 class statBonusDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -932,7 +937,7 @@ class unitGrowthRateDialog(QDialog):
         self.body_font = font
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
-        self.setMinimumWidth(500)
+        self.setMinimumWidth(600)
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
@@ -966,6 +971,8 @@ class unitGrowthRateDialog(QDialog):
         row_layout.addWidget(r0)
         
         self.rate_slider = QSlider(Qt.Horizontal)
+        self.rate_slider.setTickPosition(3)
+        self.rate_slider.setTickInterval(10)
         self.rate_slider.name = 1
         self.rate_slider.valueChanged.connect(self.colorizeSlider)
         self.rate_slider.setValue(50)
