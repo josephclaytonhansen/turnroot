@@ -19,7 +19,8 @@ from src.skeletons.identities import orientations, genders, pronouns
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
 from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats,
                                         editUniversalWeaponTypes, classSkillDialog, loadSavedClass,
-                                        instanceStatDialog, tileChangesDialog, unitGrowthRateDialog)
+                                        instanceStatDialog, tileChangesDialog, unitGrowthRateDialog,
+                                        classCriteriaDialog)
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -541,7 +542,7 @@ class UnitEditorWnd(QWidget):
             self.starting_type_sliders[weapon_type].valueChanged.connect(self.weapon_starting_level_changed)
             self.starting_type_sliders[weapon_type].setValue(2)
             self.starting_type_sliders[weapon_type].setValue(0)
-            self.starting_type_sliders[weapon_type].setRange(0,8)
+            self.starting_type_sliders[weapon_type].setRange(0,10)
             self.starting_type_sliders[weapon_type].setSingleStep(1)
             
             weapon_type_layout.addWidget(self.starting_type_sliders[weapon_type])
@@ -735,7 +736,7 @@ class UnitEditorWnd(QWidget):
         self.class_criteria.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.class_criteria.setToolTip("If classes are criteria based (%) instead of level based, set Minimum Level to 0 and use this instead.")
         self.class_criteria.setFont(self.body_font)
-        #self.class_criteria.clicked.connect(self.criteria_dialog)
+        self.class_criteria.clicked.connect(self.criteria_dialog)
         working_tab_layout.addWidget(self.class_criteria, len(wt)+3,3,1,1)
 
         self.stat_bonuses = QPushButton("Stats+")
@@ -1376,7 +1377,7 @@ class UnitEditorWnd(QWidget):
         
     def colorizeSliderC(self, v):
         n = v
-        v = v / 9
+        v = v / 11
         color_left = QColor(active_theme.unit_editor_slider_color_0)
         color_right = QColor(active_theme.unit_editor_slider_color_1)
         color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
@@ -1395,7 +1396,7 @@ class UnitEditorWnd(QWidget):
             "QSlider::handle:vertical {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;width:40px;height:40px;}"
             )
         
-        number_to_value = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S"]
+        number_to_value = ["E", "E+","D", "D+", "C", "C+", "B", "B+", "A", "A+", "S"]
         self.starting_level_labels[self.sender().name].setText(number_to_value[n])
         self.unit.current_weapon_levels[self.sender().name] = number_to_value[n]
         
@@ -1662,3 +1663,7 @@ class UnitEditorWnd(QWidget):
         self.m_tile_changes = o.table_data[5]
         self.loaded_class.mounted_tile_changes = self.m_tile_changes
         self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+    
+    def criteria_dialog(self):
+        c = classCriteriaDialog(parent=self,font=self.body_font)
+        c.exec_()

@@ -9,6 +9,7 @@ from src.node_backend import getFiles, GET_FILES
 from src.img_overlay import overlayTile
 from src.skeletons.unit_class import unitClass
 from src.UI_TableModel import TableModel
+from src.skeletons.weapon_types import weaponTypes
 
 class growthRateDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -1018,5 +1019,112 @@ class unitGrowthRateDialog(QDialog):
     
     def list_change(self):
         self.rate_slider.setValue(self.parent.unit.growth_rates[self.list.currentItem().text()])
+        
+class classCriteriaDialog(QDialog):
+    def __init__(self, parent=None,font=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.body_font = font
+        self.h_font = QFont(self.body_font)
+        self.h_font.setPointSize(20)
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        active_theme = self.active_theme
+        super().__init__(parent)
+        self.setMinimumWidth(600)
+        
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+        
+        inner = QWidget()
+        inner_layout = QHBoxLayout()
+        inner.setLayout(inner_layout)
+        
+        header = QLabel("To have a 100% chance of gaining class, unit must have:")
+        self.layout.addWidget(header)
+        header.setFont(self.h_font)
+        
+        self.layout.addWidget(inner)
+        
+        self.layout.setContentsMargins(8,8,8,8)
+        
+        with open("src/skeletons/universal_stats.json", "r") as stats_file:
+            universal_stats =  json.load(stats_file)
+        
+        weapon_types = weaponTypes().data
+        
+        stats_column = QWidget()
+        stats_column_layout = QVBoxLayout()
+        stats_column.setLayout(stats_column_layout)
+        
+        weapons_column = QWidget()
+        weapons_column_layout = QVBoxLayout()
+        weapons_column.setLayout(weapons_column_layout)
+        
+        self.stat_spinners = {}
+        self.weapon_spinners = {}
+        
+        for s in universal_stats:
+            stats_row = QWidget()
+            stats_row_layout = QHBoxLayout()
+            stats_row.setLayout(stats_row_layout)
+            
+            label = QLabel(s)
+            label.setToolTip("Leave at 0 if unrelated to class or if stat is not being used (i.e. endurance)")
+            label.setFont(self.body_font)
+            stat_amount = QSpinBox()
+            stat_amount.name = s
+            stat_amount.valueChanged.connect(self.stat_criteria)
+            stat_amount.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+            stat_amount.setFont(self.body_font)
+            stat_amount.setRange(0,40)
+            stat_amount.setValue(0)
+            self.stat_spinners[s] = stat_amount
+            
+            stats_row_layout.addWidget(label)
+            stats_row_layout.addWidget(stat_amount)
+            
+            stats_column_layout.addWidget(stats_row)
+        
+        for w in weapon_types:
+            weapons_row = QWidget()
+            weapons_row_layout = QHBoxLayout()
+            weapons_row.setLayout(weapons_row_layout)
+            
+            label = QLabel(w)
+            label.setToolTip("Leave at E if unrelated to class")
+            label.setFont(self.body_font)
+            weapon_amount = QComboBox()
+            weapon_amount.name = w
+            weapon_amount.currentTextChanged.connect(self.weapon_criteria)
+            weapon_amount.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+            weapon_amount.setFont(self.body_font)
+            weapon_amount.addItems(["E", "E+", "D", "D+", "C", "C+", "B", "B+", "A", "A+", "S"])
+            self.weapon_spinners[s] = weapon_amount
+            
+            weapons_row_layout.addWidget(label)
+            weapons_row_layout.addWidget(weapon_amount)
+            
+            weapons_column_layout.addWidget(weapons_row)
+        
+        inner_layout.addWidget(stats_column)
+        inner_layout.addWidget(weapons_column)
+        
+        self.setLayout(self.layout)
+    
+    def stat_criteria(self):
+        try:
+            self.parent.loaded_class.class_criteria_stats[self.sender().name] = self.sender().value()
+            self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
+        except:
+            pass
+
+    
+    def weapon_criteria(self):
+        try:
+            self.parent.loaded_class.class_criteria_weapon_levels[self.sender().name] = self.sender().currentText()
+            self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
+        except:
+            pass
 
         
