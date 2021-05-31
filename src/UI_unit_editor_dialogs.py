@@ -3,13 +3,14 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QFont
 from src.UI_updateJSON import updateJSON
 import src.UI_colorTheme
-import shutil, os, pickle, json, sys
+import shutil, os, pickle, json, sys, random
 from src.UI_Dialogs import confirmAction
 from src.node_backend import getFiles, GET_FILES
 from src.img_overlay import overlayTile
 from src.skeletons.unit_class import unitClass
 from src.UI_TableModel import TableModel
 from src.skeletons.weapon_types import weaponTypes
+from src.UI_unit_editor_more_dialogs import testGrowthDialog
 
 class growthRateDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -68,7 +69,7 @@ class growthRateDialog(QDialog):
         row_layout.addWidget(r1)
         
         self.layout.addWidget(row)
-        
+
         self.setLayout(self.layout)
     
     def colorizeSlider(self, v):
@@ -988,7 +989,17 @@ class unitGrowthRateDialog(QDialog):
         
         self.layout.addWidget(row)
         
+        test_rates = QPushButton("Test")
+        test_rates.setToolTip("Test growth rates using selected class.\nIf no class is selected, only unit growth rates will be factored in.")
+        test_rates.setFont(self.body_font)
+        test_rates.clicked.connect(self.test_growth)
+        self.layout.addWidget(test_rates)
+        
         self.setLayout(self.layout)
+    
+    def test_growth(self):
+        h = testGrowthDialog(parent=self,font=self.body_font)
+        h.exec_()
     
     def colorizeSlider(self, v):
         try:
