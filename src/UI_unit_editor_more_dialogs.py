@@ -16,6 +16,8 @@ class testGrowthDialog(QDialog):
         self.parent = parent
         self.restart = False
         self.body_font = font
+        self.h_font = QFont(self.body_font)
+        self.h_font.setPointSize(20)
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         
@@ -30,12 +32,17 @@ class testGrowthDialog(QDialog):
         
         self.amounts = {}
         self.stat_amounts = {}
-        row_count = 0
+        row_count = 1
         
         self.rt = 0
         self.l = 0
         self.total_l = 0
         self.rolls = 0
+        
+        h = QLabel("Given unit growth rates and class growth rates:")
+        h.setToolTip("If no class is selected, only unit growth rates will be factored in.")
+        h.setFont(self.h_font)
+        self.layout.addWidget(h,0,0,1,2)
         
         for s in universal_stats:
             self.stat_amounts[s] = 0
@@ -61,14 +68,18 @@ class testGrowthDialog(QDialog):
         self.likely = QLabel("This level up is ~"+str(self.l)+"% likely")
         self.likely.setFont(self.body_font)
         
-        self.total_likely = QLabel("The chance of "+str(self.rt)+" level ups having these total values is "+str(self.total_l)+"%")
-        self.total_likely.setFont(self.body_font)
+        self.total_likely = QLabel("Variation score: "+str(self.total_l)+"%")
+        self.total_likely.setFont(self.h_font)
+        
+        self.good_bad = QLabel()
+        self.good_bad.setPixmap(QPixmap("src/ui_icons/white/bad.png"))
         
         self.layout.addWidget(test, row_count+1,  0)
         self.layout.addWidget(clear,row_count+4,0)
         self.layout.addWidget(self.test_runs,row_count+1,1)
         self.layout.addWidget(self.likely,row_count+2,0,1,2)
-        self.layout.addWidget(self.total_likely,row_count+3,0,1,2)
+        self.layout.addWidget(self.total_likely,row_count+3,0,1,1)
+        self.layout.addWidget(self.good_bad,row_count+3,1,1,1)
     
     def reset(self):
         self.stat_amounts = {}
@@ -82,7 +93,9 @@ class testGrowthDialog(QDialog):
             self.rolls = 0
             self.total_l = 0
             self.likely.setText("This level up is ~"+str(self.l)+"% likely")
-            self.total_likely.setText("The chance of "+str(self.rt)+" level ups having these total values is "+str(self.total_l)+"%")
+            self.total_likely.setText("Variation score: "+str(self.total_l)+"%")
+            self.good_bad.setPixmap(QPixmap("src/ui_icons/white/bad.png"))
+            self.good_bad.setToolTip("This variation score means that most level ups will be the same.\nIf your score is low after repeated testing, add more variance to your growth rates")
     
     def run_test(self):
         self.unit = self.parent.parent.unit
@@ -127,6 +140,19 @@ class testGrowthDialog(QDialog):
         prob = int(prob * 100)
         self.l = prob
         self.total_l = int((self.rolls / self.rt*len(actual_outcomes)))
+        self.total_l = 100  - self.total_l
+        
+        if self.total_l >= 65:
+            self.good_bad.setPixmap(QPixmap("src/ui_icons/white/good.png"))
+            self.good_bad.setToolTip("This variation score means level ups will be unique.\nMore variance is not needed")
+        
+        elif self.total_l >= 45 and self.total_l < 65:
+            self.good_bad.setPixmap(QPixmap("src/ui_icons/white/medium.png"))
+            self.good_bad.setToolTip("This variation score means many level ups will be similar.\nIf this is unwanted, consider adding more variance to your growth rates")
+        
+        else:
+            self.good_bad.setPixmap(QPixmap("src/ui_icons/white/bad.png"))
+            self.good_bad.setToolTip("This variation score means that most level ups will be the same.\nIf your score is low after repeated testing, add more variance to your growth rates")
         
         self.likely.setText("This level up is ~"+str(self.l)+"% likely")
-        self.total_likely.setText("The chance of "+str(self.rt)+" level ups having these total values is "+str(self.total_l)+"%")
+        self.total_likely.setText("Variation score: "+str(self.total_l)+"%")

@@ -242,7 +242,7 @@ class UnitEditorWnd(QWidget):
         
         growth_rates = QPushButton("Stat Growth Rates")
         growth_rates.clicked.connect(self.unit_growth_rates_dialog)
-        growth_rates.setToolTip("Set natural affinity for different stats. \nIf growth chance for Strength for a unit is 60, and the class growth rate is 80, the actual growth rate is 70")
+        growth_rates.setToolTip("Set natural affinity for different stats.\nYou can also test growth rates here.\nIf growth chance for Strength for a unit is 60, and the class growth rate is 80, the actual growth rate is 70")
         growth_rates.setFont(self.body_font)
         
         shg_layout.addWidget(stat_label)
