@@ -227,6 +227,56 @@ class weakAgainstDialog(QDialog):
     
     def value_changed(self):
         self.loaded.weak_against_amount = self.sender().value()
+    
+class expTypesDialog(QDialog):
+    def __init__(self, parent=None,font=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.body_font = font
+        self.h_font = QFont(self.body_font)
+        self.h_font.setPointSize(20)
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QGridLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        self.setLayout(self.layout)
+        
+        weapon_types = weaponTypes().data
+
+        self.loaded = self.parent.loaded_class
+        if self.loaded.unit_class_name == None:
+            self.load_data = False
+        else:
+            self.load_data = True
+        
+        self.rows = {}
+        self.checks = {}
+        row_count = 0
+        
+        info = QLabel("EXP Types Gained")
+        info.setFont(self.body_font)
+        self.layout.addWidget(info,0,0,1,2)
+        
+        for w in weapon_types:
+            row_count+=1
+            l = QLabel(w)
+            l.setFont(self.body_font)
+            self.layout.addWidget(l,row_count,0,1,1)
+            
+            r = QCheckBox()
+            if self.load_data:
+                if w in self.loaded.experience_types_gained:
+                    r.setChecked(True)
+            r.name = w
+            r.stateChanged.connect(self.check)
+            self.layout.addWidget(r,row_count,1,1,1)
+            
+    def check(self):
+        if self.sender().name not in self.loaded.experience_types_gained:
+            self.loaded.weak_against.append(self.sender().name)
             
         
         

@@ -21,7 +21,7 @@ from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHel
                                         editUniversalWeaponTypes, classSkillDialog, loadSavedClass,
                                         instanceStatDialog, tileChangesDialog, unitGrowthRateDialog,
                                         classCriteriaDialog)
-from src.UI_unit_editor_more_dialogs import weakAgainstDialog
+from src.UI_unit_editor_more_dialogs import weakAgainstDialog, expTypesDialog
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -725,6 +725,16 @@ class UnitEditorWnd(QWidget):
         self.class_worth.setValue(1.0)
         self.class_worth.valueChanged.connect(self.class_worth_change)
         working_tab_layout.addWidget(self.class_worth, 9,3,1,1)
+        
+        exp_types = QLabel("EXP Types Gained")
+        exp_types.setToolTip("What knowledge types will gain experience during all combat, regardless of equipped weapon.\nFor example, a mounted cavalier might always gain lance, sword, and riding experience, even if using a sword only.\nIn that case, the unit would gain extra sword experience from the weapon as well.")
+        exp_types.setFont(self.body_font)
+        working_tab_layout.addWidget(exp_types, 10,2,1,1)
+        
+        exp_types_button = QPushButton("Edit")
+        exp_types_button.clicked.connect(self.exp_types_edit)
+        exp_types_button.setFont(self.body_font)
+        working_tab_layout.addWidget(exp_types_button, 10,3,1,1)
 
         self.tactics = QPushButton("Tactics")
         self.tactics.setMinimumHeight(40)
@@ -1740,3 +1750,9 @@ class UnitEditorWnd(QWidget):
     def criteria_dialog(self):
         c = classCriteriaDialog(parent=self,font=self.body_font)
         c.exec_()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+    
+    def exp_types_edit(self):
+        e = expTypesDialog(parent=self,font=self.body_font)
+        e.exec_()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
