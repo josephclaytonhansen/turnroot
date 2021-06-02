@@ -9,6 +9,7 @@ from src.node_backend import getFiles, GET_FILES
 from src.img_overlay import overlayTile
 from src.skeletons.unit_class import unitClass
 from src.skeletons.unit import Unit
+from src.skeletons.weapon_types import weaponTypes
 
 class testGrowthDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -158,3 +159,74 @@ class testGrowthDialog(QDialog):
         
         self.likely.setText("This level up is ~"+str(self.l)+"% likely")
         self.total_likely.setText("Variation score: "+str(self.total_l)+"%")
+
+class weakAgainstDialog(QDialog):
+    def __init__(self, parent=None,font=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.body_font = font
+        self.h_font = QFont(self.body_font)
+        self.h_font.setPointSize(20)
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QGridLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        self.setLayout(self.layout)
+        
+        weapon_types = weaponTypes().data
+
+        self.loaded = self.parent.loaded_class
+        if self.loaded.unit_class_name == None:
+            self.load_data = False
+        else:
+            self.load_data = True
+        
+        amount_label = QLabel("Effective damage multiplier")
+        amount_label.setFont(self.body_font)
+        amount_label.setToolTip("Usual values are double (2) or triple (3)")
+        self.layout.addWidget(amount_label,0,0,1,1)
+        
+        amount = QDoubleSpinBox()
+        amount.setRange(1.0,3.0)
+        amount.setSingleStep(1.0)
+        amount.setValue(2.0)
+        if self.load_data:
+            amount.setValue(self.loaded.weak_against_amount)
+        amount.valueChanged.connect(self.value_changed)
+        amount.setFont(self.body_font)
+        self.layout.addWidget(amount,0,1,1,1)
+        
+        self.rows = {}
+        self.checks = {}
+        row_count = 1
+        
+        info = QLabel("Effective damage types (this class is weak against)")
+        info.setFont(self.body_font)
+        self.layout.addWidget(info,1,0,1,2)
+        
+        for w in weapon_types:
+            row_count+=1
+            l = QLabel(w)
+            l.setFont(self.body_font)
+            self.layout.addWidget(l,row_count,0,1,1)
+            
+            r = QCheckBox()
+            if self.load_data:
+                if w in self.loaded.weak_against:
+                    r.setChecked(True)
+            r.name = w
+            r.stateChanged.connect(self.check)
+            self.layout.addWidget(r,row_count,1,1,1)
+            
+    def check(self):
+        if self.sender().name not in self.loaded.weak_against:
+            self.loaded.weak_against.append(self.sender().name)
+    
+    def value_changed(self):
+        self.loaded.weak_against_amount = self.sender().value()
+            
+        
+        

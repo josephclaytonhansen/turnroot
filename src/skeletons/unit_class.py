@@ -23,8 +23,8 @@ class unitClass():
         self.mounted_tile_changes = {}
         self.dismounted_tile_changes = {}
         
-        self.weak_against = {}
-        self.weak_against_amount = {}
+        self.weak_against = []
+        self.weak_against_amount = 0
         
         self.exp_gained_multiplier = 1.0
         self.class_type = None

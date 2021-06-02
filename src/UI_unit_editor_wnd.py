@@ -21,6 +21,7 @@ from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHel
                                         editUniversalWeaponTypes, classSkillDialog, loadSavedClass,
                                         instanceStatDialog, tileChangesDialog, unitGrowthRateDialog,
                                         classCriteriaDialog)
+from src.UI_unit_editor_more_dialogs import weakAgainstDialog
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -1552,7 +1553,9 @@ class UnitEditorWnd(QWidget):
         self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def weak_against_dialog(self):
-        pass
+        w = weakAgainstDialog(parent=self,font=self.body_font)
+        w.exec_()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def stat_bonuses_dialog(self):
         i = statBonusDialog(parent=self,font=self.body_font)
