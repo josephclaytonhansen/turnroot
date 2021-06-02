@@ -9,7 +9,7 @@ from src.node_backend import getFiles, GET_FILES
 from src.img_overlay import overlayTile
 from src.skeletons.unit_class import unitClass
 from src.skeletons.unit import Unit
-from src.skeletons.weapon_types import weaponTypes
+from src.skeletons.weapon_types import weaponTypes, expTypes
 
 class testGrowthDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -245,6 +245,7 @@ class expTypesDialog(QDialog):
         self.setLayout(self.layout)
         
         weapon_types = weaponTypes().data
+        extra_exp_types = expTypes().data
 
         self.loaded = self.parent.loaded_class
         if self.loaded.unit_class_name == None:
@@ -260,7 +261,7 @@ class expTypesDialog(QDialog):
         info.setFont(self.body_font)
         self.layout.addWidget(info,0,0,1,2)
         
-        for w in weapon_types:
+        for w in weapon_types+extra_exp_types:
             row_count+=1
             l = QLabel(w)
             l.setFont(self.body_font)

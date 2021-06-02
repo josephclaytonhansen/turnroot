@@ -727,11 +727,12 @@ class UnitEditorWnd(QWidget):
         working_tab_layout.addWidget(self.class_worth, 9,3,1,1)
         
         exp_types = QLabel("EXP Types Gained")
-        exp_types.setToolTip("What knowledge types will gain experience during all combat, regardless of equipped weapon.\nFor example, a mounted cavalier might always gain lance, sword, and riding experience, even if using a sword only.\nIn that case, the unit would gain extra sword experience from the weapon as well.")
+        exp_types.setToolTip("What knowledge types will gain experience during all combat, regardless of equipped weapon.\nFor example, a mounted cavalier might always gain lance, sword, and riding experience, even if using a sword only.\nIn that case, the unit would gain extra sword experience from the weapon as well.\nAdditional EXP types- such as Riding and Flying- can be set (or turned off) in the Game Editor")
         exp_types.setFont(self.body_font)
         working_tab_layout.addWidget(exp_types, 10,2,1,1)
         
         exp_types_button = QPushButton("Edit")
+        exp_types_button.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         exp_types_button.clicked.connect(self.exp_types_edit)
         exp_types_button.setFont(self.body_font)
         working_tab_layout.addWidget(exp_types_button, 10,3,1,1)

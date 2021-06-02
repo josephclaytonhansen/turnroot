@@ -1,4 +1,19 @@
 import json
+
+class expTypes():
+    def __init__(self):
+        with open("src/skeletons/extra_exp_types.json", "r") as weapons_file:
+            weapon_types = json.load(weapons_file)
+        self.data = weapon_types
+        for wt in self.data:
+            w = weaponType(wt)
+            try:
+                w.Load()
+            except:
+                print("no existing data for type" + wt)
+            with open("src/skeletons/exp_types/"+w.name+".json", "w") as f:
+                json.dump(w.data,f)
+
 class weaponTypes():
     def __init__(self):
         with open("src/skeletons/universal_weapon_types.json", "r") as weapons_file:

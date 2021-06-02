@@ -9,7 +9,7 @@ from src.node_backend import getFiles, GET_FILES
 from src.img_overlay import overlayTile
 from src.skeletons.unit_class import unitClass
 from src.UI_TableModel import TableModel
-from src.skeletons.weapon_types import weaponTypes
+from src.skeletons.weapon_types import weaponTypes, expTypes
 from src.UI_unit_editor_more_dialogs import testGrowthDialog
 
 class growthRateDialog(QDialog):
@@ -1063,6 +1063,7 @@ class classCriteriaDialog(QDialog):
             universal_stats =  json.load(stats_file)
         
         weapon_types = weaponTypes().data
+        exp_types = expTypes().data
         
         stats_column = QWidget()
         stats_column_layout = QVBoxLayout()
@@ -1097,7 +1098,7 @@ class classCriteriaDialog(QDialog):
             
             stats_column_layout.addWidget(stats_row)
         
-        for w in weapon_types:
+        for w in weapon_types+exp_types:
             weapons_row = QWidget()
             weapons_row_layout = QHBoxLayout()
             weapons_row.setLayout(weapons_row_layout)
