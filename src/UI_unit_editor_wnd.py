@@ -21,7 +21,7 @@ from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHel
                                         editUniversalWeaponTypes, classSkillDialog, loadSavedClass,
                                         instanceStatDialog, tileChangesDialog, unitGrowthRateDialog,
                                         classCriteriaDialog)
-from src.UI_unit_editor_more_dialogs import weakAgainstDialog, expTypesDialog, nextClassesDialog
+from src.UI_unit_editor_more_dialogs import weakAgainstDialog, expTypesDialog, nextClassesDialog, classGraphicDialog
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -726,16 +726,13 @@ class UnitEditorWnd(QWidget):
         self.class_worth.valueChanged.connect(self.class_worth_change)
         working_tab_layout.addWidget(self.class_worth, 9,3,1,1)
         
-        exp_types = QLabel("EXP Types Gained")
-        exp_types.setToolTip("What knowledge types will gain experience during all combat, regardless of equipped weapon.\nFor example, a mounted cavalier might always gain lance, sword, and riding experience, even if using a sword only.\nIn that case, the unit would gain extra sword experience from the weapon as well.\nAdditional EXP types- such as Riding and Flying- can be set (or turned off) in the Game Editor")
-        exp_types.setFont(self.body_font)
-        working_tab_layout.addWidget(exp_types, 10,2,1,1)
-        
-        exp_types_button = QPushButton("Edit")
+        exp_types_button = QPushButton("EXP Types Gained")
+        exp_types_button.setMinimumHeight(40)
+        exp_types_button.setToolTip("What knowledge types will gain experience during all combat, regardless of equipped weapon.\nFor example, a mounted cavalier might always gain lance, sword, and riding experience, even if using a sword only.\nIn that case, the unit would gain extra sword experience from the weapon as well.\nAdditional EXP types- such as Riding and Flying- can be set (or turned off) in the Game Editor")
         exp_types_button.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         exp_types_button.clicked.connect(self.exp_types_edit)
         exp_types_button.setFont(self.body_font)
-        working_tab_layout.addWidget(exp_types_button, 10,3,1,1)
+        working_tab_layout.addWidget(exp_types_button, len(wt)+4,3,1,1)
 
         self.tactics = QPushButton("Tactics")
         self.tactics.setMinimumHeight(40)
@@ -807,7 +804,7 @@ class UnitEditorWnd(QWidget):
         self.stat_bonuses.setToolTip("When a unit switches to this class, they can gain a set stat bonus.")
         self.stat_bonuses.setFont(self.body_font)
         self.stat_bonuses.clicked.connect(self.stat_bonuses_dialog)
-        working_tab_layout.addWidget(self.stat_bonuses, lenwt+4,0,1,2)
+        working_tab_layout.addWidget(self.stat_bonuses, lenwt+4,0,1,1)
 
         self.next_classes = QPushButton("Next Classes")
         self.next_classes.setMinimumHeight(40)
@@ -815,7 +812,15 @@ class UnitEditorWnd(QWidget):
         self.next_classes.setToolTip("If using Branching Classes, set what classes come after this one.\nOtherwise, this can be ignored.\n(Set Branching Classes in the Game Editor)")
         self.next_classes.setFont(self.body_font)
         self.next_classes.clicked.connect(self.next_classes_dialog)
-        working_tab_layout.addWidget(self.next_classes, len(wt)+4,2,1,2)
+        working_tab_layout.addWidget(self.next_classes, len(wt)+4,1,1,1)
+        
+        self.graphics = QPushButton("Graphics")
+        self.graphics.setMinimumHeight(40)
+        self.graphics.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        self.graphics.setToolTip("Change sprites/portraits for this class")
+        self.graphics.setFont(self.body_font)
+        self.graphics.clicked.connect(self.class_graphics_dialog)
+        working_tab_layout.addWidget(self.graphics, len(wt)+4,2,1,1)
 
         self.wt_checkboxes = {}
         self.wt_checkboxes_right = {}
@@ -1571,6 +1576,11 @@ class UnitEditorWnd(QWidget):
     def stat_bonuses_dialog(self):
         i = statBonusDialog(parent=self,font=self.body_font)
         i.exec_()
+        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+    
+    def class_graphics_dialog(self):
+        l = classGraphicDialog(parent=self,font=self.body_font)
+        l.exec_()
         self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
 
     def weapon_type_toggle(self):

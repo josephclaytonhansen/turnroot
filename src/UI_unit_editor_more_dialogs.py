@@ -70,7 +70,7 @@ class testGrowthDialog(QDialog):
         self.likely.setFont(self.body_font)
         
         self.total_likely = QLabel("Variation score: "+str(self.total_l)+"%")
-        self.total_likely.setToolTip("You should run a test 5+ times to get an accurate variation score")
+        self.total_likely.setToolTip("You should run a test 10+ times (without resetting) to get an accurate variation score.\nVariation score will fluctuate too much to be useful until that point")
         self.total_likely.setFont(self.h_font)
         
         self.good_bad = QLabel()
@@ -343,6 +343,24 @@ class nextClassesDialog(QDialog):
                 print(f.path," failed to load")
         print(class_names)
         return class_names
+
+class classGraphicDialog(QDialog):
+    def __init__(self, parent=None,font=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.body_font = font
+        self.h_font = QFont(self.body_font)
+        self.h_font.setPointSize(20)
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QGridLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        self.setLayout(self.layout)
+
+        self.loaded = self.parent.loaded_class
         
             
         
