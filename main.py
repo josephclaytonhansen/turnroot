@@ -162,7 +162,7 @@ class mainS(NodeEditorWnd):
 class mainN(UnitEditorWnd):
     def __init__(self, parent):
         super().__init__(parent)
-        self.resize(QSize(1400,820))
+        self.resize(QSize(1200,820))
         self.setMaximumSize(QSize(int(size.width()*2), int(size.height()*2)))
 
 class main(QMainWindow):
@@ -315,7 +315,7 @@ class main(QMainWindow):
                 self.deleteButton.setVisible(False)
                 self.fulls = True
                 self.fullScreenToggle()
-                self.resize(QSize(1400,820))
+                self.resize(QSize(1200,820))
                 self.setGeometry(
     QStyle.alignedRect(
         Qt.LeftToRight,

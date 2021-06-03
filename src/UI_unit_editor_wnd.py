@@ -514,6 +514,10 @@ class UnitEditorWnd(QWidget):
         self.growth_multipliers_widgets = {}
         growth_multiplier_labels = {}
         
+        self.wascroll = QScrollArea()
+        self.wascroll.setWidgetResizable(True)
+        working_tab_layout.addWidget(self.wascroll)
+        
         column = QWidget()
         column_layout = QVBoxLayout()
         column.setLayout(column_layout)
@@ -574,7 +578,7 @@ class UnitEditorWnd(QWidget):
         self.edit_weapon_types.clicked.connect(self.weaponTypesChange)
         column_layout.addWidget(self.edit_weapon_types)
             
-        working_tab_layout.addWidget(column)
+        self.wascroll.setWidget(column)
  
     def initActions(self):
         working_tab = self.tabs_dict["Actions"]
