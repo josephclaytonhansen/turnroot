@@ -1511,8 +1511,6 @@ class UnitEditorWnd(QWidget):
         self.loaded_class.selfToJSON("src/skeletons/classes/"+s+".tructf")
         self.getClassesInFolder()
         self.loadClass(s)
-        
-        print(getattr(self.loaded_class, "allowed_weapon_types"))
 
     def minimum_level_change(self):
         self.loaded_class.minimum_level = self.minimum_level.value()

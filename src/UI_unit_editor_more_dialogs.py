@@ -341,7 +341,6 @@ class nextClassesDialog(QDialog):
                 class_names.append(tmp_class.unit_class_name)
             except:
                 print(f.path," failed to load")
-        print(class_names)
         return class_names
 
 class classGraphicDialog(QDialog):

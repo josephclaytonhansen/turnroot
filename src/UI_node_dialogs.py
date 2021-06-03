@@ -116,7 +116,6 @@ class setSkillToClass(QDialog):
                 class_names.append(tmp_class.unit_class_name)
             except:
                 print(f.path)
-        print(class_names)
         return class_names
 
 class setSkillToWeapon(QDialog):
@@ -148,24 +147,30 @@ class setSkillToWeapon(QDialog):
     def connect_weapon(self, s):
         file_list = getFiles("src/skeletons/weapon_types")[GET_FILES]
         file_list_e = getFiles("src/skeletons/exp_types")[GET_FILES]
-        for f in file_list:
-            f.path = f.path.replace("\\", "/") 
-            tmp_weapon = weaponType(f.path[f.path.rfind("/")+1:f.path.find(".json")])
-            tmp_weapon.Load()
-            if tmp_weapon.name == s:
-                if self.parent.skill_name not in tmp_weapon.skills:
-                    print("not in skills!")
-                    tmp_weapon.addSkill(self.parent.skill_name.text(), self.n)
-                tmp_weapon.Save()
-        for f in file_list_e:
-            f.path = f.path.replace("\\", "/") 
-            tmp_weapon = expType(f.path[f.path.rfind("/")+1:f.path.find(".json")])
-            tmp_weapon.Load()
-            if tmp_weapon.name == s:
-                if self.parent.skill_name not in tmp_weapon.skills:
-                    print("not in skills!")
-                    tmp_weapon.addSkill(self.parent.skill_name.text(), self.n)
-                tmp_weapon.Save()
+        if s in file_list:
+            weapon = True
+        else:
+            weapon = False
+        if weapon:
+            for f in file_list:
+                f.path = f.path.replace("\\", "/") 
+                tmp_weapon = weaponType(f.path[f.path.rfind("/")+1:f.path.find(".json")])
+                tmp_weapon.Load()
+                if tmp_weapon.name == s:
+                    if self.parent.skill_name not in tmp_weapon.skills:
+                        print("not in weapon skills!")
+                        tmp_weapon.addSkill(self.parent.skill_name.text(), self.n)
+                    tmp_weapon.Save()
+        else:
+            for f in file_list_e:
+                f.path = f.path.replace("\\", "/") 
+                tmp_weapon = expType(f.path[f.path.rfind("/")+1:f.path.find(".json")])
+                tmp_weapon.Load()
+                if tmp_weapon.name == s:
+                    if self.parent.skill_name not in tmp_weapon.skills:
+                        print("not in exp skills!")
+                        tmp_weapon.addSkill(self.parent.skill_name.text(), self.n)
+                    tmp_weapon.Save()
         self.close()
                     
     def getWeaponsInFolder(self):
@@ -182,7 +187,6 @@ class setSkillToWeapon(QDialog):
             tmp_weapon = expType(f.path[f.path.rfind("/")+1:f.path.find(".json")])
             tmp_weapon.Load()
             weapons.append(tmp_weapon.name)
-        print(weapons)
         return weapons
 
 class setSkillToUnit(QDialog):
@@ -235,5 +239,4 @@ class setSkillToUnit(QDialog):
                 weapons.append(tmp_weapon.name)
             except:
                 pass
-        print(weapons)
         return weapons

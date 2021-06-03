@@ -75,9 +75,10 @@ class skillPreview(QWidget):
         text_area.setLayout(text_area_layout)
         
         self.skill_name = QLabel("Skill Name")
+        self.skill_name.setMaximumWidth(250)
         self.skill_name.setAlignment(Qt.AlignCenter)
         self.skill_name_font = self.skill_name.font()
-        self.skill_name_font.setPointSize(22)
+        self.skill_name_font.setPointSize(16)
         self.skill_name.setFont(self.skill_name_font)
         
         text_area_layout.addWidget(self.skill_name)
@@ -148,19 +149,24 @@ class skillPreview(QWidget):
                   "Experience Level S","Class", "Unique to Unit"]:
             if self.radio_buttons[y] != self.sender():
                self.radio_buttons[y].setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color)
+               
         if self.sender() == self.radio_buttons["Class"]:
             self.parent.scene.connection_type = self.sender().name
+            self.parent.scene.saveToFile()
             b = setSkillToClass(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
             b.exec_()
         elif self.sender() == self.radio_buttons["Unique to Unit"]:
             self.parent.scene.connection_type = self.sender().name
+            self.parent.scene.saveToFile()
             b = setSkillToUnit(parent=self,font=self.parent.parent().parent().unit_editor.body_font)
             b.exec_()
-        elif self.sender().name in l:
+        else:
             self.parent.scene.connection_type = self.sender().name
+            self.parent.scene.save_data['connection'] = self.sender().name
+            self.parent.scene.saveToFile()
             b = setSkillToWeapon(parent=self,font=self.parent.parent().parent().unit_editor.body_font,n=self.sender().name)
             b.exec_()
-        self.parent.scene.saveToFile()
+        
     
     def change_icon(self):
         self.max_or_index = len(self.outer)
