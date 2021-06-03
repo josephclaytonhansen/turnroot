@@ -66,3 +66,42 @@ class weaponType():
         self.objects[name] = obj
         self.data = {"name":self.type,"skills":self.skills,"objects":self.objects,"desc":self.desc,"icon":self.icon}
         self.Save()
+
+class expType():
+    def __init__(self, wtype):
+        self.type = wtype
+        self.skills = {}
+        self.objects = []
+        self.desc = ""
+        self.name = self.type
+        self.icon = None
+        
+        self.data = {"name":self.type,"skills":self.skills,"objects":self.objects,"desc":self.desc,"icon":self.icon}
+        
+    def Save(self):
+        with open("src/skeletons/exp_types/"+self.name+".json", "w") as f:
+            json.dump(self.data,f)
+    
+    def Load(self):
+        with open("src/skeletons/exp_types/"+self.name+".json", "r") as f:
+            self.data = json.load(f)
+    
+    def addSkill(self,name,skill):
+        self.skills[name] = skill
+        self.data = {"name":self.type,"skills":self.skills,"objects":self.objects,"desc":self.desc,"icon":self.icon}
+        self.Save()
+    
+    def removeSkill(self,name):
+        self.skills.pop(name)
+        self.data = {"name":self.type,"skills":self.skills,"objects":self.objects,"desc":self.desc,"icon":self.icon}
+        self.Save()
+    
+    def changeIcon(self,icon):
+        self.icon = icon
+        self.data = {"name":self.type,"skills":self.skills,"objects":self.objects,"desc":self.desc,"icon":self.icon}
+        self.Save()
+
+    def addObject(self,name,obj):
+        self.objects[name] = obj
+        self.data = {"name":self.type,"skills":self.skills,"objects":self.objects,"desc":self.desc,"icon":self.icon}
+        self.Save()

@@ -107,7 +107,11 @@ class skillPreview(QWidget):
         
         r = -1
         c = 0
-        for y in ["Weapon Level D", "Weapon Level C","Weapon Level B","Weapon Level A","Weapon Level S","Class", "Unique to Unit"]:
+        for y in ["Experience Level E+","Experience Level D","Experience Level D+",
+                  "Experience Level C","Experience Level C+",
+                  "Experience Level B","Experience Level B+",
+                  "Experience Level A","Experience Level A+",
+                  "Experience Level S","Class", "Unique to Unit"]:
             r += 1
             if r == 4:
                 r = 0
@@ -131,9 +135,17 @@ class skillPreview(QWidget):
             self.clabel.setText("Skill is connected to:")
     
     def clear_other_radio_buttons(self, s):
-        l = ["Weapon Level D", "Weapon Level C","Weapon Level B","Weapon Level A","Weapon Level S"]
+        l = ["Experience Level E+","Experience Level D","Experience Level D+",
+                  "Experience Level C","Experience Level C+",
+                  "Experience Level B","Experience Level B+",
+                  "Experience Level A","Experience Level A+",
+                  "Experience Level S","Class", "Unique to Unit"]
         self.sender().setStyleSheet("background-color: "+active_theme.button_alt_color+"; color:"+active_theme.button_alt_text_color)
-        for y in ["Weapon Level D", "Weapon Level C","Weapon Level B","Weapon Level A","Weapon Level S","Class", "Unique to Unit"]:
+        for y in ["Experience Level E+","Experience Level D","Experience Level D+",
+                  "Experience Level C","Experience Level C+",
+                  "Experience Level B","Experience Level B+",
+                  "Experience Level A","Experience Level A+",
+                  "Experience Level S","Class", "Unique to Unit"]:
             if self.radio_buttons[y] != self.sender():
                self.radio_buttons[y].setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color)
         if self.sender() == self.radio_buttons["Class"]:

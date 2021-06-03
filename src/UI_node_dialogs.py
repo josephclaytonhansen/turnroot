@@ -7,7 +7,7 @@ import shutil, os, pickle, json, sys
 from src.node_presets import NODE_KEYS, NODES, Nodes
 from src.skeletons.unit_class import unitClass
 from src.UI_nodes_backend import getFiles, GET_FILES
-from src.skeletons.weapon_types import weaponType
+from src.skeletons.weapon_types import weaponType, expType
 from src.skeletons.unit import Unit
 
 class addNodePreset(QDialog):
@@ -147,9 +147,19 @@ class setSkillToWeapon(QDialog):
         
     def connect_weapon(self, s):
         file_list = getFiles("src/skeletons/weapon_types")[GET_FILES]
+        file_list_e = getFiles("src/skeletons/exp_types")[GET_FILES]
         for f in file_list:
             f.path = f.path.replace("\\", "/") 
             tmp_weapon = weaponType(f.path[f.path.rfind("/")+1:f.path.find(".json")])
+            tmp_weapon.Load()
+            if tmp_weapon.name == s:
+                if self.parent.skill_name not in tmp_weapon.skills:
+                    print("not in skills!")
+                    tmp_weapon.addSkill(self.parent.skill_name.text(), self.n)
+                tmp_weapon.Save()
+        for f in file_list_e:
+            f.path = f.path.replace("\\", "/") 
+            tmp_weapon = expType(f.path[f.path.rfind("/")+1:f.path.find(".json")])
             tmp_weapon.Load()
             if tmp_weapon.name == s:
                 if self.parent.skill_name not in tmp_weapon.skills:
@@ -160,10 +170,16 @@ class setSkillToWeapon(QDialog):
                     
     def getWeaponsInFolder(self):
         file_list = getFiles("src/skeletons/weapon_types")[GET_FILES]
+        file_list_e = getFiles("src/skeletons/exp_types")[GET_FILES]
         weapons = []
         for f in file_list:
             f.path = f.path.replace("\\", "/") 
             tmp_weapon = weaponType(f.path[f.path.rfind("/")+1:f.path.find(".json")])
+            tmp_weapon.Load()
+            weapons.append(tmp_weapon.name)
+        for f in file_list_e:
+            f.path = f.path.replace("\\", "/") 
+            tmp_weapon = expType(f.path[f.path.rfind("/")+1:f.path.find(".json")])
             tmp_weapon.Load()
             weapons.append(tmp_weapon.name)
         print(weapons)
