@@ -416,7 +416,7 @@ class ocean_waves(colorTheme):
 class chocolate(colorTheme):
     name = "Chocolate"
     tag = "chocolate"
-    window_background_color = "#59302C"
+    window_background_color = "#5c2e24"
     list_background_color = "#733A2D"
     window_text_color = "#DB8C50"
     workspace_background_color = "#994E33"
@@ -657,6 +657,8 @@ class custom(colorTheme):
                    "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
     groups = [level_editor, node_grid, unit_editor]
+
+
 
 
 

@@ -40,7 +40,7 @@ class unitClass():
         self.growth_rates = {}
         self.stat_bonuses = {}
         
-        self.next_classes = {}
+        self.next_classes = []
         
         self.portrait_changes = {}
         self.sprite_changes = {}
