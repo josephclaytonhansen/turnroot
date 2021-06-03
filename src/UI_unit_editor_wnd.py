@@ -18,10 +18,11 @@ from src.skeletons.identities import orientations, genders, pronouns
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
 from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats,
-                                        editUniversalWeaponTypes, classSkillDialog, loadSavedClass,
+                                        classSkillDialog, loadSavedClass,
                                         instanceStatDialog, tileChangesDialog, unitGrowthRateDialog,
                                         classCriteriaDialog)
-from src.UI_unit_editor_more_dialogs import weakAgainstDialog, expTypesDialog, nextClassesDialog, classGraphicDialog
+from src.UI_unit_editor_more_dialogs import (weakAgainstDialog, expTypesDialog, nextClassesDialog,
+                                             classGraphicDialog,editUniversalWeaponTypes)
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -66,11 +67,17 @@ class UnitEditorWnd(QWidget):
         self.tscroll.setWidgetResizable(True)
         
         self.tab_names = ["Basic", "AI", "Weapon Affinities", "Actions", "Classes", "Unique Skills/Tactics/Objects", "Relationships", "Graphics/Sounds"]
+        self.tts = ["Edit unit identity, stats, and test growth rates", "Edit unit behavior when controlled by computer",
+                    "Edit unit weapon growth and experience. Also edit universal weapon types",
+                    "Edit unit actions such as rallying, mounting/dismounting, and summoning", "Create and edit classes",
+                    "Assign unique skills/tactics/objects to a unit", "Define how this unit interacts with teammates and set personal enemy",
+                    "Customize unit graphics and sounds"]
         
         self.tabs_dict = {}
         for tab in self.tab_names:
             self.tab_title = tab
             self.c_tab = QWidget()
+            self.c_tab.setToolTip(self.tts[self.tab_names.index(tab)])
             if tab == "Classes":
                 self.c_tab_layout = QGridLayout()
             else:
@@ -573,7 +580,7 @@ class UnitEditorWnd(QWidget):
         column_layout.addWidget(column_inner)
             
         self.edit_weapon_types = QPushButton("Edit Weapon Types")
-        self.edit_weapon_types.setToolTip("Edit universal weapon types. \nCAUTION: This may break existing files.\nDo this first when making a game with new weapon types.")
+        self.edit_weapon_types.setToolTip("Edit universal weapon types.")
         self.edit_weapon_types.setFont(self.body_font)
         self.edit_weapon_types.clicked.connect(self.weaponTypesChange)
         column_layout.addWidget(self.edit_weapon_types)

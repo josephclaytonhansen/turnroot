@@ -362,5 +362,106 @@ class classGraphicDialog(QDialog):
         self.loaded = self.parent.loaded_class
         
             
+class editUniversalWeaponTypes(QDialog):
+    def __init__(self, parent=None,font=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        self.font = font
+        
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        
+        row = QWidget()
+        row_layout = QHBoxLayout()
+        row.setLayout(row_layout)
+        
+        with open("src/skeletons/universal_weapon_types.json", "r") as weapons_file:
+            weapon_types = json.load(weapons_file)
+        
+        self.list = QListWidget()
+        self.list.setFont(self.font)
+        self.list.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.list.addItems(weapon_types)
+    
+        row_layout.addWidget(self.list)
+        
+        row2 = QWidget()
+        row2_layout = QHBoxLayout()
+        row2.setLayout(row2_layout)
+        
+        self.add_stat_name = QLineEdit()
+        self.add_stat_name.setFont(self.font)
+        self.add_stat_name.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.add_stat_name.setPlaceholderText("New weapon type name")
+        
+        self.add_stat = QPushButton("+Add Weapon Type")
+        self.add_stat.setFont(self.font)
+        self.add_stat.clicked.connect(self.addType)
+        
+        self.remove_stat = QPushButton("-Remove Selected Weapon Type")
+        self.remove_stat.setFont(self.font)
+        self.remove_stat.clicked.connect(self.removeType)
+        
+        row2_layout.addWidget(self.add_stat_name)
+        row2_layout.addWidget(self.add_stat)
+        row2_layout.addWidget(self.remove_stat)
+        
+        row3 = QWidget()
+        row3_layout = QHBoxLayout()
+        row3.setLayout(row3_layout)
+        
+        self.change_desc = QLineEdit()
+        self.change_desc.setFont(self.font)
+        self.change_desc.textChanged.connect(self.desc_change)
+        self.change_desc_label = QLabel("Change selected weapon type's description")
+        self.change_desc_label.setFont(self.font)
+        self.change_desc_label.setToolTip("This will show in game")
+        
+        self.change_icon = QPushButton()
+        self.change_icon.clicked.connect(self.icon_change)
+        self.change_icon.setIcon(QIcon(QPixmap("src/ui_icons/white/image.png")))
+        self.change_icon.setIconSize(QSize(40,40))
+        self.change_icon.setToolTip("Change in-game icon")
+        
+        row3_layout.addWidget(self.change_desc_label)
+        row3_layout.addWidget(self.change_desc)
+        row3_layout.addWidget(self.change_icon)
+        
+        self.layout.addWidget(row)
+        self.layout.addWidget(row2)
+        self.layout.addWidget(row3)
+        
+        self.setLayout(self.layout)
+    
+    def addType(self):
+        c = confirmAction("#This will add this weapon type to all units in the game, do you want to continue?", parent=self)
+        c.exec_()
+        if(c.return_confirm):
+            self.parent.unit.createUniversalWeaponsType(self.add_stat_name.text())
+            self.restart = True
+            self.close()
+    
+    def removeType(self):
+        c = confirmAction("#This will remove this weapon type from all units in the game, do you want to continue?",parent=self)
+        c.exec_()
+        if(c.return_confirm):
+            y = self.list.currentItem().text()
+            self.parent.unit.removeUniversalWeaponsType(y)
+            
+            if os.path.exists("src/skeletons/weapon_types/"+y+".json"):
+                os.remove("src/skeletons/weapon_types/"+y+".json")
+            
+            self.close()
+            self.restart = True
+        
+    def icon_change(self):
+        pass
+
+    def desc_change(self):
+        pass
         
         
