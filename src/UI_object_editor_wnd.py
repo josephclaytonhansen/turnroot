@@ -10,6 +10,7 @@ import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
 from src.game_directory import gameDirectory
 from src.skeletons.weapon_types import weaponTypes
+from src.UI_object_editor_dialogs import combatDialog
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
@@ -86,33 +87,40 @@ class ObjectEditorWnd(QWidget):
         self.working_tab = self.tabs_dict["Weapons"]
         self.working_tab_layout = self.working_tab.layout()
         
-        self.working_tab_layout.setColumnStretch(0, 3)
-        self.working_tab_layout.setColumnStretch(1, 3)
-        self.working_tab_layout.setColumnStretch(2, 3)
-        self.working_tab_layout.setRowStretch(0, 3)
-        self.working_tab_layout.setRowStretch(1, 3)
-        self.working_tab_layout.setRowStretch(2, 3)
-        self.working_tab_layout.setRowStretch(3, 3)
+        for x in [0,1,2]:
+            self.working_tab_layout.setColumnStretch(x, 3)
+        for x in [0,1,2,3]:
+            self.working_tab_layout.setRowStretch(x, 3)
         
-        self.weapon = Weapon()
+        self.newWeapon()
         
         self.icon = QPushButton()
         self.icon.setIcon(QIcon(QPixmap("src/ui_icons/white/image.png")))
         self.icon.setIconSize(QSize(64,64))
+        
         self.name_edit = QLineEdit()
         self.name_edit.returnPressed.connect(self.nameChange)
         self.name_edit.setPlaceholderText("Weapon name")
-        self.name_edit.returnPressed
+
         self.desc_edit = QLineEdit()
         self.desc_edit.setPlaceholderText("Weapon description")
+        
         self.connect = QPushButton("Connect")
-        self.forging = QPushButton("Forging")
+        
+        self.forging = QPushButton("Forge/Repair")
+        
         self.type = QComboBox()
         self.type.currentTextChanged.connect(self.changeWeaponType)
+        
         self.abilities = QPushButton("Abilities")
+        
         self.combat = QPushButton("Combat")
+        self.combat.clicked.connect(self.combat_dialog)
+        
         self.sprites = QPushButton("Sprites")
+        
         self.pricing = QPushButton("Pricing")
+        
         self.new = QPushButton("New")
         self.new.clicked.connect(self.newWeapon)
         self.save = QPushButton("Load")
@@ -126,9 +134,9 @@ class ObjectEditorWnd(QWidget):
         r = 0
         c = -1
         widgets = [self.icon, self.name_edit, self.desc_edit, self.abilities, self.pricing, self.combat, self.connect, self.forging, self.type]
-        tts = ["Change weapon icon", "change weapon name (press enter to save as name.trwof. Once saved, changes will auto-save", "change weapon description",
-               "change weapon in-game sprites", "change weapon pricing","change weapon combat behavior",
-               "change weapon in-game connections (i.e. shop menus, inventories", "change weapon forging capabilities","change weapon type"]
+        tts = ["Change weapon icon/sprites", "change weapon name (press enter to save as name.trwof. Once saved, changes will auto-save", "change weapon description",
+               "change weapon special abilities", "change weapon pricing","change weapon combat behavior",
+               "change weapon in-game connections (i.e. shop menus, inventories", "change weapon forging/repair capabilities","change weapon type"]
         for w in widgets:
             c += 1
             if c == 3:
@@ -171,16 +179,23 @@ class ObjectEditorWnd(QWidget):
         self.weapon.selfToJSON()
         self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
         self.parent().parent().save_status.setToolTip("Object file saved")
+    
+    def combat_dialog(self):
+        d = combatDialog(parent=self,font=self.body_font)
+        d.exec_()
         
     def newWeapon(self):
         self.weapon = Weapon()
         self.weapon.path = None
-        self.name_edit.clear()
-        self.type.clear()
-        self.type.addItem("--Select--")
-        self.type.addItems(weaponTypes().data)
-        self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
-        self.parent().parent().save_status.setToolTip("Object file not saved")
+        try:
+            self.name_edit.clear()
+            self.type.clear()
+            self.type.addItem("--Select--")
+            self.type.addItems(weaponTypes().data)
+            self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+            self.parent().parent().save_status.setToolTip("Object file not saved")
+        except:
+            pass
     
     def initEquippable(self):
         pass
