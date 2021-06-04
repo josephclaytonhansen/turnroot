@@ -1,5 +1,3 @@
-#from src.skeletons.weapon_types import weaponTypes
-#weapon_types = weaponTypes().data
 import json
 
 class Object():
