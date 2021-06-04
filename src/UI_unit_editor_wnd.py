@@ -17,6 +17,7 @@ from src.skeletons.unit import Unit
 from src.skeletons.identities import orientations, genders, pronouns
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
+from src.game_directory import gameDirectory
 from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats,
                                         classSkillDialog, loadSavedClass,
                                         instanceStatDialog, tileChangesDialog, unitGrowthRateDialog,

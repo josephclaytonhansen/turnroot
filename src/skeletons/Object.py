@@ -15,9 +15,11 @@ class Object():
         self.shop_pages = []
         self.buyable_quantity = 1
         
-    def selfToJSON(self, path, basic_attrs=None):
+    def selfToJSON(self, path=None, basic_attrs=None):
         if basic_attrs == None:
             basic_attrs = self.attrs
+        if path == None:
+            path = self.path
         basic_attrs_dict = {}
         for b in basic_attrs:
             basic_attrs_dict[b] = getattr(self,b)
@@ -25,9 +27,11 @@ class Object():
         with open(path, "w") as wf:
             json.dump(basic_attrs_dict, wf)
     
-    def selfFromJSON(self, path, basic_attrs=None):
+    def selfFromJSON(self, path=None, basic_attrs=None):
         if basic_attrs == None:
             basic_attrs = self.attrs
+        if path == None:
+            path = self.path
         with open(path, "r") as rf:
             tmp_data = json.load(rf)
 
@@ -93,6 +97,15 @@ class classChangeItem(usableItem):
         self.scopes = ["inventory menu", "reclass"]
         self.attrs = ["name", "desc", "icon", "sprite_sheet", "event_to_sprites", "price_if_sold", "price",
                       "price_modifiers", "scopes", "inventories", "type"]
+
+class summoningItem(usableItem):
+    def __init__(self):
+        super().__init__()
+        self.summons = []
+        self.summon_prob = {}
+        self.scopes = ["inventory menu"]
+        self.attrs = ["name", "desc", "icon", "sprite_sheet", "event_to_sprites", "price_if_sold", "price",
+                      "price_modifiers", "scopes", "inventories", "summons", "summon_prob"]
 
 class levelEffectItem(usableItem):
     def __init__(self):

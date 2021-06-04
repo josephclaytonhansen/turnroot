@@ -6,11 +6,13 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from src.UI_updateJSON import updateJSON
+from src.game_directory import gameDirectory
 from src.UI_Dialogs import confirmAction, infoClose, switchEditorDialog, REPLACE_WINDOW, NEW_WINDOW
 from src. UI_unitPreferencesDialog import unitOptionsDialog
 from src.UI_ProxyStyle import ProxyStyle
 from src.UI_unit_editor_wnd import UnitEditorWnd
 from src.UI_node_editor_wnd import NodeEditorWnd
+from src.UI_object_editor_wnd import ObjectEditorWnd
 from src.UI_node_preferences_dialog import NodePreferencesDialog
 from src.node_presets import NODES, Nodes
 from src.UI_WebViewer import webView
@@ -165,6 +167,12 @@ class mainN(UnitEditorWnd):
         self.resize(QSize(1200,820))
         self.setMaximumSize(QSize(int(size.width()*2), int(size.height()*2)))
 
+class mainO(ObjectEditorWnd):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.resize(QSize(1200,820))
+        self.setMaximumSize(QSize(int(size.width()*2), int(size.height()*2)))
+
 class main(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -223,6 +231,8 @@ class main(QMainWindow):
         self.m.addWidget(self.unit_editor)
         self.skills_editor = mainS(parent=self)
         self.m.addWidget(self.skills_editor)
+        self.object_editor = mainO(parent=self)
+        self.m.addWidget(self.object_editor)
         self.m.setCurrentWidget(self.unit_editor)
         
         self.setGeometry(
@@ -280,7 +290,8 @@ class main(QMainWindow):
             elif new_editor == 1:
                 self.m.setCurrentWidget(self.skills_editor)
                 self.openButton.triggered.disconnect()
-                self.saveButton.triggered.disconnect() 
+                self.saveButton.triggered.disconnect()
+                self.newButton.trigggered.disconnect()
                 self.openButton.triggered.connect(self.skills_editor.scene.loadFromFile)
                 self.saveButton.triggered.connect(self.skills_editor.scene.saveToFile)
                 self.fulls = True
@@ -307,7 +318,8 @@ class main(QMainWindow):
             elif new_editor == 4:
                 self.m.setCurrentWidget(self.unit_editor)
                 self.openButton.triggered.disconnect()
-                self.saveButton.triggered.disconnect() 
+                self.saveButton.triggered.disconnect()
+                self.newButton.trigggered.disconnect()
                 self.openButton.triggered.connect(self.unit_editor.loadFromFile)
                 self.saveButton.triggered.connect(self.unit_editor.unitToJSON)
                 self.unit_editor.loadClass()
@@ -328,7 +340,31 @@ class main(QMainWindow):
                 self.setWindowTitle("Turnroot Unit/Class Editor")
                 
             elif new_editor == 5:
-                from main_object_editor import main
+                self.m.setCurrentWidget(self.object_editor)
+                self.openButton.triggered.disconnect()
+                self.saveButton.triggered.disconnect()
+                self.newButton.triggered.disconnect()
+                self.openButton.triggered.connect(self.object_editor.objectFromJSON)
+                self.saveButton.triggered.connect(self.object_editor.objectToJSON)
+                self.newButton.triggered.connect(self.object_editor.newObject)
+                self.object_editor.loadObject()
+                self.newButton.setVisible(True)
+                self.deleteButton.setVisible(True)
+                self.fulls = True
+                self.fullScreenToggle()
+                self.resize(QSize(1200,820))
+                self.setGeometry(
+    QStyle.alignedRect(
+        Qt.LeftToRight,
+        Qt.AlignCenter,
+        self.size(),
+        app.desktop().availableGeometry()
+        ))
+                self.old_pos = self.geometry()
+                self.toolbar.move(self.geometry().topLeft().x() - self.toolbar.width() - 20, self.geometry().topLeft().y() - 30)
+                self.setWindowTitle("Turnroot Object Editor")
+                self.save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+                self.save_status.setToolTip("Object file not saved")
             elif new_editor == 6:
                 from main_portrait_editor import main
             elif new_editor == 7:
