@@ -144,7 +144,7 @@ class equippableItem(Object):
                       "price_modifiers", "scopes", "inventories", "special_abilities",
                       "conditional_special_abilities", "csa_conditions", "can_forge", "can_repair", "repair_cost_per",
                       "minimum_experience_level", "forge_into", "forge_items", "forge_items_amounts","rarity",
-                      "unique_to_unit","type","scope","inventories","full_durability","current_durability",
+                      "unique_to_unit","type","scopes","inventories","full_durability","current_durability",
                       "broken", "price_modifiers", "shop_pages"]
     
     def removeDurability(self, a):
@@ -176,7 +176,7 @@ class Weapon(equippableItem):
               "price_modifiers", "scopes", "inventories", "might", "hit", "crit", "range", "special_abilities",
               "conditional_special_abilities", "csa_conditions", "can_forge", "can_repair", "repair_cost_per",
               "minimum_experience_level", "forge_into", "forge_items", "forge_items_amounts","rarity",
-              "unique_to_unit","type","scope","inventories","full_durability","current_durability",
+              "unique_to_unit","type","scopes","inventories","full_durability","current_durability",
               "broken", "price_modifiers", "shop_pages", "weight"]
         
 class Shield(equippableItem):
@@ -190,6 +190,6 @@ class Shield(equippableItem):
                       "price_modifiers", "scopes", "inventories", "special_abilities",
                       "conditional_special_abilities", "csa_conditions", "can_forge", "can_repair", "repair_cost_per",
                       "minimum_experience_level", "forge_into", "forge_items", "forge_items_amounts","rarity",
-                      "unique_to_unit","type","scope","inventories","full_durability","current_durability",
+                      "unique_to_unit","type","scopes","inventories","full_durability","current_durability",
                       "broken", "price_modifiers", "shop_pages", "weight", "defense", "resistance"]
     

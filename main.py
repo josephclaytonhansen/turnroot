@@ -349,10 +349,9 @@ class main(QMainWindow):
                 self.newButton.triggered.connect(self.object_editor.newObject)
                 self.object_editor.loadObject()
                 self.newButton.setVisible(True)
-                self.deleteButton.setVisible(True)
                 self.fulls = True
                 self.fullScreenToggle()
-                self.resize(QSize(1200,820))
+                self.resize(QSize(800,420))
                 self.setGeometry(
     QStyle.alignedRect(
         Qt.LeftToRight,
