@@ -125,8 +125,10 @@ class combatDialog(QDialog):
     def combatInfo(self):
         g = popupInfo("<b><br>How do I create a weapon that recovers health, inflicts a status, or has some other ability?</b><br>"+
                       "Once you've set the stats here, close this pop-up and click 'Abilities'.<br>"+
-                      "<b>How do I create magic that can warp, heals based on unit Mag stat, or other cases where these stats aren't applicable?</b><br>"+
-                      "'Weapons' of this nature are classified as Actions, and can be set up through the Actions tab in the Unit Editor.<br>"
+                      "<br><b>How do I create magic that can warp, heals based on unit Mag stat, or other cases where these stats aren't applicable?</b><br>"+
+                      "'Weapons' of this nature are classified as Actions, and can be set up through the Actions tab in the Unit Editor.<br>"+
+                      "<br><b>Why can't I change the 'Lower Limit' of the weapon range?</b><br>"+
+                      "The lower limit must be the same or less than the upper limit, so if the upper limit is 1, the lower limit must be 1."
                       ,self,self.body_font)
     
     def change_range(self):
@@ -203,14 +205,17 @@ class loadSavedWeapon(QDialog):
         self.close()
     
     def filterList(self):
-        self.class_list.clear()
-        self.class_list.addItems(self.full_list)
-        if len(self.sender().text()) > 0:
-            tmp_list = []
-            for x in self.class_list.findItems(self.sender().text(), Qt.MatchContains):
-                tmp_list.append(x.text())
+        try:
             self.class_list.clear()
-            self.class_list.addItems(tmp_list)
+            self.class_list.addItems(self.full_list)
+            if len(self.sender().text()) > 0:
+                tmp_list = []
+                for x in self.class_list.findItems(self.sender().text(), Qt.MatchContains):
+                    tmp_list.append(x.text())
+                self.class_list.clear()
+                self.class_list.addItems(tmp_list)
+        except:
+            pass
         
         
 class pricingDialog(QDialog):
