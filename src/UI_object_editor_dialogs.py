@@ -10,6 +10,8 @@ from src.img_overlay import overlayTile
 from src.skeletons.unit_class import unitClass
 from src.skeletons.unit import Unit
 from src.skeletons.weapon_types import weaponTypes, expTypes
+from src.skeletons.Object import (Object,usableItem,Key,healItem,statIncreaseItem,expIncreaseItem,
+                                  classChangeItem,summoningItem,levelEffectItem,equippableItem,Weapon,Shield)
 
 class combatDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -114,3 +116,55 @@ class combatDialog(QDialog):
         setattr(self.parent.weapon, "range", self.new_ranges)
         if self.parent.weapon.path != None:
             self.parent.weapon.selfToJSON()
+
+class loadSavedWeapon(QDialog):
+    def __init__(self, parent=None,font=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        self.body_font = font
+        
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        self.setLayout(self.layout)
+        
+        label = QLabel("Choose Weapon")
+        label.setFont(self.body_font)
+        self.layout.addWidget(label)
+            
+        self.class_list = QListWidget()
+        self.class_list.setFont(self.body_font)
+        self.layout.addWidget(self.class_list)
+        self.class_list.itemClicked.connect(self.change)
+        self.getWeaponsInFolder()
+        self.show()
+        
+    def getWeaponsInFolder(self):
+        file_list = getFiles("src/skeletons/weapons")[GET_FILES]
+        class_names = []
+        global classes
+        classes = {}
+        self.paths = {}
+        for f in file_list:
+            f.fullPath = f.fullPath.replace("\\", "/")
+            if f.ext.strip() == ".trwof":
+                tmp_class = Weapon()
+                tmp_class.selfFromJSON(f.fullPath)
+                name = getattr(tmp_class, "name")
+                self.paths[name] = f.fullPath
+                if name not in class_names:
+                    class_names.append(name)
+                    classes[name] = tmp_class
+            self.classesToDropDown(class_names)
+                
+    def classesToDropDown(self, class_names):
+        self.class_list.clear()
+        self.class_list.addItems(class_names)
+        self.class_list.update()
+    
+    def change(self,s):
+        self.returns = self.paths[self.sender().currentItem().text()]
+        self.close()

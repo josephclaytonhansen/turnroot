@@ -10,7 +10,8 @@ import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
 from src.game_directory import gameDirectory
 from src.skeletons.weapon_types import weaponTypes
-from src.UI_object_editor_dialogs import combatDialog
+from src.UI_object_editor_dialogs import combatDialog, loadSavedWeapon
+from src.UI_Dialogs import confirmAction, popupInfo, infoClose
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
@@ -124,6 +125,7 @@ class ObjectEditorWnd(QWidget):
         self.new = QPushButton("New")
         self.new.clicked.connect(self.newWeapon)
         self.save = QPushButton("Load")
+        self.save.clicked.connect(self.loadWeaponDialog)
         
         header_font = self.name_edit.font()
         header_font.setPointSize(18)
@@ -196,6 +198,24 @@ class ObjectEditorWnd(QWidget):
             self.parent().parent().save_status.setToolTip("Object file not saved")
         except:
             pass
+    
+    def loadWeaponDialog(self):
+        y = loadSavedWeapon(parent=self,font=self.body_font)
+        y.exec_()
+        if hasattr(y,"returns"):
+            print(y.returns)
+            self.weapon.path = y.returns
+            self.weapon.selfFromJSON()
+            self.name_edit.setText(getattr(self.weapon, "name"))
+            self.desc_edit.setText(getattr(self.weapon, "desc"))
+            self.type.setCurrentText(getattr(self.weapon, "type"))
+            self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+            self.parent().parent().save_status.setToolTip("Object file saved")
+        else:
+            c = infoClose("No weapon selected")
+            c.exec_()
+            self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+            self.parent().parent().save_status.setToolTip("Object file not saved")
     
     def initEquippable(self):
         pass
