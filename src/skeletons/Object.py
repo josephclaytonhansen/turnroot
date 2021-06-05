@@ -167,7 +167,7 @@ class Weapon(equippableItem):
         self.might = 0
         self.hit = 0
         self.crit = 0
-        self.range = 1
+        self.range = [1,1]
         self.weight = 1
         self.minimum_experience_level  = "E"
         self.unique_to_unit = False

@@ -35,7 +35,7 @@ class combatDialog(QDialog):
         self.layout.addWidget(q, 0, 0, 1,2)
         
         r = 0
-        for x in ["might", "hit", "crit", "range", "weight"]:
+        for x in ["might", "hit", "crit", "weight"]:
             r +=1 
             stat_label = QLabel(x)
             stat_label.setFont(self.body_font)
@@ -57,7 +57,60 @@ class combatDialog(QDialog):
             self.layout.addWidget(stat_label, r, 0, 1, 1)
             self.layout.addWidget(stat_value, r,1,1,1)
             
+            range_row = QWidget()
+            range_row_layout = QHBoxLayout()
+            range_row.setLayout(range_row_layout)
+            
+            ranges = getattr(self.parent.weapon, "range")
+            self.new_ranges = [1,1]
+            self.range_spinners = {}
+            
+            lrange = QSpinBox()
+            self.range_spinners[0] = lrange
+            lrange.valueChanged.connect(self.change_range)
+            lrange.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+            lrange.name = 0
+            lrange.setFont(self.body_font)
+            self.values[x] = lrange
+            lrange.setRange(1,5)
+            try:
+                lrange.setValue(ranges[0])
+            except:
+                pass
+            lrange_label = QLabel("Range (Lower Limit)")
+            lrange_label.setFont(self.body_font)
+            range_row_layout.addWidget(lrange_label)
+            range_row_layout.addWidget(lrange)
+            
+            frange = QSpinBox()
+            self.range_spinners[1] = frange
+            frange.valueChanged.connect(self.change_range)
+            frange.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+            frange.name = 1
+            frange.setFont(self.body_font)
+            self.values[x] = lrange
+            frange.setRange(1,5)
+            try:
+                frange.setValue(ranges[1])
+            except:
+                pass
+            frange_label = QLabel("Range (Upper Limit)")
+            frange_label.setFont(self.body_font)
+            range_row_layout.addWidget(frange_label)
+            range_row_layout.addWidget(frange)
+            
+            self.layout.addWidget(range_row, r+1,0,1,2)
+            
     def change_value(self):
         setattr(self.parent.weapon, self.sender().name, self.sender().value()) 
+        if self.parent.weapon.path != None:
+            self.parent.weapon.selfToJSON()
+    
+    def change_range(self):
+        self.new_ranges[self.sender().name] = self.sender().value()
+        if self.new_ranges[0] > self.new_ranges[1]:
+            self.new_ranges[0] = self.new_ranges[1]
+            self.range_spinners[0].setValue(self.new_ranges[0])
+        setattr(self.parent.weapon, "range", self.new_ranges)
         if self.parent.weapon.path != None:
             self.parent.weapon.selfToJSON()
