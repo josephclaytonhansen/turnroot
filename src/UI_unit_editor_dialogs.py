@@ -24,7 +24,7 @@ class growthRateDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         
         with open("src/skeletons/universal_stats.json", "r") as stats_file:
             universal_stats =  json.load(stats_file)
@@ -116,7 +116,7 @@ class statBonusDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         
         with open("src/skeletons/universal_stats.json", "r") as stats_file:
             universal_stats =  json.load(stats_file)
@@ -442,7 +442,7 @@ class editUniversalStats(QDialog):
         
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         
         row = QWidget()
         row_layout = QHBoxLayout()
@@ -507,7 +507,7 @@ class classSkillDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
         
         #fromRow, int fromColumn, int rowSpan, int columnSpan
@@ -647,7 +647,7 @@ class loadSavedClass(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
         
         label = QLabel("Choose Class")
@@ -696,7 +696,7 @@ class instanceStatDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
         self.setMinimumWidth(700)
         
@@ -814,7 +814,7 @@ class tileChangesDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
         
         self.sheets = {}
@@ -869,7 +869,7 @@ class unitGrowthRateDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         
         with open("src/skeletons/universal_stats.json", "r") as stats_file:
             universal_stats =  json.load(stats_file)
@@ -983,7 +983,7 @@ class classCriteriaDialog(QDialog):
         
         self.layout.addWidget(inner)
         
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         
         with open("src/skeletons/universal_stats.json", "r") as stats_file:
             universal_stats =  json.load(stats_file)

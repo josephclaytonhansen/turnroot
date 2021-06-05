@@ -27,7 +27,7 @@ class combatDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
         
         self.values = {}
@@ -131,7 +131,7 @@ class loadSavedWeapon(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
         
         label = QLabel("Choose Weapon")
@@ -186,12 +186,8 @@ class pricingDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
-        
-        h = QLabel("Selling and Buying this Weapon")
-        h.setFont(self.h_font)
-        self.layout.addWidget(h,0,0,1,2)
         
         price_sold = QSpinBox()
         price_buy = QSpinBox()
@@ -233,17 +229,19 @@ class pricingDialog(QDialog):
         h.setFont(self.h_font)
         self.layout.addWidget(h,r+2,0,1,2)
         t = QLabel("Change used amount")
+        t.setToolTip("Durability must be greater than 0. Set with the Combat button")
         t.setFont(self.body_font)
         self.layout.addWidget(t,r+3,0,1,2)
         
         self.used_uses = QLabel("Remaining Uses: ")
-        self.used_uses.setFont(self.h_font)
-        self.cost = QLabel("Price: ")
-        self.cost.setFont(self.h_font)
+        self.used_uses.setFont(self.body_font)
+        self.cost = QLabel(" Price: ")
+        self.cost.setFont(self.body_font)
         self.layout.addWidget(self.used_uses, r+5, 0, 1,1)
         self.layout.addWidget(self.cost,r+5,1,1,1)
         
     def change_value(self):
+        self.cost.setText(" Price: ")
         setattr(self.parent.weapon, self.sender().name, self.sender().value()) 
         if self.parent.weapon.path != None:
             self.parent.weapon.selfToJSON()
@@ -252,11 +250,11 @@ class pricingDialog(QDialog):
         try:
             self.cost_at_use = self.parent.weapon.price_if_sold - ((self.parent.weapon.full_durability - v) * self.parent.weapon.repair_cost_per)
             self.used_uses.setText("Remaining Uses: "+str(v))
-            self.cost.setText("Price: "+str(self.cost_at_use))
+            self.cost.setText(" Price: "+str(self.cost_at_use))
         except:
             pass
             
-        v = int(v / self.parent.weapon.full_durability)
+        v = v / self.parent.weapon.full_durability
         color_left = QColor(self.active_theme.unit_editor_slider_color_0)
         color_right = QColor(self.active_theme.unit_editor_slider_color_1)
         color_left_c = [color_left.red(), color_left.green(), color_left.blue()]

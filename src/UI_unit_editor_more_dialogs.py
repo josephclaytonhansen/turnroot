@@ -24,7 +24,7 @@ class testGrowthDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
         
         with open("src/skeletons/universal_stats.json", "r") as stats_file:
@@ -173,7 +173,7 @@ class weakAgainstDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
         
         weapon_types = weaponTypes().data
@@ -241,7 +241,7 @@ class expTypesDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
         
         weapon_types = weaponTypes().data
@@ -292,7 +292,7 @@ class nextClassesDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
 
         self.loaded = self.parent.loaded_class
@@ -356,7 +356,7 @@ class classGraphicDialog(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
 
         self.loaded = self.parent.loaded_class
@@ -373,7 +373,7 @@ class editUniversalWeaponTypes(QDialog):
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setContentsMargins(12,12,12,12)
         
         row = QWidget()
         row_layout = QHBoxLayout()
