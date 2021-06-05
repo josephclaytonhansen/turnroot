@@ -165,6 +165,7 @@ class Weapon(equippableItem):
     def __init__(self):
         super().__init__()
         self.might = 0
+        self.buyable_quantity = 1
         self.hit = 0
         self.crit = 0
         self.range = [1,1]
@@ -177,7 +178,7 @@ class Weapon(equippableItem):
               "conditional_special_abilities", "csa_conditions", "can_forge", "can_repair", "repair_cost_per",
               "minimum_experience_level", "forge_into", "forge_items", "forge_items_amounts","rarity",
               "unique_to_unit","type","scopes","inventories","full_durability","current_durability",
-              "broken", "price_modifiers", "shop_pages", "weight"]
+              "broken", "price_modifiers", "shop_pages", "weight", "buyable_quantity"]
         
 class Shield(equippableItem):
     def __init__(self):

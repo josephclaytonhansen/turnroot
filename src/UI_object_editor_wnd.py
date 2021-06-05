@@ -10,7 +10,7 @@ import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
 from src.game_directory import gameDirectory
 from src.skeletons.weapon_types import weaponTypes
-from src.UI_object_editor_dialogs import combatDialog, loadSavedWeapon
+from src.UI_object_editor_dialogs import combatDialog, loadSavedWeapon, pricingDialog
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
@@ -104,6 +104,7 @@ class ObjectEditorWnd(QWidget):
         self.name_edit.setPlaceholderText("Weapon name")
 
         self.desc_edit = QLineEdit()
+        self.desc_edit.returnPressed.connect(self.descChange)
         self.desc_edit.setPlaceholderText("Weapon description")
         
         self.connect = QPushButton("Connect")
@@ -121,6 +122,7 @@ class ObjectEditorWnd(QWidget):
         self.sprites = QPushButton("Sprites")
         
         self.pricing = QPushButton("Pricing")
+        self.pricing.clicked.connect(self.pricing_dialog)
         
         self.new = QPushButton("New")
         self.new.clicked.connect(self.newWeapon)
@@ -181,6 +183,15 @@ class ObjectEditorWnd(QWidget):
         self.weapon.selfToJSON()
         self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
         self.parent().parent().save_status.setToolTip("Object file saved")
+    
+    def descChange(self):
+        self.weapon.desc = self.sender().text()
+        if self.weapon.path != None:
+            self.weapon.selfToJSON()
+    
+    def pricing_dialog(self):
+        p = pricingDialog(parent=self,font=self.body_font)
+        p.exec_()
     
     def combat_dialog(self):
         d = combatDialog(parent=self,font=self.body_font)
