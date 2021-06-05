@@ -239,6 +239,21 @@ class UnitEditorWnd(QWidget):
         
         self.basic_left_layout.addWidget(status_row)
         
+        c_row = QWidget()
+        c_row_layout = QHBoxLayout()
+        c_row.setLayout(c_row_layout)
+        
+        self.classification = QComboBox()
+        self.classification.addItems(["Human", "Monster", "Dragon", "Animal"])
+        edit_c = QPushButton("Edit")
+        edit_c.setFont(self.body_font)
+        self.classification.setFont(self.body_font)
+        c_row_layout.addWidget(self.classification)
+        self.classification.currentTextChanged.connect(self.classificationChange)
+        c_row_layout.addWidget(edit_c)
+        
+        self.basic_left_layout.addWidget(c_row)
+        
         self.working_tab_layout.addWidget(self.basic_left)
         
         stats_header_growth = QWidget()
@@ -1039,6 +1054,14 @@ class UnitEditorWnd(QWidget):
         
         if self.path != None:
             self.unit.selfToJSON(self.path)
+        
+    def classificationChange(self):
+        s = self.sender().currentText()
+        self.unit.classification = s
+        
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
+
             
     def classChange(self, s):
         global classes

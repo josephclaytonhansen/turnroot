@@ -10,7 +10,7 @@ import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
 from src.game_directory import gameDirectory
 from src.skeletons.weapon_types import weaponTypes
-from src.UI_object_editor_dialogs import combatDialog, loadSavedWeapon, pricingDialog
+from src.UI_object_editor_dialogs import combatDialog, loadSavedWeapon, pricingDialog, abilitiesDialog
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
@@ -117,6 +117,7 @@ class ObjectEditorWnd(QWidget):
         self.type.currentTextChanged.connect(self.changeWeaponType)
         
         self.abilities = QPushButton("Abilities")
+        self.abilities.clicked.connect(self.abilities_dialog)
         self.abilities.setMinimumWidth(240)
         
         self.combat = QPushButton("Combat")
@@ -195,6 +196,10 @@ class ObjectEditorWnd(QWidget):
     def pricing_dialog(self):
         p = pricingDialog(parent=self,font=self.body_font)
         p.exec_()
+        
+    def abilities_dialog(self):
+        a = abilitiesDialog(parent=self,font=self.body_font)
+        a.exec_()
     
     def combat_dialog(self):
         d = combatDialog(parent=self,font=self.body_font)

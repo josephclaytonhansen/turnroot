@@ -33,6 +33,7 @@ class Unit():
         
         self.name = ""
         self.title = ""
+        self.classification = "Human"
         self.unique = True
         self.is_friendly = True
         self.is_ally = False
@@ -166,7 +167,7 @@ class Unit():
                        "folder_index", "current_weapon_levels", "generic_stat_randomness", "generic_sprite_options",
                            "generic_gfx_options", "generic_stat_randomness_amount", "growth_rates", "current_goals",
                        "future_goals","past_classes", "armored", "status", "in_battle_dialogues", "status_duration",
-                       "current_bonuses", "current_penalties", "is_flying"]
+                       "current_bonuses", "current_penalties", "is_flying", "classification"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
@@ -194,7 +195,7 @@ class Unit():
                        "folder_index", "current_weapon_levels", "generic_stat_randomness", "generic_sprite_options",
                            "generic_gfx_options", "generic_stat_randomness_amount", "growth_rates","current_goals",
                        "future_goals", "past_classes", "armored", "status", "in_battle_dialogues", "status_duration",
-                       "current_bonuses","current_penalties", "is_flying"]
+                       "current_bonuses","current_penalties", "is_flying", "classification"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)

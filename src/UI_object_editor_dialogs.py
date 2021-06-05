@@ -318,3 +318,74 @@ class pricingDialog(QDialog):
         self.sender().setStyleSheet(
             "QSlider::handle:horizontal {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;width:40px;height:40px;}"
             )
+        
+class abilitiesDialog(QDialog):
+    def __init__(self, parent=None,font=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.body_font = font
+        self.h_font = QFont(self.body_font)
+        self.h_font.setPointSize(20)
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        active_theme = self.active_theme
+        super().__init__(parent)
+        
+        with open("src/skeletons/universal_weapon_abilities.json", "r") as f:
+            self.abilities = json.load(f)
+        
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QGridLayout()
+        self.layout.setContentsMargins(12,12,12,12)
+        self.setLayout(self.layout)
+        
+        h = QLabel("This weapon...")
+        h.setFont(self.h_font)
+        self.layout.addWidget(h,0,0,1,6)
+        
+        r = 0
+        for x in self.abilities:
+            r+=1
+            ability_split = x.split("&")
+            ability_check = QCheckBox()
+            self.layout.addWidget(ability_check, r, 0, 1, 1)
+            ability_check.name = x
+            ability_len = len(ability_split)
+            
+            if ability_len == 1:
+                label = QLabel(x)
+                label.setFont(self.body_font)
+                self.layout.addWidget(label,r,1,1,6)
+                
+            elif ability_len == 3:
+                label1 = QLabel(ability_split[0])
+                midentry = QPushButton()
+                midentry.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
+                
+                if x.startswith("Inflicts"):
+                    entry1 = QComboBox()
+                    entry1.addItems(["Poisoned", "On Fire", "Frozen", "Pummelled", "Shocked"])
+                    midentry.setVisible(False)
+                else:
+                    entry1 = QComboBox()
+                    entry1.addItems(["Number", "Unit Stat"])
+                    midentry.setVisible(True)
+                
+                label2 = QLabel(ability_split[1])
+                entry2 = QSpinBox()
+                label3 = QLabel(ability_split[2])
+                
+                for y in [label1,entry1,label2,entry2,label3,midentry]:
+                    y.setFont(self.body_font)
+                
+                for g in [midentry, entry1, entry2]:
+                    g.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+                    
+                self.layout.addWidget(label1, r,1,1,1)
+                self.layout.addWidget(entry1, r,2,1,1)
+                self.layout.addWidget(midentry,r,3,1,1)
+                self.layout.addWidget(label2, r,4,1,1)
+                self.layout.addWidget(entry2, r,5,1,1)
+                self.layout.addWidget(label3, r,6,1,1)
+                    
+                    
