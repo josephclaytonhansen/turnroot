@@ -1351,6 +1351,8 @@ class UnitEditorWnd(QWidget):
             else:
                 self.generic_label.setEnabled(False)
             
+            self.classification.setCurrentText(self.unit.classification)
+            
             for s in universal_stats:
                 self.stat_spins[s].setValue(getattr(self.unit,s))
             
@@ -1386,8 +1388,6 @@ class UnitEditorWnd(QWidget):
                 
             self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
             self.parent().parent().save_status.setToolTip("Unit file saved")
-        
-                
 
     def AIHelpDialog(self):
         a = AIHelpDialog(parent=self,font=self.body_font)
