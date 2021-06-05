@@ -538,12 +538,12 @@ class switchEditorDialog(QDialog):
         self.show()
 
 class popupInfo(QDialog):
-    def __init__(self,s,parent=None):
+    def __init__(self,s,parent=None,font=None):
         data = updateJSON()
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.setWindowFlags(Qt.Popup)
-        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
         self.info = s
         
@@ -552,6 +552,7 @@ class popupInfo(QDialog):
         layout.setSpacing(0)
         
         self.label =QLabel(self.info)
+        self.label.setFont(font)
         self.label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         layout.addWidget(self.label, 1)
         self.setLayout(layout)

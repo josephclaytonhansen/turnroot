@@ -4,7 +4,7 @@ from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QFont
 from src.UI_updateJSON import updateJSON
 import src.UI_colorTheme
 import shutil, os, pickle, json, sys, random
-from src.UI_Dialogs import confirmAction
+from src.UI_Dialogs import confirmAction, popupInfo
 from src.node_backend import getFiles, GET_FILES
 from src.img_overlay import overlayTile
 from src.skeletons.unit_class import unitClass
@@ -34,15 +34,23 @@ class combatDialog(QDialog):
         
         q = QLabel("Combat Statistics")
         q.setFont(self.h_font)
-        self.layout.addWidget(q, 0, 0, 1,2)
+        self.layout.addWidget(q, 0, 0, 1,1)
+        
+        self.help = QPushButton()
+        self.help.clicked.connect(self.combatInfo)
+        self.help.setIcon(QIcon(QPixmap("src/ui_icons/white/question-mark-4-32.png")))
+        self.help.setIconSize(QSize(36,36))
+        self.help.setMaximumWidth(36)
+        self.layout.addWidget(self.help, 0, 1, 1,1)
         
         r = 0
-        for x in ["might", "hit", "crit", "weight", "full_durability"]:
+        s = ["durability", "avoidance", "attack speed"]
+        for x in ["might", "hit", "crit", "weight", "full_durability", "avo", "asm"]:
             r +=1
-            if x != "full_durability":
+            if r <= 4:
                 stat_label = QLabel(x)
             else:
-                stat_label = QLabel("durability")
+                stat_label = QLabel(s[r-5])
             stat_label.setFont(self.body_font)
             
             stat_value = QSpinBox()
@@ -50,7 +58,10 @@ class combatDialog(QDialog):
             stat_value.name = x
             stat_value.setFont(self.body_font)
             self.values[x] = stat_value
-            stat_value.setRange(0,100)
+            if stat_value.name != "avo" and stat_value.name != "asm":
+                stat_value.setRange(0,100)
+            else:
+                stat_value.setRange(-50,50)
 
             try:
                 stat_value.setValue(getattr(self.parent.weapon, x))
@@ -62,54 +73,61 @@ class combatDialog(QDialog):
             self.layout.addWidget(stat_label, r, 0, 1, 1)
             self.layout.addWidget(stat_value, r,1,1,1)
             
-            range_row = QWidget()
-            range_row_layout = QHBoxLayout()
-            range_row.setLayout(range_row_layout)
-            
-            ranges = getattr(self.parent.weapon, "range")
-            self.new_ranges = [1,1]
-            self.range_spinners = {}
-            
-            lrange = QSpinBox()
-            self.range_spinners[0] = lrange
-            lrange.valueChanged.connect(self.change_range)
-            lrange.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
-            lrange.name = 0
-            lrange.setFont(self.body_font)
-            self.values[x] = lrange
-            lrange.setRange(1,5)
-            try:
-                lrange.setValue(ranges[0])
-            except:
-                pass
-            lrange_label = QLabel("Range (Lower Limit)")
-            lrange_label.setFont(self.body_font)
-            range_row_layout.addWidget(lrange_label)
-            range_row_layout.addWidget(lrange)
-            
-            frange = QSpinBox()
-            self.range_spinners[1] = frange
-            frange.valueChanged.connect(self.change_range)
-            frange.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
-            frange.name = 1
-            frange.setFont(self.body_font)
-            self.values[x] = lrange
-            frange.setRange(1,5)
-            try:
-                frange.setValue(ranges[1])
-            except:
-                pass
-            frange_label = QLabel("Range (Upper Limit)")
-            frange_label.setFont(self.body_font)
-            range_row_layout.addWidget(frange_label)
-            range_row_layout.addWidget(frange)
-            
-            self.layout.addWidget(range_row, r+1,0,1,2)
+        range_row = QWidget()
+        range_row_layout = QHBoxLayout()
+        range_row.setLayout(range_row_layout)
+        
+        ranges = getattr(self.parent.weapon, "range")
+        self.new_ranges = [1,1]
+        self.range_spinners = {}
+        
+        lrange = QSpinBox()
+        self.range_spinners[0] = lrange
+        lrange.valueChanged.connect(self.change_range)
+        lrange.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        lrange.name = 0
+        lrange.setFont(self.body_font)
+        self.values[x] = lrange
+        lrange.setRange(1,5)
+        try:
+            lrange.setValue(ranges[0])
+        except:
+            pass
+        lrange_label = QLabel("Range (Lower Limit)")
+        lrange_label.setFont(self.body_font)
+        range_row_layout.addWidget(lrange_label)
+        range_row_layout.addWidget(lrange)
+        
+        frange = QSpinBox()
+        self.range_spinners[1] = frange
+        frange.valueChanged.connect(self.change_range)
+        frange.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        frange.name = 1
+        frange.setFont(self.body_font)
+        self.values[x] = lrange
+        frange.setRange(1,5)
+        try:
+            frange.setValue(ranges[1])
+        except:
+            pass
+        frange_label = QLabel("Range (Upper Limit)")
+        frange_label.setFont(self.body_font)
+        range_row_layout.addWidget(frange_label)
+        range_row_layout.addWidget(frange)
+        
+        self.layout.addWidget(range_row, r+1,0,1,2)
             
     def change_value(self):
         setattr(self.parent.weapon, self.sender().name, self.sender().value()) 
         if self.parent.weapon.path != None:
             self.parent.weapon.selfToJSON()
+    
+    def combatInfo(self):
+        g = popupInfo("<b><br>How do I create a weapon that recovers health, inflicts a status, or has some other ability?</b><br>"+
+                      "Once you've set the stats here, close this pop-up and click 'Abilities'.<br>"+
+                      "<b>How do I create magic that can warp, heals based on unit Mag stat, or other cases where these stats aren't applicable?</b><br>"+
+                      "'Weapons' of this nature are classified as Actions, and can be set up through the Actions tab in the Unit Editor.<br>"
+                      ,self,self.body_font)
     
     def change_range(self):
         self.new_ranges[self.sender().name] = self.sender().value()
@@ -128,6 +146,8 @@ class loadSavedWeapon(QDialog):
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.body_font = font
+        self.h_font = QFont(self.body_font)
+        self.h_font.setPointSize(20)
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
@@ -135,10 +155,17 @@ class loadSavedWeapon(QDialog):
         self.setLayout(self.layout)
         
         label = QLabel("Choose Weapon")
-        label.setFont(self.body_font)
+        label.setFont(self.h_font)
         self.layout.addWidget(label)
-            
+        
+        self.search = QLineEdit()
+        self.search.setFont(self.body_font)
+        self.search.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.search.setPlaceholderText("Search")
+        self.layout.addWidget(self.search)
+        self.search.textChanged.connect(self.filterList)
         self.class_list = QListWidget()
+        self.class_list.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
         self.class_list.setFont(self.body_font)
         self.layout.addWidget(self.class_list)
         self.class_list.itemClicked.connect(self.change)
@@ -167,10 +194,24 @@ class loadSavedWeapon(QDialog):
         self.class_list.clear()
         self.class_list.addItems(class_names)
         self.class_list.update()
+        self.full_list = []
+        for x in range(self.class_list.count()):
+            self.full_list.append(self.class_list.item(x).text())
     
     def change(self,s):
         self.returns = self.paths[self.sender().currentItem().text()]
         self.close()
+    
+    def filterList(self):
+        self.class_list.clear()
+        self.class_list.addItems(self.full_list)
+        if len(self.sender().text()) > 0:
+            tmp_list = []
+            for x in self.class_list.findItems(self.sender().text(), Qt.MatchContains):
+                tmp_list.append(x.text())
+            self.class_list.clear()
+            self.class_list.addItems(tmp_list)
+        
         
 class pricingDialog(QDialog):
     def __init__(self, parent=None,font=None):

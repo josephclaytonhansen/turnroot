@@ -98,6 +98,8 @@ class ObjectEditorWnd(QWidget):
         self.icon = QPushButton()
         self.icon.setIcon(QIcon(QPixmap("src/ui_icons/white/image.png")))
         self.icon.setIconSize(QSize(64,64))
+        self.icon.setMaximumWidth(64)
+        self.icon.setMaximumHeight(64)
         
         self.name_edit = QLineEdit()
         self.name_edit.returnPressed.connect(self.nameChange)
@@ -115,6 +117,7 @@ class ObjectEditorWnd(QWidget):
         self.type.currentTextChanged.connect(self.changeWeaponType)
         
         self.abilities = QPushButton("Abilities")
+        self.abilities.setMinimumWidth(240)
         
         self.combat = QPushButton("Combat")
         self.combat.clicked.connect(self.combat_dialog)
