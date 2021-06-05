@@ -172,6 +172,7 @@ class UnitEditorWnd(QWidget):
         name_row_layout.addWidget(self.name_edit)
         
         self.title_edit = QComboBox()
+        self.title_edit.setStyleSheet("background-color: "+active_theme.list_background_color+";")
         self.title_edit.currentTextChanged.connect(self.classChange)
         self.title_edit.setToolTip("Choose assigned class from existing classes (edit or create new in the Classes tab)")
         self.title_edit.setFont(header_font)
@@ -186,6 +187,7 @@ class UnitEditorWnd(QWidget):
         identity_row.setLayout(identity_row_layout)
         
         self.gender_edit = QComboBox()
+        self.gender_edit.setStyleSheet("background-color: "+active_theme.list_background_color+";")
         self.gender_edit.setToolTip("Set unit gender. This will also change pronouns for dialogue")
         self.gender_edit.currentTextChanged.connect(self.genderChange)
         self.gender_edit.addItems(["Male", "Female", "Non-Binary"])
@@ -208,6 +210,7 @@ class UnitEditorWnd(QWidget):
         self.protag = QCheckBox()
         
         self.generic_label = QPushButton("Generic")
+        self.generic_label.setStyleSheet("background-color: "+active_theme.list_background_color+";")
         self.generic_label.setToolTip("If checked, there can be instances of this unit- i.e., a basic soldier.\n If unchecked, unit is unique and cannot be instanced\nClick to edit instance randomness")
         self.generic_label.clicked.connect(self.instance_stat_edit)
         self.generic_label.setEnabled(False)
@@ -221,6 +224,7 @@ class UnitEditorWnd(QWidget):
         self.generic.setFont(checkbox_font)
         
         self.status = QComboBox()
+        self.status.setStyleSheet("background-color: "+active_theme.list_background_color+";")
         self.status.setToolTip("Change status. You can only have one protagonist.\nEnemies and Allies can be generic, Recruitable Enemies/Allies or Team members cannot")
         self.status.currentTextChanged.connect(self.statusChange)
         self.status.addItems(["Enemy", "Team", "Ally", "Protagonist", "Recruitable Enemy", "Recruitable Ally"])
@@ -244,8 +248,12 @@ class UnitEditorWnd(QWidget):
         c_row.setLayout(c_row_layout)
         
         self.classification = QComboBox()
+        self.classification.setStyleSheet("background-color: "+active_theme.list_background_color+";")
+        self.classification.setToolTip("Set unit classification. Mainly affects weapon abilities")
         self.classification.addItems(["Human", "Monster", "Dragon", "Animal"])
         edit_c = QPushButton("Edit")
+        edit_c.setToolTip("Change universal classifications. For example, if you're making a sci-fi game, you could remove 'dragon' and replace with 'cyborg'")
+        edit_c.setStyleSheet("background-color: "+active_theme.list_background_color+";")
         edit_c.setFont(self.body_font)
         self.classification.setFont(self.body_font)
         c_row_layout.addWidget(self.classification)

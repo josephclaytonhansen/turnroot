@@ -361,15 +361,17 @@ class abilitiesDialog(QDialog):
                 label1 = QLabel(ability_split[0])
                 midentry = QPushButton()
                 midentry.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
+                midentry.clicked.connect(self.edit_mid)
                 
                 if x.startswith("Inflicts"):
                     entry1 = QComboBox()
-                    entry1.addItems(["Poisoned", "On Fire", "Frozen", "Pummelled", "Shocked"])
-                    midentry.setVisible(False)
+                    entry1.addItems(["Poisoned", "On Fire", "Frozen", "Shocked"])
+                    midentry.setIcon(QIcon(QPixmap("src/ui_icons/white/question-mark-4-32.png")))
+                    midentry.clicked.disconnect()
+                    midentry.clicked.connect(self.define_status)
                 else:
                     entry1 = QComboBox()
                     entry1.addItems(["Number", "Unit Stat"])
-                    midentry.setVisible(True)
                 
                 label2 = QLabel(ability_split[1])
                 entry2 = QSpinBox()
@@ -387,5 +389,18 @@ class abilitiesDialog(QDialog):
                 self.layout.addWidget(label2, r,4,1,1)
                 self.layout.addWidget(entry2, r,5,1,1)
                 self.layout.addWidget(label3, r,6,1,1)
+            
+    def edit_mid(self):
+        print("edit")
+        
+    def define_status(self):
+        g = popupInfo("\nA poisoned unit takes damage every turn until they take an antidote or it wears off\n"+
+"\nAn on fire unit takes damage every turn unless in water\n"+
+"\nA frozen enemy has movement / 2 for the next turn(s)\n"+
+"\nA shocked unit has a 25% chance to ignore AI and move somewhere random for the next turn(s)\n"
+                      ,self,self.body_font)
+        g.exec_()
+        
+        
                     
                     
