@@ -128,6 +128,8 @@ class equippableItem(Object):
         self.can_forge = True
         self.can_repair = True
         self.repair_cost_per = 0
+        self.repair_items_amounts = 0
+        self.sell_cost_per = 0
         self.forge_into = {}
         self.forge_items = []
         self.forge_items_amounts = {}
@@ -145,7 +147,7 @@ class equippableItem(Object):
                       "conditional_special_abilities", "csa_conditions", "can_forge", "can_repair", "repair_cost_per",
                       "minimum_experience_level", "forge_into", "forge_items", "forge_items_amounts","rarity",
                       "unique_to_unit","type","scopes","inventories","full_durability","current_durability",
-                      "broken", "price_modifiers", "shop_pages"]
+                      "broken", "price_modifiers", "shop_pages", "sell_cost_per", "repair_items_amounts"]
     
     def removeDurability(self, a):
         self.current_durability -= a
@@ -170,6 +172,7 @@ class Weapon(equippableItem):
         self.crit = 0
         self.avo = 0
         self.asm = 0
+        self.damage_type = "Physical"
         self.range = [1,1]
         self.weight = 1
         self.minimum_experience_level  = "E"
@@ -180,7 +183,8 @@ class Weapon(equippableItem):
               "conditional_special_abilities", "csa_conditions", "can_forge", "can_repair", "repair_cost_per",
               "minimum_experience_level", "forge_into", "forge_items", "forge_items_amounts","rarity",
               "unique_to_unit","type","scopes","inventories","full_durability","current_durability",
-              "broken", "price_modifiers", "shop_pages", "weight", "buyable_quantity", "avo", "asm"]
+              "broken", "price_modifiers", "shop_pages", "weight", "buyable_quantity", "avo", "asm",
+                      "sell_cost_per", "repair_items_amounts", "damage_type"]
         
 class Shield(equippableItem):
     def __init__(self):
@@ -194,5 +198,5 @@ class Shield(equippableItem):
                       "conditional_special_abilities", "csa_conditions", "can_forge", "can_repair", "repair_cost_per",
                       "minimum_experience_level", "forge_into", "forge_items", "forge_items_amounts","rarity",
                       "unique_to_unit","type","scopes","inventories","full_durability","current_durability",
-                      "broken", "price_modifiers", "shop_pages", "weight", "defense", "resistance"]
+                      "broken", "price_modifiers", "shop_pages", "weight", "defense", "resistance", "sell_cost_per"]
     

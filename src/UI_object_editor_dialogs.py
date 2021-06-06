@@ -116,13 +116,29 @@ class combatDialog(QDialog):
         range_row_layout.addWidget(frange_label)
         range_row_layout.addWidget(frange)
         
-        self.layout.addWidget(range_row, r+1,0,1,2)
+        damage_type = QComboBox()
+        damage_type.currentTextChanged.connect(self.change_damage_type)
+        damage_type_label = QLabel("Damage Type")
+        damage_type.addItems(["Physical", "Magical"])
+        damage_type.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        damage_type.setFont(self.body_font)
+        damage_type_label.setFont(self.body_font)
+        
+        self.layout.addWidget(damage_type_label, r+1,0,1,1)
+        self.layout.addWidget(damage_type,r+1,1,1,1)
+        
+        self.layout.addWidget(range_row, r+2,0,1,2)
             
     def change_value(self):
         setattr(self.parent.weapon, self.sender().name, self.sender().value()) 
         if self.parent.weapon.path != None:
             self.parent.weapon.selfToJSON()
     
+    def change_damage_type(self):
+        self.parent.weapon.damage_type = self.sender().currentText()
+        if self.parent.weapon.path != None:
+            self.parent.weapon.selfToJSON()
+            
     def combatInfo(self):
         g = popupInfo("<b><br>How do I create a weapon that recovers health, inflicts a status, or has some other ability?</b><br>"+
                       "Once you've set the stats here, close this pop-up and click 'Abilities'.<br>"+
@@ -217,8 +233,7 @@ class loadSavedWeapon(QDialog):
                 self.class_list.addItems(tmp_list)
         except:
             pass
-        
-        
+    
 class pricingDialog(QDialog):
     def __init__(self, parent=None,font=None):
         data = updateJSON()
@@ -241,7 +256,7 @@ class pricingDialog(QDialog):
         buyable = QSpinBox()
         cost_per_durability = QSpinBox()
         self.spinners = [price_sold,price_buy,buyable,cost_per_durability]
-        self.att = ["price_if_sold","price","repair_cost_per","buyable_quantity"]
+        self.att = ["price_if_sold","price","sell_cost_per","buyable_quantity"]
         labels = ["Price if Sold (Unused)", "Price to Buy", "Sell Price Deducted Per Use", "Maximum Buyable at a Time*"]
         r = 0
         for x in self.spinners:
@@ -295,7 +310,7 @@ class pricingDialog(QDialog):
     
     def colorizeSlider(self, v):
         try:
-            self.cost_at_use = self.parent.weapon.price_if_sold - ((self.parent.weapon.full_durability - v) * self.parent.weapon.repair_cost_per)
+            self.cost_at_use = self.parent.weapon.price_if_sold - ((self.parent.weapon.full_durability - v) * self.parent.weapon.sell_cost_per)
             self.used_uses.setText("Remaining Uses: "+str(v))
             self.cost.setText(" Price: "+str(self.cost_at_use))
         except:
