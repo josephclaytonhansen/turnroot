@@ -37,8 +37,9 @@ class chooseUnitStatDialog(QDialog):
         self.list.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
         self.list.addItems(universal_stats)
         self.layout.addWidget(self.list)
-        
+                
         self.close_button = QPushButton("Close")
+        self.close_button.setFont(self.body_font)
         self.layout.addWidget(self.close_button)
         self.close_button.clicked.connect(self.close)
     

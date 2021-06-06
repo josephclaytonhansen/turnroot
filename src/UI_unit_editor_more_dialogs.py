@@ -370,6 +370,7 @@ class editUniversalWeaponTypes(QDialog):
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.font = font
+        self.body_font = self.font
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QVBoxLayout()
@@ -435,6 +436,11 @@ class editUniversalWeaponTypes(QDialog):
         self.layout.addWidget(row2)
         self.layout.addWidget(row3)
         
+        self.close_button = QPushButton("Close")
+        self.close_button.setFont(self.body_font)
+        self.layout.addWidget(self.close_button)
+        self.close_button.clicked.connect(self.close)
+        
         self.setLayout(self.layout)
     
     def addType(self):
@@ -464,4 +470,74 @@ class editUniversalWeaponTypes(QDialog):
     def desc_change(self):
         pass
         
+class editClassifications(QDialog):
+    def __init__(self, parent=None, font =None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        self.body_font = font
         
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(12,12,12,12)
+        self.setMinimumWidth(620)
+        
+        row = QWidget()
+        row_layout = QHBoxLayout()
+        row.setLayout(row_layout)
+        
+        with open("src/skeletons/universal_classifications.json", "r") as stats_file:
+            universal_stats =  json.load(stats_file)
+        
+        self.list = QListWidget()
+        self.list.setFont(self.body_font)
+        self.list.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.list.addItems(universal_stats)
+    
+        row_layout.addWidget(self.list)
+        
+        row2 = QWidget()
+        row2_layout = QHBoxLayout()
+        row2.setLayout(row2_layout)
+        
+        self.add_stat_name = QLineEdit()
+        self.add_stat_name.setFont(self.body_font)
+        self.add_stat_name.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.add_stat_name.setPlaceholderText("New classification name")
+        
+        self.add_stat = QPushButton("+Add Classification")
+        self.add_stat.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.add_stat.setFont(self.body_font)
+        self.add_stat.clicked.connect(self.addStat)
+        
+        self.remove_stat = QPushButton("-Remove Selected Classification")
+        self.remove_stat.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.remove_stat.setFont(self.body_font)
+        self.remove_stat.clicked.connect(self.removeStat)
+        
+        row2_layout.addWidget(self.add_stat_name)
+        row2_layout.addWidget(self.add_stat)
+        row2_layout.addWidget(self.remove_stat)
+        
+        self.layout.addWidget(row)
+        self.layout.addWidget(row2)
+        
+        self.setLayout(self.layout)
+    
+    def addStat(self):
+        c = confirmAction("#This will add this classification to the game, do you want to continue?", parent=self)
+        c.exec_()
+        if(c.return_confirm):
+            self.parent.unit.createUniversalClassification(self.add_stat_name.text())
+            self.restart = True
+            self.close()
+    
+    def removeStat(self):
+        c = confirmAction("#This will remove this classification from the game, do you want to continue?",parent=self)
+        c.exec_()
+        if(c.return_confirm):
+            self.parent.unit.removeUniversalClassification(self.list.currentItem().text())
+            self.restart = True
+            self.close()

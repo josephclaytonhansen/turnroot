@@ -13,7 +13,7 @@ from src.UI_updateJSON import updateJSON
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
-from src.skeletons.unit import Unit
+from src.skeletons.unit import Unit, universal_classifications
 from src.skeletons.identities import orientations, genders, pronouns
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
@@ -23,7 +23,7 @@ from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHel
                                         instanceStatDialog, tileChangesDialog, unitGrowthRateDialog,
                                         classCriteriaDialog)
 from src.UI_unit_editor_more_dialogs import (weakAgainstDialog, expTypesDialog, nextClassesDialog,
-                                             classGraphicDialog,editUniversalWeaponTypes)
+                                             classGraphicDialog,editUniversalWeaponTypes, editClassifications)
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -250,8 +250,9 @@ class UnitEditorWnd(QWidget):
         self.classification = QComboBox()
         self.classification.setStyleSheet("background-color: "+active_theme.list_background_color+";")
         self.classification.setToolTip("Set unit classification. Mainly affects weapon abilities")
-        self.classification.addItems(["Human", "Monster", "Dragon", "Animal"])
+        self.classification.addItems(universal_classifications)
         edit_c = QPushButton("Edit")
+        edit_c.clicked.connect(self.editClassifications)
         edit_c.setToolTip("Change universal classifications. For example, if you're making a sci-fi game, you could remove 'dragon' and replace with 'cyborg'")
         edit_c.setStyleSheet("background-color: "+active_theme.list_background_color+";")
         edit_c.setFont(self.body_font)
@@ -1525,6 +1526,12 @@ class UnitEditorWnd(QWidget):
     
     def universalStats(self):
         e = editUniversalStats(parent=self)
+        e.exec_()
+        if e.restart:
+            self.parent().parent().restart()
+    
+    def editClassifications(self):
+        e = editClassifications(parent=self,font=self.body_font)
         e.exec_()
         if e.restart:
             self.parent().parent().restart()

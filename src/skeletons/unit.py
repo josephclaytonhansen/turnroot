@@ -23,6 +23,8 @@ import json, pickle
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
+with open("src/skeletons/universal_classifications.json", "r") as stats_file:
+    universal_classifications =  json.load(stats_file)
 
 universal_weapon_types = weaponTypes().data
 
@@ -139,6 +141,19 @@ class Unit():
         universal_stats.remove(stat)
         with open("src/skeletons/universal_stats.json", "w") as stats_file:
             json.dump(universal_stats, stats_file)
+    
+    def createUniversalClassification(self, stat):
+        stat = stat.lower()
+        stat = stat[0].upper() + stat[1:]
+        universal_classifications.append(stat)
+        with open("src/skeletons/universal_classifications.json", "w") as stats_file:
+            json.dump(universal_classifications, stats_file)
+        setattr(self, stat, 0)
+    
+    def removeUniversalClassification(self, stat):
+        universal_classifications.remove(stat)
+        with open("src/skeletons/universal_classifications.json", "w") as stats_file:
+            json.dump(universal_classifications, stats_file)
             
     def createUniversalWeaponsType(self, stat):
         stat = stat.lower()
