@@ -12,6 +12,7 @@ from src.skeletons.unit import Unit
 from src.skeletons.weapon_types import weaponTypes, expTypes
 from src.skeletons.Object import (Object,usableItem,Key,healItem,statIncreaseItem,expIncreaseItem,
                                   classChangeItem,summoningItem,levelEffectItem,equippableItem,Weapon,Shield)
+from src.UI_object_editor_more_dialogs import chooseUnitStatDialog
 
 class combatDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -344,10 +345,15 @@ class abilitiesDialog(QDialog):
         self.layout.addWidget(h,0,0,1,6)
         
         r = 0
+        self.entries1 = {}
+        self.entries2 = {}
+        
         for x in self.abilities:
             r+=1
             ability_split = x.split("&")
             ability_check = QCheckBox()
+            ability_check.row = r
+            ability_check.stateChanged.connect(self.toggle_ability)
             self.layout.addWidget(ability_check, r, 0, 1, 1)
             ability_check.name = x
             ability_len = len(ability_split)
@@ -360,21 +366,27 @@ class abilitiesDialog(QDialog):
             elif ability_len == 3:
                 label1 = QLabel(ability_split[0])
                 midentry = QPushButton()
+                midentry.row = r
                 midentry.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
+                midentry.name = x
                 midentry.clicked.connect(self.edit_mid)
                 
                 if x.startswith("Inflicts"):
                     entry1 = QComboBox()
+                    self.entries1[r] = entry1
                     entry1.addItems(["Poisoned", "On Fire", "Frozen", "Shocked"])
                     midentry.setIcon(QIcon(QPixmap("src/ui_icons/white/question-mark-4-32.png")))
+                    midentry.name = x
                     midentry.clicked.disconnect()
                     midentry.clicked.connect(self.define_status)
                 else:
                     entry1 = QComboBox()
+                    self.entries1[r] = entry1
                     entry1.addItems(["Number", "Unit Stat"])
                 
                 label2 = QLabel(ability_split[1])
                 entry2 = QSpinBox()
+                self.entries2[r] = entry2
                 label3 = QLabel(ability_split[2])
                 
                 for y in [label1,entry1,label2,entry2,label3,midentry]:
@@ -389,9 +401,43 @@ class abilitiesDialog(QDialog):
                 self.layout.addWidget(label2, r,4,1,1)
                 self.layout.addWidget(entry2, r,5,1,1)
                 self.layout.addWidget(label3, r,6,1,1)
+                
+        self.current_abilities = QTextEdit()
+        self.current_abilities.setMaximumHeight(140)
+        self.tfont = QFont('Monaco', 14, QFont.Light)
+        self.tfont.setKerning(False)
+        self.tfont.setFixedPitch(True)
+        self.current_abilities.setFont(self.tfont)
+        self.current_abilities.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        try:
+            self.current_abilities.setPlainText(str(self.parent.weapon.special_abilities))
+        except:
+            pass
+        self.layout.addWidget(self.current_abilities, r+1,0,1,6)
+        
+        self.clear_all  = QPushButton("Reset")
+        self.clear_all.setMinimumHeight(40)
+        self.clear_all.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.clear_all.setFont(self.body_font)
+        self.clear_all.clicked.connect(self.reset)
+        self.layout.addWidget(self.clear_all,r+1,6,1,1)
+        
+        self.ins = QLabel("This shows the current abilities on the weapon. If no weapon is loaded, this will be  blank. Click 'Reset' to clear abilities")
+        self.ins.setFont(self.body_font)
+        self.layout.addWidget(self.ins,r+2,0,1,7)
             
     def edit_mid(self):
-        print("edit")
+        if self.entries1[self.sender().row].currentText() == "Unit Stat":
+            g = chooseUnitStatDialog(parent=self,font=self.body_font)
+            g.exec_()
+            self.entries1[self.sender().row].clear()
+            self.entries1[self.sender().row].addItem("Number")
+            self.entries1[self.sender().row].addItem("Unit Stat")
+            self.entries1[self.sender().row].addItem(g.data)
+            self.entries1[self.sender().row].setCurrentText(g.data)
+        string = self.sender().name.split("&")
+        string = string[0] + self.entries1[self.sender().row].currentText() + string[1] + str(self.entries2[self.sender().row].value()) + string[2]
+        print(string)
         
     def define_status(self):
         g = popupInfo("\nA poisoned unit takes damage every turn until they take an antidote or it wears off\n"+
@@ -400,7 +446,52 @@ class abilitiesDialog(QDialog):
 "\nA shocked unit has a 25% chance to ignore AI and move somewhere random for the next turn(s)\n"
                       ,self,self.body_font)
         g.exec_()
-        
-        
+    
+    def toggle_ability(self):
+        if self.sender().row <= 2:
+            if self.entries1[self.sender().row].currentText() == "Unit Stat":
+                g = chooseUnitStatDialog(parent=self,font=self.body_font)
+                g.exec_()
+                self.entries1[self.sender().row].clear()
+                self.entries1[self.sender().row].addItem("Number")
+                self.entries1[self.sender().row].addItem("Unit Stat")
+                self.entries1[self.sender().row].addItem(g.data)
+                self.entries1[self.sender().row].setCurrentText(g.data)
+            string = self.sender().name.split("&")
+            string = string[0] + self.entries1[self.sender().row].currentText() + string[1] + str(self.entries2[self.sender().row].value()) + string[2]
+            self.toggle_save(string, self.sender(), self)
+            
+        if self.sender().row == 3:
+            string = self.sender().name.split("&")
+            string = string[0] + self.entries1[self.sender().row].currentText() + string[1] + str(self.entries2[self.sender().row].value()) + string[2]
+            self.toggle_save(string, self.sender(), self)
+            
+        if self.sender().row > 3:
+            string = self.sender().name
+            self.toggle_save(string, self.sender(), self)
+            
+    def toggle_save(self,string, sender, parent):
+        self.parent = parent.parent
+        self.p = parent
+        if sender.isChecked():
+            if string not in self.parent.weapon.special_abilities:
+                self.parent.weapon.special_abilities.append(string)
+                if self.parent.weapon.path != None:
+                    self.parent.weapon.selfToJSON()
+                    self.p.current_abilities.setPlainText(str(self.parent.weapon.special_abilities))
+        else:
+            if string in self.parent.weapon.special_abilities:
+                self.parent.weapon.special_abilities.remove(string)
+                if self.parent.weapon.path != None:
+                    self.parent.weapon.selfToJSON()
+                    self.p.current_abilities.setPlainText(str(self.parent.weapon.special_abilities))
+    
+    def reset(self):
+        self.parent.weapon.special_abilities = []
+        self.current_abilities.setPlainText(str(self.parent.weapon.special_abilities))
+        if self.parent.weapon.path != None:
+            self.parent.weapon.selfToJSON()
+            
                     
-                    
+               
+            
