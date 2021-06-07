@@ -124,10 +124,22 @@ class combatDialog(QDialog):
         damage_type.setFont(self.body_font)
         damage_type_label.setFont(self.body_font)
         
+        min_level = QComboBox()
+        min_level.currentTextChanged.connect(self.change_min_level)
+        min_level_label = QLabel("Minimum Usable Level")
+        min_level.addItems(["--Select--", "E", "D", "C", "B","A", "S"])
+        min_level.setCurrentText(self.parent.weapon.minimum_experience_level)
+
+        min_level.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        min_level.setFont(self.body_font)
+        min_level_label.setFont(self.body_font)
+        
         self.layout.addWidget(damage_type_label, r+1,0,1,1)
         self.layout.addWidget(damage_type,r+1,1,1,1)
+        self.layout.addWidget(min_level_label, r+2,0,1,1)
+        self.layout.addWidget(min_level,r+2,1,1,1)
         
-        self.layout.addWidget(range_row, r+2,0,1,2)
+        self.layout.addWidget(range_row, r+3,0,1,2)
             
     def change_value(self):
         setattr(self.parent.weapon, self.sender().name, self.sender().value()) 
@@ -138,6 +150,12 @@ class combatDialog(QDialog):
         self.parent.weapon.damage_type = self.sender().currentText()
         if self.parent.weapon.path != None:
             self.parent.weapon.selfToJSON()
+    
+    def change_min_level(self):
+        if self.sender().currentText() != "--Select--":
+            self.parent.weapon.minimum_experience_level = self.sender().currentText()
+            if self.parent.weapon.path != None:
+                self.parent.weapon.selfToJSON()
             
     def combatInfo(self):
         g = popupInfo("<b><br>How do I create a weapon that recovers health, inflicts a status, or has some other ability?</b><br>"+

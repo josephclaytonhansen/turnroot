@@ -57,6 +57,7 @@ class forgingDialog(QDialog):
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         active_theme = self.active_theme
         super().__init__(parent)
+        self.setMinimumWidth(400)
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QGridLayout()
@@ -67,7 +68,7 @@ class forgingDialog(QDialog):
         repair_items_amounts = QSpinBox()
         self.spinners = [repair_cost_per,repair_items_amounts]
         self.att = ["repair_cost_per","repair_items_amounts"]
-        labels = ["Repair Price Per Use","Repair Item Quantity Per 5 Uses*"]
+        labels = ["Repair Price Per Use","Repair Item Quantity Per 10 Uses*"]
         r = 0
         for x in self.spinners:
             r+=1
@@ -80,7 +81,7 @@ class forgingDialog(QDialog):
                 pass
             x.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
             x.valueChanged.connect(self.change_value)
-            self.layout.addWidget(x, r, 1, 1, 1)
+            self.layout.addWidget(x, r, 1, 1, 2)
             label = QLabel(labels[r-1])
             label.setFont(self.body_font)
             self.layout.addWidget(label,r,0,1,1)
@@ -92,28 +93,71 @@ class forgingDialog(QDialog):
         self.rate_slider.setRange(0,self.parent.weapon.full_durability)
         self.rate_slider.setSingleStep(1)
         
-        self.layout.addWidget(self.rate_slider,r+5,0,1,3)
+        self.layout.addWidget(self.rate_slider,r+6,0,1,3)
         
         h = QLabel("Used, this weapon would cost X to repair...")
         h.setFont(self.h_font)
-        self.layout.addWidget(h,r+3,0,1,2)
+        self.layout.addWidget(h,r+4,0,1,2)
         t = QLabel("Change used amount")
         t.setToolTip("Durability must be greater than 0. Set with the Combat button")
         t.setFont(self.body_font)
-        self.layout.addWidget(t,r+4,0,1,2)
+        self.layout.addWidget(t,r+5,0,1,2)
         
         self.used_uses = QLabel("Remaining Uses: ")
         self.used_uses.setFont(self.body_font)
         self.cost = QLabel(" Cost: ")
         self.cost.setFont(self.body_font)
-        self.layout.addWidget(self.used_uses, r+6, 0, 1,1)
-        self.layout.addWidget(self.cost,r+6,1,1,1)
+        self.layout.addWidget(self.used_uses, r+7, 0, 1,1)
+        self.layout.addWidget(self.cost,r+7,1,1,1)
         self.item_cost = QLabel(" Item Cost: ")
         self.item_cost.setFont(self.body_font)
-        self.layout.addWidget(self.item_cost,r+6,2,1,1)
+        self.layout.addWidget(self.item_cost,r+7,2,1,1)
         
         i = QLabel("*Set to 0 if this weapon doesn't require items to repair")
-        self.layout.addWidget(i,r+2,0,1,1)
+        self.layout.addWidget(i,r+3,0,1,1)
+        
+        forging_item_label = QLabel("Item Used for Repairs")
+        forging_item_label.setFont(self.body_font)
+        self.layout.addWidget(forging_item_label, r+2,0,1,1)
+        
+        self.class_list = QComboBox()
+        self.class_list.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.class_list.setFont(self.body_font)
+        self.layout.addWidget(self.class_list, r+2,1,1,2)
+        self.class_list.currentTextChanged.connect(self.change)
+        self.getWeaponsInFolder()
+        self.show()
+        
+    def getWeaponsInFolder(self):
+        file_list = getFiles("src/skeletons/items/forging_items")[GET_FILES]
+        class_names = []
+        global classes
+        classes = {}
+        self.paths = {}
+        for f in file_list:
+            f.fullPath = f.fullPath.replace("\\", "/")
+            if f.ext.strip() == ".trfof":
+                tmp_class = usableItem()
+                tmp_class.selfFromJSON(f.fullPath)
+                name = getattr(tmp_class, "name")
+                self.paths[name] = f.fullPath
+                if name not in class_names:
+                    class_names.append(name)
+                    classes[name] = tmp_class
+            self.classesToDropDown(class_names)
+                
+    def classesToDropDown(self, class_names):
+        self.class_list.clear()
+        self.class_list.addItems(class_names)
+        self.class_list.update()
+        self.full_list = []
+        for x in range(self.class_list.count()):
+            self.full_list.append(self.class_list.itemText(x))
+    
+    def change(self,s):
+        self.parent.weapon.forge_items = self.sender().currentText()
+        if self.parent.weapon.path != None:
+            self.parent.weapon.selfToJSON()
         
     def change_value(self):
         self.cost.setText(" Cost: ")
@@ -127,7 +171,7 @@ class forgingDialog(QDialog):
             self.cost_at_use = ((v) * self.parent.weapon.repair_cost_per)
             self.used_uses.setText("Remaining Uses: "+str(self.parent.weapon.full_durability-v))
             self.cost.setText(" Price: "+str(self.cost_at_use))
-            self.item_cost.setText(" Item Cost: "+str(round(v/5) * self.parent.weapon.repair_items_amounts))
+            self.item_cost.setText(" Item Cost: "+str(round(v/10) * self.parent.weapon.repair_items_amounts))
         except:
             pass
             
