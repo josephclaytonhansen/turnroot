@@ -60,9 +60,38 @@ class forgingDialog(QDialog):
         self.setMinimumWidth(400)
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
-        self.layout = QGridLayout()
+        self.layout = QVBoxLayout()
         self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
+        
+        self.tabs = QTabWidget()
+        self.tabs_font = self.tabs.font()
+        self.tabs_font.setPointSize(12)
+        self.tabs.setFont(self.tabs_font)
+        
+        self.tabs.setTabPosition(QTabWidget.South)
+        
+        self.layout.addWidget(self.tabs)
+        
+        self.tab_names = ["Repair", "Forging"]
+        self.tabs_dict = {}
+        
+        for tab in self.tab_names:
+            self.tab_title = tab
+            self.c_tab = QWidget()
+            self.c_tab_layout = QGridLayout()
+            self.c_tab.setLayout(self.c_tab_layout)
+            self.tabs_dict[tab] = self.c_tab
+            self.tabs.addTab(self.c_tab, self.tab_title)
+        
+        self.initRepair()
+        self.initForging()
+        
+    def initRepair(self):
+        self.working_tab = self.tabs_dict["Repair"]
+        self.working_tab_layout = self.working_tab.layout()
+        active_theme = self.active_theme
+        data = updateJSON()
         
         repair_cost_per = QSpinBox()
         repair_items_amounts = QSpinBox()
@@ -81,10 +110,10 @@ class forgingDialog(QDialog):
                 pass
             x.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
             x.valueChanged.connect(self.change_value)
-            self.layout.addWidget(x, r, 1, 1, 2)
+            self.working_tab_layout.addWidget(x, r, 1, 1, 2)
             label = QLabel(labels[r-1])
             label.setFont(self.body_font)
-            self.layout.addWidget(label,r,0,1,1)
+            self.working_tab_layout.addWidget(label,r,0,1,1)
         
         self.rate_slider = QSlider(Qt.Horizontal)
         self.rate_slider.name = 1
@@ -93,40 +122,86 @@ class forgingDialog(QDialog):
         self.rate_slider.setRange(0,self.parent.weapon.full_durability)
         self.rate_slider.setSingleStep(1)
         
-        self.layout.addWidget(self.rate_slider,r+6,0,1,3)
+        self.working_tab_layout.addWidget(self.rate_slider,r+6,0,1,3)
         
         h = QLabel("Used, this weapon would cost X to repair...")
         h.setFont(self.h_font)
-        self.layout.addWidget(h,r+4,0,1,2)
+        self.working_tab_layout.addWidget(h,r+4,0,1,2)
         t = QLabel("Change used amount")
         t.setToolTip("Durability must be greater than 0. Set with the Combat button")
         t.setFont(self.body_font)
-        self.layout.addWidget(t,r+5,0,1,2)
+        self.working_tab_layout.addWidget(t,r+5,0,1,2)
         
         self.used_uses = QLabel("Remaining Uses: ")
         self.used_uses.setFont(self.body_font)
         self.cost = QLabel(" Cost: ")
         self.cost.setFont(self.body_font)
-        self.layout.addWidget(self.used_uses, r+7, 0, 1,1)
-        self.layout.addWidget(self.cost,r+7,1,1,1)
+        self.working_tab_layout.addWidget(self.used_uses, r+7, 0, 1,1)
+        self.working_tab_layout.addWidget(self.cost,r+7,1,1,1)
         self.item_cost = QLabel(" Item Cost: ")
         self.item_cost.setFont(self.body_font)
-        self.layout.addWidget(self.item_cost,r+7,2,1,1)
+        self.working_tab_layout.addWidget(self.item_cost,r+7,2,1,1)
         
         i = QLabel("*Set to 0 if this weapon doesn't require items to repair")
-        self.layout.addWidget(i,r+3,0,1,1)
+        self.working_tab_layout.addWidget(i,r+3,0,1,1)
         
         forging_item_label = QLabel("Item Used for Repairs")
         forging_item_label.setFont(self.body_font)
-        self.layout.addWidget(forging_item_label, r+2,0,1,1)
+        self.working_tab_layout.addWidget(forging_item_label, r+2,0,1,1)
         
         self.class_list = QComboBox()
         self.class_list.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
         self.class_list.setFont(self.body_font)
-        self.layout.addWidget(self.class_list, r+2,1,1,2)
+        self.working_tab_layout.addWidget(self.class_list, r+2,1,1,2)
         self.class_list.currentTextChanged.connect(self.change)
         self.getWeaponsInFolder()
         self.show()
+    
+    def initForging(self):
+        self.working_tab = self.tabs_dict["Forging"]
+        self.working_tab_layout = self.working_tab.layout()
+        active_theme = self.active_theme
+        data = updateJSON()
+        
+        self.list = QListWidget()
+        self.list.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        
+        if len(self.parent.weapon.forge_into) > 0:
+            pass
+            #populate list with forge intos
+        
+        else:
+            self.list.addItem("No forge results set") 
+        
+        self.tscroll = QScrollArea()
+        self.tscroll.setWidget(self.list)
+        self.tscroll.setWidgetResizable(True)
+        
+        self.working_tab_layout.addWidget(self.tscroll,0,0,4,4)
+        
+        self.add = QPushButton()
+        self.add.setMaximumWidth(40)
+        self.add.setIcon(QIcon(QPixmap("src/ui_icons/white/add.png")))
+        self.add.setIconSize(QSize(38,38))
+        self.add.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        self.remove = QPushButton()
+        self.remove.setMaximumWidth(40)
+        self.remove.setIcon(QIcon(QPixmap("src/ui_icons/white/dl.png")))
+        self.remove.setIconSize(QSize(34,34))
+        self.remove.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        self.edit = QPushButton()
+        self.edit.setMaximumWidth(40)
+        self.edit.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
+        self.edit.setIconSize(QSize(34,34))
+        self.edit.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        
+        for w in [self.list, self.add, self.remove,self.edit]:
+            w.setFont(self.body_font)
+            w.setMinimumHeight(40)
+        
+        self.working_tab_layout.addWidget(self.add,4,1,1,1)
+        self.working_tab_layout.addWidget(self.remove,4,2,1,1)
+        self.working_tab_layout.addWidget(self.edit,4,3,1,1)
         
     def getWeaponsInFolder(self):
         file_list = getFiles("src/skeletons/items/forging_items")[GET_FILES]
