@@ -566,7 +566,7 @@ class numberEntryDialog(QDialog):
         self.setWindowFlags(Qt.Popup)
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
-        self.data = 0
+        self.data = "0"
         
         layout = QVBoxLayout()
         layout.setContentsMargins( 8,8,8,8)

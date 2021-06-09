@@ -498,7 +498,8 @@ class abilitiesDialog(QDialog):
             g = chooseUnitStatDialog(parent=self,font=self.body_font)
             g.exec_()
             self.entries1[self.sender().row].clear()
-            self.entries1[self.sender().row].addItem("Number")
+            if self.sender().row != 12:
+                self.entries1[self.sender().row].addItem("Number")
             self.entries1[self.sender().row].addItem("Unit Stat")
             self.entries1[self.sender().row].addItem(g.data)
             self.entries1[self.sender().row].setCurrentText(g.data)
@@ -506,7 +507,8 @@ class abilitiesDialog(QDialog):
             g = numberEntryDialog(parent=self,font=self.body_font)
             g.exec_()
             self.entries1[self.sender().row].clear()
-            self.entries1[self.sender().row].addItem("Number")
+            if self.sender().row != 12:
+                self.entries1[self.sender().row].addItem("Number")
             self.entries1[self.sender().row].addItem("Unit Stat")
             self.entries1[self.sender().row].addItem(g.data)
             self.entries1[self.sender().row].setCurrentText(g.data)
