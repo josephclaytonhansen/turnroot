@@ -298,7 +298,7 @@ class pricingDialog(QDialog):
         self.rate_slider = QSlider(Qt.Horizontal)
         self.rate_slider.name = 1
         self.rate_slider.valueChanged.connect(self.colorizeSlider)
-        print(self.parent.weapon.full_durability)
+
         self.rate_slider.setValue(int(self.parent.weapon.full_durability/2))
         self.rate_slider.setRange(0,self.parent.weapon.full_durability)
         self.rate_slider.setSingleStep(1)
@@ -365,8 +365,12 @@ class abilitiesDialog(QDialog):
         active_theme = self.active_theme
         super().__init__(parent)
         
-        with open("src/skeletons/universal_weapon_abilities.json", "r") as f:
-            self.abilities = json.load(f)
+        try:
+            with open("src/tmp/universal_weapon_abilities.json", "r") as f:
+                self.abilities = json.load(f)
+        except:
+            with open("src/tmp/uwad.tdndf", "r") as f:
+                self.abilities = json.load(f)
         
         self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         self.layout = QGridLayout()
@@ -398,6 +402,30 @@ class abilitiesDialog(QDialog):
                 label.setFont(self.body_font)
                 self.layout.addWidget(label,r,1,1,6)
                 
+            elif ability_len == 2:
+                label = QLabel(ability_split[0])
+                label.setFont(self.body_font)
+                self.layout.addWidget(label,r,1,1,4)
+                
+                midentry = QPushButton()
+                midentry.row = r
+                midentry.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
+                midentry.name = x
+                midentry.clicked.connect(self.edit_mid)
+                
+                entry1 = QComboBox()
+                self.entries1[r] = entry1
+                entry1.addItems(["Number", "Unit Stat"])
+                label2 = QLabel(ability_split[1])
+                label2.setFont(self.body_font)
+                
+                self.layout.addWidget(entry1,r,4,1,1)
+                self.layout.addWidget(midentry,r,5,1,1)
+                self.layout.addWidget(label2,r,6,1,1)
+                
+                for g in [midentry, entry1]:
+                    g.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+                
             elif ability_len == 3:
                 label1 = QLabel(ability_split[0])
                 midentry = QPushButton()
@@ -414,6 +442,10 @@ class abilitiesDialog(QDialog):
                     midentry.name = x
                     midentry.clicked.disconnect()
                     midentry.clicked.connect(self.define_status)
+                elif x.startswith("Foe"):
+                    entry1 = QComboBox()
+                    self.entries1[r] = entry1
+                    entry1.addItems(["Unit Stat"])
                 else:
                     entry1 = QComboBox()
                     self.entries1[r] = entry1
@@ -479,8 +511,10 @@ class abilitiesDialog(QDialog):
             self.entries1[self.sender().row].addItem(g.data)
             self.entries1[self.sender().row].setCurrentText(g.data)
         string = self.sender().name.split("&")
-        string = string[0] + self.entries1[self.sender().row].currentText() + string[1] + str(self.entries2[self.sender().row].value()) + string[2]
-        print(string)
+        try:
+            string = string[0] + self.entries1[self.sender().row].currentText() + string[1] + str(self.entries2[self.sender().row].value()) + string[2]
+        except:
+            string = string[0] + self.entries1[self.sender().row].currentText() + string[1]
         
     def define_status(self):
         g = popupInfo("\nA poisoned unit takes damage every turn until they take an antidote or it wears off\n"+
@@ -496,7 +530,8 @@ class abilitiesDialog(QDialog):
                 g = chooseUnitStatDialog(parent=self,font=self.body_font)
                 g.exec_()
                 self.entries1[self.sender().row].clear()
-                self.entries1[self.sender().row].addItem("Number")
+                if self.sender().row != 12:
+                    self.entries1[self.sender().row].addItem("Number")
                 self.entries1[self.sender().row].addItem("Unit Stat")
                 self.entries1[self.sender().row].addItem(g.data)
                 self.entries1[self.sender().row].setCurrentText(g.data)
@@ -504,15 +539,20 @@ class abilitiesDialog(QDialog):
             string = string[0] + self.entries1[self.sender().row].currentText() + string[1] + str(self.entries2[self.sender().row].value()) + string[2]
             self.toggle_save(string, self.sender(), self)
             
-        if self.sender().row == 3:
+        elif self.sender().row == 3 or self.sender().row == 12:
             string = self.sender().name.split("&")
             string = string[0] + self.entries1[self.sender().row].currentText() + string[1] + str(self.entries2[self.sender().row].value()) + string[2]
             self.toggle_save(string, self.sender(), self)
             
-        if self.sender().row > 3:
+        elif self.sender().row > 3 and self.sender().row <= 10:
             string = self.sender().name
             self.toggle_save(string, self.sender(), self)
-            
+        
+        elif self.sender().row == 11:
+            string = self.sender().name.split("&")
+            string = string[0] + self.entries1[self.sender().row].currentText() + string[1]
+            self.toggle_save(string, self.sender(), self)
+
     def toggle_save(self,string, sender, parent):
         self.parent = parent.parent
         self.p = parent

@@ -573,6 +573,7 @@ class numberEntryDialog(QDialog):
         layout.setSpacing(0)
         
         self.number = QSpinBox()
+        self.number.setRange(-100,100)
         self.number.valueChanged.connect(self.change_value)
         self.number.setFont(font)
         self.number.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
