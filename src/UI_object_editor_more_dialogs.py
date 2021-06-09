@@ -13,6 +13,9 @@ from src.skeletons.weapon_types import weaponTypes, expTypes
 from src.skeletons.Object import (Object,usableItem,Key,healItem,statIncreaseItem,expIncreaseItem,
                                   classChangeItem,summoningItem,levelEffectItem,equippableItem,Weapon,Shield)
 
+FORGED_WEAPONS_INDEX = 0
+FORGED_WEAPONS = {}
+
 class chooseUnitStatDialog(QDialog):
     def __init__(self, parent=None,font=None):
         data = updateJSON()
@@ -165,13 +168,14 @@ class forgingDialog(QDialog):
         
         self.list = QListWidget()
         self.list.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        self.list.currentTextChanged.connect(self.change_active_item)
         
         if len(self.parent.weapon.forge_into) > 0:
             pass
             #populate list with forge intos
         
         else:
-            self.list.addItem("No forge results set") 
+            pass
         
         self.tscroll = QScrollArea()
         self.tscroll.setWidget(self.list)
@@ -180,6 +184,7 @@ class forgingDialog(QDialog):
         self.working_tab_layout.addWidget(self.tscroll,0,0,4,4)
         
         self.add = QPushButton()
+        self.add.clicked.connect(self.add_forged)
         self.add.setMaximumWidth(40)
         self.add.setIcon(QIcon(QPixmap("src/ui_icons/white/add.png")))
         self.add.setIconSize(QSize(38,38))
@@ -190,6 +195,7 @@ class forgingDialog(QDialog):
         self.remove.setIconSize(QSize(34,34))
         self.remove.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
         self.edit = QPushButton()
+        self.edit.clicked.connect(self.edit_active_item)
         self.edit.setMaximumWidth(40)
         self.edit.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
         self.edit.setIconSize(QSize(34,34))
@@ -202,7 +208,16 @@ class forgingDialog(QDialog):
         self.working_tab_layout.addWidget(self.add,4,1,1,1)
         self.working_tab_layout.addWidget(self.remove,4,2,1,1)
         self.working_tab_layout.addWidget(self.edit,4,3,1,1)
-        
+
+    def add_forged(self):
+        pass
+    
+    def change_active_item(self):
+        self.active_item = self.sender().currentItem()
+    
+    def edit_active_item(self):
+        pass
+ 
     def getWeaponsInFolder(self):
         file_list = getFiles("src/skeletons/items/forging_items")[GET_FILES]
         class_names = []
@@ -230,7 +245,7 @@ class forgingDialog(QDialog):
             self.full_list.append(self.class_list.itemText(x))
     
     def change(self,s):
-        self.parent.weapon.forge_items = self.sender().currentText()
+        self.parent.weapon.repair_items = self.sender().currentText()
         if self.parent.weapon.path != None:
             self.parent.weapon.selfToJSON()
         
@@ -268,4 +283,77 @@ class forgingDialog(QDialog):
         self.sender().setStyleSheet(
             "QSlider::handle:horizontal {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;width:40px;height:40px;}"
             )
+    
+class forgeWeaponDialog(QDialog):
+    def __init__(self, parent=None,font=None):
+        data = updateJSON()
+        self.parent = parent
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        active_theme = self.active_theme
+        super().__init__(parent)
+        self.body_font = font
+        self.h_font = QFont(self.body_font)
+        self.h_font.setPointSize(20)
         
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(12,12,12,12)
+        self.setLayout(self.layout)
+        
+        label = QLabel("Choose Weapon to Forge Into")
+        label.setFont(self.h_font)
+        self.layout.addWidget(label)
+        
+        self.search = QLineEdit()
+        self.search.setFont(self.body_font)
+        self.search.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.search.setPlaceholderText("Search")
+        self.layout.addWidget(self.search)
+        self.search.textChanged.connect(self.filterList)
+        self.class_list = QListWidget()
+        self.class_list.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.class_list.setFont(self.body_font)
+        self.layout.addWidget(self.class_list)
+        self.class_list.itemClicked.connect(self.change_into)
+        
+        self.grid = QWidget()
+        self.grid_layout = QGridLayout()
+        self.grid.setLayout(self.grid_layout)
+        self.layout.addWidget(self.grid)
+        
+        forge_items_amounts = QSpinBox()
+        forge_costs = QSpinBox()
+        self.spinners = [forge_items_amounts,forge_costs]
+        self.att = ["forge_items_amounts","forge_costs"]
+        labels = ["Number of Items Needed to Forge","Cost to Forge"]
+        r = 1
+        
+        self.fi_label = QLabel("Item Used for Forging")
+        self.fi_label.setFont(self.body_font)
+        self.item_list = QComboBox()
+        self.item_list.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.item_list.setFont(self.body_font)
+
+        self.grid_layout.addWidget(self.fi_label,0,0,1,1)
+        self.grid_layout.addWidget(self.item_list,0,1,1,1)
+        
+        for x in self.spinners:
+            r+=1
+            x.setFont(self.body_font)
+            x.setRange(0,2000)
+            x.name = self.att[self.spinners.index(x)]
+            
+            try:
+                x.setValue(getattr(self.parent.parent.weapon, self.att[self.spinners.index(x)]))
+            except:
+                pass
+            
+            x.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+
+            label = QLabel(labels[r-2])
+            label.setFont(self.body_font)
+            
+            self.grid_layout.addWidget(label, r, 0, 1, 1)
+            self.grid_layout.addWidget(x, r, 1, 1, 1)
+        
+        self.show()

@@ -129,10 +129,13 @@ class equippableItem(Object):
         self.can_repair = True
         self.repair_cost_per = 0
         self.repair_items_amounts = 0
+        self.repair_items = {}
         self.sell_cost_per = 0
         self.forge_into = {}
-        self.forge_items = []
+        self.forge_items = {}
+        self.forge_into_items = {}
         self.forge_items_amounts = {}
+        self.forge_costs = {}
         self.rarity = 0
         self.type = None
         self.scopes = ["combat", "inventory menu"]
@@ -143,11 +146,11 @@ class equippableItem(Object):
         self.price_modifiers = ["durability"]
         
         self.attrs = ["name", "desc", "icon", "sprite_sheet", "event_to_sprites", "price_if_sold", "price",
-                      "price_modifiers", "scopes", "inventories", "special_abilities",
+                      "price_modifiers", "scopes", "inventories", "special_abilities", "forge_into_items", "repair_items",
                       "conditional_special_abilities", "csa_conditions", "can_forge", "can_repair", "repair_cost_per",
                       "minimum_experience_level", "forge_into", "forge_items", "forge_items_amounts","rarity",
                       "unique_to_unit","type","scopes","inventories","full_durability","current_durability",
-                      "broken", "price_modifiers", "shop_pages", "sell_cost_per", "repair_items_amounts"]
+                      "broken", "price_modifiers", "shop_pages", "sell_cost_per", "repair_items_amounts", "forge_costs"]
     
     def removeDurability(self, a):
         self.current_durability -= a
@@ -183,8 +186,8 @@ class Weapon(equippableItem):
               "conditional_special_abilities", "csa_conditions", "can_forge", "can_repair", "repair_cost_per",
               "minimum_experience_level", "forge_into", "forge_items", "forge_items_amounts","rarity",
               "unique_to_unit","type","scopes","inventories","full_durability","current_durability",
-              "broken", "price_modifiers", "shop_pages", "weight", "buyable_quantity", "avo", "asm",
-                      "sell_cost_per", "repair_items_amounts", "damage_type"]
+              "broken", "price_modifiers", "shop_pages", "weight", "buyable_quantity", "avo", "asm", "repair_items",
+                      "sell_cost_per", "repair_items_amounts", "damage_type","forge_costs", "forge_into_items"]
         
 class Shield(equippableItem):
     def __init__(self):
@@ -194,9 +197,9 @@ class Shield(equippableItem):
         self.weight = 1
         
         self.attrs = ["name", "desc", "icon", "sprite_sheet", "event_to_sprites", "price_if_sold", "price",
-                      "price_modifiers", "scopes", "inventories", "special_abilities",
+                      "price_modifiers", "scopes", "inventories", "special_abilities", "forge_into_items",
                       "conditional_special_abilities", "csa_conditions", "can_forge", "can_repair", "repair_cost_per",
                       "minimum_experience_level", "forge_into", "forge_items", "forge_items_amounts","rarity",
                       "unique_to_unit","type","scopes","inventories","full_durability","current_durability",
-                      "broken", "price_modifiers", "shop_pages", "weight", "defense", "resistance", "sell_cost_per"]
+                      "broken", "price_modifiers", "shop_pages", "weight", "defense", "resistance", "sell_cost_per", "forge_costs"]
     
