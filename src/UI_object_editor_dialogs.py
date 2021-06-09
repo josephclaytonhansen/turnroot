@@ -415,7 +415,7 @@ class abilitiesDialog(QDialog):
                 
                 entry1 = QComboBox()
                 self.entries1[r] = entry1
-                entry1.addItems(["Number", "Unit Stat"])
+                entry1.addItems(["Number"])
                 label2 = QLabel(ability_split[1])
                 label2.setFont(self.body_font)
                 
@@ -432,6 +432,7 @@ class abilitiesDialog(QDialog):
                 midentry.row = r
                 midentry.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
                 midentry.name = x
+                midentry.setMaximumWidth(30)
                 midentry.clicked.connect(self.edit_mid)
                 
                 if x.startswith("Inflicts"):
@@ -446,6 +447,10 @@ class abilitiesDialog(QDialog):
                     entry1 = QComboBox()
                     self.entries1[r] = entry1
                     entry1.addItems(["Unit Stat"])
+                elif x.startswith("After"):
+                    entry1 = QComboBox()
+                    self.entries1[r] = entry1
+                    entry1.addItems(["Number"])
                 else:
                     entry1 = QComboBox()
                     self.entries1[r] = entry1
@@ -507,9 +512,10 @@ class abilitiesDialog(QDialog):
             g = numberEntryDialog(parent=self,font=self.body_font)
             g.exec_()
             self.entries1[self.sender().row].clear()
-            if self.sender().row != 12:
+            if self.sender().row == 11:
                 self.entries1[self.sender().row].addItem("Number")
-            self.entries1[self.sender().row].addItem("Unit Stat")
+            if self.sender().row != 11:
+                self.entries1[self.sender().row].addItem("Unit Stat")
             self.entries1[self.sender().row].addItem(g.data)
             self.entries1[self.sender().row].setCurrentText(g.data)
         string = self.sender().name.split("&")
@@ -532,11 +538,13 @@ class abilitiesDialog(QDialog):
                 g = chooseUnitStatDialog(parent=self,font=self.body_font)
                 g.exec_()
                 self.entries1[self.sender().row].clear()
+                
                 if self.sender().row != 12:
                     self.entries1[self.sender().row].addItem("Number")
                 self.entries1[self.sender().row].addItem("Unit Stat")
                 self.entries1[self.sender().row].addItem(g.data)
                 self.entries1[self.sender().row].setCurrentText(g.data)
+                
             string = self.sender().name.split("&")
             string = string[0] + self.entries1[self.sender().row].currentText() + string[1] + str(self.entries2[self.sender().row].value()) + string[2]
             self.toggle_save(string, self.sender(), self)
