@@ -394,13 +394,15 @@ class PreferencesDialog(QDialog):
             infoClose("Keyboard shortcuts have been reset (restart Preferences to see change)",self)
     
     def checkFiles(self):
-        self.file_modes = ['rb', 'rb', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r',
-                           'rb', 'r', 'r', 'r', 'r']
-        self.file_count = -1        
-        for file in ['src/tmp/kybs_def.trkp', 'src/tmp/kybs.trkp', 'src/tmp/rsp.tmp', 'src/tmp/preferences.json',
-                     'src/UI_preferencesDialog.py', 'src/UI_Dialogs.py', 'src/tasks_backend.py', 'src/help_docs/help_0.html',
-                     'src/help_docs/help_1.html', 'src/help_docs/help_2.html',
-                     "src/tmp/nsp.trnes", 'src/tmp/nenc.json', 'src/tmp/nesc.json', 'src/tmp/neec.json', 'src/tmp/uctp.tmp']:
+        with open("src/essential_files_open.json", "r") as f:
+            self.file_modes = json.load(f)
+
+        self.file_count = -1
+        with open("/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/essential_files.json", "r") as f:
+            files = json.load(f)
+            
+        for file in files:
+            file = "src/tmp/" + file
             self.file_count +=1
             try:
                 open(file, self.file_modes[self.file_count])
