@@ -4,7 +4,7 @@ from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QFont
 from src.UI_updateJSON import updateJSON
 import src.UI_colorTheme
 import shutil, os, pickle, json, sys, random
-from src.UI_Dialogs import confirmAction, popupInfo
+from src.UI_Dialogs import confirmAction, popupInfo, numberEntryDialog
 from src.node_backend import getFiles, GET_FILES
 from src.img_overlay import overlayTile
 from src.skeletons.unit_class import unitClass
@@ -380,6 +380,7 @@ class abilitiesDialog(QDialog):
         r = 0
         self.entries1 = {}
         self.entries2 = {}
+        self.ability_checks = {}
         
         for x in self.abilities:
             r+=1
@@ -389,6 +390,7 @@ class abilitiesDialog(QDialog):
             ability_check.stateChanged.connect(self.toggle_ability)
             self.layout.addWidget(ability_check, r, 0, 1, 1)
             ability_check.name = x
+            self.ability_checks[x] = ability_check
             ability_len = len(ability_split)
             
             if ability_len == 1:
@@ -468,6 +470,14 @@ class abilitiesDialog(QDialog):
             self.entries1[self.sender().row].addItem("Unit Stat")
             self.entries1[self.sender().row].addItem(g.data)
             self.entries1[self.sender().row].setCurrentText(g.data)
+        else:
+            g = numberEntryDialog(parent=self,font=self.body_font)
+            g.exec_()
+            self.entries1[self.sender().row].clear()
+            self.entries1[self.sender().row].addItem("Number")
+            self.entries1[self.sender().row].addItem("Unit Stat")
+            self.entries1[self.sender().row].addItem(g.data)
+            self.entries1[self.sender().row].setCurrentText(g.data)
         string = self.sender().name.split("&")
         string = string[0] + self.entries1[self.sender().row].currentText() + string[1] + str(self.entries2[self.sender().row].value()) + string[2]
         print(string)
@@ -522,8 +532,13 @@ class abilitiesDialog(QDialog):
     def reset(self):
         self.parent.weapon.special_abilities = []
         self.current_abilities.setPlainText(str(self.parent.weapon.special_abilities))
+        
+        for x in self.ability_checks:
+            self.ability_checks[x].setChecked(False)
+        
         if self.parent.weapon.path != None:
             self.parent.weapon.selfToJSON()
+            
             
                     
                
