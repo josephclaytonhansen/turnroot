@@ -13,6 +13,7 @@ from src.UI_ProxyStyle import ProxyStyle
 from src.UI_unit_editor_wnd import UnitEditorWnd
 from src.UI_node_editor_wnd import NodeEditorWnd
 from src.UI_object_editor_wnd import ObjectEditorWnd
+from src.UI_portrait_editor_wnd import PortraitEditorWnd
 from src.UI_node_preferences_dialog import NodePreferencesDialog
 from src.node_presets import NODES, Nodes
 from src.UI_WebViewer import webView
@@ -172,6 +173,12 @@ class mainO(ObjectEditorWnd):
         super().__init__(parent)
         self.resize(QSize(1200,820))
         self.setMaximumSize(QSize(int(size.width()*2), int(size.height()*2)))
+        
+class mainP(PortraitEditorWnd):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.resize(QSize(1200,820))
+        self.setMaximumSize(QSize(int(size.width()*2), int(size.height()*2)))
 
 class main(QMainWindow):
     def __init__(self):
@@ -233,6 +240,8 @@ class main(QMainWindow):
         self.m.addWidget(self.skills_editor)
         self.object_editor = mainO(parent=self)
         self.m.addWidget(self.object_editor)
+        self.portrait_editor = mainP(parent=self)
+        self.m.addWidget(self.portrait_editor)
         self.m.setCurrentWidget(self.unit_editor)
         
         self.setGeometry(
@@ -364,7 +373,23 @@ class main(QMainWindow):
                 self.save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
                 self.save_status.setToolTip("Object file not saved")
             elif new_editor == 6:
-                from main_portrait_editor import main
+                self.m.setCurrentWidget(self.portrait_editor)
+                self.menubar.setVisible(False)
+                self.fulls = True
+                self.fullScreenToggle()
+                self.resize(QSize(960,680))
+                self.setGeometry(
+    QStyle.alignedRect(
+        Qt.LeftToRight,
+        Qt.AlignCenter,
+        self.size(),
+        app.desktop().availableGeometry()
+        ))
+                self.old_pos = self.geometry()
+                self.toolbar.move(self.geometry().topLeft().x() - self.toolbar.width() - 20, self.geometry().topLeft().y() - 30)
+                self.setWindowTitle("Turnroot Portrait Editor")
+                self.save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+                self.save_status.setToolTip("Portrait files not saved")
             elif new_editor == 7:
                 from main_menu_editor import main
             elif new_editor == 8:
