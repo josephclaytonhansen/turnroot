@@ -84,7 +84,7 @@ class imageOverlayCanvas(QWidget):
         ###TESTING ONLY###
         self.image1 = QPixmap("src/portrait_graphics/blue.png")
         self.image2 = QPixmap("src/portrait_graphics/yellow.png")
-        self.overlay_dimensions = [50,50]
+        self.overlay_dimensions = [self.image2.width(), self.image2.height()]
         self.pos = [256,256]
         composite = overlayTileWithoutScaling(self.image1, self.image2, 512, self.pos)
         self.canvas.setPixmap(composite)
