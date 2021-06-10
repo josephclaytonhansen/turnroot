@@ -18,30 +18,32 @@ class imageOverlayCanvas(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         
-        self.layout = QGridLayout()
+        self.layout = QHBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
         
         self.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: 16")
         
-        self.top_left = QWidget()
-        self.top_left_layout = QVBoxLayout()
-        self.top_left.setLayout(self.top_left_layout)
+        self.left = QWidget()
+        self.left_layout = QVBoxLayout()
+        self.left.setLayout(self.left_layout)
         
         self.right = QWidget()
+        self.right.setMinimumWidth(170)
+        self.right.setMaximumWidth(170)
         self.right_layout = QVBoxLayout()
         self.right.setLayout(self.right_layout)
         
-        self.bottom = QWidget()
-        self.bottom.setMinimumHeight(160)
-        self.bottom.setMaximumHeight(160)
-        self.bottom_layout = QHBoxLayout()
-        self.bottom.setLayout(self.bottom_layout)
+        self.center = QWidget()
+        self.center.setMaximumWidth(520)
+        self.center.setMinimumWidth(520)
+        self.center_layout = QHBoxLayout()
+        self.center.setLayout(self.center_layout)
         
-        self.layout.addWidget(self.top_left,0,0,2,2)
-        self.layout.addWidget(self.right,0,3,1,1)
-        self.layout.addWidget(self.bottom,3,0,1,1)
+        self.layout.addWidget(self.left)
+        self.layout.addWidget(self.center)
+        self.layout.addWidget(self.right)
         
         self.canvas = QLabel()
         self.canvas.setAlignment(Qt.AlignCenter)
@@ -51,17 +53,14 @@ class imageOverlayCanvas(QWidget):
         self.canvas.setMinimumHeight(512)
         self.canvas.setMaximumHeight(512)
         
-        self.top_left_layout.addWidget(self.canvas)
+        self.center_layout.addWidget(self.canvas)
         
         self.transform_pad = QWidget()
-        self.transform_pad.setMaximumWidth(150)
         self.transform_pad.setMaximumHeight(150)
         self.transform_pad_layout = QGridLayout()
         self.transform_pad_layout.setContentsMargins(0,0,0,0)
         self.layout.setSpacing(0)
         self.transform_pad.setLayout(self.transform_pad_layout)
-        
-        self.bottom_layout.addWidget(self.transform_pad)
         
         self.transform_pad_buttons = {}
         self.tpb_locs = [[0,1],[1,2],[2,1],[1,0]]
@@ -72,8 +71,9 @@ class imageOverlayCanvas(QWidget):
         for button in ["up", "right", "down", "left"]:
             index += 1
             self.transform_pad_buttons[button] = QPushButton()
+            self.transform_pad_buttons[button].setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
             self.transform_pad_buttons[button].direction = button
-            
+
             self.transform_pad_buttons[button].pressed.connect(self.on_press)
             self.transform_pad_buttons[button].released.connect(self.on_release)
             self.timer.timeout.connect(self.while_pressed)
@@ -84,9 +84,71 @@ class imageOverlayCanvas(QWidget):
             self.transform_pad_buttons[button].setIconSize(QSize(48,48))
             self.transform_pad_layout.addWidget(self.transform_pad_buttons[button], self.tpb_locs[index][0], self.tpb_locs[index][1], 1, 1)
         
-        for x in [0,1,2]:
-            self.transform_pad_layout.setColumnStretch(x, 1)
-            self.layout.setColumnStretch(x, 1)
+        self.layers_label = QLabel("Layers")
+        self.layers_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        
+        self.layers_box = QListWidget()
+        self.layers_box.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+        
+        self.edit_layers_row = QWidget()
+        self.edit_layers_row_layout = QHBoxLayout()
+        self.edit_layers_row.setLayout(self.edit_layers_row_layout)
+        
+        self.edit_layer_name = QPushButton()
+        self.edit_layer_name.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+        self.edit_layer_name.setMaximumWidth(40)
+        self.edit_layer_name.setMinimumWidth(40)
+        self.edit_layer_name.setMaximumHeight(40)
+        self.edit_layer_name.setMinimumHeight(40)
+        self.edit_layer_name.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
+        self.edit_layer_name.setIconSize(QSize(38,38))
+        
+        self.delete_layer = QPushButton()
+        self.delete_layer.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+        self.delete_layer.setMaximumWidth(40)
+        self.delete_layer.setMinimumWidth(40)
+        self.delete_layer.setMaximumHeight(40)
+        self.delete_layer.setMinimumHeight(40)
+        self.delete_layer.setIcon(QIcon(QPixmap("src/ui_icons/white/delete.png")))
+        self.delete_layer.setIconSize(QSize(38,38))
+        
+        self.edit_layers_row_layout.addWidget(self.edit_layer_name)
+        self.edit_layers_row_layout.addWidget(self.delete_layer)
+        
+        self.right_layout.addWidget(self.layers_label)
+        self.right_layout.addWidget(self.layers_box)
+        self.right_layout.addWidget(self.edit_layers_row)
+        self.right_layout.addWidget(self.transform_pad)
+        
+        self.current_layer_options_container = QWidget()
+        self.current_layer_options_container.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+        self.current_layer_options_container.setMinimumHeight(300)
+        self.current_layer_options_container_layout = QStackedLayout()
+        self.current_layer_options_container.setLayout(self.current_layer_options_container_layout)
+        
+        self.add_options = QWidget()
+        self.add_options_layout = QGridLayout()
+        self.add_options.setLayout(self.add_options_layout)
+        
+        self.add_options_buttons = {}
+        self.aob_row = -1
+        self.aob_column = 0
+        
+        for button in ["Base", "Hair", "Eyes", "Nose", "Mouth", "Scars", "Freckles", "Jewelry", "Tattoos", "Facial Hair", "Eyebrows", "Makeup", "Headwear", "Bodywear"]:
+            self.aob_row +=1
+            if self.aob_row == 4:
+                self.aob_row = 0
+                self.aob_column += 1
+                
+            self.add_options_buttons[button] = QPushButton(button)
+            self.add_options_buttons[button].setMinimumHeight(40)
+            self.add_options_buttons[button].setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+            self.add_options_buttons[button].name = button
+            
+            self.add_options_layout.addWidget(self.add_options_buttons[button], self.aob_column, self.aob_row,1,1)
+        
+        self.left_layout.addWidget(self.add_options)
+        self.left_layout.addWidget(self.current_layer_options_container)
             
         ###TESTING ONLY###
         self.image1 = QPixmap("src/portrait_graphics/blue.png")

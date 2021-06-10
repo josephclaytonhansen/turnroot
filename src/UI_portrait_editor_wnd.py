@@ -57,6 +57,7 @@ class PortraitEditorWnd(QWidget):
         self.working_tab = self.tabs_dict["Dialogue Portraits"]
         self.working_tab_layout = self.working_tab.layout()
         self.canvas = imageOverlayCanvas()
+        self.canvas.setMaximumWidth(1150)
         self.working_tab_layout.addWidget(self.canvas)
         
     def ctab_changed(self):
