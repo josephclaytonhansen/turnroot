@@ -34,6 +34,8 @@ class imageOverlayCanvas(QWidget):
         self.right.setLayout(self.right_layout)
         
         self.bottom = QWidget()
+        self.bottom.setMinimumHeight(160)
+        self.bottom.setMaximumHeight(160)
         self.bottom_layout = QHBoxLayout()
         self.bottom.setLayout(self.bottom_layout)
         
@@ -42,6 +44,7 @@ class imageOverlayCanvas(QWidget):
         self.layout.addWidget(self.bottom,3,0,1,1)
         
         self.canvas = QLabel()
+        self.canvas.setAlignment(Qt.AlignCenter)
         self.canvas.setStyleSheet("background-color: white; border: 4px solid black; border-radius: 3px;")
         self.canvas.setMinimumWidth(512)
         self.canvas.setMaximumWidth(512)
@@ -80,6 +83,10 @@ class imageOverlayCanvas(QWidget):
             self.transform_pad_buttons[button].setIcon(QIcon(QPixmap("src/ui_icons/white/"+button+".png")))
             self.transform_pad_buttons[button].setIconSize(QSize(48,48))
             self.transform_pad_layout.addWidget(self.transform_pad_buttons[button], self.tpb_locs[index][0], self.tpb_locs[index][1], 1, 1)
+        
+        for x in [0,1,2]:
+            self.transform_pad_layout.setColumnStretch(x, 1)
+            self.layout.setColumnStretch(x, 1)
             
         ###TESTING ONLY###
         self.image1 = QPixmap("src/portrait_graphics/blue.png")
