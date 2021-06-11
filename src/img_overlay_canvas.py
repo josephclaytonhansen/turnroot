@@ -149,6 +149,7 @@ class imageOverlayCanvas(QWidget):
                 self.aob_column += 1
                 
             self.add_options_buttons[button] = QPushButton(button)
+            self.add_options_buttons[button].setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
             self.add_options_buttons[button].clicked.connect(self.canvas_edit_change)
             self.add_options_buttons[button].setMinimumHeight(40)
             self.add_options_buttons[button].name = button
@@ -166,9 +167,11 @@ class imageOverlayCanvas(QWidget):
         ###TESTING ONLY###
         self.image1 = QPixmap("src/portrait_graphics/blue.png")
         self.image2 = QPixmap("src/portrait_graphics/yellow.png")
+        self.image3 = QPixmap("src/portrait_graphics/pink.png")
         self.overlay_dimensions = [self.image2.width(), self.image2.height()]
         self.pos = [135,188]
         composite = overlayTileWithoutScaling(self.image1, self.image2, 336, 468, self.pos)
+        composite = overlayTileWithoutScaling(composite, self.image3, 336, 468, self.pos)
         self.canvas.setPixmap(composite)
         #self.canvas.setPixmap(composite).scaled(self.canvas_size, self.canvas_size, Qt.KeepAspectRatio, Qt.FastTransformation)
         
@@ -206,6 +209,7 @@ class imageOverlayCanvas(QWidget):
         if self.pos[1] < 0:
             self.pos[1] = 0
         composite = overlayTileWithoutScaling(self.image1, self.image2, 336, 468, self.pos)
+        composite = overlayTileWithoutScaling(composite, self.image3, 336, 468, [135,188])
         self.canvas.setPixmap(composite)
     
     def canvas_edit_change(self):
