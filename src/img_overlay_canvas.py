@@ -14,7 +14,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
 from src.game_directory import gameDirectory
 from src.UI_portrait_editor_dialogs import portraitStackWidget
-from src.portrait_editor_backend import layerDown, layerUp
+from src.portrait_editor_backend import layerDown, layerUp, layerDelete
 
 class imageOverlayCanvas(QWidget):
     def __init__(self, parent=None,font=None):
@@ -110,6 +110,7 @@ class imageOverlayCanvas(QWidget):
         self.layer_down.setIcon(QIcon(QPixmap("src/ui_icons/white/layer_down.png")))
         
         self.delete_layer = QPushButton()
+        self.delete_layer.clicked.connect(self.layer_delete)
         self.delete_layer.setIcon(QIcon(QPixmap("src/ui_icons/white/delete.png")))
         
         for b in [self.layer_up, self.layer_down, self.delete_layer]:
@@ -230,3 +231,9 @@ class imageOverlayCanvas(QWidget):
     
     def move_layer_up(self):
         layerUp(self)
+    
+    def layer_delete(self):
+        if self.layers_box.currentRow() != -1:
+            t = self.layers_box.currentRow()
+            print("CURRENT ROW:",t)
+            layerDelete(self, t)
