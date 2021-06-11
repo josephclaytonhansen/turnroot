@@ -31,8 +31,8 @@ class portraitStackWidget(QWidget):
         self.layout.setSpacing(2)
         self.setLayout(self.layout)
         
-        self.counts = {"hair":0, "scars":0, "freckles":0, "jewelry":0}
-        self.max_counts = {"hair":3, "scars":6, "freckles":4, "jewelry":6}
+        self.counts = {"hair":0, "scars":0, "freckles":0, "jewelry":0 "masks":0, "tattoos":0, "facial hair":0}
+        self.max_counts = {"hair":3, "scars":6, "freckles":4, "jewelry":6, "masks":2, "tattoos":5, "facial hair":3}
         self.total_layers = 0
     
     def initContent(self, s):
@@ -178,13 +178,49 @@ class portraitStackWidget(QWidget):
             self.parent.layers_box.addItems(self.parent.active_layers)
     
     def initMasks(self):
-        pass
+        self.counts["masks"] += 1
+        if self.counts["masks"] <= self.max_counts["masks"]:
+        
+            ###REPLACE THIS###
+            mask = "temp mask " + str(self.counts["masks"])
+            
+            self.parent.active_layers["mask " + str(self.counts["masks"])] = mask
+            
+            self.total_layers = len(self.parent.active_layers)
+            self.parent.layer_orders[self.total_layers] = mask
+            
+            self.parent.layers_box.clear()
+            self.parent.layers_box.addItems(self.parent.active_layers)
     
     def initTattoos(self):
-        pass
+        self.counts["tattoos"] += 1
+        if self.counts["tattoos"] <= self.max_counts["tattoos"]:
+        
+            ###REPLACE THIS###
+            tattoo = "temp tattoo " + str(self.counts["tattoos"])
+            
+            self.parent.active_layers["tattoo " + str(self.counts["tattoos"])] = tattoo
+            
+            self.total_layers = len(self.parent.active_layers)
+            self.parent.layer_orders[self.total_layers] = tattoo
+            
+            self.parent.layers_box.clear()
+            self.parent.layers_box.addItems(self.parent.active_layers)
     
     def initFacialHair(self):
-        pass
+        self.counts["facial hair"] += 1
+        if self.counts["facial hair"] <= self.max_counts["facial hair"]:
+        
+            ###REPLACE THIS###
+            facial_hair = "temp facial hair " + str(self.counts["facial hair"])
+            
+            self.parent.active_layers["facial hair " + str(self.counts["facial hair"])] = facial_hair
+            
+            self.total_layers = len(self.parent.active_layers)
+            self.parent.layer_orders[self.total_layers] = facial_hair
+            
+            self.parent.layers_box.clear()
+            self.parent.layers_box.addItems(self.parent.active_layers)
     
     def initEyebrows(self):
         pass
