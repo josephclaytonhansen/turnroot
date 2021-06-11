@@ -100,14 +100,25 @@ class imageOverlayCanvas(QWidget):
         self.edit_layers_row_layout = QHBoxLayout()
         self.edit_layers_row.setLayout(self.edit_layers_row_layout)
         
-        self.edit_layer_name = QPushButton()
-        self.edit_layer_name.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
-        self.edit_layer_name.setMaximumWidth(40)
-        self.edit_layer_name.setMinimumWidth(40)
-        self.edit_layer_name.setMaximumHeight(40)
-        self.edit_layer_name.setMinimumHeight(40)
-        self.edit_layer_name.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
-        self.edit_layer_name.setIconSize(QSize(38,38))
+        self.layer_up = QPushButton()
+        self.layer_up.clicked.connect(self.move_layer_up)
+        self.layer_up.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+        self.layer_up.setMaximumWidth(42)
+        self.layer_up.setMinimumWidth(42)
+        self.layer_up.setMaximumHeight(42)
+        self.layer_up.setMinimumHeight(42)
+        self.layer_up.setIcon(QIcon(QPixmap("src/ui_icons/white/layer_up.png")))
+        self.layer_up.setIconSize(QSize(40,40))
+        
+        self.layer_down = QPushButton()
+        self.layer_down.clicked.connect(self.move_layer_down)
+        self.layer_down.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+        self.layer_down.setMaximumWidth(42)
+        self.layer_down.setMinimumWidth(42)
+        self.layer_down.setMaximumHeight(42)
+        self.layer_down.setMinimumHeight(42)
+        self.layer_down.setIcon(QIcon(QPixmap("src/ui_icons/white/layer_down.png")))
+        self.layer_down.setIconSize(QSize(40,40))
         
         self.delete_layer = QPushButton()
         self.delete_layer.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
@@ -118,7 +129,8 @@ class imageOverlayCanvas(QWidget):
         self.delete_layer.setIcon(QIcon(QPixmap("src/ui_icons/white/delete.png")))
         self.delete_layer.setIconSize(QSize(38,38))
         
-        self.edit_layers_row_layout.addWidget(self.edit_layer_name)
+        self.edit_layers_row_layout.addWidget(self.layer_up)
+        self.edit_layers_row_layout.addWidget(self.layer_down)
         self.edit_layers_row_layout.addWidget(self.delete_layer)
         
         self.right_layout.addWidget(self.layers_label)
@@ -221,3 +233,67 @@ class imageOverlayCanvas(QWidget):
             if (self.sender().name == self.buttons[x]):
                 ind = x
                 self.current_layer_options_container_layout.setCurrentIndex(ind)
+
+    def move_layer_down(self):
+        if self.layers_box.currentItem() != None:
+            for layer in self.layer_orders:
+                if self.layer_orders[layer] == self.layers_box.currentItem().text():
+                    tmp_layer_orders = self.layer_orders
+                    check = layer
+                    
+            self.layer_orders = {}
+            try:
+                if check < len(tmp_layer_orders):
+                    for n in tmp_layer_orders:
+                        if n == check:
+                            self.layer_orders[check] = tmp_layer_orders[check+1]
+                        elif n == check+1:
+                            self.layer_orders[check+1] = tmp_layer_orders[check]
+                        else:
+                            self.layer_orders[n] = tmp_layer_orders[n]
+                    self.layers_box.clear()
+                    for g in self.layer_orders:
+                        self.layers_box.addItem(self.layer_orders[g])
+                else:
+                    self.layer_orders = tmp_layer_orders
+                    self.layers_box.clear()
+                    for g in self.layer_orders:
+                        self.layers_box.addItem(self.layer_orders[g])
+            except Exception as e:
+                pass
+            try:
+                self.layers_box.setCurrentRow(check)
+            except:
+                self.layers_box.setCurrentRow(len(tmp_layer_orders))
+    
+    def move_layer_up(self):
+        if self.layers_box.currentItem() != None:
+            for layer in self.layer_orders:
+                if self.layer_orders[layer] == self.layers_box.currentItem().text():
+                    tmp_layer_orders = self.layer_orders
+                    check = layer
+                    
+            self.layer_orders = {}
+            try:
+                if check > 1:
+                    for n in tmp_layer_orders:
+                        if n == check:
+                            self.layer_orders[check] = tmp_layer_orders[check-1]
+                        elif n == check-1:
+                            self.layer_orders[check-1] = tmp_layer_orders[check]
+                        else:
+                            self.layer_orders[n] = tmp_layer_orders[n]
+                    self.layers_box.clear()
+                    for g in self.layer_orders:
+                        self.layers_box.addItem(self.layer_orders[g])
+                else:
+                    self.layer_orders = tmp_layer_orders
+                    self.layers_box.clear()
+                    for g in self.layer_orders:
+                        self.layers_box.addItem(self.layer_orders[g])
+            except Exception as e:
+                pass
+            try:
+                self.layers_box.setCurrentRow(check-2)
+            except:
+                self.layers_box.setCurrentRow(0)

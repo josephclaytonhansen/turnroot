@@ -88,11 +88,11 @@ class midnight_spark(colorTheme):
 class sand_dunes(colorTheme):
     name = "Sand Dunes"
     tag = "sand_dunes"
-    window_background_color = "#F2B66D"
-    list_background_color = "#F2E6D8"
-    window_text_color = "#734C36"
+    window_background_color = "#f0be86"
+    list_background_color = "#b8936a"
+    window_text_color = "#573a29"
     workspace_background_color = "#64b5c1"
-    button_alt_color = "#D4AC7B"
+    button_alt_color = "#f7dbbc"
     button_alt_text_color = "#363431"
     
     node_grid_background_color = "#f5ca95"
@@ -657,6 +657,14 @@ class custom(colorTheme):
                    "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
     groups = [level_editor, node_grid, unit_editor]
+
+
+
+
+
+
+
+
 
 
 

@@ -31,8 +31,8 @@ class portraitStackWidget(QWidget):
         self.layout.setSpacing(2)
         self.setLayout(self.layout)
         
-        self.counts = {"hair":0, "scars":0, "freckles":0, "jewelry":0 "masks":0, "tattoos":0, "facial hair":0}
-        self.max_counts = {"hair":3, "scars":6, "freckles":4, "jewelry":6, "masks":2, "tattoos":5, "facial hair":3}
+        self.counts = {"hair":0, "scars":0, "freckles":0, "jewelry":0, "masks":0, "tattoos":0, "facial hair":0, "makeup":0, "tops":0, "headwear":0, "armor":0}
+        self.max_counts = {"hair":3, "scars":6, "freckles":4, "jewelry":6, "masks":2, "tattoos":5, "facial hair":3,"makeup":3, "tops":3, "headwear":4, "armor":3}
         self.total_layers = 0
     
     def initContent(self, s):
@@ -71,7 +71,7 @@ class portraitStackWidget(QWidget):
     
     def initBase(self):
         ###REPLACE THIS###
-        base = "temp base"
+        base = "base"
         
         self.parent.active_layers["base"] = base
         
@@ -86,7 +86,7 @@ class portraitStackWidget(QWidget):
         if self.counts["hair"] <= self.max_counts["hair"]:
         
             ###REPLACE THIS###
-            hair = "temp hair " + str(self.counts["hair"])
+            hair = "hair " + str(self.counts["hair"])
             
             self.parent.active_layers["hair " + str(self.counts["hair"])] = hair
             
@@ -98,7 +98,7 @@ class portraitStackWidget(QWidget):
     
     def initEyes(self):
         ###REPLACE THIS###
-        eyes = "temp eyes"
+        eyes = "eyes"
         
         self.parent.active_layers["eyes"] = eyes
         
@@ -110,7 +110,7 @@ class portraitStackWidget(QWidget):
     
     def initNose(self):
         ###REPLACE THIS###
-        nose = "temp nose"
+        nose = "nose"
         
         self.parent.active_layers["nose"] = nose
         
@@ -122,7 +122,7 @@ class portraitStackWidget(QWidget):
     
     def initMouth(self):
         ###REPLACE THIS###
-        mouth = "temp mouth"
+        mouth = "mouth"
         
         self.parent.active_layers["mouth"] = mouth
         
@@ -137,7 +137,7 @@ class portraitStackWidget(QWidget):
         if self.counts["scars"] <= self.max_counts["scars"]:
         
             ###REPLACE THIS###
-            scar = "temp scar " + str(self.counts["scars"])
+            scar = "scar " + str(self.counts["scars"])
             
             self.parent.active_layers["scar " + str(self.counts["scars"])] = scar
             
@@ -152,7 +152,7 @@ class portraitStackWidget(QWidget):
         if self.counts["freckles"] <= self.max_counts["freckles"]:
         
             ###REPLACE THIS###
-            freckle = "temp freckle " + str(self.counts["freckles"])
+            freckle = "freckle " + str(self.counts["freckles"])
             
             self.parent.active_layers["freckle " + str(self.counts["freckles"])] = freckle
             
@@ -167,7 +167,7 @@ class portraitStackWidget(QWidget):
         if self.counts["jewelry"] <= self.max_counts["jewelry"]:
         
             ###REPLACE THIS###
-            jewelry = "temp jewelry " + str(self.counts["jewelry"])
+            jewelry = "jewelry " + str(self.counts["jewelry"])
             
             self.parent.active_layers["jewelry " + str(self.counts["jewelry"])] = jewelry
             
@@ -182,7 +182,7 @@ class portraitStackWidget(QWidget):
         if self.counts["masks"] <= self.max_counts["masks"]:
         
             ###REPLACE THIS###
-            mask = "temp mask " + str(self.counts["masks"])
+            mask = "mask " + str(self.counts["masks"])
             
             self.parent.active_layers["mask " + str(self.counts["masks"])] = mask
             
@@ -197,7 +197,7 @@ class portraitStackWidget(QWidget):
         if self.counts["tattoos"] <= self.max_counts["tattoos"]:
         
             ###REPLACE THIS###
-            tattoo = "temp tattoo " + str(self.counts["tattoos"])
+            tattoo = "tattoo " + str(self.counts["tattoos"])
             
             self.parent.active_layers["tattoo " + str(self.counts["tattoos"])] = tattoo
             
@@ -212,7 +212,7 @@ class portraitStackWidget(QWidget):
         if self.counts["facial hair"] <= self.max_counts["facial hair"]:
         
             ###REPLACE THIS###
-            facial_hair = "temp facial hair " + str(self.counts["facial hair"])
+            facial_hair = "facial hair " + str(self.counts["facial hair"])
             
             self.parent.active_layers["facial hair " + str(self.counts["facial hair"])] = facial_hair
             
@@ -224,7 +224,7 @@ class portraitStackWidget(QWidget):
     
     def initEyebrows(self):
         ###REPLACE THIS###
-        eyebrows = "temp eyebrows"
+        eyebrows = "eyebrows"
         
         self.parent.active_layers["eyebrows"] = eyebrows
         
@@ -239,7 +239,7 @@ class portraitStackWidget(QWidget):
         if self.counts["makeup"] <= self.max_counts["makeup"]:
         
             ###REPLACE THIS###
-            facial_hair = "temp makeup " + str(self.counts["makeup"])
+            makeup = "makeup " + str(self.counts["makeup"])
             
             self.parent.active_layers["makeup " + str(self.counts["makeup"])] = makeup
             
@@ -254,7 +254,7 @@ class portraitStackWidget(QWidget):
         if self.counts["headwear"] <= self.max_counts["headwear"]:
         
             ###REPLACE THIS###
-            headwear = "temp headwear " + str(self.counts["headwear"])
+            headwear = "headwear " + str(self.counts["headwear"])
             
             self.parent.active_layers["headwear " + str(self.counts["headwear"])] = headwear
             
@@ -269,7 +269,7 @@ class portraitStackWidget(QWidget):
         if self.counts["tops"] <= self.max_counts["tops"]:
         
             ###REPLACE THIS###
-            tops = "temp tops " + str(self.counts["tops"])
+            tops = "tops " + str(self.counts["tops"])
             
             self.parent.active_layers["tops " + str(self.counts["tops"])] = tops
             
@@ -284,7 +284,7 @@ class portraitStackWidget(QWidget):
         if self.counts["armor"] <= self.max_counts["armor"]:
         
             ###REPLACE THIS###
-            armor = "temp armor " + str(self.counts["armor"])
+            armor = "armor " + str(self.counts["armor"])
             
             self.parent.active_layers["armor " + str(self.counts["armor"])] = armor
             
