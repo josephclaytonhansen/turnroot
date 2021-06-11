@@ -223,16 +223,73 @@ class portraitStackWidget(QWidget):
             self.parent.layers_box.addItems(self.parent.active_layers)
     
     def initEyebrows(self):
-        pass
+        ###REPLACE THIS###
+        eyebrows = "temp eyebrows"
+        
+        self.parent.active_layers["eyebrows"] = eyebrows
+        
+        self.total_layers = len(self.parent.active_layers)
+        self.parent.layer_orders[self.total_layers] = eyebrows
+        
+        self.parent.layers_box.clear()
+        self.parent.layers_box.addItems(self.parent.active_layers)
     
     def initMakeup(self):
-        pass
+        self.counts["makeup"] += 1
+        if self.counts["makeup"] <= self.max_counts["makeup"]:
+        
+            ###REPLACE THIS###
+            facial_hair = "temp makeup " + str(self.counts["makeup"])
+            
+            self.parent.active_layers["makeup " + str(self.counts["makeup"])] = makeup
+            
+            self.total_layers = len(self.parent.active_layers)
+            self.parent.layer_orders[self.total_layers] = makeup
+            
+            self.parent.layers_box.clear()
+            self.parent.layers_box.addItems(self.parent.active_layers)
     
     def initHeadwear(self):
-        pass
+        self.counts["headwear"] += 1
+        if self.counts["headwear"] <= self.max_counts["headwear"]:
+        
+            ###REPLACE THIS###
+            headwear = "temp headwear " + str(self.counts["headwear"])
+            
+            self.parent.active_layers["headwear " + str(self.counts["headwear"])] = headwear
+            
+            self.total_layers = len(self.parent.active_layers)
+            self.parent.layer_orders[self.total_layers] = headwear
+            
+            self.parent.layers_box.clear()
+            self.parent.layers_box.addItems(self.parent.active_layers)
     
     def initTops(self):
-        pass
+        self.counts["tops"] += 1
+        if self.counts["tops"] <= self.max_counts["tops"]:
+        
+            ###REPLACE THIS###
+            tops = "temp tops " + str(self.counts["tops"])
+            
+            self.parent.active_layers["tops " + str(self.counts["tops"])] = tops
+            
+            self.total_layers = len(self.parent.active_layers)
+            self.parent.layer_orders[self.total_layers] = tops
+            
+            self.parent.layers_box.clear()
+            self.parent.layers_box.addItems(self.parent.active_layers)
     
     def initArmor(self):
-        pass
+        self.counts["armor"] += 1
+        if self.counts["armor"] <= self.max_counts["armor"]:
+        
+            ###REPLACE THIS###
+            armor = "temp armor " + str(self.counts["armor"])
+            
+            self.parent.active_layers["armor " + str(self.counts["armor"])] = armor
+            
+            self.total_layers = len(self.parent.active_layers)
+            self.parent.layer_orders[self.total_layers] = armor
+            
+            self.parent.layers_box.clear()
+            self.parent.layers_box.addItems(self.parent.active_layers)
