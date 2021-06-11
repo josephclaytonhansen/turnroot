@@ -16,9 +16,10 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 class portraitStackWidget(QWidget):
     def __init__(self, parent=None,font=None,stack=None):
         super().__init__(parent)
-        self.initUI()
         self.body_font = font
-        self.initContent(stack)
+        self.parent = parent
+        self.stack = stack
+        self.initUI()
         
     def initUI(self):
         self.path = None
@@ -29,6 +30,10 @@ class portraitStackWidget(QWidget):
         self.layout.setContentsMargins(0,0,0,0)
         self.layout.setSpacing(2)
         self.setLayout(self.layout)
+        
+        self.counts = {"hair":0}
+        self.max_counts = {"hair":3}
+        self.total_layers = 0
     
     def initContent(self, s):
         if s == "Base":
@@ -65,10 +70,37 @@ class portraitStackWidget(QWidget):
             self.initArmor()
     
     def initBase(self):
-        pass
+        ###REPLACE THIS###
+        base = "temp base"
+        
+        self.parent.active_layers["base"] = base
+        
+        self.total_layers = len(self.parent.active_layers)
+        self.parent.layer_orders[self.total_layers] = base
+        
+        print(self.parent.layer_orders, self.parent.active_layers)
+        
+        self.parent.layers_box.clear()
+        self.parent.layers_box.addItems(self.parent.active_layers)
     
     def initHair(self):
-        pass
+        self.counts["hair"] += 1
+        if self.counts["hair"] <= self.max_counts["hair"]:
+        
+            ###REPLACE THIS###
+            hair = "temp hair " + str(self.counts["hair"])
+            
+            self.parent.active_layers["hair " + str(self.counts["hair"])] = hair
+            
+            self.total_layers = len(self.parent.active_layers)
+            self.parent.layer_orders[self.total_layers] = hair
+            
+            print(self.parent.layer_orders, self.parent.active_layers)
+            
+            self.parent.layers_box.clear()
+            self.parent.layers_box.addItems(self.parent.active_layers)
+            
+            
     
     def initEyes(self):
         pass

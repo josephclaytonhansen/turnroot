@@ -93,6 +93,9 @@ class imageOverlayCanvas(QWidget):
         self.layers_box = QListWidget()
         self.layers_box.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
         
+        self.active_layers = {}
+        self.layer_orders = {}
+        
         self.edit_layers_row = QWidget()
         self.edit_layers_row_layout = QHBoxLayout()
         self.edit_layers_row.setLayout(self.edit_layers_row_layout)
@@ -155,7 +158,7 @@ class imageOverlayCanvas(QWidget):
             self.add_options_buttons[button].name = button
             self.add_options_buttons[button].setFont(self.body_font)
             
-            widget = portraitStackWidget(self,self.body_font,button)
+            widget = portraitStackWidget(parent=self,font=self.body_font,stack=button)
             self.stacks[button] = widget
             
             self.current_layer_options_container_layout.addWidget(widget)
@@ -213,6 +216,7 @@ class imageOverlayCanvas(QWidget):
         self.canvas.setPixmap(composite)
     
     def canvas_edit_change(self):
+        self.stacks[self.sender().name].initContent(self.sender().name)
         for x in range(0, len(self.buttons)):
             if (self.sender().name == self.buttons[x]):
                 ind = x
