@@ -1,3 +1,5 @@
+from src.UI_Dialogs import textEntryDialog
+
 def layerDown(parent):
     if parent.layers_box.currentItem() != None:
         for layer in parent.layer_orders:
@@ -84,3 +86,15 @@ def layerDelete(parent, layer):
     
     for g in layer_orders:
         parent.layers_box.addItem(layer_orders[g])
+
+def layerRename(parent, layer):
+    p = parent
+    current_name = parent.layer_orders[layer+1]
+    y = textEntryDialog(parent=p,font=parent.body_font,n=current_name)
+    y.exec_()
+    parent.layer_orders[layer+1] = y.data
+    
+    parent.layers_box.clear()
+    
+    for g in parent.layer_orders:
+        parent.layers_box.addItem(parent.layer_orders[g])

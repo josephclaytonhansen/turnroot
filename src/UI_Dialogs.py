@@ -564,7 +564,7 @@ class numberEntryDialog(QDialog):
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.setWindowFlags(Qt.Popup)
-        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.setStyleSheet("background-color: "+self.active_theme.button_alt_color+";color: "+self.active_theme.button_alt_text_color)
         
         self.data = "0"
         
@@ -574,13 +574,47 @@ class numberEntryDialog(QDialog):
         
         self.number = QSpinBox()
         self.number.setRange(-100,100)
-        self.number.valueChanged.connect(self.change_value)
         self.number.setFont(font)
         self.number.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
         layout.addWidget(self.number)
+        self.ok = QPushButton("Ok")
+        self.ok.setFont(font)
+        self.ok.clicked.connect(self.change_value)
+        layout.addWidget(self.ok)
         self.setLayout(layout)
         self.show()
     
     def change_value(self):
-        self.data = str(self.sender().value())
+        self.data = str(self.number.value())
+        self.close()
+        
+class textEntryDialog(QDialog):
+    def __init__(self,parent=None,font=None,n=None):
+        data = updateJSON()
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        self.setWindowFlags(Qt.Popup)
+        self.setStyleSheet("background-color: "+self.active_theme.button_alt_color+";color: "+self.active_theme.button_alt_text_color)
+        
+        self.data = "Name"
+        
+        layout = QVBoxLayout()
+        layout.setContentsMargins( 8,8,8,8)
+        layout.setSpacing(0)
+        
+        self.number = QLineEdit()
+        self.number.setPlaceholderText(n)
+        self.number.setFont(font)
+        self.number.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        layout.addWidget(self.number)
+        self.ok = QPushButton("Ok")
+        self.ok.setFont(font)
+        self.ok.clicked.connect(self.change_value)
+        layout.addWidget(self.ok)
+        self.setLayout(layout)
+        self.show()
+    
+    def change_value(self):
+        self.data = str(self.number.text())
+        self.close()
 

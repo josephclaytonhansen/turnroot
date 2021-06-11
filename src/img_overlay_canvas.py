@@ -14,7 +14,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
 from src.game_directory import gameDirectory
 from src.UI_portrait_editor_dialogs import portraitStackWidget
-from src.portrait_editor_backend import layerDown, layerUp, layerDelete
+from src.portrait_editor_backend import layerDown, layerUp, layerDelete, layerRename
 
 class imageOverlayCanvas(QWidget):
     def __init__(self, parent=None,font=None):
@@ -33,8 +33,8 @@ class imageOverlayCanvas(QWidget):
         self.left.setLayout(self.left_layout)
         
         self.right = QWidget()
-        self.right.setMinimumWidth(170)
-        self.right.setMaximumWidth(170)
+        self.right.setMinimumWidth(210)
+        self.right.setMaximumWidth(210)
         self.right_layout = QVBoxLayout()
         self.right.setLayout(self.right_layout)
         
@@ -113,17 +113,18 @@ class imageOverlayCanvas(QWidget):
         self.delete_layer.clicked.connect(self.layer_delete)
         self.delete_layer.setIcon(QIcon(QPixmap("src/ui_icons/white/delete.png")))
         
-        for b in [self.layer_up, self.layer_down, self.delete_layer]:
+        self.rename_layer = QPushButton()
+        self.rename_layer.clicked.connect(self.layer_rename)
+        self.rename_layer.setIcon(QIcon(QPixmap("src/ui_icons/white/rename.png")))
+        
+        for b in [self.layer_up, self.layer_down, self.delete_layer, self.rename_layer]:
             b.setMaximumWidth(42)
             b.setMinimumWidth(42)
             b.setMinimumHeight(42)
             b.setMaximumHeight(42)
             b.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
             b.setIconSize(QSize(40,40))
-            
-        self.edit_layers_row_layout.addWidget(self.layer_up)
-        self.edit_layers_row_layout.addWidget(self.layer_down)
-        self.edit_layers_row_layout.addWidget(self.delete_layer)
+            self.edit_layers_row_layout.addWidget(b)
         
         self.right_layout.addWidget(self.layers_label)
         self.right_layout.addWidget(self.layers_box)
@@ -235,5 +236,9 @@ class imageOverlayCanvas(QWidget):
     def layer_delete(self):
         if self.layers_box.currentRow() != -1:
             t = self.layers_box.currentRow()
-            print("CURRENT ROW:",t)
             layerDelete(self, t)
+    
+    def layer_rename(self):
+        if self.layers_box.currentRow() != -1:
+            t = self.layers_box.currentRow()
+            layerRename(self, t)
