@@ -591,12 +591,13 @@ class numberEntryDialog(QDialog):
 class textEntryDialog(QDialog):
     def __init__(self,parent=None,font=None,n=None):
         data = updateJSON()
+        self.n = n
         self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
         super().__init__(parent)
         self.setWindowFlags(Qt.Popup)
         self.setStyleSheet("background-color: "+self.active_theme.button_alt_color+";color: "+self.active_theme.button_alt_text_color)
         
-        self.data = "Name"
+        self.data = self.n
         
         layout = QVBoxLayout()
         layout.setContentsMargins( 8,8,8,8)
@@ -615,6 +616,8 @@ class textEntryDialog(QDialog):
         self.show()
     
     def change_value(self):
+        if self.data == "Name":
+            self.data = self.n
         self.data = str(self.number.text())
         self.close()
 
