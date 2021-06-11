@@ -165,7 +165,7 @@ class mainS(NodeEditorWnd):
 class mainN(UnitEditorWnd):
     def __init__(self, parent):
         super().__init__(parent)
-        self.resize(QSize(1200,820))
+        self.resize(QSize(1200,880))
         self.setMaximumSize(QSize(int(size.width()*2), int(size.height()*2)))
 
 class mainO(ObjectEditorWnd):
@@ -300,7 +300,7 @@ class main(QMainWindow):
                 self.m.setCurrentWidget(self.skills_editor)
                 self.openButton.triggered.disconnect()
                 self.saveButton.triggered.disconnect()
-                self.newButton.trigggered.disconnect()
+                self.newButton.triggered.disconnect()
                 self.openButton.triggered.connect(self.skills_editor.scene.loadFromFile)
                 self.saveButton.triggered.connect(self.skills_editor.scene.saveToFile)
                 self.fulls = True
@@ -336,7 +336,7 @@ class main(QMainWindow):
                 self.deleteButton.setVisible(False)
                 self.fulls = True
                 self.fullScreenToggle()
-                self.resize(QSize(1200,820))
+                self.resize(QSize(1200,880))
                 self.setGeometry(
     QStyle.alignedRect(
         Qt.LeftToRight,

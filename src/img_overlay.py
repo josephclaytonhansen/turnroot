@@ -15,11 +15,11 @@ def overlayTile(image, overlay, size):
     result = result.scaled(size, size, Qt.KeepAspectRatio)
     return result
 
-def overlayTileWithoutScaling(image, overlay, size, pos,transform=None):
+def overlayTileWithoutScaling(image, overlay, size, size2, pos,transform=None):
     image = QPixmap(image)
     overlay = QPixmap(overlay)
     painter = QPainter()
-    result = QPixmap(size, size)
+    result = QPixmap(size, size2)
     result.fill(Qt.transparent)
     painter.begin(result)
     painter.drawPixmap(0, 0, image)

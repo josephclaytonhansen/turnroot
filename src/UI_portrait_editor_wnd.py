@@ -50,13 +50,17 @@ class PortraitEditorWnd(QWidget):
             self.tabs.addTab(self.c_tab, self.tab_title)
         
         self.tabs.currentChanged.connect(self.ctab_changed)
+        fontc = QLabel()
+        body_font = fontc.font()
+        body_font.setPointSize(int(data["font_size"]))
+        self.body_font = body_font
         
         self.initDP()
     
     def initDP(self):
         self.working_tab = self.tabs_dict["Dialogue Portraits"]
         self.working_tab_layout = self.working_tab.layout()
-        self.canvas = imageOverlayCanvas()
+        self.canvas = imageOverlayCanvas(self,self.body_font)
         self.canvas.setMaximumWidth(1150)
         self.working_tab_layout.addWidget(self.canvas)
         

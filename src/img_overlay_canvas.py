@@ -13,15 +13,17 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
 from src.game_directory import gameDirectory
+from src.UI_portrait_editor_dialogs import portraitStackWidget
 
 class imageOverlayCanvas(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,font=None):
         super().__init__(parent)
         
         self.layout = QHBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
+        self.body_font = font
         
         self.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: 16")
         
@@ -48,10 +50,10 @@ class imageOverlayCanvas(QWidget):
         self.canvas = QLabel()
         self.canvas.setAlignment(Qt.AlignCenter)
         self.canvas.setStyleSheet("background-color: white; border: 4px solid black; border-radius: 3px;")
-        self.canvas.setMinimumWidth(512)
-        self.canvas.setMaximumWidth(512)
-        self.canvas.setMinimumHeight(512)
-        self.canvas.setMaximumHeight(512)
+        self.canvas.setMinimumWidth(336)
+        self.canvas.setMaximumWidth(336)
+        self.canvas.setMinimumHeight(468)
+        self.canvas.setMaximumHeight(468)
         
         self.center_layout.addWidget(self.canvas)
         
@@ -85,6 +87,7 @@ class imageOverlayCanvas(QWidget):
             self.transform_pad_layout.addWidget(self.transform_pad_buttons[button], self.tpb_locs[index][0], self.tpb_locs[index][1], 1, 1)
         
         self.layers_label = QLabel("Layers")
+        self.layers_label.setFont(self.body_font)
         self.layers_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         
         self.layers_box = QListWidget()
@@ -126,6 +129,8 @@ class imageOverlayCanvas(QWidget):
         self.current_layer_options_container_layout = QStackedLayout()
         self.current_layer_options_container.setLayout(self.current_layer_options_container_layout)
         
+        self.stacks = {}
+        
         self.add_options = QWidget()
         self.add_options_layout = QGridLayout()
         self.add_options.setLayout(self.add_options_layout)
@@ -133,18 +138,26 @@ class imageOverlayCanvas(QWidget):
         self.add_options_buttons = {}
         self.aob_row = -1
         self.aob_column = 0
+        self.buttons =  ["Base", "Hair", "Eyes", "Nose", "Mouth", "Scars", "Freckles", "Jewelry",
+                       "Masks", "Tattoos", "Facial Hair", "Eyebrows", "Makeup", "Headwear", "Tops", "Armor"]
         
-        for button in ["Base", "Hair", "Eyes", "Nose", "Mouth", "Scars", "Freckles", "Jewelry", "Tattoos", "Facial Hair", "Eyebrows", "Makeup", "Headwear", "Bodywear"]:
+        #"Bottoms", "Shoes", "Belts", "Gloves"
+        for button in self.buttons:
             self.aob_row +=1
             if self.aob_row == 4:
                 self.aob_row = 0
                 self.aob_column += 1
                 
             self.add_options_buttons[button] = QPushButton(button)
+            self.add_options_buttons[button].clicked.connect(self.canvas_edit_change)
             self.add_options_buttons[button].setMinimumHeight(40)
-            self.add_options_buttons[button].setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
             self.add_options_buttons[button].name = button
+            self.add_options_buttons[button].setFont(self.body_font)
             
+            widget = portraitStackWidget(self,self.body_font,button)
+            self.stacks[button] = widget
+            
+            self.current_layer_options_container_layout.addWidget(widget)
             self.add_options_layout.addWidget(self.add_options_buttons[button], self.aob_column, self.aob_row,1,1)
         
         self.left_layout.addWidget(self.add_options)
@@ -154,8 +167,8 @@ class imageOverlayCanvas(QWidget):
         self.image1 = QPixmap("src/portrait_graphics/blue.png")
         self.image2 = QPixmap("src/portrait_graphics/yellow.png")
         self.overlay_dimensions = [self.image2.width(), self.image2.height()]
-        self.pos = [256,256]
-        composite = overlayTileWithoutScaling(self.image1, self.image2, 512, self.pos)
+        self.pos = [135,188]
+        composite = overlayTileWithoutScaling(self.image1, self.image2, 336, 468, self.pos)
         self.canvas.setPixmap(composite)
         #self.canvas.setPixmap(composite).scaled(self.canvas_size, self.canvas_size, Qt.KeepAspectRatio, Qt.FastTransformation)
         
@@ -184,13 +197,19 @@ class imageOverlayCanvas(QWidget):
             self.actually_move_overlay()
     
     def actually_move_overlay(self):
-        if self.pos[0] > 512-self.overlay_dimensions[0]:
-            self.pos[0] = 512-self.overlay_dimensions[0]
+        if self.pos[0] > 336-self.overlay_dimensions[0]:
+            self.pos[0] = 336-self.overlay_dimensions[0]
         if self.pos[0] < 0:
             self.pos[0] = 0
-        if self.pos[1] > 512-self.overlay_dimensions[1]:
-            self.pos[1] = 512-self.overlay_dimensions[1]
+        if self.pos[1] > 468-self.overlay_dimensions[1]:
+            self.pos[1] = 468-self.overlay_dimensions[1]
         if self.pos[1] < 0:
             self.pos[1] = 0
-        composite = overlayTileWithoutScaling(self.image1, self.image2, 512, self.pos)
+        composite = overlayTileWithoutScaling(self.image1, self.image2, 336, 468, self.pos)
         self.canvas.setPixmap(composite)
+    
+    def canvas_edit_change(self):
+        for x in range(0, len(self.buttons)):
+            if (self.sender().name == self.buttons[x]):
+                ind = x
+                self.current_layer_options_container_layout.setCurrentIndex(ind)
