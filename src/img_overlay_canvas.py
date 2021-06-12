@@ -20,6 +20,9 @@ class imageOverlayCanvas(QWidget):
     def __init__(self, parent=None,font=None):
         super().__init__(parent)
         
+        self.path_no_ext = None
+        self.path = None
+        
         self.layout = QHBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
         self.layout.setSpacing(0)
@@ -94,8 +97,10 @@ class imageOverlayCanvas(QWidget):
         self.layers_box = QListWidget()
         self.layers_box.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
         
-        self.active_layers = {}
+        self.layer_positions = {}
         self.layer_orders = {}
+        self.layer_attributes = {}
+        self.layer_images = {}
         
         self.edit_layers_row = QWidget()
         self.edit_layers_row_layout = QHBoxLayout()
@@ -242,3 +247,13 @@ class imageOverlayCanvas(QWidget):
         if self.layers_box.currentRow() != -1:
             t = self.layers_box.currentRow()
             layerRename(self, t)
+    
+    def canvasToJSON(self):
+        with open("src/skeletons/portraits/"+self.path) as f:
+            data = {"poss":self.layer_positions,"orders":self.layer_orders,"attrs":self.layer_attributes,:"imgs":self.layer_images}
+            json.load(data,f)
+        #editable canvas
+    
+    def canvasToPNG(self):
+        self.canvas.pixmap.save("src/skeletons/portrait_images/"+self.path_no_ext, "PNG")
+        #flat image used for actual game
