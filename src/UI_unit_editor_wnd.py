@@ -131,13 +131,13 @@ class UnitEditorWnd(QWidget):
         self.basic_layout.addWidget(self.basic_center, 60)
         
         image = QPushButton()
-        image.setMaximumHeight(470)
-        image.setMaximumWidth(340)
-        pixmap = QPixmap(336,468)
+        image.setMaximumHeight(522)
+        image.setMaximumWidth(362)
+        pixmap = QPixmap(360,520)
         pixmap.fill(QColor("white"))
         pixmap = QIcon(pixmap)
         image.setIcon(pixmap)
-        image.setIconSize(QSize(336,468))
+        image.setIconSize(QSize(360,520))
         image.setToolTip("Edit portraits in the Graphics/Sounds tab")
         
         img_container = QWidget()

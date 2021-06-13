@@ -53,11 +53,11 @@ class imageOverlayCanvas(QWidget):
         
         self.canvas = QLabel()
         self.canvas.setAlignment(Qt.AlignCenter)
-        self.canvas.setStyleSheet("background-color: white; border: 4px solid black; border-radius: 3px;")
-        self.canvas.setMinimumWidth(336)
-        self.canvas.setMaximumWidth(336)
-        self.canvas.setMinimumHeight(468)
-        self.canvas.setMaximumHeight(468)
+        self.canvas.setStyleSheet("background-color: white; border: 2px solid black; border-radius: 3px;")
+        self.canvas.setMinimumWidth(360)
+        self.canvas.setMaximumWidth(360)
+        self.canvas.setMinimumHeight(520)
+        self.canvas.setMaximumHeight(520)
         
         self.center_layout.addWidget(self.canvas)
         
@@ -250,7 +250,7 @@ class imageOverlayCanvas(QWidget):
     
     def canvasToJSON(self):
         with open("src/skeletons/portraits/"+self.path) as f:
-            data = {"poss":self.layer_positions,"orders":self.layer_orders,"attrs":self.layer_attributes,:"imgs":self.layer_images}
+            data = {"poss":self.layer_positions,"orders":self.layer_orders,"attrs":self.layer_attributes,"imgs":self.layer_images}
             json.load(data,f)
         #editable canvas
     
