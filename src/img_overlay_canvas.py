@@ -183,8 +183,8 @@ class imageOverlayCanvas(QWidget):
         self.image3 = QPixmap("src/portrait_graphics/pink.png")
         self.overlay_dimensions = [self.image2.width(), self.image2.height()]
         self.pos = [135,188]
-        composite = overlayTileWithoutScaling(self.image1, self.image2, 336, 468, self.pos)
-        composite = overlayTileWithoutScaling(composite, self.image3, 336, 468, self.pos)
+        composite = overlayTileWithoutScaling(self.image1, self.image2, 360, 520, self.pos)
+        composite = overlayTileWithoutScaling(composite, self.image3, 360, 520, self.pos)
         self.canvas.setPixmap(composite)
         #self.canvas.setPixmap(composite).scaled(self.canvas_size, self.canvas_size, Qt.KeepAspectRatio, Qt.FastTransformation)
         
@@ -213,16 +213,16 @@ class imageOverlayCanvas(QWidget):
             self.actually_move_overlay()
     
     def actually_move_overlay(self):
-        if self.pos[0] > 336-self.overlay_dimensions[0]:
-            self.pos[0] = 336-self.overlay_dimensions[0]
+        if self.pos[0] > 360-self.overlay_dimensions[0]:
+            self.pos[0] = 360-self.overlay_dimensions[0]
         if self.pos[0] < 0:
             self.pos[0] = 0
-        if self.pos[1] > 468-self.overlay_dimensions[1]:
-            self.pos[1] = 468-self.overlay_dimensions[1]
+        if self.pos[1] > 520-self.overlay_dimensions[1]:
+            self.pos[1] = 520-self.overlay_dimensions[1]
         if self.pos[1] < 0:
             self.pos[1] = 0
-        composite = overlayTileWithoutScaling(self.image1, self.image2, 336, 468, self.pos)
-        composite = overlayTileWithoutScaling(composite, self.image3, 336, 468, [135,188])
+        composite = overlayTileWithoutScaling(self.image1, self.image2, 360, 520, self.pos)
+        composite = overlayTileWithoutScaling(composite, self.image3, 360, 520, [135,188])
         self.canvas.setPixmap(composite)
     
     def canvas_edit_change(self):
