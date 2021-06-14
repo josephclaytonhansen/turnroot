@@ -173,9 +173,30 @@ class imageOverlayCanvas(QWidget):
             
             self.current_layer_options_container_layout.addWidget(widget)
             self.add_options_layout.addWidget(self.add_options_buttons[button], self.aob_column, self.aob_row,1,1)
+            
+        self.left_buttons_row = QWidget()
+        self.left_buttons_row_layout = QHBoxLayout()
+        self.left_buttons_row.setLayout(self.left_buttons_row_layout)
+        
+        self.left_buttons= {}
+        
+        for button in ["add_image", "help"]:
+            self.left_buttons[button] = QPushButton()
+            self.left_buttons[button].setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+            self.left_buttons[button].what = button
+            
+            self.left_buttons[button].clicked.connect(self.left_button_clicked)
+            
+            self.left_buttons[button].setMaximumWidth(58)
+            self.left_buttons[button].setMaximumHeight(58)
+            self.left_buttons[button].setIcon(QIcon(QPixmap("src/ui_icons/white/"+button+".png")))
+            self.left_buttons[button].setIconSize(QSize(56,56))
+            
+            self.left_buttons_row_layout.addWidget(self.left_buttons[button])
         
         self.left_layout.addWidget(self.add_options)
         self.left_layout.addWidget(self.current_layer_options_container)
+        self.left_layout.addWidget(self.left_buttons_row)
             
         ###TESTING ONLY###
         self.image1 = QPixmap("src/portrait_graphics/blue.png")
@@ -247,6 +268,9 @@ class imageOverlayCanvas(QWidget):
         if self.layers_box.currentRow() != -1:
             t = self.layers_box.currentRow()
             layerRename(self, t)
+    
+    def left_button_clicked(self):
+        print(self.sender().what)
     
     def canvasToJSON(self):
         with open("src/skeletons/portraits/"+self.path) as f:
