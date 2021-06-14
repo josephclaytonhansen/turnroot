@@ -63,7 +63,7 @@ class portraitStackWidget(QWidget):
         self.color_hex = QLineEdit()
         self.color_hex.setFont(self.body_font)
         self.color_hex.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
-        self.color_hex.setText("#000000")
+        self.color_hex.setPlaceholderText("#000000")
         color_edit_layout.addWidget(self.color_hex,1,0,1,1)
         
         save_fav_color = QPushButton()
@@ -138,8 +138,8 @@ class portraitStackWidget(QWidget):
             
         color_edit_layout.addWidget(palette_row,3,0,1,2)
         
-        self.history_index = 9
-        self.palette_index = 9
+        self.history_index = 8
+        self.palette_index = 8
             
     def initContent(self, s):
         s = s.lower()
@@ -162,10 +162,12 @@ class portraitStackWidget(QWidget):
         print("color from button")
     
     def save_color(self):
-        self.history_index -= 1
-        if self.history_index == 0:
-            self.history_index = 8
-        self.saved_palette[self.history_index] = self.color_hex.text()
-        self.palette_buttons[self.history_index].value = self.color_hex.text()
-        self.palette_buttons[self.history_index].setStyleSheet("background-color: "+self.color_hex.text())
-        print(self.color_hex.text())
+        if self.color_hex.text() != "":
+            self.history_index -= 1
+            if self.history_index == -1:
+                self.history_index = 7
+            self.saved_palette[self.history_index] = self.color_hex.text()
+            self.palette_buttons[self.history_index].value = self.color_hex.text()
+            self.palette_buttons[self.history_index].setStyleSheet("background-color: "+self.color_hex.text())
+            with open("src/tmp/pecp.trch", "w") as f:
+                json.dump(self.saved_palette, f)
