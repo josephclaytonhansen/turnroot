@@ -23,6 +23,7 @@ class portraitStackWidget(QWidget):
         
     def initUI(self):
         self.path = None
+        self.active_color = "#000000"
         
         self.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: 16")
 
@@ -61,6 +62,7 @@ class portraitStackWidget(QWidget):
         color_edit_layout.addWidget(self.color_preview,0,0,1,2)
         
         self.color_hex = QLineEdit()
+        self.color_hex.returnPressed.connect(self.color_update)
         self.color_hex.setFont(self.body_font)
         self.color_hex.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
         self.color_hex.setPlaceholderText("#000000")
@@ -159,15 +161,37 @@ class portraitStackWidget(QWidget):
             #add stack widget
                 
     def color_from_palette(self):
-        print("color from button")
+        color = self.sender().value
+        self.active_color = color
+        self.color_preview.setStyleSheet("background-color: "+self.active_color)
+        self.color_hex.setText(self.active_color)
     
+    def color_update(self):
+        color = self.color_hex.text()
+        if color == "":
+            color = "#000000"
+        if color.startswith("#") == False:
+            color = "#" + color
+        self.active_color = color
+        self.color_preview.setStyleSheet("background-color: "+self.active_color)
+        self.color_hex.setText(self.active_color)
+        
+        self.history_index -= 1
+        if self.history_index == -1:
+            self.history_index = 7
+        self.saved_palette[self.history_index] = self.active_color
+        self.color_history_buttons[self.history_index].value = self.active_color
+        self.color_history_buttons[self.history_index].setStyleSheet("background-color: "+self.active_color)
+        
+        #set pixmap to color using mask
+        
     def save_color(self):
         if self.color_hex.text() != "":
-            self.history_index -= 1
-            if self.history_index == -1:
-                self.history_index = 7
-            self.saved_palette[self.history_index] = self.color_hex.text()
-            self.palette_buttons[self.history_index].value = self.color_hex.text()
-            self.palette_buttons[self.history_index].setStyleSheet("background-color: "+self.color_hex.text())
+            self.palette_index -= 1
+            if self.palette_index == -1:
+                self.palette_index = 7
+            self.saved_palette[self.palette_index] = self.color_hex.text()
+            self.palette_buttons[self.palette_index].value = self.color_hex.text()
+            self.palette_buttons[self.palette_index].setStyleSheet("background-color: "+self.color_hex.text())
             with open("src/tmp/pecp.trch", "w") as f:
                 json.dump(self.saved_palette, f)
