@@ -7,8 +7,12 @@ from PyQt5.QtGui import *
 from src.UI_updateJSON import updateJSON
 from src.game_directory import gameDirectory
 from src.UI_Dialogs import confirmAction, infoClose, switchEditorDialog, REPLACE_WINDOW, NEW_WINDOW
+from src.node_backend import getFiles, File
 import qtmodern.styles
 import qtmodern.windows
+
+GET_FILES = 1
+GET_FOLDERS = 0
 
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
@@ -57,12 +61,15 @@ class portraitStackWidget(QWidget):
         self.layout.addWidget(img_edit)
         
         self.img_choices_list = QListWidget()
+        self.img_choices_list.setMinimumWidth(156)
+        self.img_choices_list.setMaximumWidth(156)
         self.img_choices_list.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
         img_edit_layout.addWidget(self.img_choices_list)
         
         self.expand_choices = QPushButton()
         self.expand_choices.setIcon(QIcon(QPixmap("src/ui_icons/white/expand.png")))
         self.expand_choices.setMinimumWidth(42)
+        self.expand_choices.setMaximumWidth(140)
         self.expand_choices.setMinimumHeight(42)
         self.expand_choices.setMaximumHeight(42)
         self.expand_choices.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
@@ -161,7 +168,7 @@ class portraitStackWidget(QWidget):
         self.initItem(s)
             
     def initItem(self,item):
-        print(item)
+        self.what = item
         self.counts[item] += 1
         if self.counts[item] <= self.max_counts[item]:
 
@@ -172,7 +179,8 @@ class portraitStackWidget(QWidget):
             self.parent.layers_box.clear()
             for g in self.parent.layer_orders:
                 self.parent.layers_box.addItem(self.parent.layer_orders[g])
-            #add stack widget
+        
+        self.getImageFiles()
                 
     def color_from_palette(self):
         color = self.sender().value
@@ -209,3 +217,24 @@ class portraitStackWidget(QWidget):
             self.palette_buttons[self.palette_index].setStyleSheet("background-color: "+self.color_hex.text())
             with open("src/tmp/pecp.trch", "w") as f:
                 json.dump(self.saved_palette, f)
+            
+    def getImageFiles(self):
+        file_list = getFiles("src/portrait_graphics/"+self.what)[GET_FILES]
+
+        global images
+        images = {}
+        self.paths = []
+        self.icon_height = 0
+        self.img_choices_list.clear()
+        for f in file_list:
+            if f.name.endswith("s") == False and f.name.endswith("cm") == False and f.name.endswith("p") == False and "DS_Store" not in f.fullPath:
+                self.paths.append(f.fullPath)
+                
+                list_img = QListWidgetItem()
+                list_img.setIcon(QIcon(QPixmap(f.fullPath.strip(".png")+"p.png")))
+                ht = QPixmap(f.fullPath.strip(".png")+"p.png").height()
+                if ht > self.icon_height:
+                    self.icon_height = ht
+                
+                self.img_choices_list.setIconSize(QSize(150,self.icon_height))
+                self.img_choices_list.addItem(list_img)
