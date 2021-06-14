@@ -541,3 +541,58 @@ class editClassifications(QDialog):
             self.parent.unit.removeUniversalClassification(self.list.currentItem().text())
             self.restart = True
             self.close()
+            
+class statCapDialog(QDialog):
+    def __init__(self, parent=None,font=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        self.setMinimumWidth(200)
+        self.body_font = font
+        
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(12,12,12,12)
+        
+        with open("src/skeletons/universal_stats.json", "r") as stats_file:
+            universal_stats =  json.load(stats_file)
+        
+        self.rows = {}
+        self.labels = {}
+        self.values = {}
+        
+        for s in universal_stats:
+            if s not in self.parent.unit.stat_caps:
+                self.parent.unit.stat_caps[s] = 0
+            row = QWidget()
+            row_layout = QHBoxLayout()
+            row.setLayout(row_layout)
+            
+            self.rows[s] = row
+            
+            label = QLabel(s)
+            label.setFont(self.body_font)
+            self.labels[s] = label
+            row_layout.addWidget(label)
+            
+            value = QSpinBox()
+            value.setFont(self.body_font)
+            value.name = s
+            value.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+            value.setRange(0,100)
+            value.setValue(self.parent.unit.stat_caps[s])
+            value.valueChanged.connect(self.value_changed)
+            self.values[s] = value
+            row_layout.addWidget(value)
+            
+            self.layout.addWidget(row)
+            
+        self.setLayout(self.layout)
+        
+    def value_changed(self):
+        try:
+            self.parent.unit.stat_caps[self.sender().name] = self.sender().value()
+        except:
+            pass

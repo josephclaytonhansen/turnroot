@@ -14,7 +14,6 @@ data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 from src.skeletons.unit import Unit, universal_classifications
-from src.skeletons.identities import orientations, genders, pronouns
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
 from src.game_directory import gameDirectory
@@ -23,7 +22,7 @@ from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHel
                                         instanceStatDialog, tileChangesDialog, unitGrowthRateDialog,
                                         classCriteriaDialog)
 from src.UI_unit_editor_more_dialogs import (weakAgainstDialog, expTypesDialog, nextClassesDialog,
-                                             classGraphicDialog,editUniversalWeaponTypes, editClassifications)
+                                             classGraphicDialog,editUniversalWeaponTypes, editClassifications, statCapDialog)
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -186,16 +185,10 @@ class UnitEditorWnd(QWidget):
         identity_row_layout = QHBoxLayout()
         identity_row.setLayout(identity_row_layout)
         
-        self.gender_edit = QComboBox()
-        self.gender_edit.setStyleSheet("background-color: "+active_theme.list_background_color+";")
-        self.gender_edit.setToolTip("Set unit gender. This will also change pronouns for dialogue")
-        self.gender_edit.currentTextChanged.connect(self.genderChange)
-        self.gender_edit.addItems(["Male", "Female", "Non-Binary"])
-        self.gender_edit.setFont(small_font)
-        identity_row_layout.addWidget(self.gender_edit)
-        
-        self.pronouns_edit = QLabel("He/Him/His")
-        self.pronouns_edit.setToolTip("Will change based on gender selection")
+        self.pronouns_edit = QComboBox()
+        self.pronouns_edit.currentTextChanged.connect(self.genderChange)
+        self.pronouns_edit.addItems(["He/Him", "She/Her", "They/Them"])
+        self.pronouns_edit.setToolTip("Set unit pronouns")
         self.pronouns_edit.setFont(small_font)
         identity_row_layout.addWidget(self.pronouns_edit)
         
@@ -358,6 +351,12 @@ class UnitEditorWnd(QWidget):
         
         text_row_layout.addWidget(notes_column)
         text_row_layout.addWidget(desc_column)
+        
+        stat_cap = QPushButton("Stat Caps (if enabled)")
+        stat_cap.setFont(self.body_font)
+        stat_cap.setToolTip("If Stat Caps are enabled in the Game Editor, set the maximum amount this unit can reach for each stat. Otherwise, ignore")
+        stat_cap.clicked.connect(self.stat_cap_change)
+        self.basic_center_layout.addWidget(stat_cap)
         
         self.basic_center_layout.addWidget(text_row)
         
@@ -1038,21 +1037,7 @@ class UnitEditorWnd(QWidget):
         working_tab_layout.addWidget(supports_setup)
         
     def genderChange(self, s):
-        if s == "Male":
-            self.unit.gender = genders().MALE
-        elif s == "Female":
-            self.unit.gender = genders().FEMALE
-        elif s == "Non-Binary":
-            self.unit.gender = genders().OTHER
-        self.unit.pronoun_string = ""
-        for k in (self.unit.pronouns):
-            self.unit.pronoun_string += k[0].upper()+k[1:]
-            if self.unit.pronouns.index(k) != 2:
-                self.unit.pronoun_string += "/"
-        try:
-            self.pronouns_edit.setText(self.unit.pronoun_string)
-        except:
-            pass
+        self.unit.pronouns = s
         
         if self.path != None:
             self.unit.selfToJSON(self.path)
@@ -1817,3 +1802,9 @@ class UnitEditorWnd(QWidget):
         e = expTypesDialog(parent=self,font=self.body_font)
         e.exec_()
         self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+    
+    def stat_cap_change(self):
+        p = statCapDialog(parent=self,font=self.body_font)
+        p.exec_()
+        if self.path != None:
+            self.unit.selfToJSON(self.path)

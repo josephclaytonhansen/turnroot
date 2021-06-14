@@ -5,7 +5,6 @@ from src.skeletons.weakness_strength import Weakness, Strength
 from src.skeletons.unit_level import Level
 from src.skeletons.unit_class import unitClass
 from src.skeletons.team_likes_dislikes import teamDislike, teamLike
-from src.skeletons.identities import orientations, genders, pronouns
 from src.skeletons.weapon_types import weaponTypes
 
 #general imports
@@ -54,9 +53,7 @@ class Unit():
         self.sprites = {}
         self.sounds =  {}
         
-        self._gender = genders().MALE
-        self.orientation = orientations().STRAIGHT
-        self.pronouns = pronouns(self._gender).pronouns
+        self.pronouns = ""
         
         self.level = 1
         self.exp = 0
@@ -96,6 +93,8 @@ class Unit():
         self.tactics = {}
         self.skilled_blows = {}
         
+        self.stat_caps = {}
+        
         self.inventory_objects = {}
         self.attacks = {}
         self.actions = {}
@@ -120,15 +119,6 @@ class Unit():
         self.growth_rates = {}
         self.current_goals = {}
         self.future_goals = {}
-        
-    @property
-    def gender(self):
-        return self._gender
-       
-    @gender.setter
-    def gender(self, g):
-        self._gender = g
-        self.setIdentity()
     
     def createUniversalStat(self, stat):
         stat = stat.lower()
@@ -166,16 +156,13 @@ class Unit():
         with open("src/skeletons/universal_weapon_types.json", "w") as stats_file:
             json.dump(universal_weapon_types, stats_file)
     
-    def setIdentity(self):
-        self.pronouns = pronouns(self.gender).pronouns
-    
     def selfToJSON(self, path, p = True):
         basic_attrs = ["name","title","unique","is_friendly","is_ally","is_lord","is_recruitable",
                  "has_dialogue","is_permanently_dead","gender","pronouns","orientation",
                        "portraits","sprites","sounds","level","exp","exp_to_next_level","move","size",
                        "is_mounted","is_currently_mounted","weapon_exps","unit_classes_exps",
                        "unit_class","mastered_unit_classes","future_unit_classes","unique_classes",
-                       "unique_objects","affinities","skills","tactics",
+                       "unique_objects","affinities","skills","tactics", "stat_caps",
                        "skilled_blows","inventory_objects","attacks","actions","support_difficulty",
                        "max_support_levels","support_levels","description","notes","AI_soldier",
                        "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range",
@@ -203,7 +190,7 @@ class Unit():
                        "portraits","sprites","sounds","level","exp","exp_to_next_level","move","size",
                        "is_mounted","is_currently_mounted","weapon_exps","unit_classes_exps",
                        "unit_class","mastered_unit_classes","future_unit_classes","unique_classes",
-                       "unique_objects","affinities","skills","tactics",
+                       "unique_objects","affinities","skills","tactics", "stat_caps",
                        "skilled_blows","inventory_objects","attacks","actions","support_difficulty",
                        "max_support_levels","support_levels","description","notes","AI_soldier",
                        "AI_strategic", "AI_cautious", "AI_sheets", "personal_enemy", "visibility_range",
