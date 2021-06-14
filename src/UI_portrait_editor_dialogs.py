@@ -161,6 +161,7 @@ class portraitStackWidget(QWidget):
         self.initItem(s)
             
     def initItem(self,item):
+        print(item)
         self.counts[item] += 1
         if self.counts[item] <= self.max_counts[item]:
 
@@ -192,7 +193,7 @@ class portraitStackWidget(QWidget):
         self.history_index -= 1
         if self.history_index == -1:
             self.history_index = 5
-        self.saved_palette[self.history_index] = self.active_color
+        self.color_history[self.history_index] = self.active_color
         self.color_history_buttons[self.history_index].value = self.active_color
         self.color_history_buttons[self.history_index].setStyleSheet("background-color: "+self.active_color)
         
