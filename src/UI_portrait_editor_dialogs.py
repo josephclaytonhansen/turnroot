@@ -56,6 +56,19 @@ class portraitStackWidget(QWidget):
         self.layout.addWidget(color_edit)
         self.layout.addWidget(img_edit)
         
+        self.img_choices_list = QListWidget()
+        self.img_choices_list.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+        img_edit_layout.addWidget(self.img_choices_list)
+        
+        self.expand_choices = QPushButton()
+        self.expand_choices.setIcon(QIcon(QPixmap("src/ui_icons/white/expand.png")))
+        self.expand_choices.setMinimumWidth(42)
+        self.expand_choices.setMinimumHeight(42)
+        self.expand_choices.setMaximumHeight(42)
+        self.expand_choices.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+        self.expand_choices.setIconSize(QSize(40,40))
+        img_edit_layout.addWidget(self.expand_choices)
+        
         self.color_preview = QWidget()
         self.color_preview.setStyleSheet("background-color: #000000")
         self.color_preview.setMinimumHeight(60)
@@ -91,7 +104,7 @@ class portraitStackWidget(QWidget):
         history_label.setFont(self.body_font)
         color_history_row_layout.addWidget(history_label)
         
-        for x in range(0,8):
+        for x in range(0,6):
             color_ = QPushButton()
             self.color_history_buttons[x] = color_
             color_.setMaximumHeight(20)
@@ -121,7 +134,7 @@ class portraitStackWidget(QWidget):
         palette_label.setFont(self.body_font)
         palette_row_layout.addWidget(palette_label)
         
-        for x in range(0,8):
+        for x in range(0,6):
             color_ = QPushButton()
             self.palette_buttons[x] = color_
             color_.setMaximumHeight(20)
@@ -140,8 +153,8 @@ class portraitStackWidget(QWidget):
             
         color_edit_layout.addWidget(palette_row,3,0,1,2)
         
-        self.history_index = 8
-        self.palette_index = 8
+        self.history_index = 6
+        self.palette_index = 6
             
     def initContent(self, s):
         s = s.lower()
@@ -178,7 +191,7 @@ class portraitStackWidget(QWidget):
         
         self.history_index -= 1
         if self.history_index == -1:
-            self.history_index = 7
+            self.history_index = 5
         self.saved_palette[self.history_index] = self.active_color
         self.color_history_buttons[self.history_index].value = self.active_color
         self.color_history_buttons[self.history_index].setStyleSheet("background-color: "+self.active_color)
@@ -189,7 +202,7 @@ class portraitStackWidget(QWidget):
         if self.color_hex.text() != "":
             self.palette_index -= 1
             if self.palette_index == -1:
-                self.palette_index = 7
+                self.palette_index = 5
             self.saved_palette[self.palette_index] = self.color_hex.text()
             self.palette_buttons[self.palette_index].value = self.color_hex.text()
             self.palette_buttons[self.palette_index].setStyleSheet("background-color: "+self.color_hex.text())
