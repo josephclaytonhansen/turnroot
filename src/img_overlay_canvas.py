@@ -140,7 +140,7 @@ class imageOverlayCanvas(QWidget):
         self.right_layout.addWidget(self.transform_pad)
         
         self.current_layer_options_container = portraitStackWidget(parent=self,font=self.body_font)
-        self.current_layer_options_container.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+        self.current_layer_options_container.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+";")
         self.current_layer_options_container.setMinimumHeight(300)
         
         self.add_options = QWidget()

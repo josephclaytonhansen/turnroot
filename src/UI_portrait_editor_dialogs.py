@@ -62,15 +62,15 @@ class portraitStackWidget(QWidget):
         self.layout.addWidget(img_edit)
         
         self.img_choices_list = QListWidget()
-        self.img_choices_list.setMinimumWidth(156)
-        self.img_choices_list.setMaximumWidth(156)
+        self.img_choices_list.setMinimumWidth(166)
+        self.img_choices_list.setMaximumWidth(166)
         self.img_choices_list.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
         img_edit_layout.addWidget(self.img_choices_list)
         
         self.expand_choices = QPushButton()
         self.expand_choices.setIcon(QIcon(QPixmap("src/ui_icons/white/expand.png")))
         self.expand_choices.setMinimumWidth(42)
-        self.expand_choices.setMaximumWidth(140)
+        self.expand_choices.setMaximumWidth(164)
         self.expand_choices.setMinimumHeight(42)
         self.expand_choices.setMaximumHeight(42)
         self.expand_choices.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
@@ -108,7 +108,8 @@ class portraitStackWidget(QWidget):
         
         self.color_history_buttons = {}
         
-        history_label = QLabel("History")
+        history_label = QLabel()
+        history_label.setPixmap(QPixmap("src/ui_icons/white/history.png"))
         history_label.setFont(self.body_font)
         color_history_row_layout.addWidget(history_label,0,0,2,1)
         
@@ -144,7 +145,8 @@ class portraitStackWidget(QWidget):
         
         self.palette_buttons = {}
         
-        palette_label = QLabel("Saved")
+        palette_label = QLabel()
+        palette_label.setPixmap(QPixmap("src/ui_icons/white/star.png"))
         palette_label.setFont(self.body_font)
         palette_row_layout.addWidget(palette_label,0,0,2,1)
         
