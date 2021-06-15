@@ -188,15 +188,12 @@ class imageOverlayCanvas(QWidget):
         self.left_layout.addWidget(self.add_options)
         self.left_layout.addWidget(self.current_layer_options_container)
         self.left_layout.addWidget(self.left_buttons_row)
-
-        self.pos = [135,188]
-        #delete this ^
         
     def on_release(self):
         self.timer.stop()
 
     def on_press(self):
-        self.timer.start(25)
+        self.timer.start(36)
         self.tmp_direction = self.sender().direction
 
     def while_pressed(self):
@@ -204,20 +201,20 @@ class imageOverlayCanvas(QWidget):
 
     def move_overlay(self,direction):
         if direction == "up":
-            self.pos[1] -= 1
+            self.layer_positions[self.layers_box.currentRow()][1] -= 1
             self.actually_move_overlay()
         elif direction == "right":
-            self.pos[0] += 1
+            self.layer_positions[self.layers_box.currentRow()][0] += 1
             self.actually_move_overlay()
         elif direction == "down":
-            self.pos[1] += 1
+            self.layer_positions[self.layers_box.currentRow()][1] += 1
             self.actually_move_overlay()
         elif direction == "left":
-            self.pos[0] -= 1
+            self.layer_positions[self.layers_box.currentRow()][0] -= 1
             self.actually_move_overlay()
     
     def actually_move_overlay(self):
-        #rework!
+        self.overlay_dimensions = [360,520]
         if self.pos[0] > 360-self.overlay_dimensions[0]:
             self.pos[0] = 360-self.overlay_dimensions[0]
         if self.pos[0] < 0:
@@ -226,9 +223,7 @@ class imageOverlayCanvas(QWidget):
             self.pos[1] = 520-self.overlay_dimensions[1]
         if self.pos[1] < 0:
             self.pos[1] = 0
-        composite = overlayTileWithoutScaling(self.image1, self.image2, 360, 520, self.pos)
-        composite = overlayTileWithoutScaling(composite, self.image3, 360, 520, [135,188])
-        self.canvas.setPixmap(composite)
+        self.render()
     
     def color_mask(self, bottom, color):
         if isinstance(bottom, str):
@@ -251,11 +246,11 @@ class imageOverlayCanvas(QWidget):
         result.fill(Qt.transparent)
         painter.begin(result)
         try:
-            painter.drawPixmap(0,0,self.composites[-1].scaled(360,520, Qt.KeepAspectRatio))
+            painter.drawPixmap(self.layer_positions[-1][0], self.layer_positions[-1][1],self.composites[-1].scaled(360,520, Qt.KeepAspectRatio))
         except:
-            painter.drawPixmap(0,0,self.composites[0].scaled(360,520, Qt.KeepAspectRatio))
+            painter.drawPixmap(self.layer_positions[0][0], self.layer_positions[0][1],self.composites[0].scaled(360,520, Qt.KeepAspectRatio))
         for x in range(0, number+1):
-            painter.drawPixmap(0,0, self.composites[x].scaled(360,520, Qt.KeepAspectRatio))
+            painter.drawPixmap(self.layer_positions[x][0], self.layer_positions[x][1], self.composites[x].scaled(360,520, Qt.KeepAspectRatio))
         self.canvas.setPixmap(result)
     
     def canvas_edit_change(self):
@@ -263,6 +258,10 @@ class imageOverlayCanvas(QWidget):
     
     def list_index_change(self,i):
         self.current_layer_options_container.refreshData(i)
+        try:
+            self.pos = self.layer_positions[i]
+        except:
+            self.pos = [0,0]
 
     def move_layer_down(self):
         layerDown(self)

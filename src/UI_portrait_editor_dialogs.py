@@ -200,6 +200,7 @@ class portraitStackWidget(QWidget):
         self.getImageFiles()
         if self.parent.layers_box.currentRow() not in self.parent.composites:
             self.parent.composites[self.parent.layers_box.currentRow()] = QPixmap(self.img_choices_list.currentItem().img_path)
+        self.parent.layer_positions[self.parent.layers_box.currentRow()] = [0,0]
         self.parent.render()
     
     def refreshData(self,i):
@@ -224,6 +225,7 @@ class portraitStackWidget(QWidget):
             if self.img_choices_list.currentItem().color_mask:
                 self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
                 self.parent.layer_attributes[self.parent.layers_box.currentItem().text()] = self.active_color
+                print(self.parent.composites,self.parent.layer_orders,self.parent.layer_attributes)
     
     def color_update(self):
         color = self.color_hex.text()
