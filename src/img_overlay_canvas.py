@@ -201,7 +201,6 @@ class imageOverlayCanvas(QWidget):
         self.left_layout.addWidget(self.left_buttons_row)
 
         self.pos = [135,188]
-        self.color_mask("src/portrait_graphics/eyes/F_S_p_vls_e001.png", "#CCFFCC")
         #delete this ^
         
     def on_release(self):
@@ -255,10 +254,20 @@ class imageOverlayCanvas(QWidget):
     
     def render(self):
         print(self.composites)
+        print(self.layer_orders)
         number = self.layers_box.count()-1
-        for x in range(number, 0,-1):
-            composite = overlayTileWithoutScaling(self.composites[x-1].scaled(360,520, Qt.KeepAspectRatio),self.composites[x].scaled(360,520, Qt.KeepAspectRatio), 360, 520, [0,0])
-            self.canvas.setPixmap(composite)
+        painter = QPainter()
+        result = QPixmap(360,520)
+        result.fill(Qt.transparent)
+        painter.begin(result)
+        try:
+            painter.drawPixmap(0,0,self.composites[-1].scaled(360,520, Qt.KeepAspectRatio))
+        except:
+            painter.drawPixmap(0,0,self.composites[0].scaled(360,520, Qt.KeepAspectRatio))
+        for x in range(0, number+1):
+            painter.drawPixmap(0,0, self.composites[x].scaled(360,520, Qt.KeepAspectRatio))
+            print("drawing")
+        self.canvas.setPixmap(result)
     
     def canvas_edit_change(self):
         self.stacks[self.sender().name].initContent(self.sender().name)

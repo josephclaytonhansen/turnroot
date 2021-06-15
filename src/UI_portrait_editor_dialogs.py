@@ -176,6 +176,8 @@ class portraitStackWidget(QWidget):
             
             self.parent.total_layers = len(self.parent.layer_orders)+1
             self.parent.layer_orders[self.parent.total_layers] = t
+            self.list_index = self.parent.total_layers
+            print("list Index:",self.list_index)
             self.parent.layers_box.clear()
             for g in self.parent.layer_orders:
                 self.parent.layers_box.addItem(self.parent.layer_orders[g])
@@ -184,7 +186,8 @@ class portraitStackWidget(QWidget):
         
         
         self.getImageFiles()
-        self.parent.composites[self.parent.layers_box.currentRow()] = QPixmap(self.img_choices_list.currentItem().img_path)
+        if self.parent.layers_box.currentRow() not in self.parent.composites:
+            self.parent.composites[self.parent.layers_box.currentRow()] = QPixmap(self.img_choices_list.currentItem().img_path)
         self.parent.render()
         
     def color_from_palette(self):
@@ -192,7 +195,12 @@ class portraitStackWidget(QWidget):
         self.active_color = color
         self.color_preview.setStyleSheet("background-color: "+self.active_color)
         self.color_hex.setText(self.active_color)
-        self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
+        print(self.parent.layers_box.currentRow())
+        try:
+            self.parent.color_mask(self.parent.composites[self.parent.layers_box.currentRow()], self.active_color)
+            print("already have data")
+        except:
+            self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
     
     def color_update(self):
         color = self.color_hex.text()
@@ -212,7 +220,11 @@ class portraitStackWidget(QWidget):
         self.color_history_buttons[self.history_index].setStyleSheet("background-color: "+self.active_color)
         
         #set pixmap to color using mask
-        self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
+        try:
+            print("CURRENT ROW:",self.parent.layers_box.currentRow())
+            self.parent.color_mask(self.parent.composites[self.parent.layers_box.currentRow()], self.active_color)
+        except:
+            self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
         
     def save_color(self):
         if self.color_hex.text() != "":
