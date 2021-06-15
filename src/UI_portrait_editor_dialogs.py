@@ -180,13 +180,19 @@ class portraitStackWidget(QWidget):
             for g in self.parent.layer_orders:
                 self.parent.layers_box.addItem(self.parent.layer_orders[g])
         
+        self.parent.layers_box.setCurrentRow(self.parent.layers_box.count()-1)
+        
+        
         self.getImageFiles()
-                
+        self.parent.composites[self.parent.layers_box.currentRow()] = QPixmap(self.img_choices_list.currentItem().img_path)
+        self.parent.render()
+        
     def color_from_palette(self):
         color = self.sender().value
         self.active_color = color
         self.color_preview.setStyleSheet("background-color: "+self.active_color)
         self.color_hex.setText(self.active_color)
+        self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
     
     def color_update(self):
         color = self.color_hex.text()
@@ -206,6 +212,7 @@ class portraitStackWidget(QWidget):
         self.color_history_buttons[self.history_index].setStyleSheet("background-color: "+self.active_color)
         
         #set pixmap to color using mask
+        self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
         
     def save_color(self):
         if self.color_hex.text() != "":
@@ -231,6 +238,7 @@ class portraitStackWidget(QWidget):
                 self.paths.append(f.fullPath)
                 
                 list_img = QListWidgetItem()
+                list_img.img_path = f.fullPath
                 list_img.setIcon(QIcon(QPixmap(f.fullPath.strip(".png")+"p.png")))
                 ht = QPixmap(f.fullPath.strip(".png")+"p.png").height()
                 if ht > self.icon_height:
@@ -238,3 +246,4 @@ class portraitStackWidget(QWidget):
                 
                 self.img_choices_list.setIconSize(QSize(150,self.icon_height))
                 self.img_choices_list.addItem(list_img)
+                self.img_choices_list.setCurrentItem(list_img)

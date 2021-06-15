@@ -1,4 +1,4 @@
-from src.img_overlay import overlayTileWithoutScaling
+from src.img_overlay import overlayTileWithoutScaling, createClippingMask
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -22,6 +22,8 @@ class imageOverlayCanvas(QWidget):
         
         self.path_no_ext = None
         self.path = None
+        
+        self.composites = {}
         
         self.layout = QHBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
@@ -197,17 +199,10 @@ class imageOverlayCanvas(QWidget):
         self.left_layout.addWidget(self.add_options)
         self.left_layout.addWidget(self.current_layer_options_container)
         self.left_layout.addWidget(self.left_buttons_row)
-            
-        ###TESTING ONLY###
-        self.image1 = QPixmap("src/portrait_graphics/blue.png")
-        self.image2 = QPixmap("src/portrait_graphics/yellow.png")
-        self.image3 = QPixmap("src/portrait_graphics/pink.png")
-        self.overlay_dimensions = [self.image2.width(), self.image2.height()]
+
         self.pos = [135,188]
-        composite = overlayTileWithoutScaling(self.image1, self.image2, 360, 520, self.pos)
-        composite = overlayTileWithoutScaling(composite, self.image3, 360, 520, self.pos)
-        self.canvas.setPixmap(composite)
-        #self.canvas.setPixmap(composite).scaled(self.canvas_size, self.canvas_size, Qt.KeepAspectRatio, Qt.FastTransformation)
+        self.color_mask("src/portrait_graphics/eyes/F_S_p_vls_e001.png", "#CCFFCC")
+        #delete this ^
         
     def on_release(self):
         self.timer.stop()
@@ -234,6 +229,7 @@ class imageOverlayCanvas(QWidget):
             self.actually_move_overlay()
     
     def actually_move_overlay(self):
+        #rework!
         if self.pos[0] > 360-self.overlay_dimensions[0]:
             self.pos[0] = 360-self.overlay_dimensions[0]
         if self.pos[0] < 0:
@@ -245,6 +241,24 @@ class imageOverlayCanvas(QWidget):
         composite = overlayTileWithoutScaling(self.image1, self.image2, 360, 520, self.pos)
         composite = overlayTileWithoutScaling(composite, self.image3, 360, 520, [135,188])
         self.canvas.setPixmap(composite)
+    
+    def color_mask(self, bottom, color):
+        mask = bottom.strip(".png")+"cm.png"
+        self.img_bottom = QPixmap(bottom).scaled(360,520, Qt.KeepAspectRatio)
+        self.img_mask = QPixmap(mask).scaled(360,520, Qt.KeepAspectRatio)
+        self.img_top = QPixmap(bottom).scaled(360,520, Qt.KeepAspectRatio)
+        self.overlay_dimensions = [self.img_mask.width(), self.img_mask.height()]
+        composite = createClippingMask(self.img_bottom, self.img_mask, color, 360, 520)
+        composite = overlayTileWithoutScaling(composite, self.img_top, 360, 520, [0,0])
+        self.composites[self.layers_box.currentRow()] = composite
+        self.render()
+    
+    def render(self):
+        print(self.composites)
+        number = self.layers_box.count()-1
+        for x in range(number, 0,-1):
+            composite = overlayTileWithoutScaling(self.composites[x-1].scaled(360,520, Qt.KeepAspectRatio),self.composites[x].scaled(360,520, Qt.KeepAspectRatio), 360, 520, [0,0])
+            self.canvas.setPixmap(composite)
     
     def canvas_edit_change(self):
         self.stacks[self.sender().name].initContent(self.sender().name)
