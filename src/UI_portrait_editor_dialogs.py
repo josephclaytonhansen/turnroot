@@ -223,6 +223,7 @@ class portraitStackWidget(QWidget):
         if self.img_choices_list.currentItem() != None:
             if self.img_choices_list.currentItem().color_mask:
                 self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
+                self.parent.layer_attributes[self.parent.layers_box.currentItem().text()] = self.active_color
     
     def color_update(self):
         color = self.color_hex.text()

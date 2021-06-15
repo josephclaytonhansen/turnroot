@@ -281,7 +281,7 @@ class imageOverlayCanvas(QWidget):
     
     def canvasToJSON(self):
         with open("src/skeletons/portraits/"+self.path) as f:
-            data = {"poss":self.layer_positions,"orders":self.layer_orders,"attrs":self.layer_attributes,"imgs":self.layer_images}
+            data = {"poss":self.layer_positions,"orders":self.layer_orders,"attrs":self.layer_attributes,"imgs":self.composites}
             json.load(data,f)
         #editable canvas
     
