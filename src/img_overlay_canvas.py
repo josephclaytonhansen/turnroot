@@ -14,7 +14,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
 from src.game_directory import gameDirectory
 from src.UI_portrait_editor_dialogs import portraitStackWidget
-from src.portrait_editor_backend import layerDown, layerUp, layerDelete, layerRename
+from src.portrait_editor_backend import layerDown, layerUp, layerDelete
 
 class imageOverlayCanvas(QWidget):
     def __init__(self, parent=None,font=None):
@@ -121,11 +121,7 @@ class imageOverlayCanvas(QWidget):
         self.delete_layer.clicked.connect(self.layer_delete)
         self.delete_layer.setIcon(QIcon(QPixmap("src/ui_icons/white/delete.png")))
         
-        self.rename_layer = QPushButton()
-        self.rename_layer.clicked.connect(self.layer_rename)
-        self.rename_layer.setIcon(QIcon(QPixmap("src/ui_icons/white/rename.png")))
-        
-        for b in [self.layer_up, self.layer_down, self.delete_layer, self.rename_layer]:
+        for b in [self.layer_up, self.layer_down, self.delete_layer]:
             b.setMaximumWidth(42)
             b.setMinimumWidth(42)
             b.setMinimumHeight(42)
@@ -277,12 +273,8 @@ class imageOverlayCanvas(QWidget):
     def layer_delete(self):
         if self.layers_box.currentRow() != -1:
             t = self.layers_box.currentRow()
-            layerDelete(self, t)
-    
-    def layer_rename(self):
-        if self.layers_box.currentRow() != -1:
-            t = self.layers_box.currentRow()
-            layerRename(self, t)
+            s = self.layers_box.currentItem().text()
+            layerDelete(self, t, s)
     
     def left_button_clicked(self):
         print(self.sender().what)
