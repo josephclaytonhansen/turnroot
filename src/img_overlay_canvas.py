@@ -97,6 +97,7 @@ class imageOverlayCanvas(QWidget):
         self.layers_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         
         self.layers_box = QListWidget()
+        self.layers_box.currentRowChanged.connect(self.list_index_change)
         self.layers_box.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
         
         self.layer_positions = {}
@@ -138,13 +139,9 @@ class imageOverlayCanvas(QWidget):
         self.right_layout.addWidget(self.edit_layers_row)
         self.right_layout.addWidget(self.transform_pad)
         
-        self.current_layer_options_container = QWidget()
+        self.current_layer_options_container = portraitStackWidget(parent=self,font=self.body_font)
         self.current_layer_options_container.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
         self.current_layer_options_container.setMinimumHeight(300)
-        self.current_layer_options_container_layout = QStackedLayout()
-        self.current_layer_options_container.setLayout(self.current_layer_options_container_layout)
-        
-        self.stacks = {}
         
         self.add_options = QWidget()
         self.add_options_layout = QGridLayout()
@@ -169,11 +166,7 @@ class imageOverlayCanvas(QWidget):
             self.add_options_buttons[button].setMinimumHeight(40)
             self.add_options_buttons[button].name = button
             self.add_options_buttons[button].setFont(self.body_font)
-            
-            widget = portraitStackWidget(parent=self,font=self.body_font,stack=button)
-            self.stacks[button] = widget
-            
-            self.current_layer_options_container_layout.addWidget(widget)
+
             self.add_options_layout.addWidget(self.add_options_buttons[button], self.aob_column, self.aob_row,1,1)
             
         self.left_buttons_row = QWidget()
@@ -242,7 +235,10 @@ class imageOverlayCanvas(QWidget):
         self.canvas.setPixmap(composite)
     
     def color_mask(self, bottom, color):
-        mask = bottom.strip(".png")+"cm.png"
+        if isinstance(bottom, str):
+            mask = bottom.strip(".png")+"cm.png"
+        else:
+            mask = bottom
         self.img_bottom = QPixmap(bottom).scaled(360,520, Qt.KeepAspectRatio)
         self.img_mask = QPixmap(mask).scaled(360,520, Qt.KeepAspectRatio)
         self.img_top = QPixmap(bottom).scaled(360,520, Qt.KeepAspectRatio)
@@ -253,8 +249,6 @@ class imageOverlayCanvas(QWidget):
         self.render()
     
     def render(self):
-        print(self.composites)
-        print(self.layer_orders)
         number = self.layers_box.count()-1
         painter = QPainter()
         result = QPixmap(360,520)
@@ -266,15 +260,13 @@ class imageOverlayCanvas(QWidget):
             painter.drawPixmap(0,0,self.composites[0].scaled(360,520, Qt.KeepAspectRatio))
         for x in range(0, number+1):
             painter.drawPixmap(0,0, self.composites[x].scaled(360,520, Qt.KeepAspectRatio))
-            print("drawing")
         self.canvas.setPixmap(result)
     
     def canvas_edit_change(self):
-        self.stacks[self.sender().name].initContent(self.sender().name)
-        for x in range(0, len(self.buttons)):
-            if (self.sender().name == self.buttons[x]):
-                ind = x
-                self.current_layer_options_container_layout.setCurrentIndex(ind)
+        self.current_layer_options_container.addRow(self.sender().name)
+    
+    def list_index_change(self,i):
+        self.current_layer_options_container.refreshData(i)
 
     def move_layer_down(self):
         layerDown(self)

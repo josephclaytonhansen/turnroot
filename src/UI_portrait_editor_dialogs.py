@@ -8,6 +8,7 @@ from src.UI_updateJSON import updateJSON
 from src.game_directory import gameDirectory
 from src.UI_Dialogs import confirmAction, infoClose, switchEditorDialog, REPLACE_WINDOW, NEW_WINDOW
 from src.node_backend import getFiles, File
+from pathlib import Path
 import qtmodern.styles
 import qtmodern.windows
 
@@ -101,7 +102,7 @@ class portraitStackWidget(QWidget):
         
         color_history_row = QWidget()
         color_history_row.setMaximumHeight(60)
-        color_history_row_layout = QHBoxLayout()
+        color_history_row_layout = QGridLayout()
         color_history_row_layout.setSpacing(2)
         color_history_row.setLayout(color_history_row_layout)
         
@@ -109,9 +110,15 @@ class portraitStackWidget(QWidget):
         
         history_label = QLabel("History")
         history_label.setFont(self.body_font)
-        color_history_row_layout.addWidget(history_label)
+        color_history_row_layout.addWidget(history_label,0,0,2,1)
         
-        for x in range(0,6):
+        c = 0
+        r = 0
+        for x in range(0,12):
+            r +=1
+            if r == 7:
+                r = 1
+                c += 1
             color_ = QPushButton()
             self.color_history_buttons[x] = color_
             color_.setMaximumHeight(20)
@@ -124,14 +131,14 @@ class portraitStackWidget(QWidget):
             except:
                 color_.setStyleSheet("background-color: #000000")
                 color_.value = "#000000"
-            color_history_row_layout.addWidget(color_)
+            color_history_row_layout.addWidget(color_,c,r)
             color_.clicked.connect(self.color_from_palette)
             
         color_edit_layout.addWidget(color_history_row,2,0,1,2)
         
         palette_row = QWidget()
         palette_row.setMaximumHeight(60)
-        palette_row_layout = QHBoxLayout()
+        palette_row_layout = QGridLayout()
         palette_row_layout.setSpacing(2)
         palette_row.setLayout(palette_row_layout)
         
@@ -139,9 +146,15 @@ class portraitStackWidget(QWidget):
         
         palette_label = QLabel("Saved")
         palette_label.setFont(self.body_font)
-        palette_row_layout.addWidget(palette_label)
+        palette_row_layout.addWidget(palette_label,0,0,2,1)
         
-        for x in range(0,6):
+        col = 0
+        row = 0
+        for x in range(0,12):
+            row +=1
+            if row == 7:
+                row = 1
+                col += 1
             color_ = QPushButton()
             self.palette_buttons[x] = color_
             color_.setMaximumHeight(20)
@@ -155,19 +168,17 @@ class portraitStackWidget(QWidget):
                 color_.setStyleSheet("background-color: #000000")
                 color_.value = "#000000"
                 
-            palette_row_layout.addWidget(color_)
+            palette_row_layout.addWidget(color_,col,row)
             color_.clicked.connect(self.color_from_palette)
             
         color_edit_layout.addWidget(palette_row,3,0,1,2)
         
-        self.history_index = 6
-        self.palette_index = 6
+        self.history_index = 12
+        self.palette_index = 12
             
-    def initContent(self, s):
+    def addRow(self, s):
         s = s.lower()
-        self.initItem(s)
-            
-    def initItem(self,item):
+        item = s
         self.what = item
         self.counts[item] += 1
         if self.counts[item] <= self.max_counts[item]:
@@ -177,7 +188,6 @@ class portraitStackWidget(QWidget):
             self.parent.total_layers = len(self.parent.layer_orders)+1
             self.parent.layer_orders[self.parent.total_layers] = t
             self.list_index = self.parent.total_layers
-            print("list Index:",self.list_index)
             self.parent.layers_box.clear()
             for g in self.parent.layer_orders:
                 self.parent.layers_box.addItem(self.parent.layer_orders[g])
@@ -189,18 +199,28 @@ class portraitStackWidget(QWidget):
         if self.parent.layers_box.currentRow() not in self.parent.composites:
             self.parent.composites[self.parent.layers_box.currentRow()] = QPixmap(self.img_choices_list.currentItem().img_path)
         self.parent.render()
+    
+    def refreshData(self,i):
+        try:
+            s = self.parent.layer_orders[i+1].split(" ")[0]
+            item = s
+            self.what = item
+            
+            self.getImageFiles()
+            if self.parent.layers_box.currentRow() not in self.parent.composites:
+                self.parent.composites[self.parent.layers_box.currentRow()] = QPixmap(self.img_choices_list.currentItem().img_path)
+            self.parent.render()
+        except:
+            pass
         
     def color_from_palette(self):
         color = self.sender().value
         self.active_color = color
         self.color_preview.setStyleSheet("background-color: "+self.active_color)
         self.color_hex.setText(self.active_color)
-        print(self.parent.layers_box.currentRow())
-        try:
-            self.parent.color_mask(self.parent.composites[self.parent.layers_box.currentRow()], self.active_color)
-            print("already have data")
-        except:
-            self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
+        if self.img_choices_list.currentItem() != None:
+            if self.img_choices_list.currentItem().color_mask:
+                self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
     
     def color_update(self):
         color = self.color_hex.text()
@@ -214,23 +234,21 @@ class portraitStackWidget(QWidget):
         
         self.history_index -= 1
         if self.history_index == -1:
-            self.history_index = 5
+            self.history_index = 11
         self.color_history[self.history_index] = self.active_color
         self.color_history_buttons[self.history_index].value = self.active_color
         self.color_history_buttons[self.history_index].setStyleSheet("background-color: "+self.active_color)
         
         #set pixmap to color using mask
-        try:
-            print("CURRENT ROW:",self.parent.layers_box.currentRow())
-            self.parent.color_mask(self.parent.composites[self.parent.layers_box.currentRow()], self.active_color)
-        except:
-            self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
+        if self.img_choices_list.currentItem() != None:
+            if self.img_choices_list.currentItem().color_mask:
+                self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
         
     def save_color(self):
         if self.color_hex.text() != "":
             self.palette_index -= 1
             if self.palette_index == -1:
-                self.palette_index = 5
+                self.palette_index = 11
             self.saved_palette[self.palette_index] = self.color_hex.text()
             self.palette_buttons[self.palette_index].value = self.color_hex.text()
             self.palette_buttons[self.palette_index].setStyleSheet("background-color: "+self.color_hex.text())
@@ -251,6 +269,11 @@ class portraitStackWidget(QWidget):
                 
                 list_img = QListWidgetItem()
                 list_img.img_path = f.fullPath
+                g = Path(f.fullPath.strip(".png")+("cm.png"))
+                if g.exists():
+                    list_img.color_mask = True
+                else:
+                    list_img.color_mask = False
                 list_img.setIcon(QIcon(QPixmap(f.fullPath.strip(".png")+"p.png")))
                 ht = QPixmap(f.fullPath.strip(".png")+"p.png").height()
                 if ht > self.icon_height:
