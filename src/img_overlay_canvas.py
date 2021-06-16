@@ -87,20 +87,23 @@ class imageOverlayCanvas(QWidget):
         self.transform_pad.setLayout(self.transform_pad_layout)
         
         self.transform_pad_buttons = {}
-        self.tpb_locs = [[0,1],[1,2],[2,1],[1,0]]
+        self.tpb_locs = [[0,1],[1,2],[2,1],[1,0],[1,1]]
         index = -1
         
         self.timer = QTimer()
         
-        for button in ["up", "right", "down", "left"]:
+        for button in ["up", "right", "down", "left", "reset"]:
             index += 1
             self.transform_pad_buttons[button] = QPushButton()
             self.transform_pad_buttons[button].setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
             self.transform_pad_buttons[button].direction = button
-
-            self.transform_pad_buttons[button].pressed.connect(self.on_press)
-            self.transform_pad_buttons[button].released.connect(self.on_release)
-            self.timer.timeout.connect(self.while_pressed)
+            
+            if button != "reset":
+                self.transform_pad_buttons[button].pressed.connect(self.on_press)
+                self.transform_pad_buttons[button].released.connect(self.on_release)
+                self.timer.timeout.connect(self.while_pressed)
+            else:
+                self.transform_pad_buttons[button].clicked.connect(self.reset_transform)
             
             self.transform_pad_buttons[button].setMaximumWidth(50)
             self.transform_pad_buttons[button].setMaximumHeight(50)
@@ -228,6 +231,10 @@ class imageOverlayCanvas(QWidget):
         elif direction == "left":
             self.layer_positions[self.layers_box.currentRow()][0] -= 1
             self.actually_move_overlay()
+    
+    def reset_transform(self):
+        self.layer_positions[self.layers_box.currentRow()] = [0,0]
+        self.render()
     
     def actually_move_overlay(self):
         self.overlay_dimensions = [360,520]
