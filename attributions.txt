@@ -5,3 +5,5 @@ Rename Icon made by Pixel perfect from www.flaticon.com
 Other icons from Google Material Icons or created for Turnroot
 
 GitHub user https://github.com/janbodnar made the skeleton for the web viewer
+
+StackOverflow user https://stackoverflow.com/users/8924713/thib for pixmap to data

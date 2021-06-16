@@ -12,6 +12,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 class PortraitEditorWnd(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.main_up = parent
         self.initUI()
         
     def initUI(self):
@@ -61,6 +62,7 @@ class PortraitEditorWnd(QWidget):
         self.working_tab = self.tabs_dict["Dialogue Portraits"]
         self.working_tab_layout = self.working_tab.layout()
         self.canvas = imageOverlayCanvas(self,self.body_font)
+        self.canvas.main_up = self.main_up
         self.canvas.setMaximumWidth(1150)
         self.working_tab_layout.addWidget(self.canvas)
         

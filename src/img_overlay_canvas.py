@@ -3,8 +3,9 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from src.node_backend import getFiles, File
+from src.pixmap_to_data import StoreQPixmap
 
-import json, math, os, random
+import json, math, os, random, pickle
 
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
@@ -44,9 +45,9 @@ class imageOverlayCanvas(QWidget):
         self.right.setLayout(self.right_layout)
         
         self.center = QWidget()
-        self.center.setMaximumWidth(520)
-        self.center.setMinimumWidth(520)
-        self.center_layout = QHBoxLayout()
+        self.center.setMaximumWidth(400)
+        self.center.setMinimumWidth(400)
+        self.center_layout = QVBoxLayout()
         self.center.setLayout(self.center_layout)
         
         self.layout.addWidget(self.left)
@@ -60,6 +61,21 @@ class imageOverlayCanvas(QWidget):
         self.canvas.setMaximumWidth(360)
         self.canvas.setMinimumHeight(520)
         self.canvas.setMaximumHeight(520)
+        
+        self.sl_row = QWidget()
+        self.sl_row_layout = QHBoxLayout()
+        self.sl_row.setLayout(self.sl_row_layout)
+        self.center_layout.addWidget(self.sl_row)
+        
+        for b in ["Save", "Load"]:
+            slb = QPushButton(b)
+            slb.setMaximumWidth(190)
+            slb.setFont(self.body_font)
+            slb.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+            self.sl_row_layout.addWidget(slb)
+            slb.what = b
+            slb.clicked.connect(self.b_save_load)
+        
         
         self.center_layout.addWidget(self.canvas)
         
@@ -224,6 +240,8 @@ class imageOverlayCanvas(QWidget):
         if self.pos[1] < 0:
             self.pos[1] = 0
         self.render()
+        self.main_up.save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+        self.main_up.save_status.setToolTip("Portrait file not saved")
     
     def color_mask(self, bottom, color):
         if isinstance(bottom, str):
@@ -274,12 +292,62 @@ class imageOverlayCanvas(QWidget):
     def left_button_clicked(self):
         print(self.sender().what)
     
+    def b_save_load(self):
+        print(self.sender().what)
+        if self.sender().what == "Save":
+            self.save()
+    
     def canvasToJSON(self):
-        with open("src/skeletons/portraits/"+self.path) as f:
-            data = {"poss":self.layer_positions,"orders":self.layer_orders,"attrs":self.layer_attributes,"imgs":self.composites}
-            json.load(data,f)
+        with open(self.path, "wb") as f:
+            p = StoreQPixmap()
+            pixmap_data = {}
+            for img in self.composites:
+                p._qpixmap[img] = self.composites[img]
+            pixmap_data = p.to_data()
+            data = {"poss":self.layer_positions,"orders":self.layer_orders,"attrs":self.layer_attributes,"imgs":pixmap_data}
+            pickle.dump(data,f)
         #editable canvas
     
     def canvasToPNG(self):
-        self.canvas.pixmap.save("src/skeletons/portrait_images/"+self.path_no_ext, "PNG")
+        f = QFile(self.path+".png")
+        f.open(QIODevice.ReadOnly)
+        self.canvas.pixmap().save(f, "PNG")
         #flat image used for actual game
+           
+    def saveFileDialog(self):
+        q = QFileDialog(self)
+        self.main_up.save_status.setPixmap(QPixmap("src/ui_icons/white/file_saving.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+        self.main_up.save_status.setToolTip("Portrait file saving")
+        options = q.Options()
+        options |= q.DontUseNativeDialog
+        fileName, _ = q.getSaveFileName(None,"Save","","Turnroot Portrait (*.trsp)", options=options)
+        if fileName:
+            self.path = fileName+".trsp"
+            g = infoClose("Saved portrait as "+self.path+"\nPlease note that changes will not auto-save")
+            
+            self.main_up.save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+            self.main_up.save_status.setToolTip("Portrait file saved")
+            g.exec_()
+            
+    def save(self):
+        self.main_up.save_status.setPixmap(QPixmap("src/ui_icons/white/file_saving.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+        self.main_up.save_status.setToolTip("Portrait file saving")
+        
+        if self.path == None or self.path == '':
+            self.saveFileDialog()
+            if self.path == None or self.path == '':
+                c = infoClose("No file selected")
+                c.exec_()
+            else:
+                self.canvasToJSON()
+                self.canvasToPNG()
+                    
+                self.main_up.save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+                self.main_up.save_status.setToolTip("Portrait file saved")
+
+        else:
+            self.canvasToJSON()
+            self.canvasToPNG()
+            
+            self.main_up.save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+            self.main_up.save_status.setToolTip("Portrait file saved")

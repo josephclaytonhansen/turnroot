@@ -377,7 +377,7 @@ class main(QMainWindow):
                 self.menubar.setVisible(False)
                 self.fulls = True
                 self.fullScreenToggle()
-                self.resize(QSize(1200,690))
+                self.resize(QSize(1070,690))
                 self.setGeometry(
     QStyle.alignedRect(
         Qt.LeftToRight,

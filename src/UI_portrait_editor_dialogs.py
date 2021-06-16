@@ -196,6 +196,8 @@ class portraitStackWidget(QWidget):
         
         self.parent.layers_box.setCurrentRow(self.parent.layers_box.count()-1)
         
+        self.parent.main_up.save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+        self.parent.main_up.save_status.setToolTip("Portrait file not saved")
         
         self.getImageFiles()
         if self.parent.layers_box.currentRow() not in self.parent.composites:
@@ -223,6 +225,8 @@ class portraitStackWidget(QWidget):
         self.color_hex.setText(self.active_color)
         if self.img_choices_list.currentItem() != None:
             if self.img_choices_list.currentItem().color_mask:
+                self.parent.main_up.save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+                self.parent.main_up.save_status.setToolTip("Portrait file not saved")
                 self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
                 self.parent.layer_attributes[self.parent.layers_box.currentItem().text()] = self.active_color
                 print(self.parent.composites,self.parent.layer_orders,self.parent.layer_attributes)
@@ -247,6 +251,8 @@ class portraitStackWidget(QWidget):
         #set pixmap to color using mask
         if self.img_choices_list.currentItem() != None:
             if self.img_choices_list.currentItem().color_mask:
+                self.parent.main_up.save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+                self.parent.main_up.save_status.setToolTip("Portrait file not saved")
                 self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
         
     def save_color(self):
