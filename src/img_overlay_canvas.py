@@ -303,7 +303,6 @@ class imageOverlayCanvas(QWidget):
         print(self.sender().what)
     
     def b_save_load(self):
-        print(self.sender().what)
         if self.sender().what == "Save":
             self.save()
     

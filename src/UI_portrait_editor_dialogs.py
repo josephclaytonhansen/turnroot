@@ -63,6 +63,7 @@ class portraitStackWidget(QWidget):
         self.layout.addWidget(img_edit)
         
         self.img_choices_list = QListWidget()
+        self.img_choices_list.currentRowChanged.connect(self.new_image)
         self.img_choices_list.setMinimumWidth(166)
         self.img_choices_list.setMaximumWidth(166)
         self.img_choices_list.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
@@ -231,7 +232,6 @@ class portraitStackWidget(QWidget):
                 self.parent.main_up.save_status.setToolTip("Portrait file not saved")
                 self.parent.color_mask(self.img_choices_list.currentItem().img_path, self.active_color)
                 self.parent.layer_attributes[self.parent.layers_box.currentItem().text()] = self.active_color
-                print(self.parent.composites,self.parent.layer_orders,self.parent.layer_attributes)
     
     def color_update(self):
         color = self.color_hex.text()
@@ -300,6 +300,14 @@ class portraitStackWidget(QWidget):
         if self.what!= None:
             p = choicesPopup(parent=self,font=self.body_font)
             p.exec_()
+    
+    def new_image(self):
+        try:
+            self.parent.composites[self.parent.layers_box.currentRow()] = QPixmap(self.img_choices_list.currentItem().img_path)
+            self.parent.layer_positions[self.parent.layers_box.currentRow()] = [0,0]
+            self.parent.render()
+        except Exception as e:
+            print(e)
 
 class choicesPopup(QDialog):
     def __init__(self,parent=None,font=None):
@@ -318,22 +326,21 @@ class choicesPopup(QDialog):
         
         self.index = 0
         
-        self.r = 0
-        self.c = -1
-        
         self.imgs0 = QListWidget()
-        self.imgs1 = QListWidget()
-        self.imgs2 = QListWidget()
-        self.imgs3 = QListWidget()
+        self.imgs0.setFlow(QListView.LeftToRight)
+        self.imgs0.setWrapping(True)
         
         self.lcount = 0
         
-        for k in [self.imgs0, self.imgs1, self.imgs2, self.imgs3]:
+        for k in [self.imgs0]:
             k.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
-            layout.addWidget(k,0,self.lcount,1,1)
+            layout.addWidget(k,0,self.lcount,1,4)
+            k.currentRowChanged.connect(self.list_select)
+            k.ind = self.lcount
             self.lcount +=1
         
         self.choose = QPushButton("Select")
+        self.choose.clicked.connect(self.select_expand)
         self.choose.setFont(font)
         self.choose.setMinimumHeight(40)
         self.choose.setStyleSheet("background-color: "+active_theme.button_alt_color+"; color:"+active_theme.button_alt_text_color+";")
@@ -342,15 +349,17 @@ class choicesPopup(QDialog):
         self.getFilesForPopup()
         self.show()
     
+    def list_select(self, y):
+        self.popup_index = y
+    
     def getFilesForPopup(self):
-        print(self.parent.what)
         file_list = getFiles("src/portrait_graphics/"+self.parent.what)[GET_FILES]
 
         global images
         images = {}
         self.paths = []
         self.icon_height = 0
-        for k in [self.imgs0, self.imgs1, self.imgs2, self.imgs3]:
+        for k in [self.imgs0]:
             k.clear()
             
         for f in file_list:
@@ -371,28 +380,16 @@ class choicesPopup(QDialog):
                 
                 self.index += 1
                 list_img.index = self.index
-                self.c += 1
-                if self.c == 4:
-                    self.c = 0
-                    self.r +=1
-                print(self.index,self.c,self.r)
                 
-                if self.c == 0:
-                    self.imgs0.setIconSize(QSize(150,self.icon_height))
-                    self.imgs0.addItem(list_img)
-                    self.imgs0.setCurrentItem(list_img)
-                
-                elif self.c == 1:
-                    self.imgs1.setIconSize(QSize(150,self.icon_height))
-                    self.imgs1.addItem(list_img)
-                    self.imgs1.setCurrentItem(list_img)
-                
-                elif self.c == 2:
-                    self.imgs2.setIconSize(QSize(150,self.icon_height))
-                    self.imgs2.addItem(list_img)
-                    self.imgs2.setCurrentItem(list_img)
-                
-                elif self.c == 3:
-                    self.imgs3.setIconSize(QSize(150,self.icon_height))
-                    self.imgs3.addItem(list_img)
-                    self.imgs3.setCurrentItem(list_img)
+                self.imgs0.setIconSize(QSize(150,self.icon_height))
+                self.imgs0.addItem(list_img)
+                self.imgs0.setCurrentItem(list_img)
+
+    
+    def select_expand(self):
+        self.close()
+        self.parent.img_choices_list.setCurrentRow(self.popup_index)
+        
+        self.parent.parent.composites[self.parent.parent.layers_box.currentRow()] = QPixmap(self.parent.img_choices_list.currentItem().img_path)
+        self.parent.parent.layer_positions[self.parent.parent.layers_box.currentRow()] = [0,0]
+        self.parent.parent.render()
