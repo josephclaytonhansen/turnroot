@@ -284,11 +284,14 @@ class imageOverlayCanvas(QWidget):
     def list_index_change(self,i):
         self.current_layer_options_container.refreshData(i)
         self.pos = [0,0]
+        
     def move_layer_down(self):
-        layerDown(self)
+        if self.layers_box.currentRow() < self.layers_box.count():
+            layerDown(self)
     
     def move_layer_up(self):
-        layerUp(self)
+        if self.layers_box.currentRow() > 0:
+            layerUp(self)
     
     def layer_delete(self):
         if self.layers_box.currentRow() != -1:
