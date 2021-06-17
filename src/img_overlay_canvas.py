@@ -212,7 +212,7 @@ class imageOverlayCanvas(QWidget):
         self.timer.stop()
 
     def on_press(self):
-        self.timer.start(36)
+        self.timer.start(44)
         self.tmp_direction = self.sender().direction
 
     def while_pressed(self):
@@ -286,7 +286,7 @@ class imageOverlayCanvas(QWidget):
         self.pos = [0,0]
         
     def move_layer_down(self):
-        if self.layers_box.currentRow() < self.layers_box.count():
+        if self.layers_box.currentRow() < self.layers_box.count() - 1:
             layerDown(self)
     
     def move_layer_up(self):

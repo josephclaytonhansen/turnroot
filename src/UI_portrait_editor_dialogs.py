@@ -28,6 +28,7 @@ class portraitStackWidget(QWidget):
         
     def initUI(self):
         self.path = None
+        self.what = None
         self.active_color = "#000000"
         
         self.setStyleSheet("background-color: "+active_theme.window_background_color+"; color:"+active_theme.window_text_color+"; font-size: 16")
@@ -68,6 +69,7 @@ class portraitStackWidget(QWidget):
         img_edit_layout.addWidget(self.img_choices_list)
         
         self.expand_choices = QPushButton()
+        self.expand_choices.clicked.connect(self.choices_popup)
         self.expand_choices.setIcon(QIcon(QPixmap("src/ui_icons/white/expand.png")))
         self.expand_choices.setMinimumWidth(42)
         self.expand_choices.setMaximumWidth(164)
@@ -293,3 +295,104 @@ class portraitStackWidget(QWidget):
                 self.img_choices_list.setIconSize(QSize(150,self.icon_height))
                 self.img_choices_list.addItem(list_img)
                 self.img_choices_list.setCurrentItem(list_img)
+    
+    def choices_popup(self):
+        if self.what!= None:
+            p = choicesPopup(parent=self,font=self.body_font)
+            p.exec_()
+
+class choicesPopup(QDialog):
+    def __init__(self,parent=None,font=None):
+        self.parent = parent
+        data = updateJSON()
+        self.active_theme = active_theme
+        super().__init__(parent)
+        self.setWindowFlags(Qt.Popup)
+        
+        layout = QGridLayout()
+        layout.setContentsMargins( 8,8,8,8)
+        layout.setSpacing(0)
+        self.setLayout(layout)
+        self.setMinimumWidth(620)
+        self.setMinimumHeight(450)
+        
+        self.index = 0
+        
+        self.r = 0
+        self.c = -1
+        
+        self.imgs0 = QListWidget()
+        self.imgs1 = QListWidget()
+        self.imgs2 = QListWidget()
+        self.imgs3 = QListWidget()
+        
+        self.lcount = 0
+        
+        for k in [self.imgs0, self.imgs1, self.imgs2, self.imgs3]:
+            k.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+";")
+            layout.addWidget(k,0,self.lcount,1,1)
+            self.lcount +=1
+        
+        self.choose = QPushButton("Select")
+        self.choose.setFont(font)
+        self.choose.setMinimumHeight(40)
+        self.choose.setStyleSheet("background-color: "+active_theme.button_alt_color+"; color:"+active_theme.button_alt_text_color+";")
+        layout.addWidget(self.choose,1,3,1,1)
+            
+        self.getFilesForPopup()
+        self.show()
+    
+    def getFilesForPopup(self):
+        print(self.parent.what)
+        file_list = getFiles("src/portrait_graphics/"+self.parent.what)[GET_FILES]
+
+        global images
+        images = {}
+        self.paths = []
+        self.icon_height = 0
+        for k in [self.imgs0, self.imgs1, self.imgs2, self.imgs3]:
+            k.clear()
+            
+        for f in file_list:
+            if f.name.endswith("s") == False and f.name.endswith("cm") == False and f.name.endswith("p") == False and "DS_Store" not in f.fullPath:
+                self.paths.append(f.fullPath)
+                
+                list_img = QListWidgetItem()
+                list_img.img_path = f.fullPath
+                g = Path(f.fullPath.strip(".png")+("cm.png"))
+                if g.exists():
+                    list_img.color_mask = True
+                else:
+                    list_img.color_mask = False
+                list_img.setIcon(QIcon(QPixmap(f.fullPath.strip(".png")+"p.png")))
+                ht = QPixmap(f.fullPath.strip(".png")+"p.png").height()
+                if ht > self.icon_height:
+                    self.icon_height = ht
+                
+                self.index += 1
+                list_img.index = self.index
+                self.c += 1
+                if self.c == 4:
+                    self.c = 0
+                    self.r +=1
+                print(self.index,self.c,self.r)
+                
+                if self.c == 0:
+                    self.imgs0.setIconSize(QSize(150,self.icon_height))
+                    self.imgs0.addItem(list_img)
+                    self.imgs0.setCurrentItem(list_img)
+                
+                elif self.c == 1:
+                    self.imgs1.setIconSize(QSize(150,self.icon_height))
+                    self.imgs1.addItem(list_img)
+                    self.imgs1.setCurrentItem(list_img)
+                
+                elif self.c == 2:
+                    self.imgs2.setIconSize(QSize(150,self.icon_height))
+                    self.imgs2.addItem(list_img)
+                    self.imgs2.setCurrentItem(list_img)
+                
+                elif self.c == 3:
+                    self.imgs3.setIconSize(QSize(150,self.icon_height))
+                    self.imgs3.addItem(list_img)
+                    self.imgs3.setCurrentItem(list_img)
