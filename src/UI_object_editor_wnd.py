@@ -422,8 +422,7 @@ class ObjectEditorWnd(QWidget):
             self.cs_row_layout.addWidget(label)
             self.cs_row_layout.addWidget(y)
             count += 1
-            
-        self.working_tab_layout.addWidget(row)
+
         self.working_tab_layout.addWidget(self.cs_row)
         
         self.hd_row = QWidget()
@@ -443,6 +442,7 @@ class ObjectEditorWnd(QWidget):
         self.hd_row_layout.addWidget(self.hi_dur)        
         
         self.working_tab_layout.addWidget(self.hd_row)
+        self.working_tab_layout.addWidget(row)
         
     def change_healing_range(self):
         self.new_ranges[self.sender().name] = self.sender().value()
