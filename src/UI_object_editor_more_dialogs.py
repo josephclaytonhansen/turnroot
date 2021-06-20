@@ -478,3 +478,62 @@ class healingAbilitiesDialog(QDialog):
             ability_check.name = x
             self.ability_checks[x] = ability_check
             ability_len = len(ability_split)
+            
+            if ability_len == 1:
+                label = QLabel(x)
+                label.setFont(self.body_font)
+                self.layout.addWidget(label,r,1,1,6)
+    
+        self.current_abilities = QTextEdit()
+        self.current_abilities.setMaximumHeight(140)
+        self.tfont = QFont('Monaco', 14, QFont.Light)
+        self.tfont.setKerning(False)
+        self.tfont.setFixedPitch(True)
+        self.current_abilities.setFont(self.tfont)
+        self.current_abilities.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        try:
+            self.current_abilities.setPlainText(str(self.parent.weapon.special_abilities))
+        except:
+            pass
+        
+        self.layout.addWidget(self.current_abilities, r+1,0,1,6)
+        
+        self.clear_all  = QPushButton("Reset")
+        self.clear_all.setMinimumHeight(40)
+        self.clear_all.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+        self.clear_all.setFont(self.body_font)
+        self.clear_all.clicked.connect(self.reset)
+        self.layout.addWidget(self.clear_all,r+1,6,1,1)
+        
+        self.ins = QLabel("This shows the current abilities on the weapon. If no weapon is loaded, this will be  blank. Click 'Reset' to clear abilities")
+        self.ins.setFont(self.body_font)
+        self.layout.addWidget(self.ins,r+2,0,1,7)
+        
+    def toggle_ability(self):
+        pass
+
+    def toggle_save(self,string, sender, parent):
+        self.parent = parent.parent
+        self.p = parent
+        if sender.isChecked():
+            if string not in self.parent.weapon.special_abilities:
+                self.parent.weapon.special_abilities.append(string)
+                if self.parent.weapon.path != None:
+                    self.parent.weapon.selfToJSON()
+                    self.p.current_abilities.setPlainText(str(self.parent.weapon.special_abilities))
+        else:
+            if string in self.parent.weapon.special_abilities:
+                self.parent.weapon.special_abilities.remove(string)
+                if self.parent.weapon.path != None:
+                    self.parent.weapon.selfToJSON()
+                    self.p.current_abilities.setPlainText(str(self.parent.weapon.special_abilities))
+    
+    def reset(self):
+        self.parent.weapon.special_abilities = []
+        self.current_abilities.setPlainText(str(self.parent.weapon.special_abilities))
+        
+        for x in self.ability_checks:
+            self.ability_checks[x].setChecked(False)
+        
+        if self.parent.weapon.path != None:
+            self.parent.weapon.selfToJSON()
