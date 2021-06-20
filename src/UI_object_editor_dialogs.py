@@ -305,7 +305,7 @@ class pricingDialog(QDialog):
         
         self.layout.addWidget(self.rate_slider,r+4,0,1,2)
         
-        h = QLabel("Used, this weapon would sell for...")
+        h = QLabel("Used, this item would sell for...")
         h.setFont(self.h_font)
         self.layout.addWidget(h,r+2,0,1,2)
         t = QLabel("Change used amount")

@@ -165,7 +165,26 @@ class equippableItem(Object):
         return cost
         if self.path != None:
             self.selfToJSON(self.path)
-    
+
+class Healing(equippableItem):
+    def __init__(self):
+        super().__init__()
+        self.buyable_quantity = 1
+        self.heals_from_stats = True
+        self.healing_amount_bonus = 0
+        self.range = [1,1]
+        self.range_change = False
+        self.rc_amount = 0
+        self.minimum_experience_level  = "E"
+        self.weight = 1
+        self.attrs = ["name", "desc", "icon", "sprite_sheet", "event_to_sprites", "price_if_sold", "price","rc_amount",
+                      "price_modifiers", "scopes", "inventories", "special_abilities", "forge_into_items", "repair_items",
+                      "conditional_special_abilities", "csa_conditions", "can_forge", "can_repair", "repair_cost_per",
+                      "minimum_experience_level", "forge_into", "forge_items", "forge_items_amounts","rarity","type",
+                      "scopes","inventories","full_durability","current_durability","range_change",
+                      "broken", "price_modifiers", "shop_pages", "sell_cost_per", "repair_items_amounts", "forge_costs",
+                      "heals_from_stats","healing_amount_bonus","range","minimum_experience_level","weight"]
+        
 class Weapon(equippableItem):
     def __init__(self):
         super().__init__()

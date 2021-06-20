@@ -359,7 +359,7 @@ class main(QMainWindow):
                 self.newButton.setVisible(False)
                 self.fulls = True
                 self.fullScreenToggle()
-                self.resize(QSize(800,420))
+                self.resize(QSize(800,460))
                 self.setGeometry(
     QStyle.alignedRect(
         Qt.LeftToRight,
