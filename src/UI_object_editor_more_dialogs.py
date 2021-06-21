@@ -10,6 +10,7 @@ from src.img_overlay import overlayTile
 from src.skeletons.unit_class import unitClass
 from src.skeletons.unit import Unit
 from src.skeletons.weapon_types import weaponTypes, expTypes
+from src.UI_object_editor_dialogs import numberEntryDialog
 from src.skeletons.Object import (Object,usableItem,Key,healItem,statIncreaseItem,expIncreaseItem,Healing,
                                   classChangeItem,summoningItem,levelEffectItem,equippableItem,Weapon,Shield)
 
@@ -33,6 +34,7 @@ class chooseUnitStatDialog(QDialog):
         
         with open("src/skeletons/universal_stats.json", "r") as stats_file:
             universal_stats =  json.load(stats_file)
+        universal_stats.append("None")
         
         self.list = QListWidget()
         self.list.currentTextChanged.connect(self.returnData)
@@ -459,13 +461,14 @@ class healingAbilitiesDialog(QDialog):
         self.layout.setContentsMargins(12,12,12,12)
         self.setLayout(self.layout)
         
-        h = QLabel("This weapon...")
+        h = QLabel("This item...")
         h.setFont(self.h_font)
         self.layout.addWidget(h,0,0,1,6)
         
         r = 0
         self.entries1 = {}
         self.entries2 = {}
+        self.entries3 = {}
         self.ability_checks = {}
         
         for x in self.abilities:
@@ -483,6 +486,38 @@ class healingAbilitiesDialog(QDialog):
                 label = QLabel(x)
                 label.setFont(self.body_font)
                 self.layout.addWidget(label,r,1,1,6)
+            
+            elif ability_len == 3:
+                label1 = QLabel(ability_split[0])
+                midentry = QPushButton()
+                midentry.row = r
+                midentry.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
+                midentry.name = x
+                midentry.setMaximumWidth(30)
+                midentry.clicked.connect(self.edit_mid)
+
+                entry2 = QComboBox()
+                self.entries1[r] = entry2
+                entry2.addItems(["Unit Stat"])
+                
+                label2 = QLabel(ability_split[1])
+                entry1 = QSpinBox()
+                self.entries2[r] = entry1
+                label3 = QLabel(ability_split[2])
+                
+                for y in [label1,entry1,label2,entry2,label3,midentry]:
+                    y.setFont(self.body_font)
+                
+                for g in [midentry, entry1, entry2]:
+                    g.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+                    
+                self.layout.addWidget(label1, r,1,1,1)
+                self.layout.addWidget(entry1, r,2,1,1)
+                self.layout.addWidget(label2,r,3,1,1)
+                self.layout.addWidget(entry2, r,4,1,1)
+                self.layout.addWidget(midentry, r,5,1,1)
+                self.layout.addWidget(label3, r,6,1,1)
+                
     
         self.current_abilities = QTextEdit()
         self.current_abilities.setMaximumHeight(140)
@@ -505,13 +540,41 @@ class healingAbilitiesDialog(QDialog):
         self.clear_all.clicked.connect(self.reset)
         self.layout.addWidget(self.clear_all,r+1,6,1,1)
         
-        self.ins = QLabel("This shows the current abilities on the weapon. If no weapon is loaded, this will be  blank. Click 'Reset' to clear abilities")
+        self.ins = QLabel("This shows the current abilities on the item. If no item is loaded, this will remain blank. Click 'Reset' to clear abilities")
         self.ins.setFont(self.body_font)
         self.layout.addWidget(self.ins,r+2,0,1,7)
-        
+    
+    def edit_mid(self):
+        if self.entries1[self.sender().row].currentText() == "Unit Stat":
+            g = chooseUnitStatDialog(parent=self,font=self.body_font)
+            g.exec_()
+            self.entries1[self.sender().row].addItem("Unit Stat")
+            self.entries1[self.sender().row].addItem(g.data)
+            self.entries1[self.sender().row].setCurrentText(g.data)
+        else:
+            g = numberEntryDialog(parent=self,font=self.body_font)
+            g.exec_()
+            self.entries1[self.sender().row].clear()
+            self.entries1[self.sender().row].addItem("Unit Stat")
+            self.entries1[self.sender().row].addItem(g.data)
+            self.entries1[self.sender().row].setCurrentText(g.data)
+        string = self.sender().name.split("&")
+        try:
+            string = string[0] + str(self.entries2[self.sender().row].value()) + string[1] + self.entries1[self.sender().row].currentText() + string[2]
+        except:
+            string = string[0] + self.entries1[self.sender().row].currentText() + string[1]
+        print(string)
+    
     def toggle_ability(self):
-        pass
-
+        print(self.sender().row)
+        if self.sender().row in [2,3,5,6]:
+            string = self.sender().name
+            self.toggle_save(string, self.sender(), self)
+        elif self.sender().row in [1,4,7,8]:
+            string = self.sender().name.split("&")
+            string = string[0] + str(self.entries2[self.sender().row].value()) + string[1] + self.entries1[self.sender().row].currentText() + string[2]
+            self.toggle_save(string, self.sender(), self)
+            
     def toggle_save(self,string, sender, parent):
         self.parent = parent.parent
         self.p = parent
