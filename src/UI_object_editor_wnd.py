@@ -254,12 +254,14 @@ class ObjectEditorWnd(QWidget):
             pass
     
     def loadWeaponDialog(self):
+        self.weapon = Weapon()
         y = loadSavedWeapon(parent=self,font=self.body_font)
         y.exec_()
         if hasattr(y,"returns"):
             print(y.returns)
             self.weapon.path = y.returns
             self.weapon.selfFromJSON()
+            print(self.weapon.name)
             self.name_edit.setText(getattr(self.weapon, "name"))
             self.desc_edit.setText(getattr(self.weapon, "desc"))
             self.type.setCurrentText(getattr(self.weapon, "type"))
@@ -272,15 +274,16 @@ class ObjectEditorWnd(QWidget):
             self.parent().parent().save_status.setToolTip("Object file not saved")
     
     def loadHealingDialog(self):
+        self.weapon = Healing()
         y = loadSavedHealing(parent=self,font=self.body_font)
         y.exec_()
         if hasattr(y,"returns"):
             print(y.returns)
             self.weapon.path = y.returns
             self.weapon.selfFromJSON()
-            self.name_edit.setText(getattr(self.weapon, "name"))
-            self.desc_edit.setText(getattr(self.weapon, "desc"))
-            self.type.setCurrentText(getattr(self.weapon, "type"))
+            self.hname_edit.setText(getattr(self.weapon, "name"))
+            self.hdesc_edit.setText(getattr(self.weapon, "desc"))
+            self.htype.setCurrentText(getattr(self.weapon, "type"))
             self.upper_range.setValue(getattr(self.weapon, "range")[1])
             self.mag_adjust.setChecked(getattr(self.weapon, "range_change"))
             self.mag_adjust_amount.setValue(getattr(self.weapon, "rc_amount"))
@@ -304,28 +307,28 @@ class ObjectEditorWnd(QWidget):
         
         self.newHealing()
         
-        self.icon = QPushButton()
-        self.icon.setIcon(QIcon(QPixmap("src/ui_icons/white/image.png")))
-        self.icon.setIconSize(QSize(64,64))
-        self.icon.setMaximumWidth(64)
-        self.icon.setMaximumHeight(64)
+        self.hicon = QPushButton()
+        self.hicon.setIcon(QIcon(QPixmap("src/ui_icons/white/image.png")))
+        self.hicon.setIconSize(QSize(64,64))
+        self.hicon.setMaximumWidth(64)
+        self.hicon.setMaximumHeight(64)
         
-        self.name_edit = QLineEdit()
-        self.name_edit.returnPressed.connect(self.hNameChange)
-        self.name_edit.setPlaceholderText("Item name")
+        self.hname_edit = QLineEdit()
+        self.hname_edit.returnPressed.connect(self.hNameChange)
+        self.hname_edit.setPlaceholderText("Item name")
 
-        self.desc_edit = QLineEdit()
-        self.desc_edit.returnPressed.connect(self.descChange)
-        self.desc_edit.setPlaceholderText("Item description")
+        self.hdesc_edit = QLineEdit()
+        self.hdesc_edit.returnPressed.connect(self.descChange)
+        self.hdesc_edit.setPlaceholderText("Item description")
         
-        self.type = QComboBox()
-        self.type.currentTextChanged.connect(self.changeWeaponType)
+        self.htype = QComboBox()
+        self.htype.currentTextChanged.connect(self.changeWeaponType)
         
         self.base_a_row = QWidget()
         self.base_a_row_layout = QHBoxLayout()
         self.base_a_row.setLayout(self.base_a_row_layout)
         
-        for w in [self.icon,self.name_edit,self.desc_edit,self.type]:
+        for w in [self.hicon,self.hname_edit,self.hdesc_edit,self.htype]:
             w.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
             w.setFont(self.body_font)
             w.setMinimumHeight(64)
@@ -381,8 +384,8 @@ class ObjectEditorWnd(QWidget):
             w.setMinimumHeight(64)
             row_layout.addWidget(w)
         
-        self.type.addItem("--Select--")
-        self.type.addItems(weaponTypes().data)
+        self.htype.addItem("--Select--")
+        self.htype.addItems(weaponTypes().data)
         
         self.cs_row = QWidget()
         self.cs_row_layout = QHBoxLayout()

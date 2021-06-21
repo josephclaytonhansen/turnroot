@@ -1,0 +1,1 @@
+{"name": "Sapphire Fragment", "desc": "", "icon": null, "sprite_sheet": null, "event_to_sprites": {}, "price_if_sold": 0, "price": 0, "price_modifiers": [], "scopes": ["combat", "inventory menu"], "inventories": ["unit_object_inventory", "convoy_usable_inventory"], "uses": 1, "used_uses": 0, "used": false}
