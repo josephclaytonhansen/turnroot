@@ -281,6 +281,14 @@ class ObjectEditorWnd(QWidget):
             self.name_edit.setText(getattr(self.weapon, "name"))
             self.desc_edit.setText(getattr(self.weapon, "desc"))
             self.type.setCurrentText(getattr(self.weapon, "type"))
+            self.upper_range.setValue(getattr(self.weapon, "range")[1])
+            self.mag_adjust.setChecked(getattr(self.weapon, "range_change"))
+            self.mag_adjust_amount.setValue(getattr(self.weapon, "rc_amount"))
+            self.hi_dur.setValue(getattr(self.weapon, "full_durability"))
+            self.hi_me.setCurrentText(getattr(self.weapon, "minimum_experience_level"))
+            self.hi_cr.setChecked(getattr(self.weapon, "can_forge"))
+            self.hi_cf.setChecked(getattr(self.weapon, "can_repair"))
+            
             self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
             self.parent().parent().save_status.setToolTip("Object file saved")
         else:
@@ -438,8 +446,35 @@ class ObjectEditorWnd(QWidget):
         self.hi_dur_label = QLabel("Number of uses:")
         self.hi_dur_label.setFont(self.body_font)
         
+        self.hi_me_label = QLabel("Minimum experience level:")
+        self.hi_me_label.setFont(self.body_font)
+        
+        self.hi_me = QComboBox()
+        self.hi_me.setStyleSheet("background-color: "+active_theme.list_background_color+"; color:"+active_theme.window_text_color+"; font-size: "+str(data["font_size"]))
+        self.hi_me.currentTextChanged.connect(self.hi_min)
+        self.hi_me.addItems(["E", "D", "C", "B", "A"])
+        self.hi_me.setFont(self.body_font)
+        
+        self.hi_cr_label = QLabel("Can forge?")
+        self.hi_cf_label = QLabel("Can repair?")
+        self.hi_cr_label.setFont(self.body_font)
+        self.hi_cf_label.setFont(self.body_font)
+        self.hi_cr = QCheckBox()
+        self.hi_cr.stateChanged.connect(self.hi_cr_adjust)
+        self.hi_cf = QCheckBox()
+        self.hi_cf.stateChanged.connect(self.hi_cf_adjust)
+        
+        self.hd_row_layout.addWidget(self.hi_cr_label)
+        self.hd_row_layout.addWidget(self.hi_cr)
+        
+        self.hd_row_layout.addWidget(self.hi_cf_label)
+        self.hd_row_layout.addWidget(self.hi_cf)
+        
         self.hd_row_layout.addWidget(self.hi_dur_label)
-        self.hd_row_layout.addWidget(self.hi_dur)        
+        self.hd_row_layout.addWidget(self.hi_dur)
+        
+        self.hd_row_layout.addWidget(self.hi_me_label)
+        self.hd_row_layout.addWidget(self.hi_me)  
         
         self.working_tab_layout.addWidget(self.hd_row)
         self.working_tab_layout.addWidget(row)
@@ -465,6 +500,21 @@ class ObjectEditorWnd(QWidget):
     
     def dur_adjust(self):
         setattr(self.weapon, "full_durability", self.sender().value())
+        if self.weapon.path != None:
+            self.weapon.selfToJSON()
+    
+    def hi_min(self):
+        setattr(self.weapon, "minimum_experience_level", self.sender().currentText())
+        if self.weapon.path != None:
+            self.weapon.selfToJSON()
+            
+    def hi_cr_adjust(self):
+        setattr(self.weapon, "can_forge", self.sender().isChecked())
+        if self.weapon.path != None:
+            self.weapon.selfToJSON()
+            
+    def hi_cf_adjust(self):
+        setattr(self.weapon, "can_repair", self.sender().isChecked())
         if self.weapon.path != None:
             self.weapon.selfToJSON()
             

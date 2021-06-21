@@ -540,7 +540,7 @@ class healingAbilitiesDialog(QDialog):
         self.clear_all.clicked.connect(self.reset)
         self.layout.addWidget(self.clear_all,r+1,6,1,1)
         
-        self.ins = QLabel("This shows the current abilities on the item. If no item is loaded, this will remain blank. Click 'Reset' to clear abilities")
+        self.ins = QLabel("This shows the current abilities on the item. If no item is loaded, this will remain blank. Click 'Reset' to clear abilities\nPlease note that when loading an item, there may be text here but no boxes checked. Whatever is in this box is what is actually on the item")
         self.ins.setFont(self.body_font)
         self.layout.addWidget(self.ins,r+2,0,1,7)
     
