@@ -9,3 +9,5 @@ GitHub user https://github.com/janbodnar made the skeleton for the web viewer
 StackOverflow user https://stackoverflow.com/users/8924713/thib for pixmap to data
 
 OGA "Insert Graphics Disc" Resource pack from https://opengameart.org/users/buch / Michele "Buch" Bucelli
+
+Retro loader sound effects by StumpyStrust from OGA
