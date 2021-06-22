@@ -10,6 +10,7 @@ class Constants():
         self.cursor_speed = d[2]
 
 C = Constants("src/tmp/sc.trecd")
+C.scale = 64
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self,x,y,tile_graphic_index,tile_type):
@@ -24,7 +25,10 @@ class Tile(pygame.sprite.Sprite):
         
     def animateSprites(self):
         self.sprites = []
-        self.sprites.append(pygame.image.load('app/app_imgs/grass_test.png'))
+        if C.scale == 64:
+            self.sprites.append(pygame.image.load('app/app_imgs/grass_test.png'))
+        elif C.scale == 32:
+            self.sprites.append(pygame.image.load('app/app_imgs/32grass_test.png'))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
@@ -166,4 +170,4 @@ class sandbox():
         imgY = self.cursor_pos[1]
         self.fake_screen.blit(img, (imgX,imgY))
 
-m = sandbox((832,640), "Sandbox", "#FfFfFf", "icon.png", "#000000", C.cursor_speed)
+m = sandbox((15*C.scale,13*C.scale), "Sandbox", "#FfFfFf", "icon.png", "#000000", C.cursor_speed)
