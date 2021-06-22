@@ -78,6 +78,21 @@ class retroLoader():
                         self.move_sound.play()
                         self.cursor_x_change = 0
                         self.cursor_y_change = 0
+                
+                #Mouse
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    self.select_sound.play()
+                    self.buttonPress(self.b_pos[self.cursor_pos[1]])
+                
+                #Mouse move
+                elif event.type == pygame.MOUSEMOTION:
+                    x, y = pygame.mouse.get_pos()
+                    if y > 64 and y < 200:
+                        self.cursor_pos[1] = 64
+                    elif y > 200 and y < 336:
+                        self.cursor_pos[1] = 256
+                    elif y > 336:
+                        self.cursor_pos[1] = 448
                         
                 #Handle screen size
                 elif event.type == pygame.VIDEORESIZE:
