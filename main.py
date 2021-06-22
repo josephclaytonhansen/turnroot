@@ -499,7 +499,8 @@ class main(QMainWindow):
         else:
             self.fullScreen()
             
-
-window = main()
-window.show()
-a = app.exec_()
+def Go(go):
+    if go:
+        window = main()
+        window.show()
+        a = app.exec_()

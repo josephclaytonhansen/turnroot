@@ -1,4 +1,8 @@
 import pygame, sys, random, json
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from main import Go
 
 class Constants():
     def __init__(self,data):
@@ -57,73 +61,84 @@ class retroLoader():
 
         #Game loop
         while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                    sys.exit()
-                
-                #Key press
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_UP:
-                        self.cursor_y_change = -192
-                    elif event.key == pygame.K_DOWN:
-                        self.cursor_y_change = 192
-                    elif event.key == pygame.K_RETURN:
+            try:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        running = False
+                        sys.exit()
+                    
+                    #Key press
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_UP:
+                            self.cursor_y_change = -192
+                        elif event.key == pygame.K_DOWN:
+                            self.cursor_y_change = 192
+                        elif event.key == pygame.K_RETURN:
+                            self.select_sound.play()
+                            self.buttonPress(self.b_pos[self.cursor_pos[1]])
+
+                    #Key release
+                    elif event.type == pygame.KEYUP:
+                        if event.key in [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN]:
+                            self.move_sound.play()
+                            self.cursor_x_change = 0
+                            self.cursor_y_change = 0
+                    
+                    #Mouse
+                    elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                         self.select_sound.play()
                         self.buttonPress(self.b_pos[self.cursor_pos[1]])
-
-                #Key release
-                elif event.type == pygame.KEYUP:
-                    if event.key in [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN]:
-                        self.move_sound.play()
-                        self.cursor_x_change = 0
-                        self.cursor_y_change = 0
+                    
+                    #Mouse move
+                    elif event.type == pygame.MOUSEMOTION:
+                        x, y = pygame.mouse.get_pos()
+                        if y > 64 and y < 200:
+                            self.cursor_pos[1] = 64
+                        elif y > 200 and y < 336:
+                            self.cursor_pos[1] = 256
+                        elif y > 336:
+                            self.cursor_pos[1] = 448
+                            
+                    #Handle screen size
+                    elif event.type == pygame.VIDEORESIZE:
+                        screen = pygame.display.set_mode((int(event.size[0]), int(event.size[1])), pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.RESIZABLE)
+                        self.screen_rect = self.screen.get_rect()
                 
-                #Mouse
-                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    self.select_sound.play()
-                    self.buttonPress(self.b_pos[self.cursor_pos[1]])
+                screen.fill(bar_bg)
+                self.fake_screen.fill(initial_bg)
                 
-                #Mouse move
-                elif event.type == pygame.MOUSEMOTION:
-                    x, y = pygame.mouse.get_pos()
-                    if y > 64 and y < 200:
-                        self.cursor_pos[1] = 64
-                    elif y > 200 and y < 336:
-                        self.cursor_pos[1] = 256
-                    elif y > 336:
-                        self.cursor_pos[1] = 448
-                        
-                #Handle screen size
-                elif event.type == pygame.VIDEORESIZE:
-                    screen = pygame.display.set_mode((int(event.size[0]), int(event.size[1])), pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.RESIZABLE)
-                    self.screen_rect = self.screen.get_rect()
-            
-            screen.fill(bar_bg)
-            self.fake_screen.fill(initial_bg)
-            
-            #self.show...
-            self.showConsole()
-            if C.aw == "main":
-                self.showButtons()
-                self.showCursor()
-            if C.aw == "settings":
-                self.showSettings()
-            
-            #screen.blit(pygame.transform.scale(self.fake_screen, screen.get_rect().size), (0, 0))
-            if self.screen_rect.size != self.dimensions:
-                fit_to_rect = self.fake_rect.fit(self.screen_rect)
-                fit_to_rect.center = self.screen_rect.center
-                scaled = pygame.transform.smoothscale(self.fake_screen, fit_to_rect.size)
-                self.screen.blit(scaled, fit_to_rect)
-            else:
-                self.screen.blit(self.fake_screen, (0,0))
-            
-            pygame.display.update()
+                #self.show...
+                self.showConsole()
+                if C.aw == "main":
+                    self.showButtons()
+                    self.showCursor()
+                if C.aw == "settings":
+                    self.showSettings()
+                
+                #screen.blit(pygame.transform.scale(self.fake_screen, screen.get_rect().size), (0, 0))
+                if self.screen_rect.size != self.dimensions:
+                    fit_to_rect = self.fake_rect.fit(self.screen_rect)
+                    fit_to_rect.center = self.screen_rect.center
+                    scaled = pygame.transform.smoothscale(self.fake_screen, fit_to_rect.size)
+                    self.screen.blit(scaled, fit_to_rect)
+                else:
+                    self.screen.blit(self.fake_screen, (0,0))
+                
+                pygame.display.update()
+                
+            except:
+                sys.exit()
             
     def buttonPress(self, s):
         if s == "settings":
             C.aw = "settings"
+        if s == "create":
+            C.aw = "create"
+            pygame.display.quit()
+            pygame.quit()
+            Go(True)
+            running = False
+            
     
     def showConsole(self):
         self.leds = pygame.image.load("app/app_imgs/leds.png")
