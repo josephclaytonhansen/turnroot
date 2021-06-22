@@ -1,22 +1,24 @@
 import pygame, sys
 
-class main():
-    def __init__(self, title, initial_bg, icon, bar_bg, cursor_speed):
+loader = "retro"
+
+class retroLoader():
+    def __init__(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         super().__init__()
         pygame.init()
-        self.initMainWindow(title, initial_bg, icon, bar_bg, cursor_speed)
+        self.initMainWindow(dimensions, title, initial_bg, icon, bar_bg, cursor_speed)
     
-    def initInitialValues(self, cursor_speed):
-        self.cursor_pos = [0,0]
+    def initInitialValues(self, dimensions, cursor_speed):
+        self.cursor_pos = [192,64]
         self.cursor_x_change = 0
         self.cursor_y_change = 0
-        self.dimensions = (1344,960)
+        self.dimensions = dimensions
         self.last_cursor_move = pygame.time.get_ticks()
         self.cursor_move_cooldown = cursor_speed
         
-    def initMainWindow(self, title, initial_bg, icon, bar_bg, cursor_speed):
+    def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         #load variables and constants
-        self.initInitialValues(cursor_speed)
+        self.initInitialValues(dimensions, cursor_speed)
         
         #init screen
         screen = pygame.display.set_mode(self.dimensions, flags=(pygame.RESIZABLE))
@@ -30,8 +32,8 @@ class main():
         self.screen_rect = self.screen.get_rect()
         
         pygame.display.set_caption(title)
-        i = pygame.image.load(icon)
-        pygame.display.set_icon(i)
+        #i = pygame.image.load(icon)
+        #pygame.display.set_icon(i)
 
         #Game loop
         while running:
@@ -42,14 +44,10 @@ class main():
                 
                 #Key press
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        self.cursor_x_change = -64
-                    if event.key == pygame.K_RIGHT:
-                        self.cursor_x_change = 64
                     if event.key == pygame.K_UP:
-                        self.cursor_y_change = -64
+                        self.cursor_y_change = -192
                     if event.key == pygame.K_DOWN:
-                        self.cursor_y_change = 64
+                        self.cursor_y_change = 192
 
                 #Key release
                 elif event.type == pygame.KEYUP:
@@ -66,6 +64,7 @@ class main():
             self.fake_screen.fill(initial_bg)
             
             #self.show...
+            self.showButtons()
             self.showCursor()
             
             #screen.blit(pygame.transform.scale(self.fake_screen, screen.get_rect().size), (0, 0))
@@ -79,25 +78,50 @@ class main():
             
             pygame.display.update()
     
+    def showButtons(self):
+        if self.cursor_pos[1] == 64:
+            self.load_button = pygame.image.load("app/app_imgs/load_game_s.png")
+        elif self.cursor_pos[1] != 64:
+            self.load_button = pygame.image.load("app/app_imgs/load_game.png")
+        if self.cursor_pos[1] == 256:
+            self.create_button = pygame.image.load("app/app_imgs/create_game_s.png")
+        elif self.cursor_pos[1] != 256:
+            self.create_button = pygame.image.load("app/app_imgs/create_game.png")
+        if self.cursor_pos[1] == 448:
+            self.settings_button = pygame.image.load("app/app_imgs/settings_s.png")
+        elif self.cursor_pos[1] != 448:
+            self.settings_button = pygame.image.load("app/app_imgs/settings.png")
+
+        self.leds = pygame.image.load("app/app_imgs/leds.png")
+        self.screen_img = pygame.image.load("app/app_imgs/screen.png")
+        self.speaker = pygame.image.load("app/app_imgs/speaker.png")
+        self.fake_screen.blit(self.screen_img, (0,46))
+        self.fake_screen.blit(self.load_button, (192,64))
+        self.fake_screen.blit(self.create_button, (192,256))
+        self.fake_screen.blit(self.settings_button, (192,448))
+        self.fake_screen.blit(self.leds, (510,500))
+        self.fake_screen.blit(self.speaker, (590,60))
+    
     def showCursor(self):
-        img = pygame.image.load("cursor.png")
+        img = pygame.image.load("app/app_imgs/cursor.png")
         now = pygame.time.get_ticks()
         if now - self.last_cursor_move >= self.cursor_move_cooldown:
             self.cursor_pos[0] += self.cursor_x_change
             self.cursor_pos[1] += self.cursor_y_change
             if self.cursor_pos[0] < 0:
                 self.cursor_pos[0] = 0
-            if self.cursor_pos[0] >= self.dimensions[0] - 64:
-                self.cursor_pos[0] = self.dimensions[0] - 64
-            if self.cursor_pos[1] < 0:
-                self.cursor_pos[1] = 0
-            if self.cursor_pos[1] >= self.dimensions[1] - 64:
-                self.cursor_pos[1] = self.dimensions[1] - 64
+            if self.cursor_pos[0] >= self.dimensions[0] - 256:
+                self.cursor_pos[0] = self.dimensions[0] - 256
+            if self.cursor_pos[1] < 64:
+                self.cursor_pos[1] = 64
+            if self.cursor_pos[1] >= self.dimensions[1] - 192:
+                self.cursor_pos[1] = self.dimensions[1] - 192
             
             self.last_cursor_move = now
             
         imgX = self.cursor_pos[0]
         imgY = self.cursor_pos[1]
         self.fake_screen.blit(img, (imgX,imgY))
-        
-m = main("Testing", "#FFFFFF", "icon.png", "#00C56A", 70)
+
+if loader == "retro":
+    m = retroLoader((768,640), "Testing", "#DfDfDf", "icon.png", "#000000", 70)
