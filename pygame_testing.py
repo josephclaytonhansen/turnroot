@@ -99,8 +99,8 @@ class retroLoader():
         self.fake_screen.blit(self.load_button, (192,64))
         self.fake_screen.blit(self.create_button, (192,256))
         self.fake_screen.blit(self.settings_button, (192,448))
-        self.fake_screen.blit(self.leds, (510,500))
-        self.fake_screen.blit(self.speaker, (590,60))
+        self.fake_screen.blit(self.leds, (560,500))
+        self.fake_screen.blit(self.speaker, (630,10))
     
     def showCursor(self):
         img = pygame.image.load("app/app_imgs/cursor.png")
@@ -124,4 +124,4 @@ class retroLoader():
         self.fake_screen.blit(img, (imgX,imgY))
 
 if loader == "retro":
-    m = retroLoader((768,640), "Testing", "#DfDfDf", "icon.png", "#000000", 70)
+    m = retroLoader((840,640), "Testing", "#DfDfDf", "icon.png", "#000000", 70)
