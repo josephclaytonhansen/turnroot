@@ -220,7 +220,8 @@ class sandbox():
     def showCursor(self):
         now = pygame.time.get_ticks()
         
-        self.move_over_group.draw(self.fullmap)
+        for j in self.move_over_group:
+            self.fullmap.blit(j.image,(j.x,j.y))
         
         if now - self.last_cursor_move >= self.cursor_move_cooldown:
             self.cursor_pos[0] += self.cursor_x_change
@@ -264,8 +265,6 @@ class sandbox():
         if GRID_OVER:
             self.fullmap.blit(self.grid.image, (self.camera.x, self.camera.y))
         self.fullmap.blit(self.c_img, (imgX,imgY))
-        for j in self.move_over_group:
-            self.fullmap.blit(j.image,(j.x,j.y))
         
     def Select(self):
         self.move_over_group.empty()
