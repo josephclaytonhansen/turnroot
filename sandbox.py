@@ -170,4 +170,4 @@ class sandbox():
         imgY = self.cursor_pos[1]
         self.fake_screen.blit(img, (imgX,imgY))
 
-m = sandbox((15*C.scale,13*C.scale), "Sandbox", "#FfFfFf", "icon.png", "#000000", C.cursor_speed)
+m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#FfFfFf", "icon.png", "#000000", C.cursor_speed)
