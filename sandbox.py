@@ -1,9 +1,9 @@
 import pygame, sys, random, json
 
 class Constants():
-    def __init__(self,data):
+    def __init__(self,constants):
         super().__init__()
-        with open(data, "r") as f:
+        with open(constants, "r") as f:
             d = json.load(f)
         self.scale = d[0]
         self.fps = d[1]
@@ -11,8 +11,56 @@ class Constants():
         self.grid_dimensions = d[3]
 
 C = Constants("src/tmp/sc.trecd")
-C.scale = 64
 
+CURSOR_OVER = True
+GRID_OVER = False
+GRID_OPACITY = 50
+
+class cursorOver(pygame.sprite.Sprite):
+    def __init__(self,x,y):
+        super().__init__()
+        self.sprites = []
+        self.x = x
+        self.y = y 
+        if C.scale == 64:
+            self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over.png'))
+        elif C.scale == 32:
+            pass
+        self.current_sprite = 0
+        self.image = self.sprites[self.current_sprite]
+        self.rect = self.image.get_rect()
+        self.rect.topleft = [self.x*C.scale,self.y*C.scale]
+
+class gridOver(pygame.sprite.Sprite):
+    def __init__(self,x,y):
+        super().__init__()
+        self.sprites = []
+        self.x = x
+        self.y = y 
+        if C.scale == 64:
+            self.sprites.append(pygame.image.load('app/app_imgs/64_grid.png'))
+        elif C.scale == 32:
+            pass
+        self.current_sprite = 0
+        self.image = self.sprites[self.current_sprite]
+        self.rect = self.image.get_rect()
+        self.rect.topleft = [self.x*C.scale,self.y*C.scale]
+        
+class moveOver(pygame.sprite.Sprite):
+    def __init__(self,x,y):
+        super().__init__()
+        self.sprites = []
+        self.x = x
+        self.y = y 
+        if C.scale == 64:
+            self.sprites.append(pygame.image.load('app/app_imgs/64move.png'))
+        elif C.scale == 32:
+            pass
+        self.current_sprite = 0
+        self.image = self.sprites[self.current_sprite]
+        self.rect = self.image.get_rect()
+        self.rect.topleft = [self.x*C.scale,self.y*C.scale]
+        
 class Tile(pygame.sprite.Sprite):
     def __init__(self,x,y,tile_graphic_index,tile_type):
         super().__init__()
@@ -58,6 +106,7 @@ class sandbox():
         self.tiles = {}
         
         self.tile_group = pygame.sprite.Group()
+        self.move_over_group = pygame.sprite.Group()
         self.graphics = pygame.sprite.Group()
         
         self.cursor_move_cooldown = cursor_speed
@@ -77,6 +126,8 @@ class sandbox():
         self.screen = screen
         self.icon = icon
         running = True
+        
+        self.c_over = cursorOver(192,192)
         
         if C.scale == 64:
             self.c_img = pygame.image.load("app/app_imgs/64cursor.png")
@@ -114,6 +165,7 @@ class sandbox():
                     elif event.key == pygame.K_RETURN:
                         t = self.tiles[self.tile_pos[0]][self.tile_pos[1]]
                         print(t.x, t.y, t)
+                        self.Select()
 
                 #Key release
                 elif event.type == pygame.KEYUP:
@@ -131,13 +183,13 @@ class sandbox():
             screen.fill(bar_bg)
             self.fake_screen.fill(initial_bg)
             
-            #self.show...
+            #draw grid
             self.tile_group.draw(self.fullmap)
- 
+            
+            #draw cursor and map from camera)
             self.showCursor()
             self.fake_screen.blit(self.fullmap, (0,0), self.camera)
-            
-            #screen.blit(pygame.transform.scale(self.fake_screen, screen.get_rect().size), (0, 0))
+
             if self.screen_rect.size != self.dimensions:
                 fit_to_rect = self.fake_rect.fit(self.screen_rect)
                 fit_to_rect.center = self.screen_rect.center
@@ -159,9 +211,16 @@ class sandbox():
                 self.tiles[x][y] = Tile(x,y,0,"ground")
                 self.tile_group.add(self.tiles[x][y])
                 self.graphics.add(self. tiles[x][y])
+                
+                global GRID_OVER, GRID_OPACITY
+                if GRID_OVER:
+                    self.grid = gridOver(0,0)
+                    self.grid.image.set_alpha(GRID_OPACITY)
     
     def showCursor(self):
         now = pygame.time.get_ticks()
+        
+        self.move_over_group.draw(self.fullmap)
         
         if now - self.last_cursor_move >= self.cursor_move_cooldown:
             self.cursor_pos[0] += self.cursor_x_change
@@ -199,6 +258,27 @@ class sandbox():
             
         imgX = self.cursor_pos[0]
         imgY = self.cursor_pos[1]
+        global CURSOR_OVER, GRID_OVER
+        if CURSOR_OVER:
+            self.fullmap.blit(self.c_over.image, (self.cursor_pos[0]-192, self.cursor_pos[1]-192))
+        if GRID_OVER:
+            self.fullmap.blit(self.grid.image, (self.camera.x, self.camera.y))
         self.fullmap.blit(self.c_img, (imgX,imgY))
+        for j in self.move_over_group:
+            self.fullmap.blit(j.image,(j.x,j.y))
+        
+    def Select(self):
+        self.move_over_group.empty()
+        #get move and damage from tile contents
+        start = self.tile_pos
+        move = 2
+        damage = 1
+        rows = (move* 2) + 1
+        for x in range(-move+self.tile_pos[0],move+1+self.tile_pos[0]):
+            for y in range(-move+self.tile_pos[1], move+1+self.tile_pos[1]):
+                distance = abs(self.tile_pos[0] - x) + abs(self.tile_pos[1] - y)
+                if distance <= move:
+                    m = moveOver(x*C.scale, y*C.scale)
+                    self.move_over_group.add(m)
 
 m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#FfFfFf", "icon.png", "#000000", C.cursor_speed)
