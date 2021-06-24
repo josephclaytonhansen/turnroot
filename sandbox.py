@@ -12,7 +12,7 @@ OVERLAY_PLACEMENTS = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100
 GUARD_ICON = "app/app_imgs/overlays/guard_001.png"
 AVOID_ICON = "app/app_imgs/overlays/avoid_001.png"
 HEAL_ICON = "app/app_imgs/overlays/heal_001.png"
-
+SELECTION_OVERLAY_TYPE = "full"
 #Overhaul later
 TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"Adds health each turn",
               30:"Raises avoidance except for flyers", 31:"Slows movement",32:"Neutral terrain",33:"Neutral terrain"}
@@ -210,11 +210,8 @@ class sandbox():
     def showOverlays(self):
         ground_desc = overlayOver(image64="app/app_imgs/overlays/tile_desc_001.png",image32=None)
         tile_name = overlayOver(image64="app/app_imgs/overlays/tile_name_001.png",image32=None)
-        unit_info = overlayOver(image64="app/app_imgs/overlays/unit_info_001.png", image32=None)
-        xp_bar = overlayOver(image64="app/app_imgs/overlays/xp_bar_001.png", image32=None)
-        xp_crest = overlayOver(image64="app/app_imgs/overlays/xp_crest_001.png", image32=None)
         
-        global OVERLAY_PLACEMENTS, GUARD_ICON, AVOID_ICON, HEAL_ICON
+        global OVERLAY_PLACEMENTS, GUARD_ICON, AVOID_ICON, HEAL_ICON, SELECTION_OVERLAY_TYPE
         self.fake_screen.blit(ground_desc.image, OVERLAY_PLACEMENTS[0])
         self.fake_screen.blit(tile_name.image, OVERLAY_PLACEMENTS[1])
         
@@ -225,9 +222,14 @@ class sandbox():
         self.fake_screen.blit(guard.image, OVERLAY_PLACEMENTS[3])
         self.fake_screen.blit(avoid.image, OVERLAY_PLACEMENTS[4])
         self.fake_screen.blit(heal.image, OVERLAY_PLACEMENTS[5])
-        self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS[10])
-        self.fake_screen.blit(xp_bar.image, OVERLAY_PLACEMENTS[11])
-        self.fake_screen.blit(xp_crest.image, OVERLAY_PLACEMENTS[11])
+        
+        if SELECTION_OVERLAY_TYPE == "full":
+            unit_info = overlayOver(image64="app/app_imgs/overlays/unit_info_001.png", image32=None)
+            xp_bar = overlayOver(image64="app/app_imgs/overlays/xp_bar_001.png", image32=None)
+            xp_crest = overlayOver(image64="app/app_imgs/overlays/xp_crest_001.png", image32=None)
+            self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS[10])
+            self.fake_screen.blit(xp_bar.image, OVERLAY_PLACEMENTS[11])
+            self.fake_screen.blit(xp_crest.image, OVERLAY_PLACEMENTS[11])
         
     #update cursor/selected overlays
     def showCursor(self):
@@ -333,19 +335,8 @@ class sandbox():
         self.fake_screen.blit(guard_text, OVERLAY_PLACEMENTS[6])
         self.fake_screen.blit(avoid_text, OVERLAY_PLACEMENTS[7])
         self.fake_screen.blit(heal_text, OVERLAY_PLACEMENTS[8])
-        class_text = self.fonts["SERIF_16"].render("Soldier", 1, (238,238,230))
-        self.fake_screen.blit(class_text, OVERLAY_PLACEMENTS[13])
-        unit_name = self.fonts["SERIF_28"].render("Talculí", 1, (238,238,230))
-        self.fake_screen.blit(unit_name, OVERLAY_PLACEMENTS[14])
-        hp_label = self.fonts["SERIF_12"].render("HP", 1, (238,238,230))
-        self.fake_screen.blit(hp_label, OVERLAY_PLACEMENTS[15])
-        hp_text = self.fonts["SERIF_28"].render("10/10", 1, (238,238,230))
-        self.fake_screen.blit(hp_text, OVERLAY_PLACEMENTS[16])
         
-        level_text = self.fonts["SERIF_20"].render("Lvl 11", 1, color)
-        self.fake_screen.blit(level_text, OVERLAY_PLACEMENTS[12])
-        
-        global TILE_TYPES, TILE_TYPE_NAMES
+        global TILE_TYPES, TILE_TYPE_NAMES, SELECTION_OVERLAY_TYPE
         #Remove these if statements- a real level will have data for all tiles
         if self.current_tile_index in TILE_TYPE_NAMES:
             label = self.fonts["SERIF_22"].render(str(TILE_TYPE_NAMES[self.current_tile_index]), 1, (238,238,230))
@@ -353,5 +344,19 @@ class sandbox():
         if self.current_tile_index in TILE_TYPES:
             tile_type_text = self.fonts["SANS_16"].render(str(TILE_TYPES[self.current_tile_index]), 1, color)
             self.fake_screen.blit(tile_type_text, OVERLAY_PLACEMENTS[9])
-
+    
+        if self.unit_selected:
+            if SELECTION_OVERLAY_TYPE == "full":
+            #get actual values from unit
+                class_text = self.fonts["SERIF_16"].render("Soldier", 1, (238,238,230))
+                self.fake_screen.blit(class_text, OVERLAY_PLACEMENTS[13])
+                unit_name = self.fonts["SERIF_28"].render("Talculí", 1, (238,238,230))
+                self.fake_screen.blit(unit_name, OVERLAY_PLACEMENTS[14])
+                hp_label = self.fonts["SERIF_12"].render("HP", 1, (238,238,230))
+                self.fake_screen.blit(hp_label, OVERLAY_PLACEMENTS[15])
+                hp_text = self.fonts["SERIF_28"].render("10/10", 1, (238,238,230))
+                self.fake_screen.blit(hp_text, OVERLAY_PLACEMENTS[16])
+                level_text = self.fonts["SERIF_20"].render("Lvl 11", 1, color)
+                self.fake_screen.blit(level_text, OVERLAY_PLACEMENTS[12])
+            
 m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#000000", "icon.png", "#000000", C.cursor_speed)
