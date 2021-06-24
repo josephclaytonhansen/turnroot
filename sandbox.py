@@ -7,7 +7,7 @@ GRID_COLOR = "white"
 GRID_OPACITY = 30
 SANS_GAME_FONT = "FiraSans-Light.ttf"
 SERIF_GAME_FONT = "Martel-Bold.ttf"
-OVERLAY_PLACEMENTS = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100,88),(160,88), (10, 124)]
+OVERLAY_PLACEMENTS = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100,88),(160,88),(10,124), (10,515)]
 GUARD_ICON = "app/app_imgs/overlays/guard_001.png"
 AVOID_ICON = "app/app_imgs/overlays/avoid_001.png"
 HEAL_ICON = "app/app_imgs/overlays/heal_001.png"
@@ -207,8 +207,9 @@ class sandbox():
                 self.fonts[n+"_"+str(font_size)] = fontObj
 
     def showOverlays(self):
-        ground_desc = overlayOver(image64="app/app_imgs/overlays/tile_desc001.png",image32=None)
-        tile_name = overlayOver(image64="app/app_imgs/overlays/tile_name001.png",image32=None)
+        ground_desc = overlayOver(image64="app/app_imgs/overlays/tile_desc_001.png",image32=None)
+        tile_name = overlayOver(image64="app/app_imgs/overlays/tile_name_001.png",image32=None)
+        unit_info = overlayOver(image64="app/app_imgs/overlays/unit_info_001.png", image32=None)
         
         global OVERLAY_PLACEMENTS, GUARD_ICON, AVOID_ICON, HEAL_ICON
         self.fake_screen.blit(ground_desc.image, OVERLAY_PLACEMENTS[0])
@@ -221,6 +222,7 @@ class sandbox():
         self.fake_screen.blit(guard.image, OVERLAY_PLACEMENTS[3])
         self.fake_screen.blit(avoid.image, OVERLAY_PLACEMENTS[4])
         self.fake_screen.blit(heal.image, OVERLAY_PLACEMENTS[5])
+        self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS[10])
         
     #update cursor/selected overlays
     def showCursor(self):
