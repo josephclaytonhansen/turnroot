@@ -6,10 +6,16 @@ GRID_OVER = True
 GRID_OPACITY = 30
 SANS_GAME_FONT = "FiraSans-Light.ttf"
 SERIF_GAME_FONT = "Martel-Bold.ttf"
-OVERLAY_PLACEMENTS = [(3,80),(4,20),(11,6),(10,90),(70,92),(130,92)]
+OVERLAY_PLACEMENTS = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100,88),(160,88), (10, 124)]
 GUARD_ICON = "app/app_imgs/overlays/guard_001.png"
 AVOID_ICON = "app/app_imgs/overlays/avoid_001.png"
 HEAL_ICON = "app/app_imgs/overlays/heal_001.png"
+
+#Overhaul later
+TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"Adds health each turn",
+              30:"Raises avoidance except for flyers", 31:"Slows movement",32:"Neutral terrain",33:"Neutral terrain"}
+TILE_TYPE_NAMES = {0:"Floor", 1:"Floor",2:"Floor", 3:"Heal",
+              30:"Forest", 31:"Shallow Water",32:"Floor",33:"Floor"}
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self,x,y,tile_graphic_index,tile_type):
@@ -142,6 +148,7 @@ class sandbox():
             self.showCursor()
             self.fake_screen.blit(self.fullmap, (0,0), self.camera)
             self.showOverlays()
+            self.showTileTexts()
             
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
@@ -181,20 +188,18 @@ class sandbox():
             else:
                 n = "SERIF"
             font_path = "app/app_fonts/"+font
-            for size in [12,15,20,24,28,32]:
+            for size in [12,15,20,22,24,28,32,48]:
                 font_size = size
                 fontObj = pygame.font.Font(font_path, font_size)
                 self.fonts[n+"_"+str(font_size)] = fontObj
 
     def showOverlays(self):
-        label = self.fonts["SERIF_24"].render("Floor", 1, (238,238,230))
         ground_desc = overlayOver(image64="app/app_imgs/overlays/tile_desc001.png",image32=None)
         tile_name = overlayOver(image64="app/app_imgs/overlays/tile_name001.png",image32=None)
         
         global OVERLAY_PLACEMENTS, GUARD_ICON, AVOID_ICON, HEAL_ICON
         self.fake_screen.blit(ground_desc.image, OVERLAY_PLACEMENTS[0])
         self.fake_screen.blit(tile_name.image, OVERLAY_PLACEMENTS[1])
-        self.fake_screen.blit(label, (OVERLAY_PLACEMENTS[1][0]+OVERLAY_PLACEMENTS[2][0], OVERLAY_PLACEMENTS[1][1]+OVERLAY_PLACEMENTS[2][1]))
         
         guard = overlayOver(image64=GUARD_ICON,image32=None)
         avoid = overlayOver(image64=AVOID_ICON,image32=None)
@@ -203,13 +208,11 @@ class sandbox():
         self.fake_screen.blit(guard.image, OVERLAY_PLACEMENTS[3])
         self.fake_screen.blit(avoid.image, OVERLAY_PLACEMENTS[4])
         self.fake_screen.blit(heal.image, OVERLAY_PLACEMENTS[5])
-
-        #self.showTileTexts()
         
     #update cursor/selected overlays
     def showCursor(self):
         now = pygame.time.get_ticks()
-        
+        self.current_tile_index = self.tile_pos[0]+(self.tile_pos[1]*C.grid_dimensions[1])
         for j in self.move_over_group:
             self.fullmap.blit(j.image,(j.x,j.y))
         
@@ -261,6 +264,7 @@ class sandbox():
         self.move_over_group.empty()
         #get move and damage from tile contents
         start = self.tile_pos
+
         move = 3
         damage = 1
         
@@ -282,5 +286,29 @@ class sandbox():
                     d = damageOver(x*C.scale, y*C.scale)
                     self.damage_tiles.append((x,y))
                     self.move_over_group.add(d)
+                
+    def showTileTexts(self):
+        #Get actual values from tile
+        self.avoid_amount = self.tile_pos[0]
+        self.guard_amount = self.tile_pos[1]
+        self.heal_amount = 0
+        color = (0,0,0)
+        heal_text = self.fonts["SERIF_20"].render(str(self.heal_amount), 1, color)
+        avoid_text = self.fonts["SERIF_20"].render(str(self.avoid_amount), 1, color)
+        guard_text = self.fonts["SERIF_20"].render(str(self.guard_amount), 1, color)
+        self.fake_screen.blit(guard_text, OVERLAY_PLACEMENTS[6])
+        self.fake_screen.blit(avoid_text, OVERLAY_PLACEMENTS[7])
+        self.fake_screen.blit(heal_text, OVERLAY_PLACEMENTS[8])
+        
+        global TILE_TYPES, TILE_TYPE_NAMES
+        #Remove these if statements- a real level will have data for all tiles
+        if self.current_tile_index in TILE_TYPE_NAMES:
+            label = self.fonts["SERIF_22"].render(str(TILE_TYPE_NAMES[self.current_tile_index]), 1, (238,238,230))
+            self.fake_screen.blit(label, (OVERLAY_PLACEMENTS[1][0]+OVERLAY_PLACEMENTS[2][0], OVERLAY_PLACEMENTS[1][1]+OVERLAY_PLACEMENTS[2][1]))
+        if self.current_tile_index in TILE_TYPES:
+            tile_type_text = self.fonts["SANS_15"].render(str(TILE_TYPES[self.current_tile_index]), 1, color)
+            self.fake_screen.blit(tile_type_text, OVERLAY_PLACEMENTS[9])
+        
+
 
 m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#FfFfFf", "icon.png", "#000000", C.cursor_speed)
