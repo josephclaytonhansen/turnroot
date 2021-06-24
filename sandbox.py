@@ -1,66 +1,10 @@
 import pygame, sys, random, json
-
-class Constants():
-    def __init__(self,constants):
-        super().__init__()
-        with open(constants, "r") as f:
-            d = json.load(f)
-        self.scale = d[0]
-        self.fps = d[1]
-        self.cursor_speed = d[2]
-        self.grid_dimensions = d[3]
-
-C = Constants("src/tmp/sc.trecd")
+from src.GAME_battle_map_graphics_backend import cursorOver, gridOver, moveOver, damageOver, C
 
 CURSOR_OVER = True
 GRID_OVER = False
 GRID_OPACITY = 50
-
-class cursorOver(pygame.sprite.Sprite):
-    def __init__(self,x,y):
-        super().__init__()
-        self.sprites = []
-        self.x = x
-        self.y = y 
-        if C.scale == 64:
-            self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over.png'))
-        elif C.scale == 32:
-            pass
-        self.current_sprite = 0
-        self.image = self.sprites[self.current_sprite]
-        self.rect = self.image.get_rect()
-        self.rect.topleft = [self.x*C.scale,self.y*C.scale]
-
-class gridOver(pygame.sprite.Sprite):
-    def __init__(self,x,y):
-        super().__init__()
-        self.sprites = []
-        self.x = x
-        self.y = y 
-        if C.scale == 64:
-            self.sprites.append(pygame.image.load('app/app_imgs/64_grid.png'))
-        elif C.scale == 32:
-            pass
-        self.current_sprite = 0
-        self.image = self.sprites[self.current_sprite]
-        self.rect = self.image.get_rect()
-        self.rect.topleft = [self.x*C.scale,self.y*C.scale]
-        
-class moveOver(pygame.sprite.Sprite):
-    def __init__(self,x,y):
-        super().__init__()
-        self.sprites = []
-        self.x = x
-        self.y = y 
-        if C.scale == 64:
-            self.sprites.append(pygame.image.load('app/app_imgs/64move.png'))
-        elif C.scale == 32:
-            pass
-        self.current_sprite = 0
-        self.image = self.sprites[self.current_sprite]
-        self.rect = self.image.get_rect()
-        self.rect.topleft = [self.x*C.scale,self.y*C.scale]
-        
+     
 class Tile(pygame.sprite.Sprite):
     def __init__(self,x,y,tile_graphic_index,tile_type):
         super().__init__()
@@ -186,10 +130,11 @@ class sandbox():
             #draw grid
             self.tile_group.draw(self.fullmap)
             
-            #draw cursor and map from camera)
+            #draw cursor and map from camera
             self.showCursor()
             self.fake_screen.blit(self.fullmap, (0,0), self.camera)
-
+            
+            #fit screen to screen
             if self.screen_rect.size != self.dimensions:
                 fit_to_rect = self.fake_rect.fit(self.screen_rect)
                 fit_to_rect.center = self.screen_rect.center
@@ -199,7 +144,8 @@ class sandbox():
                 self.screen.blit(self.fake_screen, (0,0))
             
             pygame.display.update()
-            
+    
+    #init tile grid- runs once
     def initGrid(self):
         self.fullmap = pygame.Surface((C.grid_dimensions[0]*C.scale, C.grid_dimensions[1]*C.scale))
         self.fullmap_rect = self.fullmap.get_rect()
@@ -217,6 +163,7 @@ class sandbox():
                     self.grid = gridOver(0,0)
                     self.grid.image.set_alpha(GRID_OPACITY)
     
+    #update cursor/selected overlays
     def showCursor(self):
         now = pygame.time.get_ticks()
         
@@ -265,19 +212,32 @@ class sandbox():
         if GRID_OVER:
             self.fullmap.blit(self.grid.image, (self.camera.x, self.camera.y))
         self.fullmap.blit(self.c_img, (imgX,imgY))
-        
+    
     def Select(self):
+        #currently selects tile- get unit from tile contents
         self.move_over_group.empty()
         #get move and damage from tile contents
         start = self.tile_pos
         move = 2
         damage = 1
+        
+        #use these to limit cursor movement
+        self.move_tiles = []
+        self.damage_tiles = []
+        self.unit_selected = True
+        
         rows = (move* 2) + 1
-        for x in range(-move+self.tile_pos[0],move+1+self.tile_pos[0]):
-            for y in range(-move+self.tile_pos[1], move+1+self.tile_pos[1]):
+        for x in range(-move+self.tile_pos[0]-damage,move+1+self.tile_pos[0]+damage):
+            for y in range(-move+self.tile_pos[1]-damage, move+1+self.tile_pos[1]+damage):
                 distance = abs(self.tile_pos[0] - x) + abs(self.tile_pos[1] - y)
                 if distance <= move:
+                    #and if tile is movable by unit/tile is empty
                     m = moveOver(x*C.scale, y*C.scale)
+                    self.move_tiles.append((x,y))
                     self.move_over_group.add(m)
+                elif distance > move and distance <= damage + move:
+                    d = damageOver(x*C.scale, y*C.scale)
+                    self.damage_tiles.append((x,y))
+                    self.move_over_group.add(d)
 
-m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#FfFfFf", "icon.png", "#000000", C.cursor_speed)
+m = sandbox((21*C.scale,15*C.scale), "Sandbox", "#FfFfFf", "icon.png", "#000000", C.cursor_speed)
