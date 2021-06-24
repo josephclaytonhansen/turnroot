@@ -8,11 +8,12 @@ GRID_OPACITY = 30
 SANS_GAME_FONT = "Karla-Medium.ttf"
 SERIF_GAME_FONT = "Martel-Bold.ttf"
 OVERLAY_PLACEMENTS = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100,88),(160,88),(10,124),
-                      (10,500), (225,594), (182,586), (260,748), (20, 512), (315,540), (230,520)]
+                      (10,500), (225,594), (182,586), (260,748), (20, 512), (315,540), (230,520),(10,570),
+                      (190, 770), (395,790), (338,780)]
 GUARD_ICON = "app/app_imgs/overlays/guard_001.png"
 AVOID_ICON = "app/app_imgs/overlays/avoid_001.png"
 HEAL_ICON = "app/app_imgs/overlays/heal_001.png"
-SELECTION_OVERLAY_TYPE = "full"
+SELECTION_OVERLAY_TYPE = "small"
 #Overhaul later
 TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"Adds health each turn",
               30:"Raises avoidance except for flyers", 31:"Slows movement",32:"Neutral terrain",33:"Neutral terrain"}
@@ -230,6 +231,9 @@ class sandbox():
             self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS[10])
             self.fake_screen.blit(xp_bar.image, OVERLAY_PLACEMENTS[11])
             self.fake_screen.blit(xp_crest.image, OVERLAY_PLACEMENTS[11])
+        else:
+            unit_info = overlayOver(image64="app/app_imgs/overlays/unit_info_small_001.png", image32=None)
+            self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS[17])
         
     #update cursor/selected overlays
     def showCursor(self):
@@ -358,5 +362,13 @@ class sandbox():
                 self.fake_screen.blit(hp_text, OVERLAY_PLACEMENTS[16])
                 level_text = self.fonts["SERIF_20"].render("Lvl 11", 1, color)
                 self.fake_screen.blit(level_text, OVERLAY_PLACEMENTS[12])
+            else:
+                unit_name = self.fonts["SERIF_20"].render("Talculí", 1, (238,238,230))
+                self.fake_screen.blit(unit_name, OVERLAY_PLACEMENTS[18])
+                hp_label = self.fonts["SERIF_12"].render("HP", 1, (238,238,230))
+                self.fake_screen.blit(hp_label, OVERLAY_PLACEMENTS[19])
+                hp_text = self.fonts["SERIF_20"].render("10/10", 1, (238,238,230))
+                self.fake_screen.blit(hp_text, OVERLAY_PLACEMENTS[20])
+                
             
 m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#000000", "icon.png", "#000000", C.cursor_speed)
