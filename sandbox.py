@@ -5,9 +5,10 @@ CURSOR_OVER = True
 GRID_OVER = True
 GRID_COLOR = "white"
 GRID_OPACITY = 30
-SANS_GAME_FONT = "FiraSans-Light.ttf"
+SANS_GAME_FONT = "Karla-Medium.ttf"
 SERIF_GAME_FONT = "Martel-Bold.ttf"
-OVERLAY_PLACEMENTS = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100,88),(160,88),(10,124), (10,500), (225,594), (182,586)]
+OVERLAY_PLACEMENTS = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100,88),(160,88),(10,124),
+                      (10,500), (225,594), (182,586), (260,748), (20, 512), (315,540), (230,520)]
 GUARD_ICON = "app/app_imgs/overlays/guard_001.png"
 AVOID_ICON = "app/app_imgs/overlays/avoid_001.png"
 HEAL_ICON = "app/app_imgs/overlays/heal_001.png"
@@ -332,6 +333,14 @@ class sandbox():
         self.fake_screen.blit(guard_text, OVERLAY_PLACEMENTS[6])
         self.fake_screen.blit(avoid_text, OVERLAY_PLACEMENTS[7])
         self.fake_screen.blit(heal_text, OVERLAY_PLACEMENTS[8])
+        class_text = self.fonts["SERIF_16"].render("Soldier", 1, (238,238,230))
+        self.fake_screen.blit(class_text, OVERLAY_PLACEMENTS[13])
+        unit_name = self.fonts["SERIF_28"].render("Talculí", 1, (238,238,230))
+        self.fake_screen.blit(unit_name, OVERLAY_PLACEMENTS[14])
+        hp_label = self.fonts["SERIF_12"].render("HP", 1, (238,238,230))
+        self.fake_screen.blit(hp_label, OVERLAY_PLACEMENTS[15])
+        hp_text = self.fonts["SERIF_28"].render("10/10", 1, (238,238,230))
+        self.fake_screen.blit(hp_text, OVERLAY_PLACEMENTS[16])
         
         level_text = self.fonts["SERIF_20"].render("Lvl 11", 1, color)
         self.fake_screen.blit(level_text, OVERLAY_PLACEMENTS[12])
