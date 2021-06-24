@@ -57,6 +57,7 @@ class sandbox():
         self.cursor_history = []
         self.moved = False
         self.unit_selected = False
+        self.tmp_cursor = [0,0]
         
         self.dimensions = dimensions
         self.last_cursor_move = pygame.time.get_ticks()
@@ -222,6 +223,10 @@ class sandbox():
     def showCursor(self):
         now = pygame.time.get_ticks()
         self.current_tile_index = self.tile_pos[0]+(self.tile_pos[1]*C.grid_dimensions[1])
+        self.tile_pos[0] = int(self.cursor_pos[0] / C.scale) + self.tile_offset[0]
+        self.tile_pos[1] = int(self.cursor_pos[1] / C.scale) + self.tile_offset[1]
+        self.tmp_cursor = self.cursor_pos.copy()
+        
         for j in self.move_over_group:
             self.fullmap.blit(j.image,(j.x,j.y))
         
@@ -243,6 +248,11 @@ class sandbox():
                 self.cursor_pos[1] = 0
             if self.tile_pos[1] >= C.grid_dimensions[1]-1:
                 self.cursor_pos[1] = (C.grid_dimensions[1]-1)*C.scale
+                
+            if self.unit_selected:
+                t = (self.tile_pos[0], self.tile_pos[1])
+                if t not in self.move_tiles:
+                    self.cursor_pos = self.tmp_cursor
             
             if len(self.cursor_history) > 3:
                 camera_pan_direction = self.cursor_history[0]
@@ -273,12 +283,13 @@ class sandbox():
         self.move_over_group.empty()
         #get move and damage from tile contents
         start = self.tile_pos
+        s = start.copy()
 
         move = 3
         damage = 1
         
         #use these to limit cursor movement
-        self.move_tiles = []
+        self.move_tiles = [(s[0],s[1])]
         self.damage_tiles = []
         self.unit_selected = True
         
