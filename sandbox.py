@@ -2,8 +2,8 @@ import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import cursorOver, gridOver, moveOver, damageOver, C
 
 CURSOR_OVER = True
-GRID_OVER = False
-GRID_OPACITY = 50
+GRID_OVER = True
+GRID_OPACITY = 30
      
 class Tile(pygame.sprite.Sprite):
     def __init__(self,x,y,tile_graphic_index,tile_type):
@@ -158,10 +158,10 @@ class sandbox():
                 self.tile_group.add(self.tiles[x][y])
                 self.graphics.add(self. tiles[x][y])
                 
-                global GRID_OVER, GRID_OPACITY
-                if GRID_OVER:
-                    self.grid = gridOver(0,0)
-                    self.grid.image.set_alpha(GRID_OPACITY)
+        global GRID_OVER, GRID_OPACITY
+        if GRID_OVER:
+            self.grid = gridOver(0,0)
+            self.grid.image.set_alpha(GRID_OPACITY*(255/100))
     
     #update cursor/selected overlays
     def showCursor(self):
@@ -218,7 +218,7 @@ class sandbox():
         self.move_over_group.empty()
         #get move and damage from tile contents
         start = self.tile_pos
-        move = 2
+        move = 3
         damage = 1
         
         #use these to limit cursor movement
@@ -240,4 +240,4 @@ class sandbox():
                     self.damage_tiles.append((x,y))
                     self.move_over_group.add(d)
 
-m = sandbox((21*C.scale,15*C.scale), "Sandbox", "#FfFfFf", "icon.png", "#000000", C.cursor_speed)
+m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#FfFfFf", "icon.png", "#000000", C.cursor_speed)
