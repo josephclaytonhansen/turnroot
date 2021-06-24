@@ -6,6 +6,11 @@ GRID_OVER = True
 GRID_OPACITY = 30
 SANS_GAME_FONT = "FiraSans-Light.ttf"
 SERIF_GAME_FONT = "Martel-Bold.ttf"
+OVERLAY_PLACEMENTS = [(3,80),(4,20),(11,6),(10,90),(70,92),(130,92)]
+GUARD_ICON = "app/app_imgs/overlays/guard_001.png"
+AVOID_ICON = "app/app_imgs/overlays/avoid_001.png"
+HEAL_ICON = "app/app_imgs/overlays/heal_001.png"
+
 class Tile(pygame.sprite.Sprite):
     def __init__(self,x,y,tile_graphic_index,tile_type):
         super().__init__()
@@ -182,10 +187,24 @@ class sandbox():
                 self.fonts[n+"_"+str(font_size)] = fontObj
 
     def showOverlays(self):
-        label = self.fonts["SERIF_15"].render("Neutral terrain", 1, (0,0,0))
+        label = self.fonts["SERIF_24"].render("Floor", 1, (238,238,230))
         ground_desc = overlayOver(image64="app/app_imgs/overlays/tile_desc001.png",image32=None)
-        self.fake_screen.blit(ground_desc.image, (0, 70))
-        self.fake_screen.blit(label, (10, 90))
+        tile_name = overlayOver(image64="app/app_imgs/overlays/tile_name001.png",image32=None)
+        
+        global OVERLAY_PLACEMENTS, GUARD_ICON, AVOID_ICON, HEAL_ICON
+        self.fake_screen.blit(ground_desc.image, OVERLAY_PLACEMENTS[0])
+        self.fake_screen.blit(tile_name.image, OVERLAY_PLACEMENTS[1])
+        self.fake_screen.blit(label, (OVERLAY_PLACEMENTS[1][0]+OVERLAY_PLACEMENTS[2][0], OVERLAY_PLACEMENTS[1][1]+OVERLAY_PLACEMENTS[2][1]))
+        
+        guard = overlayOver(image64=GUARD_ICON,image32=None)
+        avoid = overlayOver(image64=AVOID_ICON,image32=None)
+        heal = overlayOver(image64=HEAL_ICON,image32=None)
+        
+        self.fake_screen.blit(guard.image, OVERLAY_PLACEMENTS[3])
+        self.fake_screen.blit(avoid.image, OVERLAY_PLACEMENTS[4])
+        self.fake_screen.blit(heal.image, OVERLAY_PLACEMENTS[5])
+
+        #self.showTileTexts()
         
     #update cursor/selected overlays
     def showCursor(self):

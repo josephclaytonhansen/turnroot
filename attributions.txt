@@ -2,7 +2,7 @@ Move Layer Up by The Icon Z from the Noun Project
 
 Rename Icon made by Pixel perfect from www.flaticon.com
 
-Other icons from Google Material Icons or created for Turnroot
+Other icons from Google Material Icons, www.iconsdb.com, or created for Turnroot
 
 GitHub user https://github.com/janbodnar made the skeleton for the web viewer
 
@@ -11,3 +11,9 @@ StackOverflow user https://stackoverflow.com/users/8924713/thib for pixmap to da
 OGA "Insert Graphics Disc" Resource pack from https://opengameart.org/users/buch / Michele "Buch" Bucelli
 
 Retro loader sound effects by StumpyStrust from OGA
+
+Shield (guard_001) by Abdullah Al Noman from the Noun Project
+
+Taxicab distance equation from https://study.com/academy/lesson/taxicab-geometry-history-formula.html 
+
+A* algorithm from https://www.redblobgames.com/pathfinding/a-star/implementation.html
