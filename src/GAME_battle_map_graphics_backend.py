@@ -27,6 +27,17 @@ class cursorOver(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = [self.x*C.scale,self.y*C.scale]
 
+class overlayOver(pygame.sprite.Sprite):
+    def __init__(self,image64,image32):
+        super().__init__()
+        self.sprites = []
+        if C.scale == 64:
+            self.sprites.append(pygame.image.load(image64))
+        elif C.scale == 32:
+            self.sprites.append(pygame.image.load(image32))
+        self.current_sprite = 0
+        self.image = self.sprites[self.current_sprite]
+
 class gridOver(pygame.sprite.Sprite):
     def __init__(self,x,y):
         super().__init__()

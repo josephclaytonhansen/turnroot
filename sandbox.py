@@ -1,10 +1,11 @@
 import pygame, sys, random, json
-from src.GAME_battle_map_graphics_backend import cursorOver, gridOver, moveOver, damageOver, C
+from src.GAME_battle_map_graphics_backend import cursorOver, gridOver, moveOver, damageOver, C, overlayOver
 
 CURSOR_OVER = True
 GRID_OVER = True
 GRID_OPACITY = 30
-     
+SANS_GAME_FONT = "FiraSans-Light.ttf"
+SERIF_GAME_FONT = "Martel-Bold.ttf"
 class Tile(pygame.sprite.Sprite):
     def __init__(self,x,y,tile_graphic_index,tile_type):
         super().__init__()
@@ -32,6 +33,7 @@ class sandbox():
         super().__init__()
         pygame.init()
         pygame.mixer.init()
+        pygame.font.init()
         self.initMainWindow(dimensions, title, initial_bg, icon, bar_bg, cursor_speed)
     
     def initInitialValues(self, dimensions, cursor_speed):
@@ -61,6 +63,7 @@ class sandbox():
         #load variables and constants
         self.initInitialValues(dimensions, cursor_speed)
         self.initGrid()
+        self.initFont()
         
         #init screen
         screen = pygame.display.set_mode(self.dimensions, flags=(pygame.RESIZABLE))
@@ -133,6 +136,7 @@ class sandbox():
             #draw cursor and map from camera
             self.showCursor()
             self.fake_screen.blit(self.fullmap, (0,0), self.camera)
+            self.showOverlays()
             
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
@@ -163,6 +167,26 @@ class sandbox():
             self.grid = gridOver(0,0)
             self.grid.image.set_alpha(GRID_OPACITY*(255/100))
     
+    def initFont(self):
+        global SANS_GAME_FONT, SERIF_GAME_FONT
+        self.fonts = {}
+        for font in [SANS_GAME_FONT, SERIF_GAME_FONT]:
+            if font == SANS_GAME_FONT:
+                n = "SANS"
+            else:
+                n = "SERIF"
+            font_path = "app/app_fonts/"+font
+            for size in [12,15,20,24,28,32]:
+                font_size = size
+                fontObj = pygame.font.Font(font_path, font_size)
+                self.fonts[n+"_"+str(font_size)] = fontObj
+
+    def showOverlays(self):
+        label = self.fonts["SERIF_15"].render("Neutral terrain", 1, (0,0,0))
+        ground_desc = overlayOver(image64="app/app_imgs/overlays/tile_desc001.png",image32=None)
+        self.fake_screen.blit(ground_desc.image, (0, 70))
+        self.fake_screen.blit(label, (10, 90))
+        
     #update cursor/selected overlays
     def showCursor(self):
         now = pygame.time.get_ticks()
