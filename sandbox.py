@@ -56,6 +56,7 @@ class sandbox():
         self.cursor_y_change = 0
         self.cursor_history = []
         self.moved = False
+        self.unit_selected = False
         
         self.dimensions = dimensions
         self.last_cursor_move = pygame.time.get_ticks()
@@ -120,10 +121,18 @@ class sandbox():
                     elif event.key == pygame.K_RIGHT:
                         self.cursor_x_change = C.scale
                         self.moved = True
-                    elif event.key == pygame.K_RETURN:
+                    #A key
+                    elif event.key == pygame.K_a:
                         t = self.tiles[self.tile_pos[0]][self.tile_pos[1]]
                         print(t.x, t.y, t)
                         self.Select()
+                    #'B' key
+                    elif event.key == pygame.K_s:
+                        if self.unit_selected:
+                            self.Deselect()
+                        #replace else with elif for different selection cases
+                        else:
+                            print("nothing selected")
 
                 #Key release
                 elif event.type == pygame.KEYUP:
@@ -188,7 +197,7 @@ class sandbox():
             else:
                 n = "SERIF"
             font_path = "app/app_fonts/"+font
-            for size in [12,15,20,22,24,28,32,48]:
+            for size in [12,14,16,20,22,24,28,32,48]:
                 font_size = size
                 fontObj = pygame.font.Font(font_path, font_size)
                 self.fonts[n+"_"+str(font_size)] = fontObj
@@ -286,6 +295,10 @@ class sandbox():
                     d = damageOver(x*C.scale, y*C.scale)
                     self.damage_tiles.append((x,y))
                     self.move_over_group.add(d)
+    
+    def Deselect(self):
+        self.move_over_group.empty()
+        self.unit_selected = False
                 
     def showTileTexts(self):
         #Get actual values from tile
@@ -306,9 +319,7 @@ class sandbox():
             label = self.fonts["SERIF_22"].render(str(TILE_TYPE_NAMES[self.current_tile_index]), 1, (238,238,230))
             self.fake_screen.blit(label, (OVERLAY_PLACEMENTS[1][0]+OVERLAY_PLACEMENTS[2][0], OVERLAY_PLACEMENTS[1][1]+OVERLAY_PLACEMENTS[2][1]))
         if self.current_tile_index in TILE_TYPES:
-            tile_type_text = self.fonts["SANS_15"].render(str(TILE_TYPES[self.current_tile_index]), 1, color)
+            tile_type_text = self.fonts["SANS_16"].render(str(TILE_TYPES[self.current_tile_index]), 1, color)
             self.fake_screen.blit(tile_type_text, OVERLAY_PLACEMENTS[9])
-        
 
-
-m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#FfFfFf", "icon.png", "#000000", C.cursor_speed)
+m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#000000", "icon.png", "#000000", C.cursor_speed)
