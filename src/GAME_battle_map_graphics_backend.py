@@ -13,13 +13,16 @@ class Constants():
 C = Constants("src/tmp/sc.trecd")
 
 class cursorOver(pygame.sprite.Sprite):
-    def __init__(self,x,y):
+    def __init__(self,x,y,color):
         super().__init__()
         self.sprites = []
         self.x = x
         self.y = y 
         if C.scale == 64:
-            self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over.png'))
+            if color == "white":
+                self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_white.png'))
+            if color == "black":
+                self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_black.png'))
         elif C.scale == 32:
             pass
         self.current_sprite = 0
@@ -39,13 +42,16 @@ class overlayOver(pygame.sprite.Sprite):
         self.image = self.sprites[self.current_sprite]
 
 class gridOver(pygame.sprite.Sprite):
-    def __init__(self,x,y):
+    def __init__(self,x,y,color):
         super().__init__()
         self.sprites = []
         self.x = x
         self.y = y 
         if C.scale == 64:
-            self.sprites.append(pygame.image.load('app/app_imgs/64_grid.png'))
+            if color == "white":
+                self.sprites.append(pygame.image.load('app/app_imgs/64_grid_white.png'))
+            elif color == "black":
+                self.sprites.append(pygame.image.load('app/app_imgs/64_grid_black.png'))
         elif C.scale == 32:
             pass
         self.current_sprite = 0

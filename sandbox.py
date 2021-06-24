@@ -3,6 +3,7 @@ from src.GAME_battle_map_graphics_backend import cursorOver, gridOver, moveOver,
 
 CURSOR_OVER = True
 GRID_OVER = True
+GRID_COLOR = "white"
 GRID_OPACITY = 30
 SANS_GAME_FONT = "FiraSans-Light.ttf"
 SERIF_GAME_FONT = "Martel-Bold.ttf"
@@ -87,7 +88,7 @@ class sandbox():
         self.icon = icon
         running = True
         
-        self.c_over = cursorOver(192,192)
+        self.c_over = cursorOver(192,192,GRID_COLOR)
         
         if C.scale == 64:
             self.c_img = pygame.image.load("app/app_imgs/64cursor.png")
@@ -157,6 +158,7 @@ class sandbox():
             #draw cursor and map from camera
             self.showCursor()
             self.fake_screen.blit(self.fullmap, (0,0), self.camera)
+            #draw overlays and overlay text
             self.showOverlays()
             self.showTileTexts()
             
@@ -184,11 +186,12 @@ class sandbox():
                 self.tile_group.add(self.tiles[x][y])
                 self.graphics.add(self. tiles[x][y])
                 
-        global GRID_OVER, GRID_OPACITY
+        global GRID_OVER, GRID_OPACITY, GRID_COLOR
         if GRID_OVER:
-            self.grid = gridOver(0,0)
+            self.grid = gridOver(0,0,GRID_COLOR)
             self.grid.image.set_alpha(GRID_OPACITY*(255/100))
     
+    #load fonts- runs once
     def initFont(self):
         global SANS_GAME_FONT, SERIF_GAME_FONT
         self.fonts = {}
