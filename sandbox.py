@@ -8,9 +8,9 @@ GRID_OPACITY = 30
 SANS_GAME_FONT = "Karla-Medium.ttf"
 SERIF_GAME_FONT = "Martel-Bold.ttf"
 OVERLAY_PLACEMENTS = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100,88),(160,88),(10,124),
-                      (10,500), (225,594), (182,586), (260,748), (20, 512), (315,540), (230,520),(10,570),
-                      (190, 770), (395,790), (338,780),(243,595),(920,730), (1100,730),(1010,780),
-                      (932,734), (970,742), (1112,734), (1150,742), (1022,784), (1060,792)]
+                      (10,500), (225,594), (180,586), (260,748), (20, 512), (315,540), (230,520),(10,570),
+                      (190, 770), (395,790), (338,780),(243,595),(940,730), (1120,730),(1030,780),
+                      (952,734), (990,742), (1132,734), (1170,742), (1040,784), (1080,792)]
 GUARD_ICON = "app/app_imgs/overlays/guard_001.png"
 AVOID_ICON = "app/app_imgs/overlays/avoid_001.png"
 HEAL_ICON = "app/app_imgs/overlays/heal_001.png"
@@ -74,7 +74,7 @@ class sandbox():
         self.toggle_menu_key = "Z"
         self.toggle_menu_text = "Menu"
         
-        self.toggle_danger_key = "X"
+        self.toggle_danger_key = "W"
         self.toggle_danger_text = "Show danger area"
         
         self.dimensions = dimensions
