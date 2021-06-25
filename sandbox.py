@@ -9,8 +9,8 @@ SANS_GAME_FONT = "Karla-Medium.ttf"
 SERIF_GAME_FONT = "Martel-Bold.ttf"
 OVERLAY_PLACEMENTS = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100,88),(160,88),(10,124),
                       (10,500), (225,594), (180,586), (260,748), (20, 512), (315,540), (230,520),(10,570),
-                      (190, 770), (395,790), (338,780),(243,595),(940,730), (1120,730),(1030,780),
-                      (952,734), (990,742), (1132,734), (1170,742), (1040,784), (1080,792)]
+                      (190, 770), (395,790), (338,780),(243,595),(950,730), (1130,730),(1040,780),
+                      (962,734), (1000,742), (1142,734), (1180,742), (1050,784), (1090,792)]
 GUARD_ICON = "app/app_imgs/overlays/guard_001.png"
 AVOID_ICON = "app/app_imgs/overlays/avoid_001.png"
 HEAL_ICON = "app/app_imgs/overlays/heal_001.png"
@@ -67,6 +67,8 @@ class sandbox():
         #get from unit
         self.xp_amount = 0
         self.level_number = 1
+        
+        self.colors = {"CREAM":(238,238,230),"BLACK":(0,0,0),"WHITE":(255,255,255)}
          
         self.toggle_full_key = "Q"
         self.toggle_full_key_text = "Basic overlay"
@@ -378,7 +380,7 @@ class sandbox():
         self.avoid_amount = self.tile_pos[0]
         self.guard_amount = self.tile_pos[1]
         self.heal_amount = 0
-        color = (0,0,0)
+        color = self.colors["BLACK"]
         heal_text = self.fonts["SERIF_20"].render(str(self.heal_amount), 1, color)
         avoid_text = self.fonts["SERIF_20"].render(str(self.avoid_amount), 1, color)
         guard_text = self.fonts["SERIF_20"].render(str(self.guard_amount), 1, color)
@@ -386,25 +388,25 @@ class sandbox():
         self.fake_screen.blit(avoid_text, OVERLAY_PLACEMENTS[7])
         self.fake_screen.blit(heal_text, OVERLAY_PLACEMENTS[8])
 
-        toggle_full_key_label_key = self.fonts["SERIF_24"].render(self.toggle_full_key, 1, (255,255,255))
-        toggle_full_key_label_text = self.fonts["SANS_16"].render(self.toggle_full_key_text, 1, (0,0,0))
+        toggle_full_key_label_key = self.fonts["SERIF_24"].render(self.toggle_full_key, 1, self.colors["WHITE"])
+        toggle_full_key_label_text = self.fonts["SANS_16"].render(self.toggle_full_key_text, 1, self.colors["BLACK"])
         self.fake_screen.blit(toggle_full_key_label_key, OVERLAY_PLACEMENTS[25])
         self.fake_screen.blit(toggle_full_key_label_text, OVERLAY_PLACEMENTS[26])
         
-        toggle_menu_key_label_key = self.fonts["SERIF_24"].render(self.toggle_menu_key, 1, (255,255,255))
-        toggle_menu_label_text = self.fonts["SANS_16"].render(self.toggle_menu_text, 1, (0,0,0))
+        toggle_menu_key_label_key = self.fonts["SERIF_24"].render(self.toggle_menu_key, 1, self.colors["WHITE"])
+        toggle_menu_label_text = self.fonts["SANS_16"].render(self.toggle_menu_text, 1, self.colors["BLACK"])
         self.fake_screen.blit(toggle_menu_key_label_key, OVERLAY_PLACEMENTS[27])
         self.fake_screen.blit(toggle_menu_label_text, OVERLAY_PLACEMENTS[28])
         
-        toggle_danger_label_key = self.fonts["SERIF_24"].render(self.toggle_danger_key, 1, (255,255,255))
-        toggle_danger_label_text = self.fonts["SANS_16"].render(self.toggle_danger_text, 1, (0,0,0))
+        toggle_danger_label_key = self.fonts["SERIF_24"].render(self.toggle_danger_key, 1, self.colors["WHITE"])
+        toggle_danger_label_text = self.fonts["SANS_16"].render(self.toggle_danger_text, 1, self.colors["BLACK"])
         self.fake_screen.blit(toggle_danger_label_key, OVERLAY_PLACEMENTS[29])
         self.fake_screen.blit(toggle_danger_label_text, OVERLAY_PLACEMENTS[30])
         
         global TILE_TYPES, TILE_TYPE_NAMES, SELECTION_OVERLAY_TYPE
         #Remove these if statements- a real level will have data for all tiles
         if self.current_tile_index in TILE_TYPE_NAMES:
-            label = self.fonts["SERIF_22"].render(str(TILE_TYPE_NAMES[self.current_tile_index]), 1, (238,238,230))
+            label = self.fonts["SERIF_22"].render(str(TILE_TYPE_NAMES[self.current_tile_index]), 1, self.colors["CREAM"])
             self.fake_screen.blit(label, (OVERLAY_PLACEMENTS[1][0]+OVERLAY_PLACEMENTS[2][0], OVERLAY_PLACEMENTS[1][1]+OVERLAY_PLACEMENTS[2][1]))
         if self.current_tile_index in TILE_TYPES:
             tile_type_text = self.fonts["SANS_16"].render(str(TILE_TYPES[self.current_tile_index]), 1, color)
@@ -413,23 +415,22 @@ class sandbox():
         if self.unit_selected:
             if SELECTION_OVERLAY_TYPE == "full":
             #get actual values from unit
-                class_text = self.fonts["SERIF_16"].render("Soldier", 1, (238,238,230))
+                class_text = self.fonts["SERIF_16"].render("Soldier", 1, self.colors["CREAM"])
                 self.fake_screen.blit(class_text, OVERLAY_PLACEMENTS[13])
-                unit_name = self.fonts["SERIF_28"].render("Talculí", 1, (238,238,230))
+                unit_name = self.fonts["SERIF_28"].render("Talculí", 1, self.colors["CREAM"])
                 self.fake_screen.blit(unit_name, OVERLAY_PLACEMENTS[14])
-                hp_label = self.fonts["SERIF_12"].render("HP", 1, (238,238,230))
+                hp_label = self.fonts["SERIF_12"].render("HP", 1, self.colors["CREAM"])
                 self.fake_screen.blit(hp_label, OVERLAY_PLACEMENTS[15])
-                hp_text = self.fonts["SERIF_28"].render("10/10", 1, (238,238,230))
+                hp_text = self.fonts["SERIF_28"].render("10/10", 1, self.colors["CREAM"])
                 self.fake_screen.blit(hp_text, OVERLAY_PLACEMENTS[16])
                 level_text = self.fonts["SERIF_20"].render("Lvl "+str(self.level_number), 1, color)
                 self.fake_screen.blit(level_text, OVERLAY_PLACEMENTS[12])
             else:
-                unit_name = self.fonts["SERIF_20"].render("Talculí", 1, (238,238,230))
+                unit_name = self.fonts["SERIF_20"].render("Talculí", 1, self.colors["CREAM"])
                 self.fake_screen.blit(unit_name, OVERLAY_PLACEMENTS[18])
-                hp_label = self.fonts["SERIF_12"].render("HP", 1, (238,238,230))
+                hp_label = self.fonts["SERIF_12"].render("HP", 1, self.colors["CREAM"])
                 self.fake_screen.blit(hp_label, OVERLAY_PLACEMENTS[19])
-                hp_text = self.fonts["SERIF_20"].render("10/10", 1, (238,238,230))
+                hp_text = self.fonts["SERIF_20"].render("10/10", 1, self.colors["CREAM"])
                 self.fake_screen.blit(hp_text, OVERLAY_PLACEMENTS[20])
-                
             
 m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#000000", "icon.png", "#000000", C.cursor_speed)
