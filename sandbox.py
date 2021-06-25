@@ -45,7 +45,7 @@ class Tile(pygame.sprite.Sprite):
 class sandbox():
     def __init__(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         super().__init__()
-        pygame.init()
+        pygame.display.init()
         pygame.mixer.init()
         pygame.font.init()
         self.initMainWindow(dimensions, title, initial_bg, icon, bar_bg, cursor_speed)
@@ -249,10 +249,10 @@ class sandbox():
                 xp_bar = overlayOver(image64="app/app_imgs/overlays/xp_bar_001.png", image32=None)
                 xp_crest = overlayOver(image64="app/app_imgs/overlays/xp_crest_001.png", image32=None)
                 xp_count = 0
-                for x in range(int((self.xp_amount*(148/244)))):
+                for x in range(int(((2*self.xp_amount)*(148/244)))):
                     xp_count +=1
                     xp_amount = overlayOver(image64="app/app_imgs/overlays/xp_bar_progress_001.png", image32=None)
-                    self.fake_screen.blit(xp_amount.image, (OVERLAY_PLACEMENTS[21][0]+(4*xp_count),OVERLAY_PLACEMENTS[21][1]))
+                    self.fake_screen.blit(xp_amount.image, (OVERLAY_PLACEMENTS[21][0]+(2*xp_count),OVERLAY_PLACEMENTS[21][1]))
                 self.fake_screen.blit(xp_bar.image, OVERLAY_PLACEMENTS[11])
                 self.fake_screen.blit(xp_crest.image, OVERLAY_PLACEMENTS[11])
             else:
