@@ -9,10 +9,13 @@ SANS_GAME_FONT = "Karla-Medium.ttf"
 SERIF_GAME_FONT = "Martel-Bold.ttf"
 OVERLAY_PLACEMENTS = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100,88),(160,88),(10,124),
                       (10,500), (225,594), (182,586), (260,748), (20, 512), (315,540), (230,520),(10,570),
-                      (190, 770), (395,790), (338,780),(243,595)]
+                      (190, 770), (395,790), (338,780),(243,595),(920,730), (1100,730),(1010,780),
+                      (932,734), (970,742), (1112,734), (1150,742), (1022,784), (1060,792)]
 GUARD_ICON = "app/app_imgs/overlays/guard_001.png"
 AVOID_ICON = "app/app_imgs/overlays/avoid_001.png"
 HEAL_ICON = "app/app_imgs/overlays/heal_001.png"
+KEY_OVER = "app/app_imgs/overlays/key_overlay_001.png"
+KEY_OVER_WIDE = "app/app_imgs/overlays/key_overlay_wide_001.png"
 SELECTION_OVERLAY_TYPE = "full"
 #Overhaul later
 TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"Adds health each turn",
@@ -64,6 +67,15 @@ class sandbox():
         #get from unit
         self.xp_amount = 0
         self.level_number = 1
+         
+        self.toggle_full_key = "Q"
+        self.toggle_full_key_text = "Basic overlay"
+        
+        self.toggle_menu_key = "Z"
+        self.toggle_menu_text = "Menu"
+        
+        self.toggle_danger_key = "X"
+        self.toggle_danger_text = "Show danger area"
         
         self.dimensions = dimensions
         self.last_cursor_move = pygame.time.get_ticks()
@@ -146,8 +158,10 @@ class sandbox():
                         if self.unit_selected:
                             if SELECTION_OVERLAY_TYPE == "full":
                                 SELECTION_OVERLAY_TYPE = "small"
+                                self.toggle_full_key_text = "Full overlay"
                             else:
                                 SELECTION_OVERLAY_TYPE = "full"
+                                self.toggle_full_key_text = "Basic overlay"
 
                 #Key release
                 elif event.type == pygame.KEYUP:
@@ -242,6 +256,14 @@ class sandbox():
         self.fake_screen.blit(guard.image, OVERLAY_PLACEMENTS[3])
         self.fake_screen.blit(avoid.image, OVERLAY_PLACEMENTS[4])
         self.fake_screen.blit(heal.image, OVERLAY_PLACEMENTS[5])
+        
+        toggle_full_selection = overlayOver(image64=KEY_OVER,image32=None)
+        self.fake_screen.blit(toggle_full_selection.image, OVERLAY_PLACEMENTS[22])
+        toggle_damage = overlayOver(image64=KEY_OVER,image32=None)
+        self.fake_screen.blit(toggle_damage.image, OVERLAY_PLACEMENTS[23])
+        show_menu = overlayOver(image64=KEY_OVER_WIDE,image32=None)
+        self.fake_screen.blit(show_menu.image, OVERLAY_PLACEMENTS[24])
+        
         if self.unit_selected:
             if SELECTION_OVERLAY_TYPE == "full":
                 unit_info = overlayOver(image64="app/app_imgs/overlays/unit_info_001.png", image32=None)
@@ -363,6 +385,21 @@ class sandbox():
         self.fake_screen.blit(guard_text, OVERLAY_PLACEMENTS[6])
         self.fake_screen.blit(avoid_text, OVERLAY_PLACEMENTS[7])
         self.fake_screen.blit(heal_text, OVERLAY_PLACEMENTS[8])
+
+        toggle_full_key_label_key = self.fonts["SERIF_24"].render(self.toggle_full_key, 1, (255,255,255))
+        toggle_full_key_label_text = self.fonts["SANS_16"].render(self.toggle_full_key_text, 1, (0,0,0))
+        self.fake_screen.blit(toggle_full_key_label_key, OVERLAY_PLACEMENTS[25])
+        self.fake_screen.blit(toggle_full_key_label_text, OVERLAY_PLACEMENTS[26])
+        
+        toggle_menu_key_label_key = self.fonts["SERIF_24"].render(self.toggle_menu_key, 1, (255,255,255))
+        toggle_menu_label_text = self.fonts["SANS_16"].render(self.toggle_menu_text, 1, (0,0,0))
+        self.fake_screen.blit(toggle_menu_key_label_key, OVERLAY_PLACEMENTS[27])
+        self.fake_screen.blit(toggle_menu_label_text, OVERLAY_PLACEMENTS[28])
+        
+        toggle_danger_label_key = self.fonts["SERIF_24"].render(self.toggle_danger_key, 1, (255,255,255))
+        toggle_danger_label_text = self.fonts["SANS_16"].render(self.toggle_danger_text, 1, (0,0,0))
+        self.fake_screen.blit(toggle_danger_label_key, OVERLAY_PLACEMENTS[29])
+        self.fake_screen.blit(toggle_danger_label_text, OVERLAY_PLACEMENTS[30])
         
         global TILE_TYPES, TILE_TYPE_NAMES, SELECTION_OVERLAY_TYPE
         #Remove these if statements- a real level will have data for all tiles
