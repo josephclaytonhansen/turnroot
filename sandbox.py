@@ -9,17 +9,17 @@ SANS_GAME_FONT = "Karla-Medium.ttf"
 SERIF_GAME_FONT = "Martel-Bold.ttf"
 OVERLAY_PLACEMENTS = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100,88),(160,88),(10,124),
                       (10,500), (225,594), (182,586), (260,748), (20, 512), (315,540), (230,520),(10,570),
-                      (190, 770), (395,790), (338,780)]
+                      (190, 770), (395,790), (338,780),(243,595)]
 GUARD_ICON = "app/app_imgs/overlays/guard_001.png"
 AVOID_ICON = "app/app_imgs/overlays/avoid_001.png"
 HEAL_ICON = "app/app_imgs/overlays/heal_001.png"
-SELECTION_OVERLAY_TYPE = "small"
+SELECTION_OVERLAY_TYPE = "full"
 #Overhaul later
 TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"Adds health each turn",
               30:"Raises avoidance except for flyers", 31:"Slows movement",32:"Neutral terrain",33:"Neutral terrain"}
 TILE_TYPE_NAMES = {0:"Floor", 1:"Floor",2:"Floor", 3:"Heal",
               30:"Forest", 31:"Shallow Water",32:"Floor",33:"Floor"}
-
+  
 class Tile(pygame.sprite.Sprite):
     def __init__(self,x,y,tile_graphic_index,tile_type):
         super().__init__()
@@ -61,6 +61,9 @@ class sandbox():
         self.moved = False
         self.unit_selected = False
         self.tmp_cursor = [0,0]
+        #get from unit
+        self.xp_amount = 0
+        self.level_number = 1
         
         self.dimensions = dimensions
         self.last_cursor_move = pygame.time.get_ticks()
@@ -112,6 +115,7 @@ class sandbox():
                     sys.exit()
                 
                 #Key press
+                global SELECTION_OVERLAY_TYPE
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
                         self.moved = True
@@ -128,7 +132,6 @@ class sandbox():
                     #A key
                     elif event.key == pygame.K_a:
                         t = self.tiles[self.tile_pos[0]][self.tile_pos[1]]
-                        print(t.x, t.y, t)
                         self.Select()
                     #'B' key
                     elif event.key == pygame.K_s:
@@ -137,6 +140,14 @@ class sandbox():
                         #replace else with elif for different selection cases
                         else:
                             print("nothing selected")
+                    
+                    #Shoulder, maybe? Toggle overlay mode
+                    elif event.key == pygame.K_q:
+                        if self.unit_selected:
+                            if SELECTION_OVERLAY_TYPE == "full":
+                                SELECTION_OVERLAY_TYPE = "small"
+                            else:
+                                SELECTION_OVERLAY_TYPE = "full"
 
                 #Key release
                 elif event.type == pygame.KEYUP:
@@ -172,6 +183,14 @@ class sandbox():
                 self.screen.blit(scaled, fit_to_rect)
             else:
                 self.screen.blit(self.fake_screen, (0,0))
+            
+            #Just for testing
+            if self.xp_amount < 100:
+                self.xp_amount += 1
+            else:
+                self.xp_amount = 0
+                self.level_number += 1
+                
             
             pygame.display.update()
     
@@ -223,17 +242,22 @@ class sandbox():
         self.fake_screen.blit(guard.image, OVERLAY_PLACEMENTS[3])
         self.fake_screen.blit(avoid.image, OVERLAY_PLACEMENTS[4])
         self.fake_screen.blit(heal.image, OVERLAY_PLACEMENTS[5])
-        
-        if SELECTION_OVERLAY_TYPE == "full":
-            unit_info = overlayOver(image64="app/app_imgs/overlays/unit_info_001.png", image32=None)
-            xp_bar = overlayOver(image64="app/app_imgs/overlays/xp_bar_001.png", image32=None)
-            xp_crest = overlayOver(image64="app/app_imgs/overlays/xp_crest_001.png", image32=None)
-            self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS[10])
-            self.fake_screen.blit(xp_bar.image, OVERLAY_PLACEMENTS[11])
-            self.fake_screen.blit(xp_crest.image, OVERLAY_PLACEMENTS[11])
-        else:
-            unit_info = overlayOver(image64="app/app_imgs/overlays/unit_info_small_001.png", image32=None)
-            self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS[17])
+        if self.unit_selected:
+            if SELECTION_OVERLAY_TYPE == "full":
+                unit_info = overlayOver(image64="app/app_imgs/overlays/unit_info_001.png", image32=None)
+                self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS[10])
+                xp_bar = overlayOver(image64="app/app_imgs/overlays/xp_bar_001.png", image32=None)
+                xp_crest = overlayOver(image64="app/app_imgs/overlays/xp_crest_001.png", image32=None)
+                xp_count = 0
+                for x in range(int((self.xp_amount*(148/244)))):
+                    xp_count +=1
+                    xp_amount = overlayOver(image64="app/app_imgs/overlays/xp_bar_progress_001.png", image32=None)
+                    self.fake_screen.blit(xp_amount.image, (OVERLAY_PLACEMENTS[21][0]+(4*xp_count),OVERLAY_PLACEMENTS[21][1]))
+                self.fake_screen.blit(xp_bar.image, OVERLAY_PLACEMENTS[11])
+                self.fake_screen.blit(xp_crest.image, OVERLAY_PLACEMENTS[11])
+            else:
+                unit_info = overlayOver(image64="app/app_imgs/overlays/unit_info_small_001.png", image32=None)
+                self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS[17])
         
     #update cursor/selected overlays
     def showCursor(self):
@@ -360,7 +384,7 @@ class sandbox():
                 self.fake_screen.blit(hp_label, OVERLAY_PLACEMENTS[15])
                 hp_text = self.fonts["SERIF_28"].render("10/10", 1, (238,238,230))
                 self.fake_screen.blit(hp_text, OVERLAY_PLACEMENTS[16])
-                level_text = self.fonts["SERIF_20"].render("Lvl 11", 1, color)
+                level_text = self.fonts["SERIF_20"].render("Lvl "+str(self.level_number), 1, color)
                 self.fake_screen.blit(level_text, OVERLAY_PLACEMENTS[12])
             else:
                 unit_name = self.fonts["SERIF_20"].render("Talculí", 1, (238,238,230))
