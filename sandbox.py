@@ -54,8 +54,8 @@ class sandbox():
         self.initMainWindow(dimensions, title, initial_bg, icon, bar_bg, cursor_speed)
     
     def initInitialValues(self, dimensions, cursor_speed):
-        self.scales=[2,2.4,3]
-        self.scale = 2
+        self.scales=[1.8,2.3,3]
+        self.scale = 1
         self.show_grid_at_scale = True
         self.cursor_pos = [0,0]
         self.tile_pos = [0,0]
