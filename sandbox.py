@@ -2,7 +2,7 @@ import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import cursorOver, gridOver, moveOver, damageOver, C, overlayOver
 
 CURSOR_OVER = True
-GRID_OVER = True
+GRID_OVER = False
 GRID_COLOR = "white"
 GRID_OPACITY = 30
 SANS_GAME_FONT = "Karla-Medium.ttf"
