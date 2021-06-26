@@ -54,6 +54,9 @@ class sandbox():
         self.initMainWindow(dimensions, title, initial_bg, icon, bar_bg, cursor_speed)
     
     def initInitialValues(self, dimensions, cursor_speed):
+        self.scales=[2,2.4,3]
+        self.scale = 2
+        self.show_grid_at_scale = True
         self.cursor_pos = [0,0]
         self.tile_pos = [0,0]
         self.tile_offset = [0,0]
@@ -157,6 +160,15 @@ class sandbox():
                     elif event.key == pygame.K_a:
                         t = self.tiles[self.tile_pos[0]][self.tile_pos[1]]
                         self.Select()
+                    #scale map
+                    elif event.key == pygame.K_x:
+                        self.scale +=1
+                        if self.scale == 3:
+                            self.scale = 0
+                        if self.scale < 2:
+                            self.show_grid_at_scale = False
+                        else:
+                            self.show_grid_at_scale = True
                     #'B' key
                     elif event.key == pygame.K_s:
                         if self.unit_selected:
@@ -196,7 +208,8 @@ class sandbox():
             
             #draw cursor and map from camera
             self.showCursor()
-            self.fake_screen.blit(self.fullmap, (0,0), self.camera)
+            self.fullmap_scaled = pygame.transform.scale(self.fullmap, (int(self.scales[self.scale] * self.fake_screen.get_width()), int(self.scales[self.scale] * self.fake_screen.get_height())))
+            self.fake_screen.blit(self.fullmap_scaled, (0,0), self.camera)
             #draw overlays and overlay text
             self.showOverlays()
             self.showTileTexts()
@@ -318,11 +331,11 @@ class sandbox():
             if self.cursor_pos[0] < 0:
                 self.cursor_pos[0] = 0
             if self.tile_pos[0] >= C.grid_dimensions[0]-1:
-                self.cursor_pos[0] = (C.grid_dimensions[0]-1)*C.scale
+                self.cursor_pos[0] = int((C.grid_dimensions[0]-1)*C.scale/(self.scales[self.scale]/2))
             if self.cursor_pos[1] < 0:
                 self.cursor_pos[1] = 0
             if self.tile_pos[1] >= C.grid_dimensions[1]-1:
-                self.cursor_pos[1] = (C.grid_dimensions[1]-1)*C.scale
+                self.cursor_pos[1] = int((C.grid_dimensions[1]-1)*C.scale/(self.scales[self.scale]/2))
                 
             if self.unit_selected:
                 t = (self.tile_pos[0], self.tile_pos[1])
@@ -350,7 +363,8 @@ class sandbox():
         if CURSOR_OVER:
             self.fullmap.blit(self.c_over.image, (self.cursor_pos[0]-192, self.cursor_pos[1]-192))
         if GRID_OVER:
-            self.fullmap.blit(self.grid.image, (self.camera.x, self.camera.y))
+            if self.show_grid_at_scale:
+                self.fullmap.blit(self.grid.image, (self.camera.x, self.camera.y))
         self.fullmap.blit(self.c_img, (imgX,imgY))
     
     def Select(self):
@@ -367,6 +381,7 @@ class sandbox():
         self.move_tiles = [(s[0],s[1])]
         self.damage_tiles = []
         self.unit_selected = True
+        self.idle = True
         
         rows = (move* 2) + 1
         for x in range(-move+self.tile_pos[0]-damage,move+1+self.tile_pos[0]+damage):
