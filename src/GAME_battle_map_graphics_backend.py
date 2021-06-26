@@ -1,16 +1,36 @@
 import pygame, sys, random, json
 
 class Constants():
-    def __init__(self,constants):
+    def __init__(self):
         super().__init__()
-        with open(constants, "r") as f:
+        with open("src/tmp/sc.trecd", "r") as f:
             d = json.load(f)
         self.scale = d[0]
         self.fps = d[1]
         self.cursor_speed = d[2]
         self.grid_dimensions = d[3]
+        with open("src/tmp/sc2.trecd", "r") as da:
+            g = json.load(da)
+        self.CURSOR_OVER = g[0]
+        self.GRID_OVER = g[1]
+        self.GRID_OPACITY = g[2]
+        self.SANS_GAME_FONT= g[3]
+        self.SERIF_GAME_FONT = g[4]
+        self.OVERLAY_PLACEMENTS64 = g[5]
+        self.OVERLAY_PLACEMENTS32 = g[6]
+        self.GUARD_ICON = g[7]
+        self.AVOID_ICON = g[8]
+        self.HEAL_ICON = g[9]
+        self.GUARD_ICON32 = g[10]
+        self.AVOID_ICON32 = g[11]
+        self.HEAL_ICON32 = g[12]
+        self.KEY_OVER = g[13]
+        self.KEY_OVER_WIDE = g[14]
+        self.KEY_OVER32 = g[15]
+        self.KEY_OVER_WIDE32 = g[16]
+        self.SELECTION_OVERLAY_TYPE = g[17]
 
-C = Constants("src/tmp/sc.trecd")
+C = Constants()
 
 class cursorOver(pygame.sprite.Sprite):
     def __init__(self,x,y,color):
