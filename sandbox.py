@@ -81,6 +81,8 @@ class sandbox():
         
         self.dimensions = dimensions
         self.last_cursor_move = pygame.time.get_ticks()
+        self.last_input = pygame.time.get_ticks()
+        self.idle = False
         
         self.tiles = {}
         
@@ -89,6 +91,7 @@ class sandbox():
         self.graphics = pygame.sprite.Group()
         
         self.cursor_move_cooldown = cursor_speed
+        self.idle_cooldown = 1400
         clock = pygame.time.Clock()
         clock.tick(C.fps)
         
@@ -123,6 +126,11 @@ class sandbox():
 
         #Game loop
         while running:
+            #idle timer
+            now = pygame.time.get_ticks()
+            if now - self.last_input >= self.idle_cooldown:
+                self.idle = True   
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -131,6 +139,8 @@ class sandbox():
                 #Key press
                 global SELECTION_OVERLAY_TYPE
                 if event.type == pygame.KEYDOWN:
+                    self.last_input = pygame.time.get_ticks()
+                    self.idle = False
                     if event.key == pygame.K_UP:
                         self.moved = True
                         self.cursor_y_change = -C.scale
@@ -259,12 +269,13 @@ class sandbox():
         self.fake_screen.blit(avoid.image, OVERLAY_PLACEMENTS[4])
         self.fake_screen.blit(heal.image, OVERLAY_PLACEMENTS[5])
         
-        toggle_full_selection = overlayOver(image64=KEY_OVER,image32=None)
-        self.fake_screen.blit(toggle_full_selection.image, OVERLAY_PLACEMENTS[22])
-        toggle_damage = overlayOver(image64=KEY_OVER,image32=None)
-        self.fake_screen.blit(toggle_damage.image, OVERLAY_PLACEMENTS[23])
-        show_menu = overlayOver(image64=KEY_OVER_WIDE,image32=None)
-        self.fake_screen.blit(show_menu.image, OVERLAY_PLACEMENTS[24])
+        if self.idle:
+            toggle_full_selection = overlayOver(image64=KEY_OVER,image32=None)
+            self.fake_screen.blit(toggle_full_selection.image, OVERLAY_PLACEMENTS[22])
+            toggle_damage = overlayOver(image64=KEY_OVER,image32=None)
+            self.fake_screen.blit(toggle_damage.image, OVERLAY_PLACEMENTS[23])
+            show_menu = overlayOver(image64=KEY_OVER_WIDE,image32=None)
+            self.fake_screen.blit(show_menu.image, OVERLAY_PLACEMENTS[24])
         
         if self.unit_selected:
             if SELECTION_OVERLAY_TYPE == "full":
@@ -387,21 +398,22 @@ class sandbox():
         self.fake_screen.blit(guard_text, OVERLAY_PLACEMENTS[6])
         self.fake_screen.blit(avoid_text, OVERLAY_PLACEMENTS[7])
         self.fake_screen.blit(heal_text, OVERLAY_PLACEMENTS[8])
-
-        toggle_full_key_label_key = self.fonts["SERIF_24"].render(self.toggle_full_key, 1, self.colors["WHITE"])
-        toggle_full_key_label_text = self.fonts["SANS_16"].render(self.toggle_full_key_text, 1, self.colors["BLACK"])
-        self.fake_screen.blit(toggle_full_key_label_key, OVERLAY_PLACEMENTS[25])
-        self.fake_screen.blit(toggle_full_key_label_text, OVERLAY_PLACEMENTS[26])
         
-        toggle_menu_key_label_key = self.fonts["SERIF_24"].render(self.toggle_menu_key, 1, self.colors["WHITE"])
-        toggle_menu_label_text = self.fonts["SANS_16"].render(self.toggle_menu_text, 1, self.colors["BLACK"])
-        self.fake_screen.blit(toggle_menu_key_label_key, OVERLAY_PLACEMENTS[27])
-        self.fake_screen.blit(toggle_menu_label_text, OVERLAY_PLACEMENTS[28])
-        
-        toggle_danger_label_key = self.fonts["SERIF_24"].render(self.toggle_danger_key, 1, self.colors["WHITE"])
-        toggle_danger_label_text = self.fonts["SANS_16"].render(self.toggle_danger_text, 1, self.colors["BLACK"])
-        self.fake_screen.blit(toggle_danger_label_key, OVERLAY_PLACEMENTS[29])
-        self.fake_screen.blit(toggle_danger_label_text, OVERLAY_PLACEMENTS[30])
+        if self.idle:
+            toggle_full_key_label_key = self.fonts["SERIF_24"].render(self.toggle_full_key, 1, self.colors["WHITE"])
+            toggle_full_key_label_text = self.fonts["SANS_16"].render(self.toggle_full_key_text, 1, self.colors["BLACK"])
+            self.fake_screen.blit(toggle_full_key_label_key, OVERLAY_PLACEMENTS[25])
+            self.fake_screen.blit(toggle_full_key_label_text, OVERLAY_PLACEMENTS[26])
+            
+            toggle_menu_key_label_key = self.fonts["SERIF_24"].render(self.toggle_menu_key, 1, self.colors["WHITE"])
+            toggle_menu_label_text = self.fonts["SANS_16"].render(self.toggle_menu_text, 1, self.colors["BLACK"])
+            self.fake_screen.blit(toggle_menu_key_label_key, OVERLAY_PLACEMENTS[27])
+            self.fake_screen.blit(toggle_menu_label_text, OVERLAY_PLACEMENTS[28])
+            
+            toggle_danger_label_key = self.fonts["SERIF_24"].render(self.toggle_danger_key, 1, self.colors["WHITE"])
+            toggle_danger_label_text = self.fonts["SANS_16"].render(self.toggle_danger_text, 1, self.colors["BLACK"])
+            self.fake_screen.blit(toggle_danger_label_key, OVERLAY_PLACEMENTS[29])
+            self.fake_screen.blit(toggle_danger_label_text, OVERLAY_PLACEMENTS[30])
         
         global TILE_TYPES, TILE_TYPE_NAMES, SELECTION_OVERLAY_TYPE
         #Remove these if statements- a real level will have data for all tiles
