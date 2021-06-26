@@ -1,21 +1,25 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import cursorOver, gridOver, moveOver, damageOver, C, overlayOver
-
 CURSOR_OVER = True
 GRID_OVER = False
 GRID_COLOR = "white"
 GRID_OPACITY = 30
 SANS_GAME_FONT = "Karla-Medium.ttf"
 SERIF_GAME_FONT = "Martel-Bold.ttf"
-OVERLAY_PLACEMENTS = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100,88),(160,88),(10,124),
+OVERLAY_PLACEMENTS64 = [(3,80),(4,23),(11,9),(10,90),(70,92),(130,92),(38,88),(100,88),(160,88),(10,124),
                       (10,500), (225,594), (180,586), (260,748), (20, 512), (315,540), (230,520),(10,570),
                       (190, 770), (395,790), (338,780),(243,595),(950,730), (1130,730),(1040,780),
                       (962,734), (1000,742), (1142,734), (1180,742), (1050,784), (1090,792)]
+OVERLAY_PLACEMENTS32 = []
 GUARD_ICON = "app/app_imgs/overlays/guard_001.png"
 AVOID_ICON = "app/app_imgs/overlays/avoid_001.png"
 HEAL_ICON = "app/app_imgs/overlays/heal_001.png"
+GUARD_ICON32 = ""
+AVOID_ICON32 = ""
+HEAL_ICON32 = ""
 KEY_OVER = "app/app_imgs/overlays/key_overlay_001.png"
 KEY_OVER_WIDE = "app/app_imgs/overlays/key_overlay_wide_001.png"
+KEY_OVER32 = ""
 SELECTION_OVERLAY_TYPE = "full"
 #Overhaul later
 TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"Adds health each turn",
@@ -212,7 +216,10 @@ class sandbox():
             self.fake_screen.blit(self.fullmap_scaled, (0,0), self.camera)
             #draw overlays and overlay text
             self.showOverlays()
-            self.showTileTexts()
+            if C.scale == 64:
+                self.showTileTexts64()
+            elif C.scale == 32:
+                self.showTileTexts32()
             
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
@@ -261,51 +268,78 @@ class sandbox():
             else:
                 n = "SERIF"
             font_path = "app/app_fonts/"+font
-            for size in [12,14,16,20,22,24,28,32,48]:
+            for size in [8,10,12,14,16,20,22,24,28,32,48]:
                 font_size = size
                 fontObj = pygame.font.Font(font_path, font_size)
                 self.fonts[n+"_"+str(font_size)] = fontObj
 
     def showOverlays(self):
-        ground_desc = overlayOver(image64="app/app_imgs/overlays/tile_desc_001.png",image32=None)
-        tile_name = overlayOver(image64="app/app_imgs/overlays/tile_name_001.png",image32=None)
+        ground_desc = overlayOver(image64="app/app_imgs/overlays/64tile_desc_001.png",image32="app/app_imgs/overlays/32tile_desc_001.png")
+        tile_name = overlayOver(image64="app/app_imgs/overlays/64tile_name_001.png",image32="app/app_imgs/overlays/32tile_name_001.png")
         
-        global OVERLAY_PLACEMENTS, GUARD_ICON, AVOID_ICON, HEAL_ICON, SELECTION_OVERLAY_TYPE
-        self.fake_screen.blit(ground_desc.image, OVERLAY_PLACEMENTS[0])
-        self.fake_screen.blit(tile_name.image, OVERLAY_PLACEMENTS[1])
+        global OVERLAY_PLACEMENTS6464, GUARD_ICON, AVOID_ICON, HEAL_ICON, GUARD_ICON32, AVOID_ICON32, HEAL_ICON32, SELECTION_OVERLAY_TYPE
+        if C.scale == 64:
+            self.fake_screen.blit(ground_desc.image, OVERLAY_PLACEMENTS64[0])
+            self.fake_screen.blit(tile_name.image, OVERLAY_PLACEMENTS64[1])
+        elif C.scale == 32:
+            self.fake_screen.blit(ground_desc.image, OVERLAY_PLACEMENTS32[0])
+            self.fake_screen.blit(tile_name.image, OVERLAY_PLACEMENTS32[1])
         
-        guard = overlayOver(image64=GUARD_ICON,image32=None)
-        avoid = overlayOver(image64=AVOID_ICON,image32=None)
-        heal = overlayOver(image64=HEAL_ICON,image32=None)
+        guard = overlayOver(image64=GUARD_ICON,image32=GUARD_ICON32)
+        avoid = overlayOver(image64=AVOID_ICON,image32=AVOID_ICON32)
+        heal = overlayOver(image64=HEAL_ICON,image32=HEAL_ICON32)
         
-        self.fake_screen.blit(guard.image, OVERLAY_PLACEMENTS[3])
-        self.fake_screen.blit(avoid.image, OVERLAY_PLACEMENTS[4])
-        self.fake_screen.blit(heal.image, OVERLAY_PLACEMENTS[5])
+        if C.scale == 64:
+            self.fake_screen.blit(guard.image, OVERLAY_PLACEMENTS64[3])
+            self.fake_screen.blit(avoid.image, OVERLAY_PLACEMENTS64[4])
+            self.fake_screen.blit(heal.image, OVERLAY_PLACEMENTS64[5])
+        elif C.scale == 32:
+            self.fake_screen.blit(guard.image, OVERLAY_PLACEMENTS32[3])
+            self.fake_screen.blit(avoid.image, OVERLAY_PLACEMENTS32[4])
+            self.fake_screen.blit(heal.image, OVERLAY_PLACEMENTS32[5])
         
         if self.idle:
-            toggle_full_selection = overlayOver(image64=KEY_OVER,image32=None)
-            self.fake_screen.blit(toggle_full_selection.image, OVERLAY_PLACEMENTS[22])
-            toggle_damage = overlayOver(image64=KEY_OVER,image32=None)
-            self.fake_screen.blit(toggle_damage.image, OVERLAY_PLACEMENTS[23])
-            show_menu = overlayOver(image64=KEY_OVER_WIDE,image32=None)
-            self.fake_screen.blit(show_menu.image, OVERLAY_PLACEMENTS[24])
-        
+            toggle_full_selection = overlayOver(image64=KEY_OVER,image32=KEY_OVER32)
+            toggle_damage = overlayOver(image64=KEY_OVER,image32=KEY_OVER32)
+            show_menu = overlayOver(image64=KEY_OVER_WIDE,image32=KEY_OVER32)
+            if C.scale == 64:
+                self.fake_screen.blit(toggle_full_selection.image, OVERLAY_PLACEMENTS64[22])
+                self.fake_screen.blit(toggle_damage.image, OVERLAY_PLACEMENTS64[23])
+                self.fake_screen.blit(show_menu.image, OVERLAY_PLACEMENTS64[24])
+            elif C.scale == 32:
+                self.fake_screen.blit(toggle_full_selection.image, OVERLAY_PLACEMENTS32[22])
+                self.fake_screen.blit(toggle_damage.image, OVERLAY_PLACEMENTS32[23])
+                self.fake_screen.blit(show_menu.image, OVERLAY_PLACEMENTS32[24])
+            
         if self.unit_selected:
             if SELECTION_OVERLAY_TYPE == "full":
                 unit_info = overlayOver(image64="app/app_imgs/overlays/unit_info_001.png", image32=None)
-                self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS[10])
+                if C.scale == 64:
+                    self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS64[10])
+                elif C.scale == 32:
+                    self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS32[10])
                 xp_bar = overlayOver(image64="app/app_imgs/overlays/xp_bar_001.png", image32=None)
                 xp_crest = overlayOver(image64="app/app_imgs/overlays/xp_crest_001.png", image32=None)
                 xp_count = 0
                 for x in range(int(((2*self.xp_amount)*(148/244)))):
                     xp_count +=1
                     xp_amount = overlayOver(image64="app/app_imgs/overlays/xp_bar_progress_001.png", image32=None)
-                    self.fake_screen.blit(xp_amount.image, (OVERLAY_PLACEMENTS[21][0]+(2*xp_count),OVERLAY_PLACEMENTS[21][1]))
-                self.fake_screen.blit(xp_bar.image, OVERLAY_PLACEMENTS[11])
-                self.fake_screen.blit(xp_crest.image, OVERLAY_PLACEMENTS[11])
+                    if C.scale == 64:
+                        self.fake_screen.blit(xp_amount.image, (OVERLAY_PLACEMENTS64[21][0]+(2*xp_count),OVERLAY_PLACEMENTS64[21][1]))
+                    elif C.scale == 32:
+                        self.fake_screen.blit(xp_amount.image, (OVERLAY_PLACEMENTS32[21][0]+(xp_count),OVERLAY_PLACEMENTS32[21][1]))
+                if C.scale == 64:
+                    self.fake_screen.blit(xp_bar.image, OVERLAY_PLACEMENTS64[11])
+                    self.fake_screen.blit(xp_crest.image, OVERLAY_PLACEMENTS64[11])
+                elif C.scale == 32:
+                    self.fake_screen.blit(xp_bar.image, OVERLAY_PLACEMENTS32[11])
+                    self.fake_screen.blit(xp_crest.image, OVERLAY_PLACEMENTS32[11])
             else:
                 unit_info = overlayOver(image64="app/app_imgs/overlays/unit_info_small_001.png", image32=None)
-                self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS[17])
+                if C.scale == 64:
+                    self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS64[17])
+                elif C.scale == 32:
+                    self.fake_screen.blit(unit_info.image, OVERLAY_PLACEMENTS32[17])
         
     #update cursor/selected overlays
     def showCursor(self):
@@ -401,7 +435,7 @@ class sandbox():
         self.move_over_group.empty()
         self.unit_selected = False
                 
-    def showTileTexts(self):
+    def showTileTexts64(self):
         #Get actual values from tile
         self.avoid_amount = self.tile_pos[0]
         self.guard_amount = self.tile_pos[1]
@@ -410,54 +444,58 @@ class sandbox():
         heal_text = self.fonts["SERIF_20"].render(str(self.heal_amount), 1, color)
         avoid_text = self.fonts["SERIF_20"].render(str(self.avoid_amount), 1, color)
         guard_text = self.fonts["SERIF_20"].render(str(self.guard_amount), 1, color)
-        self.fake_screen.blit(guard_text, OVERLAY_PLACEMENTS[6])
-        self.fake_screen.blit(avoid_text, OVERLAY_PLACEMENTS[7])
-        self.fake_screen.blit(heal_text, OVERLAY_PLACEMENTS[8])
+        if C.scale == 64:
+            self.fake_screen.blit(guard_text, OVERLAY_PLACEMENTS64[6])
+            self.fake_screen.blit(avoid_text, OVERLAY_PLACEMENTS64[7])
+            self.fake_screen.blit(heal_text, OVERLAY_PLACEMENTS64[8])
         
         if self.idle:
             toggle_full_key_label_key = self.fonts["SERIF_24"].render(self.toggle_full_key, 1, self.colors["WHITE"])
             toggle_full_key_label_text = self.fonts["SANS_16"].render(self.toggle_full_key_text, 1, self.colors["BLACK"])
-            self.fake_screen.blit(toggle_full_key_label_key, OVERLAY_PLACEMENTS[25])
-            self.fake_screen.blit(toggle_full_key_label_text, OVERLAY_PLACEMENTS[26])
+            self.fake_screen.blit(toggle_full_key_label_key, OVERLAY_PLACEMENTS64[25])
+            self.fake_screen.blit(toggle_full_key_label_text, OVERLAY_PLACEMENTS64[26])
             
             toggle_menu_key_label_key = self.fonts["SERIF_24"].render(self.toggle_menu_key, 1, self.colors["WHITE"])
             toggle_menu_label_text = self.fonts["SANS_16"].render(self.toggle_menu_text, 1, self.colors["BLACK"])
-            self.fake_screen.blit(toggle_menu_key_label_key, OVERLAY_PLACEMENTS[27])
-            self.fake_screen.blit(toggle_menu_label_text, OVERLAY_PLACEMENTS[28])
+            self.fake_screen.blit(toggle_menu_key_label_key, OVERLAY_PLACEMENTS64[27])
+            self.fake_screen.blit(toggle_menu_label_text, OVERLAY_PLACEMENTS64[28])
             
             toggle_danger_label_key = self.fonts["SERIF_24"].render(self.toggle_danger_key, 1, self.colors["WHITE"])
             toggle_danger_label_text = self.fonts["SANS_16"].render(self.toggle_danger_text, 1, self.colors["BLACK"])
-            self.fake_screen.blit(toggle_danger_label_key, OVERLAY_PLACEMENTS[29])
-            self.fake_screen.blit(toggle_danger_label_text, OVERLAY_PLACEMENTS[30])
+            self.fake_screen.blit(toggle_danger_label_key, OVERLAY_PLACEMENTS64[29])
+            self.fake_screen.blit(toggle_danger_label_text, OVERLAY_PLACEMENTS64[30])
         
         global TILE_TYPES, TILE_TYPE_NAMES, SELECTION_OVERLAY_TYPE
         #Remove these if statements- a real level will have data for all tiles
         if self.current_tile_index in TILE_TYPE_NAMES:
             label = self.fonts["SERIF_22"].render(str(TILE_TYPE_NAMES[self.current_tile_index]), 1, self.colors["CREAM"])
-            self.fake_screen.blit(label, (OVERLAY_PLACEMENTS[1][0]+OVERLAY_PLACEMENTS[2][0], OVERLAY_PLACEMENTS[1][1]+OVERLAY_PLACEMENTS[2][1]))
+            self.fake_screen.blit(label, (OVERLAY_PLACEMENTS64[1][0]+OVERLAY_PLACEMENTS64[2][0], OVERLAY_PLACEMENTS64[1][1]+OVERLAY_PLACEMENTS64[2][1]))
         if self.current_tile_index in TILE_TYPES:
             tile_type_text = self.fonts["SANS_16"].render(str(TILE_TYPES[self.current_tile_index]), 1, color)
-            self.fake_screen.blit(tile_type_text, OVERLAY_PLACEMENTS[9])
+            self.fake_screen.blit(tile_type_text, OVERLAY_PLACEMENTS64[9])
     
         if self.unit_selected:
             if SELECTION_OVERLAY_TYPE == "full":
             #get actual values from unit
                 class_text = self.fonts["SERIF_16"].render("Soldier", 1, self.colors["CREAM"])
-                self.fake_screen.blit(class_text, OVERLAY_PLACEMENTS[13])
+                self.fake_screen.blit(class_text, OVERLAY_PLACEMENTS64[13])
                 unit_name = self.fonts["SERIF_28"].render("Talculí", 1, self.colors["CREAM"])
-                self.fake_screen.blit(unit_name, OVERLAY_PLACEMENTS[14])
+                self.fake_screen.blit(unit_name, OVERLAY_PLACEMENTS64[14])
                 hp_label = self.fonts["SERIF_12"].render("HP", 1, self.colors["CREAM"])
-                self.fake_screen.blit(hp_label, OVERLAY_PLACEMENTS[15])
+                self.fake_screen.blit(hp_label, OVERLAY_PLACEMENTS64[15])
                 hp_text = self.fonts["SERIF_28"].render("10/10", 1, self.colors["CREAM"])
-                self.fake_screen.blit(hp_text, OVERLAY_PLACEMENTS[16])
+                self.fake_screen.blit(hp_text, OVERLAY_PLACEMENTS64[16])
                 level_text = self.fonts["SERIF_20"].render("Lvl "+str(self.level_number), 1, color)
-                self.fake_screen.blit(level_text, OVERLAY_PLACEMENTS[12])
+                self.fake_screen.blit(level_text, OVERLAY_PLACEMENTS64[12])
             else:
                 unit_name = self.fonts["SERIF_20"].render("Talculí", 1, self.colors["CREAM"])
-                self.fake_screen.blit(unit_name, OVERLAY_PLACEMENTS[18])
+                self.fake_screen.blit(unit_name, OVERLAY_PLACEMENTS64[18])
                 hp_label = self.fonts["SERIF_12"].render("HP", 1, self.colors["CREAM"])
-                self.fake_screen.blit(hp_label, OVERLAY_PLACEMENTS[19])
+                self.fake_screen.blit(hp_label, OVERLAY_PLACEMENTS64[19])
                 hp_text = self.fonts["SERIF_20"].render("10/10", 1, self.colors["CREAM"])
-                self.fake_screen.blit(hp_text, OVERLAY_PLACEMENTS[20])
+                self.fake_screen.blit(hp_text, OVERLAY_PLACEMENTS64[20])
+    
+    def showTileTexts32(self):
+        pass
             
 m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#000000", "icon.png", "#000000", C.cursor_speed)

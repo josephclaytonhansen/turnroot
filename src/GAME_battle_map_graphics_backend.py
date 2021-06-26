@@ -24,7 +24,10 @@ class cursorOver(pygame.sprite.Sprite):
             if color == "black":
                 self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_black.png'))
         elif C.scale == 32:
-            pass
+            if color == "white":
+                self.sprites.append(pygame.image.load('app/app_imgs/32_cursor_over_white.png'))
+            if color == "black":
+                self.sprites.append(pygame.image.load('app/app_imgs/32_cursor_over_black.png'))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
@@ -68,7 +71,7 @@ class moveOver(pygame.sprite.Sprite):
         if C.scale == 64:
             self.sprites.append(pygame.image.load('app/app_imgs/64move.png'))
         elif C.scale == 32:
-            pass
+            self.sprites.append(pygame.image.load('app/app_imgs/32move.png'))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
@@ -83,7 +86,7 @@ class damageOver(pygame.sprite.Sprite):
         if C.scale == 64:
             self.sprites.append(pygame.image.load('app/app_imgs/64damage.png'))
         elif C.scale == 32:
-            pass
+            self.sprites.append(pygame.image.load('app/app_imgs/32damage.png'))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
