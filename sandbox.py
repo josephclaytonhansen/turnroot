@@ -1,7 +1,6 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import cursorOver, gridOver, moveOver, damageOver, C, overlayOver
 GRID_COLOR = "white"
-C.scale = 32
 if C.scale == 32:
     C.SERIF_GAME_FONT = "lunchds.ttf"
     C.SANS_GAME_FONT = "manaspc.ttf"
