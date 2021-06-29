@@ -148,8 +148,8 @@ class sandbox():
         self.music_max_volume = 1.0
     
     def initMusic(self,s):
-        self.rain = Fader("app/app_sounds/"+s+"_rain"+".mp3",self)
-        self.thunder = Fader("app/app_sounds/"+s+"_thunder"+".mp3",self)
+        self.rain = Fader("app/app_sounds/music/"+s+"_rain"+".mp3",self)
+        self.thunder = Fader("app/app_sounds/music/"+s+"_thunder"+".mp3",self)
         self.rain.sound.play()
         self.thunder.sound.play()
         self.rain.sound.set_volume(0)
