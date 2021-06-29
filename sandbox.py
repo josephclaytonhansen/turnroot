@@ -7,28 +7,6 @@ TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"A
 TILE_TYPE_NAMES = {0:"Floor", 1:"Floor",2:"Floor", 3:"Heal",
               30:"Forest", 31:"Shallow Water",32:"Floor",33:"Floor"}
 
-class Fader(object):
-    instances = []
-    def __init__(self, fname,parent):
-        self.parent = parent
-        super(Fader, self).__init__()
-        assert isinstance(fname, str)
-        self.sound = pygame.mixer.Sound(fname)
-        self.increment = 0.03 # tweak for speed of effect!!
-        self.next_vol = 1 # fade to 100 on start
-        Fader.instances.append(self)
-
-    def fade_to(self, new_vol):
-            self.next_vol = new_vol
-
-    def update(self):
-        if self.parent.music_fade[0] == True:
-            curr_volume = self.sound.get_volume()
-            if self.next_vol > curr_volume:
-                self.sound.set_volume(curr_volume + self.increment)
-            elif self.next_vol < curr_volume:
-                self.sound.set_volume(curr_volume - self.increment)
-
 class Tile(pygame.sprite.Sprite):
     def __init__(self,x,y,tile_graphic_index,tile_type):
         super().__init__()
@@ -67,13 +45,13 @@ class sandbox():
             now = pygame.time.get_ticks()
             self.music_fade[0] = True
             #PULL UP NEW SCREEN
-            increment = int((8 * self.music_max_volume) * ((self.clock.get_fps()/60)))
+            increment = int((6 * self.music_max_volume) * ((self.clock.get_fps()/60)))
             while thunder_s < self.music_max_volume:
                 if pygame.time.get_ticks() - now > increment:
                     rain_s -=.01
                     thunder_s += .01
-                    self.rain.sound.set_volume(rain_s)
-                    self.thunder.sound.set_volume(thunder_s)
+                    self.rain.set_volume(rain_s)
+                    self.thunder.set_volume(thunder_s)
                     now = pygame.time.get_ticks()
         elif d == "out":
             thunder_s = self.music_max_volume
@@ -81,23 +59,23 @@ class sandbox():
             now = pygame.time.get_ticks()
             self.music_fade[0] = True
             #PULL UP NEW SCREEN
-            increment = int((8 * self.music_max_volume) * ((self.clock.get_fps()/60)))
+            increment = int((6 * self.music_max_volume) * ((self.clock.get_fps()/60)))
             while rain_s < self.music_max_volume:
                 if pygame.time.get_ticks() - now > increment:
                     thunder_s -=.01
                     rain_s += .01
-                    self.rain.sound.set_volume(rain_s)
-                    self.thunder.sound.set_volume(thunder_s)
+                    self.rain.set_volume(rain_s)
+                    self.thunder.set_volume(thunder_s)
                     now = pygame.time.get_ticks()
         elif d == "init":
             rain_s = 0.0
             now = pygame.time.get_ticks()
             self.music_fade[0] = True
-            increment = int((8 * self.music_max_volume) * ((self.clock.get_fps()/60)))
+            increment = int((6 * self.music_max_volume) * ((self.clock.get_fps()/60)))
             while rain_s < self.music_max_volume:
                 if pygame.time.get_ticks() - now > increment:
                     rain_s += .01
-                    self.rain.sound.set_volume(rain_s)
+                    self.rain.set_volume(rain_s)
                     now = pygame.time.get_ticks()
             
     def initInitialValues(self, dimensions, cursor_speed):
@@ -146,14 +124,16 @@ class sandbox():
         
         self.music_fade = [False, "init"]
         self.music_max_volume = 1.0
+        
+        self.show_combat = False
     
     def initMusic(self,s):
-        self.rain = Fader("app/app_sounds/music/"+s+"_rain"+".mp3",self)
-        self.thunder = Fader("app/app_sounds/music/"+s+"_thunder"+".mp3",self)
-        self.rain.sound.play()
-        self.thunder.sound.play()
-        self.rain.sound.set_volume(0)
-        self.thunder.sound.set_volume(0)
+        self.rain = pygame.mixer.Sound("app/app_sounds/music/"+s+"_rain"+".mp3")
+        self.thunder = pygame.mixer.Sound("app/app_sounds/music/"+s+"_thunder"+".mp3")
+        self.rain.play()
+        self.thunder.play()
+        self.rain.set_volume(0)
+        self.thunder.set_volume(0)
 
     def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         #load variables and constants
@@ -180,6 +160,8 @@ class sandbox():
         
         self.initMusic("fw")
         self.Fade()
+        
+        self.initCombat()
         
         pygame.display.set_caption(title)
         #i = pygame.image.load(icon)
@@ -217,14 +199,14 @@ class sandbox():
                     #A key
                     elif event.key == pygame.K_a:
                         t = self.tiles[self.tile_pos[0]][self.tile_pos[1]]
-                        #if unit selected AND combat selected
+                        #if unit selected AND combat selected- FIX THIS LATER
                         if self.unit_selected:
                             #pull up battle screen and then self.Fade()
                             self.music_fade[1] = "in"
                             self.Fade()
+                            self.show_combat = True
                         self.Select()
                         
-
                     #scale map
                     elif event.key == pygame.K_x:
                         self.scale +=1
@@ -243,6 +225,7 @@ class sandbox():
                             print("nothing selected")
                     #fade music out- delete later
                     elif event.key == pygame.K_m:
+                        self.show_combat = False
                         self.music_fade[1] = "out"
                         self.Fade()
                     
@@ -283,7 +266,11 @@ class sandbox():
             self.showOverlays()
             if C.scale == 64:
                 self.showTileTexts64()
-            
+                        
+            #show combat
+            if self.show_combat:
+                self.fake_screen.blit(self.combat_surface, (0,0))
+                
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
                 fit_to_rect = self.fake_rect.fit(self.screen_rect)
@@ -292,7 +279,7 @@ class sandbox():
                 self.screen.blit(scaled, fit_to_rect)
             else:
                 self.screen.blit(self.fake_screen, (0,0))
-                
+
             pygame.display.update()
     
     #init tile grid- runs once
@@ -461,6 +448,13 @@ class sandbox():
     def Deselect(self):
         self.move_over_group.empty()
         self.unit_selected = False
+    
+    def initCombat(self):
+        self.combat_surface = pygame.Surface((21*C.scale, 14*C.scale))
+        self.combat_surface_rect = self.combat_surface.get_rect()
+        self.combat_surface.fill((255,0,255))
+        #UNCOMMENT THIS WHEN THERE'S SOMETHING ON THE SURFACE
+        #self.combat_surface.set_colorkey((255,0,255))
                 
     def showTileTexts64(self):
         #Get actual values from tile
