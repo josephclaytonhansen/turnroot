@@ -59,6 +59,8 @@ class sandbox():
         self.music_max_volume = 0.7
         
         self.show_combat = False
+        self.combat_transition = False
+        self.fc = 0
     
     def initMusic(self,s):
         self.rain = pygame.mixer.Sound("app/app_sounds/music/"+s+"_rain"+".mp3")
@@ -156,11 +158,13 @@ class sandbox():
                         #replace else with elif for different selection cases
                         else:
                             print("nothing selected")
-                    #fade music out- delete later
+                    #fade out- replace trigger later
                     elif event.key == pygame.K_m:
-                        self.show_combat = False
-                        self.music_fade[1] = "out"
-                        Fade(self)
+                        if self.unit_selected:
+                            self.show_combat = True
+                            self.combat_transition = True
+                            self.music_fade[1] = "out"
+                            Fade(self)
                     
                     #Shoulder, maybe? Toggle overlay mode
                     elif event.key == pygame.K_q:
@@ -202,7 +206,42 @@ class sandbox():
                         
             #show combat
             if self.show_combat:
-                self.fake_screen.blit(self.combat_surface, (0,0))
+                self.combat_transition = True
+                last_frame = pygame.time.get_ticks()
+                #start transition
+                frames = ["00405","00407", "00409","00411", "00413", "00415", "00417", "00419", "00421", "00423", "00425", "00427"]
+                
+                frame = frames[self.fc]
+                foreground = self.fake_screen
+                background = self.combat_surface
+                mask = pygame.image.load("app/app_imgs/transitions/map_to_combat/scene"+frame+".png").convert_alpha()
+                self.fake_screen.blit(foreground, (0,0))
+                masked = background.copy()
+                masked.blit(mask, (0, 0), None, pygame.BLEND_RGBA_MULT)
+                self.fake_screen.blit(masked, (0, 0))
+                
+                #next frame
+                if self.combat_transition:
+                    if self.music_fade[1] == "in":
+                        if pygame.time.get_ticks() - last_frame > 1:
+                            self.fc += 1
+                            if self.fc == 12:
+                                #transition complete
+                                self.combat_transition = False
+                                self.fc = 11
+                            frame = frames[self.fc]
+                            last_frame = pygame.time.get_ticks()
+                    elif self.music_fade[1] == "out":
+                        if pygame.time.get_ticks() - last_frame > 1:
+                            self.fc -= 1
+                            if self.fc == -1:
+                                #transition complete
+                                self.combat_transition = False
+                                self.fc = 0
+                            frame = frames[self.fc]
+                            last_frame = pygame.time.get_ticks()
+                        
+                    
                 
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:

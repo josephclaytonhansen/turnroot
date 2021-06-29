@@ -12,7 +12,9 @@ def Fade(parent):
         increment = int(12 * ((parent.clock.get_fps()/60)))
         fc = 0
         tf = parent.music_max_volume /100
+
         while thunder_s < parent.music_max_volume:
+
             if pygame.time.get_ticks() - now > increment:
                 rain_s -=.01
                 thunder_s += .01
