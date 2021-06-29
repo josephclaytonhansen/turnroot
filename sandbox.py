@@ -67,7 +67,7 @@ class sandbox():
             now = pygame.time.get_ticks()
             self.music_fade[0] = True
             #PULL UP NEW SCREEN
-            increment = int(1.5 * self.music_max_volume)
+            increment = int((8 * self.music_max_volume) * ((self.clock.get_fps()/60)))
             while thunder_s < self.music_max_volume:
                 if pygame.time.get_ticks() - now > increment:
                     rain_s -=.01
@@ -81,7 +81,7 @@ class sandbox():
             now = pygame.time.get_ticks()
             self.music_fade[0] = True
             #PULL UP NEW SCREEN
-            increment = int(1.5 * self.music_max_volume)
+            increment = int((8 * self.music_max_volume) * ((self.clock.get_fps()/60)))
             while rain_s < self.music_max_volume:
                 if pygame.time.get_ticks() - now > increment:
                     thunder_s -=.01
@@ -93,7 +93,7 @@ class sandbox():
             rain_s = 0.0
             now = pygame.time.get_ticks()
             self.music_fade[0] = True
-            increment = int(1.5 * self.music_max_volume)
+            increment = int((8 * self.music_max_volume) * ((self.clock.get_fps()/60)))
             while rain_s < self.music_max_volume:
                 if pygame.time.get_ticks() - now > increment:
                     rain_s += .01
@@ -115,7 +115,7 @@ class sandbox():
         self.unit_selected = False
         self.tmp_cursor = [0,0]
         #get from unit
-        self.xp_amount = 0
+        self.xp_amount = 1
         self.level_number = 1
         
         self.colors = {"CREAM":(238,238,230),"BLACK":(0,0,0),"WHITE":(255,255,255)}
@@ -143,10 +143,9 @@ class sandbox():
         self.cursor_move_cooldown = cursor_speed
         self.idle_cooldown = 1400
         self.clock = pygame.time.Clock()
-        self.clock.tick(C.fps)
         
         self.music_fade = [False, "init"]
-        self.music_max_volume = .7
+        self.music_max_volume = 1.0
     
     def initMusic(self,s):
         self.rain = Fader("app/app_sounds/"+s+"_rain"+".mp3",self)
@@ -188,7 +187,7 @@ class sandbox():
 
         #Game loop
         while running:
-
+            self.clock.tick(C.fps)
             #idle timer
             now = pygame.time.get_ticks()
             if now - self.last_input >= self.idle_cooldown:
@@ -242,6 +241,10 @@ class sandbox():
                         #replace else with elif for different selection cases
                         else:
                             print("nothing selected")
+                    #fade music out- delete later
+                    elif event.key == pygame.K_m:
+                        self.music_fade[1] = "out"
+                        self.Fade()
                     
                     #Shoulder, maybe? Toggle overlay mode
                     elif event.key == pygame.K_q:
