@@ -219,6 +219,7 @@ class sandbox():
                 mask = pygame.image.load("app/app_imgs/transitions/map_to_combat/scene"+frame+".png").convert_alpha()
                 self.fake_screen.blit(foreground, (0,0))
                 masked = background.copy()
+                masked.set_colorkey((0,0,0))
                 masked.blit(mask, (0, 0), None, pygame.BLEND_RGBA_MULT)
                 self.fake_screen.blit(masked, (0, 0))
                 
