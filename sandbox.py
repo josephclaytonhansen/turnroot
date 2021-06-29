@@ -1,7 +1,9 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile
 from src.GAME_battle_map_sounds_backend import Fade
+
 GRID_COLOR = "white"
+COLORS = {"CREAM":(238,238,230),"BLACK":(0,0,0),"WHITE":(255,255,255), "NID_PINK":(255,0,255),"MUTED_NAVY":(57,65,89), "MUTED_FOREST":(53,89,78), "LIGHT_GRASS":(153,207,174)}
 
 class sandbox():
     def __init__(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
@@ -29,7 +31,7 @@ class sandbox():
         self.xp_amount = 1
         self.level_number = 1
         
-        self.colors = {"CREAM":(238,238,230),"BLACK":(0,0,0),"WHITE":(255,255,255)}
+        self.colors = COLORS
          
         self.toggle_full_key = "Q"
         self.toggle_full_key_text = "Basic overlay"
@@ -56,7 +58,7 @@ class sandbox():
         self.clock = pygame.time.Clock()
         
         self.music_fade = [False, "init"]
-        self.music_max_volume = 0.7
+        self.music_max_volume = 1
         
         self.show_combat = False
         self.combat_transition = False
@@ -240,9 +242,7 @@ class sandbox():
                                 self.fc = 0
                             frame = frames[self.fc]
                             last_frame = pygame.time.get_ticks()
-                        
-                    
-                
+                            
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
                 fit_to_rect = self.fake_rect.fit(self.screen_rect)
@@ -424,8 +424,9 @@ class sandbox():
     def initCombat(self):
         self.combat_surface = pygame.Surface((21*C.scale, 14*C.scale))
         self.combat_surface_rect = self.combat_surface.get_rect()
-        self.combat_surface.fill((255,0,255))
+        self.combat_surface.fill(self.colors["NID_PINK"])
         #UNCOMMENT THIS WHEN THERE'S SOMETHING ON THE SURFACE
-        #self.combat_surface.set_colorkey((255,0,255))
-            
-m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#000000", "icon.png", "#000000", C.cursor_speed)
+        #self.combat_surface.set_colorkey(self.colors["NID_PINK"])
+        
+bc = COLORS[random.choice(["BLACK","MUTED_NAVY","MUTED_FOREST","LIGHT_GRASS"])]            
+m = sandbox((21*C.scale,13*C.scale), "Sandbox", bc, "icon.png", bc, C.cursor_speed)
