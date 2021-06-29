@@ -39,17 +39,25 @@ class sandbox():
     
     def Fade(self):
         d = self.music_fade[1]
+        animation_frames = round(self.music_max_volume*100/12)
+        frames = 0
         if d == "in":
             rain_s = self.music_max_volume
             thunder_s = 0.0
             now = pygame.time.get_ticks()
             self.music_fade[0] = True
             #PULL UP NEW SCREEN
-            increment = int((6 * self.music_max_volume) * ((self.clock.get_fps()/60)))
+            increment = int(12 * ((self.clock.get_fps()/60)))
+            fc = 0
+            tf = self.music_max_volume /100
             while thunder_s < self.music_max_volume:
                 if pygame.time.get_ticks() - now > increment:
                     rain_s -=.01
                     thunder_s += .01
+                    frames += 1
+                    if frames == animation_frames:
+                        #advance transition animation by 1
+                        pass
                     self.rain.set_volume(rain_s)
                     self.thunder.set_volume(thunder_s)
                     now = pygame.time.get_ticks()
@@ -59,11 +67,15 @@ class sandbox():
             now = pygame.time.get_ticks()
             self.music_fade[0] = True
             #PULL UP NEW SCREEN
-            increment = int((6 * self.music_max_volume) * ((self.clock.get_fps()/60)))
+            increment = int(12 * ((self.clock.get_fps()/60)))
             while rain_s < self.music_max_volume:
                 if pygame.time.get_ticks() - now > increment:
                     thunder_s -=.01
                     rain_s += .01
+                    frames += 1
+                    if frames == animation_frames:
+                        #advance transition animation by 1
+                        pass
                     self.rain.set_volume(rain_s)
                     self.thunder.set_volume(thunder_s)
                     now = pygame.time.get_ticks()
@@ -71,7 +83,7 @@ class sandbox():
             rain_s = 0.0
             now = pygame.time.get_ticks()
             self.music_fade[0] = True
-            increment = int((6 * self.music_max_volume) * ((self.clock.get_fps()/60)))
+            increment = int(12 * ((self.clock.get_fps()/60)))
             while rain_s < self.music_max_volume:
                 if pygame.time.get_ticks() - now > increment:
                     rain_s += .01
@@ -123,7 +135,7 @@ class sandbox():
         self.clock = pygame.time.Clock()
         
         self.music_fade = [False, "init"]
-        self.music_max_volume = 1.0
+        self.music_max_volume = 0.7
         
         self.show_combat = False
     
