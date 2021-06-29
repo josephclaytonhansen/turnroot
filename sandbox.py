@@ -1,33 +1,7 @@
 import pygame, sys, random, json
-from src.GAME_battle_map_graphics_backend import cursorOver, gridOver, moveOver, damageOver, C, overlayOver
+from src.GAME_battle_map_graphics_backend import cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile
+from src.GAME_battle_map_sounds_backend import Fade
 GRID_COLOR = "white"
-#Overhaul later
-TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"Adds health each turn",
-              30:"Raises avoidance except for flyers", 31:"Slows movement",32:"Neutral terrain",33:"Neutral terrain"}
-TILE_TYPE_NAMES = {0:"Floor", 1:"Floor",2:"Floor", 3:"Heal",
-              30:"Forest", 31:"Shallow Water",32:"Floor",33:"Floor"}
-
-class Tile(pygame.sprite.Sprite):
-    def __init__(self,x,y,tile_graphic_index,tile_type):
-        super().__init__()
-        self.x = x
-        self.y = y
-        self.grid_pos = [x,y]
-        self.tile_graphic_index = tile_graphic_index
-        self.tile_type = tile_type
-        
-        self.animateSprites()
-        
-    def animateSprites(self):
-        self.sprites = []
-        if C.scale == 64:
-            self.sprites.append(pygame.image.load('app/app_imgs/grass_test.png'))
-        elif C.scale == 32:
-            self.sprites.append(pygame.image.load('app/app_imgs/32grass_test.png'))
-        self.current_sprite = 0
-        self.image = self.sprites[self.current_sprite]
-        self.rect = self.image.get_rect()
-        self.rect.topleft = [self.x*C.scale,self.y*C.scale]
 
 class sandbox():
     def __init__(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
@@ -37,59 +11,6 @@ class sandbox():
         pygame.font.init()
         self.initMainWindow(dimensions, title, initial_bg, icon, bar_bg, cursor_speed)
     
-    def Fade(self):
-        d = self.music_fade[1]
-        animation_frames = round(self.music_max_volume*100/12)
-        frames = 0
-        if d == "in":
-            rain_s = self.music_max_volume
-            thunder_s = 0.0
-            now = pygame.time.get_ticks()
-            self.music_fade[0] = True
-            #PULL UP NEW SCREEN
-            increment = int(12 * ((self.clock.get_fps()/60)))
-            fc = 0
-            tf = self.music_max_volume /100
-            while thunder_s < self.music_max_volume:
-                if pygame.time.get_ticks() - now > increment:
-                    rain_s -=.01
-                    thunder_s += .01
-                    frames += 1
-                    if frames == animation_frames:
-                        #advance transition animation by 1
-                        pass
-                    self.rain.set_volume(rain_s)
-                    self.thunder.set_volume(thunder_s)
-                    now = pygame.time.get_ticks()
-        elif d == "out":
-            thunder_s = self.music_max_volume
-            rain_s = 0.0
-            now = pygame.time.get_ticks()
-            self.music_fade[0] = True
-            #PULL UP NEW SCREEN
-            increment = int(12 * ((self.clock.get_fps()/60)))
-            while rain_s < self.music_max_volume:
-                if pygame.time.get_ticks() - now > increment:
-                    thunder_s -=.01
-                    rain_s += .01
-                    frames += 1
-                    if frames == animation_frames:
-                        #advance transition animation by 1
-                        pass
-                    self.rain.set_volume(rain_s)
-                    self.thunder.set_volume(thunder_s)
-                    now = pygame.time.get_ticks()
-        elif d == "init":
-            rain_s = 0.0
-            now = pygame.time.get_ticks()
-            self.music_fade[0] = True
-            increment = int(12 * ((self.clock.get_fps()/60)))
-            while rain_s < self.music_max_volume:
-                if pygame.time.get_ticks() - now > increment:
-                    rain_s += .01
-                    self.rain.set_volume(rain_s)
-                    now = pygame.time.get_ticks()
-            
     def initInitialValues(self, dimensions, cursor_speed):
         self.scales=[1.8,2.3,3]
         self.scale = 1
@@ -171,7 +92,7 @@ class sandbox():
         self.screen_rect = self.screen.get_rect()
         
         self.initMusic("fw")
-        self.Fade()
+        Fade(self)
         
         self.initCombat()
         
@@ -215,7 +136,7 @@ class sandbox():
                         if self.unit_selected:
                             #pull up battle screen and then self.Fade()
                             self.music_fade[1] = "in"
-                            self.Fade()
+                            Fade(self)
                             self.show_combat = True
                         self.Select()
                         
@@ -239,7 +160,7 @@ class sandbox():
                     elif event.key == pygame.K_m:
                         self.show_combat = False
                         self.music_fade[1] = "out"
-                        self.Fade()
+                        Fade(self)
                     
                     #Shoulder, maybe? Toggle overlay mode
                     elif event.key == pygame.K_q:
@@ -277,7 +198,7 @@ class sandbox():
             #draw overlays and overlay text
             self.showOverlays()
             if C.scale == 64:
-                self.showTileTexts64()
+                showTileTexts64(self)
                         
             #show combat
             if self.show_combat:
@@ -467,64 +388,5 @@ class sandbox():
         self.combat_surface.fill((255,0,255))
         #UNCOMMENT THIS WHEN THERE'S SOMETHING ON THE SURFACE
         #self.combat_surface.set_colorkey((255,0,255))
-                
-    def showTileTexts64(self):
-        #Get actual values from tile
-        self.avoid_amount = self.tile_pos[0]
-        self.guard_amount = self.tile_pos[1]
-        self.heal_amount = 0
-        color = self.colors["BLACK"]
-        heal_text = self.fonts["SERIF_20"].render(str(self.heal_amount), 1, color)
-        avoid_text = self.fonts["SERIF_20"].render(str(self.avoid_amount), 1, color)
-        guard_text = self.fonts["SERIF_20"].render(str(self.guard_amount), 1, color)
-
-        self.fake_screen.blit(guard_text, C.OVERLAY_PLACEMENTS64[6])
-        self.fake_screen.blit(avoid_text, C.OVERLAY_PLACEMENTS64[7])
-        self.fake_screen.blit(heal_text, C.OVERLAY_PLACEMENTS64[8])
-        
-        if self.idle:
-            toggle_full_key_label_key = self.fonts["SERIF_24"].render(self.toggle_full_key, 1, self.colors["WHITE"])
-            toggle_full_key_label_text = self.fonts["SANS_16"].render(self.toggle_full_key_text, 1, self.colors["BLACK"])
-            self.fake_screen.blit(toggle_full_key_label_key, C.OVERLAY_PLACEMENTS64[25])
-            self.fake_screen.blit(toggle_full_key_label_text, C.OVERLAY_PLACEMENTS64[26])
-            
-            toggle_menu_key_label_key = self.fonts["SERIF_24"].render(self.toggle_menu_key, 1, self.colors["WHITE"])
-            toggle_menu_label_text = self.fonts["SANS_16"].render(self.toggle_menu_text, 1, self.colors["BLACK"])
-            self.fake_screen.blit(toggle_menu_key_label_key, C.OVERLAY_PLACEMENTS64[27])
-            self.fake_screen.blit(toggle_menu_label_text, C.OVERLAY_PLACEMENTS64[28])
-            
-            toggle_danger_label_key = self.fonts["SERIF_24"].render(self.toggle_danger_key, 1, self.colors["WHITE"])
-            toggle_danger_label_text = self.fonts["SANS_16"].render(self.toggle_danger_text, 1, self.colors["BLACK"])
-            self.fake_screen.blit(toggle_danger_label_key, C.OVERLAY_PLACEMENTS64[29])
-            self.fake_screen.blit(toggle_danger_label_text, C.OVERLAY_PLACEMENTS64[30])
-        
-        #Remove these if statements- a real level will have data for all tiles
-        if self.current_tile_index in TILE_TYPE_NAMES:
-            label = self.fonts["SERIF_22"].render(str(TILE_TYPE_NAMES[self.current_tile_index]), 1, self.colors["CREAM"])
-            self.fake_screen.blit(label, (C.OVERLAY_PLACEMENTS64[1][0]+C.OVERLAY_PLACEMENTS64[2][0], C.OVERLAY_PLACEMENTS64[1][1]+C.OVERLAY_PLACEMENTS64[2][1]))
-        if self.current_tile_index in TILE_TYPES:
-            tile_type_text = self.fonts["SANS_16"].render(str(TILE_TYPES[self.current_tile_index]), 1, color)
-            self.fake_screen.blit(tile_type_text, C.OVERLAY_PLACEMENTS64[9])
-    
-        if self.unit_selected:
-            if C.SELECTION_OVERLAY_TYPE == "full":
-            #get actual values from unit
-                class_text = self.fonts["SERIF_16"].render("Soldier", 1, self.colors["CREAM"])
-                self.fake_screen.blit(class_text, C.OVERLAY_PLACEMENTS64[13])
-                unit_name = self.fonts["SERIF_28"].render("Talculí", 1, self.colors["CREAM"])
-                self.fake_screen.blit(unit_name, C.OVERLAY_PLACEMENTS64[14])
-                hp_label = self.fonts["SERIF_12"].render("HP", 1, self.colors["CREAM"])
-                self.fake_screen.blit(hp_label, C.OVERLAY_PLACEMENTS64[15])
-                hp_text = self.fonts["SERIF_28"].render("10/10", 1, self.colors["CREAM"])
-                self.fake_screen.blit(hp_text, C.OVERLAY_PLACEMENTS64[16])
-                level_text = self.fonts["SERIF_20"].render("Lvl "+str(self.level_number), 1, color)
-                self.fake_screen.blit(level_text, C.OVERLAY_PLACEMENTS64[12])
-            else:
-                unit_name = self.fonts["SERIF_20"].render("Talculí", 1, self.colors["CREAM"])
-                self.fake_screen.blit(unit_name, C.OVERLAY_PLACEMENTS64[18])
-                hp_label = self.fonts["SERIF_12"].render("HP", 1, self.colors["CREAM"])
-                self.fake_screen.blit(hp_label, C.OVERLAY_PLACEMENTS64[19])
-                hp_text = self.fonts["SERIF_20"].render("10/10", 1, self.colors["CREAM"])
-                self.fake_screen.blit(hp_text, C.OVERLAY_PLACEMENTS64[20])
             
 m = sandbox((21*C.scale,13*C.scale), "Sandbox", "#000000", "icon.png", "#000000", C.cursor_speed)

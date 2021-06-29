@@ -1,4 +1,9 @@
 import pygame, sys, random, json
+#Overhaul later
+TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"Adds health each turn",
+              30:"Raises avoidance except for flyers", 31:"Slows movement",32:"Neutral terrain",33:"Neutral terrain"}
+TILE_TYPE_NAMES = {0:"Floor", 1:"Floor",2:"Floor", 3:"Heal",
+              30:"Forest", 31:"Shallow Water",32:"Floor",33:"Floor"}
 
 class Constants():
     def __init__(self):
@@ -107,6 +112,87 @@ class damageOver(pygame.sprite.Sprite):
             self.sprites.append(pygame.image.load('app/app_imgs/64damage.png'))
         elif C.scale == 32:
             self.sprites.append(pygame.image.load('app/app_imgs/32damage.png'))
+        self.current_sprite = 0
+        self.image = self.sprites[self.current_sprite]
+        self.rect = self.image.get_rect()
+        self.rect.topleft = [self.x*C.scale,self.y*C.scale]
+
+def showTileTexts64(parent):
+    #Get actual values from tile
+    parent.avoid_amount = parent.tile_pos[0]
+    parent.guard_amount = parent.tile_pos[1]
+    parent.heal_amount = 0
+    color = parent.colors["BLACK"]
+    heal_text = parent.fonts["SERIF_20"].render(str(parent.heal_amount), 1, color)
+    avoid_text = parent.fonts["SERIF_20"].render(str(parent.avoid_amount), 1, color)
+    guard_text = parent.fonts["SERIF_20"].render(str(parent.guard_amount), 1, color)
+
+    parent.fake_screen.blit(guard_text, C.OVERLAY_PLACEMENTS64[6])
+    parent.fake_screen.blit(avoid_text, C.OVERLAY_PLACEMENTS64[7])
+    parent.fake_screen.blit(heal_text, C.OVERLAY_PLACEMENTS64[8])
+    
+    if parent.idle:
+        toggle_full_key_label_key = parent.fonts["SERIF_24"].render(parent.toggle_full_key, 1, parent.colors["WHITE"])
+        toggle_full_key_label_text = parent.fonts["SANS_16"].render(parent.toggle_full_key_text, 1, parent.colors["BLACK"])
+        parent.fake_screen.blit(toggle_full_key_label_key, C.OVERLAY_PLACEMENTS64[25])
+        parent.fake_screen.blit(toggle_full_key_label_text, C.OVERLAY_PLACEMENTS64[26])
+        
+        toggle_menu_key_label_key = parent.fonts["SERIF_24"].render(parent.toggle_menu_key, 1, parent.colors["WHITE"])
+        toggle_menu_label_text = parent.fonts["SANS_16"].render(parent.toggle_menu_text, 1, parent.colors["BLACK"])
+        parent.fake_screen.blit(toggle_menu_key_label_key, C.OVERLAY_PLACEMENTS64[27])
+        parent.fake_screen.blit(toggle_menu_label_text, C.OVERLAY_PLACEMENTS64[28])
+        
+        toggle_danger_label_key = parent.fonts["SERIF_24"].render(parent.toggle_danger_key, 1, parent.colors["WHITE"])
+        toggle_danger_label_text = parent.fonts["SANS_16"].render(parent.toggle_danger_text, 1, parent.colors["BLACK"])
+        parent.fake_screen.blit(toggle_danger_label_key, C.OVERLAY_PLACEMENTS64[29])
+        parent.fake_screen.blit(toggle_danger_label_text, C.OVERLAY_PLACEMENTS64[30])
+    
+    #Remove these if statements- a real level will have data for all tiles
+    if parent.current_tile_index in TILE_TYPE_NAMES:
+        label = parent.fonts["SERIF_22"].render(str(TILE_TYPE_NAMES[parent.current_tile_index]), 1, parent.colors["CREAM"])
+        parent.fake_screen.blit(label, (C.OVERLAY_PLACEMENTS64[1][0]+C.OVERLAY_PLACEMENTS64[2][0], C.OVERLAY_PLACEMENTS64[1][1]+C.OVERLAY_PLACEMENTS64[2][1]))
+    if parent.current_tile_index in TILE_TYPES:
+        tile_type_text = parent.fonts["SANS_16"].render(str(TILE_TYPES[parent.current_tile_index]), 1, color)
+        parent.fake_screen.blit(tile_type_text, C.OVERLAY_PLACEMENTS64[9])
+
+    if parent.unit_selected:
+        if C.SELECTION_OVERLAY_TYPE == "full":
+        #get actual values from unit
+            class_text = parent.fonts["SERIF_16"].render("Soldier", 1, parent.colors["CREAM"])
+            parent.fake_screen.blit(class_text, C.OVERLAY_PLACEMENTS64[13])
+            unit_name = parent.fonts["SERIF_28"].render("Talculí", 1, parent.colors["CREAM"])
+            parent.fake_screen.blit(unit_name, C.OVERLAY_PLACEMENTS64[14])
+            hp_label = parent.fonts["SERIF_12"].render("HP", 1, parent.colors["CREAM"])
+            parent.fake_screen.blit(hp_label, C.OVERLAY_PLACEMENTS64[15])
+            hp_text = parent.fonts["SERIF_28"].render("10/10", 1, parent.colors["CREAM"])
+            parent.fake_screen.blit(hp_text, C.OVERLAY_PLACEMENTS64[16])
+            level_text = parent.fonts["SERIF_20"].render("Lvl "+str(parent.level_number), 1, color)
+            parent.fake_screen.blit(level_text, C.OVERLAY_PLACEMENTS64[12])
+        else:
+            unit_name = parent.fonts["SERIF_20"].render("Talculí", 1, parent.colors["CREAM"])
+            parent.fake_screen.blit(unit_name, C.OVERLAY_PLACEMENTS64[18])
+            hp_label = parent.fonts["SERIF_12"].render("HP", 1, parent.colors["CREAM"])
+            parent.fake_screen.blit(hp_label, C.OVERLAY_PLACEMENTS64[19])
+            hp_text = parent.fonts["SERIF_20"].render("10/10", 1, parent.colors["CREAM"])
+            parent.fake_screen.blit(hp_text, C.OVERLAY_PLACEMENTS64[20])
+
+class Tile(pygame.sprite.Sprite):
+    def __init__(self,x,y,tile_graphic_index,tile_type):
+        super().__init__()
+        self.x = x
+        self.y = y
+        self.grid_pos = [x,y]
+        self.tile_graphic_index = tile_graphic_index
+        self.tile_type = tile_type
+        
+        self.animateSprites()
+        
+    def animateSprites(self):
+        self.sprites = []
+        if C.scale == 64:
+            self.sprites.append(pygame.image.load('app/app_imgs/grass_test.png'))
+        elif C.scale == 32:
+            self.sprites.append(pygame.image.load('app/app_imgs/32grass_test.png'))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
