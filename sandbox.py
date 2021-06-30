@@ -1,6 +1,6 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
-FRIEND, ENEMY, ALLY, TILE)
+FRIEND, ENEMY, ALLY, TILE, showMenuTiles)
 from src.GAME_battle_map_sounds_backend import Fade
 
 GRID_COLOR = "white"
@@ -68,6 +68,7 @@ class sandbox():
         self.show_combat = False
         self.combat_transition = False
         self.fc = 0
+        self.show_menu = False
     
     def initMusic(self,s):
         self.rain = pygame.mixer.Sound("app/app_sounds/music/"+s+"_rain"+".mp3")
@@ -144,8 +145,11 @@ class sandbox():
                         
                         if self.unit_selected:
                             #if unit selected, "move" unit (really, confirm unit movement by deselecting the unit)
+                            #This line turns on the menu for action selection
+                            self.show_menu = True
+                            #this line confirms the action and moves on, so it ALWAYS has to be last
                             self.current_unit = None
-                            #this is the battle transition- it's in the wrong place for now
+                            #this is the battle transition- it's in the wrong place for now, so it's commented out
                             #self.music_fade[1] = "in"
                             #Fade(self)
                             #self.show_combat = True
@@ -257,7 +261,11 @@ class sandbox():
                                 self.fc = 0
                             frame = frames[self.fc]
                             last_frame = pygame.time.get_ticks()
-                            
+            
+            #show menu, if needed
+            if self.show_menu:
+                showMenuTiles(self)
+            
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
                 fit_to_rect = self.fake_rect.fit(self.screen_rect)

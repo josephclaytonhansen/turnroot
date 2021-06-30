@@ -11,6 +11,10 @@ ENEMY = 1
 ALLY = 2
 TILE = 3
 
+ALL_MENU_TILES = ["*Attack","*Assist","*Rally","Wait",
+"Items","*Mount/Dismount","*Trade","*Convoy",
+ "*Rescue","*Units","*Options","*End"]
+
 class Constants():
     def __init__(self):
         super().__init__()
@@ -123,6 +127,15 @@ class damageOver(pygame.sprite.Sprite):
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
         self.rect.topleft = [self.x*C.scale,self.y*C.scale]
+
+def showMenuTiles(parent):
+    start_pos = [860,0]
+    for item in ALL_MENU_TILES:
+        start_pos[1] += 55
+        img = overlayOver(image64="app/app_imgs/overlays/menu_tile.png",image32="app/app_imgs/overlays/menu_tile.png")
+        text = parent.fonts["SERIF_20"].render(item, 1, parent.colors["CREAM"])
+        parent.fake_screen.blit(img.image, start_pos)
+        parent.fake_screen.blit(text, (start_pos[0]+5,start_pos[1]+5))
 
 def showTileTexts64(parent):
     #Get actual values from tile
