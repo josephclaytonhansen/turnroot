@@ -66,6 +66,7 @@ class sandbox():
         self.music_fade = [False, "init"]
         self.music_max_volume = C.music_max_volume
         self.sfx_max_volume = C.sfx_max_volume
+        self.voices_max_volume = C.max_voices_volume
         
         self.show_combat = False
         self.combat_transition = False
@@ -84,6 +85,7 @@ class sandbox():
         self.show_overlays = True
         self.active_options_index = 0
         self.option_cursor = False
+        self.option_slider_edit = False
 
     def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         #load variables and constants
