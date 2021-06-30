@@ -54,3 +54,29 @@ def Fade(parent):
                 parent.rain.set_volume(rain_s)
                 now = pygame.time.get_ticks()
 
+    
+def initMusic(parent,s):
+    parent.rain = pygame.mixer.Sound("app/app_sounds/music/"+s+"_rain"+".mp3")
+    parent.thunder = pygame.mixer.Sound("app/app_sounds/music/"+s+"_thunder"+".mp3")
+    parent.special_music1 = None
+    parent.special_music2 = None
+    parent.special_music3 = None
+    parent.special_music4 = None
+    #these blank slots allow for a boss theme- rain/thunder- and two other songs, which should be enough?
+    parent.rain.play(-1)
+    parent.thunder.play(-1)
+    
+    parent.rain.set_volume(0)
+    parent.thunder.set_volume(0)
+    parent.menu_move = pygame.mixer.Sound("app/app_sounds/menu_move.wav")
+    parent.menu_confirm = pygame.mixer.Sound("app/app_sounds/menu_confirm.wav")
+    parent.transition_sound_combat = pygame.mixer.Sound("app/app_sounds/Swoosh.mp3")
+    
+def updateVolumes(parent):
+    #Call this on volume settings change!
+    for s in [parent.menu_move, parent.menu_confirm, parent.transition_sound_combat]:
+        s.set_volume(parent.sfx_max_volume)
+    for m in [parent.rain, parent.thunder, parent.special_music1, parent.special_music2, parent.special_music3, parent.special_music4]:
+        m.set_volume(parent.music_max_volume)
+
+

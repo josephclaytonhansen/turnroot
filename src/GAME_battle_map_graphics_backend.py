@@ -16,6 +16,13 @@ ALL_MENU_TILES = ["*Attack","*Assist","*Rally","Wait",
  "*Rescue","*Units","*Options","*End"]
 CURRENT_MENU_TILES = ALL_MENU_TILES.copy()
 #No, it doesn't, but it does for now. Get from unit later
+#To be exact- if enemy units in danger area or move area (or max_range for weird stuff like Meteor), show attack
+#If allied units in assist max_radius, show assist
+#If allied unit adjacent, show rally/trade/rescue (if can be rescued, figure that out later)
+#If unit is mounted, show mount/dismount
+#If protagonist adjacent, or selected unit is protagonist, show convoy
+#Wait/options/units/end always show
+#So the only way there's ACTUALLY all items is if a mounted healer protagonist is adjacent to another unit
 
 MENU_ITEMS = {}
 
@@ -258,3 +265,40 @@ class gUnit(pygame.sprite.Sprite):
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
         self.rect.topleft = [self.x*C.scale,self.y*C.scale]
+        
+#init tile grid- runs once
+def initGrid(parent):
+    parent.fullmap = pygame.Surface((C.grid_dimensions[0]*C.scale, C.grid_dimensions[1]*C.scale))
+    parent.fullmap_rect = parent.fullmap.get_rect()
+    max_x = int(parent.dimensions[0] / C.scale)
+    max_y = int(parent.dimensions[1] / C.scale)
+    for x in range(0,C.grid_dimensions[0]+1):
+        parent.tiles[x] = {}
+        parent.units_pos[x]  = {}
+        for y in range(0,C.grid_dimensions[1]+1):
+            parent.units_pos[x][y] = None
+            parent.tiles[x][y] = Tile(x,y,0,"ground")
+            parent.tile_group.add(parent.tiles[x][y])
+            parent.graphics.add(parent. tiles[x][y])
+            if (x+(y*C.grid_dimensions[1])) in TILE_CONTENTS:
+                parent.units_pos[x][y] = gUnit(x,y,TILE_CONTENTS[(x+(y*C.grid_dimensions[1]))])
+                parent.on_screen_units.add(parent.units_pos[x][y])
+            
+    if C.GRID_OVER:
+        parent.grid = gridOver(0,0,GRID_COLOR)
+        parent.grid.image.set_alpha(C.GRID_OPACITY*(255/100))
+
+#load fonts- runs once
+def initFont(parent):
+    parent.fonts = {}
+    for font in [C.SANS_GAME_FONT, C.SERIF_GAME_FONT]:
+        if font == C.SANS_GAME_FONT:
+            n = "SANS"
+        else:
+            n = "SERIF"
+        font_path = "app/app_fonts/"+font
+        for size in [8,10,12,14,16,20,22,24,28,32,48]:
+            font_size = size
+            fontObj = pygame.font.Font(font_path, font_size)
+            parent.fonts[n+"_"+str(font_size)] = fontObj
+

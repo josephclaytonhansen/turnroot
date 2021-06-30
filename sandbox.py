@@ -1,7 +1,7 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
-FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, CURRENT_MENU_TILES)
-from src.GAME_battle_map_sounds_backend import Fade
+FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, CURRENT_MENU_TILES, initGrid, initFont)
+from src.GAME_battle_map_sounds_backend import Fade, initMusic, updateVolumes
 
 GRID_COLOR = "white"
 COLORS = {"CREAM":(238,238,230),"BLACK":(0,0,0),"WHITE":(255,255,255), "NID_PINK":(255,0,255),"MUTED_NAVY":(57,65,89), "MUTED_FOREST":(53,89,78), "LIGHT_GRASS":(153,207,174)}
@@ -78,36 +78,12 @@ class sandbox():
         self.current_menu_length = 11
         self.menu_sound_played = False
         self.menu_active = False
-    
-    def initMusic(self,s):
-        self.rain = pygame.mixer.Sound("app/app_sounds/music/"+s+"_rain"+".mp3")
-        self.thunder = pygame.mixer.Sound("app/app_sounds/music/"+s+"_thunder"+".mp3")
-        self.special_music1 = None
-        self.special_music2 = None
-        self.special_music3 = None
-        self.special_music4 = None
-        #these blank slots allow for a boss theme- rain/thunder- and two other songs, which should be enough?
-        self.rain.play()
-        self.thunder.play()
-        
-        self.rain.set_volume(0)
-        self.thunder.set_volume(0)
-        self.menu_move = pygame.mixer.Sound("app/app_sounds/menu_move.wav")
-        self.menu_confirm = pygame.mixer.Sound("app/app_sounds/menu_confirm.wav")
-        self.transition_sound_combat = pygame.mixer.Sound("app/app_sounds/Swoosh.mp3")
-        
-    def updateVolumes(self):
-        #Call this on volume settings change!
-        for s in [self.menu_move, self.menu_confirm, self.transition_sound_combat]:
-            s.set_volume(self.sfx_max_volume)
-        for m in [self.rain, self.thunder, self.special_music1, self.special_music2, self.special_music3, self.special_music4]:
-            m.set_volume(self.music_max_volume)
 
     def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         #load variables and constants
         self.initInitialValues(dimensions, cursor_speed)
-        self.initGrid()
-        self.initFont()
+        initGrid(self)
+        initFont(self)
         
         #init screen
         screen = pygame.display.set_mode(self.dimensions, flags=(pygame.RESIZABLE))
@@ -126,7 +102,7 @@ class sandbox():
         self.fake_rect = self.fake_screen.get_rect()
         self.screen_rect = self.screen.get_rect()
         
-        self.initMusic("fw")
+        initMusic(self,"fw")
         Fade(self)
         
         self.initCombat()
@@ -223,6 +199,7 @@ class sandbox():
                     #'B' key
                     elif event.key == pygame.K_s:
                         if self.unit_selected:
+                            self.menu_active = False
                             self.Deselect()
                         #replace else with elif for different selection cases
                         else:
@@ -234,14 +211,6 @@ class sandbox():
                             self.combat_transition = True
                             self.music_fade[1] = "out"
                             Fade(self)
-                            
-                    elif event.key == pygame.K_j:
-                    #this is the battle transition- it's in the wrong place for now. These should be menu actions, not key actions
-                        if self.unit_selected:
-                            self.transition_sound_combat.play()
-                            self.music_fade[1] = "in"
-                            Fade(self)
-                            self.show_combat = True
                     
                     #Shoulder, maybe? Toggle overlay mode
                     elif event.key == pygame.K_q:
@@ -343,42 +312,6 @@ class sandbox():
                 self.screen.blit(self.fake_screen, (0,0))
 
             pygame.display.update()
-    
-    #init tile grid- runs once
-    def initGrid(self):
-        self.fullmap = pygame.Surface((C.grid_dimensions[0]*C.scale, C.grid_dimensions[1]*C.scale))
-        self.fullmap_rect = self.fullmap.get_rect()
-        max_x = int(self.dimensions[0] / C.scale)
-        max_y = int(self.dimensions[1] / C.scale)
-        for x in range(0,C.grid_dimensions[0]+1):
-            self.tiles[x] = {}
-            self.units_pos[x]  = {}
-            for y in range(0,C.grid_dimensions[1]+1):
-                self.units_pos[x][y] = None
-                self.tiles[x][y] = Tile(x,y,0,"ground")
-                self.tile_group.add(self.tiles[x][y])
-                self.graphics.add(self. tiles[x][y])
-                if (x+(y*C.grid_dimensions[1])) in TILE_CONTENTS:
-                    self.units_pos[x][y] = gUnit(x,y,TILE_CONTENTS[(x+(y*C.grid_dimensions[1]))])
-                    self.on_screen_units.add(self.units_pos[x][y])
-                
-        if C.GRID_OVER:
-            self.grid = gridOver(0,0,GRID_COLOR)
-            self.grid.image.set_alpha(C.GRID_OPACITY*(255/100))
-    
-    #load fonts- runs once
-    def initFont(self):
-        self.fonts = {}
-        for font in [C.SANS_GAME_FONT, C.SERIF_GAME_FONT]:
-            if font == C.SANS_GAME_FONT:
-                n = "SANS"
-            else:
-                n = "SERIF"
-            font_path = "app/app_fonts/"+font
-            for size in [8,10,12,14,16,20,22,24,28,32,48]:
-                font_size = size
-                fontObj = pygame.font.Font(font_path, font_size)
-                self.fonts[n+"_"+str(font_size)] = fontObj
 
     def showOverlays(self):
         ground_desc = overlayOver(image64="app/app_imgs/overlays/64tile_desc_001.png",image32="app/app_imgs/overlays/32tile_desc_001.png")
