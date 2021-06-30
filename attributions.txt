@@ -19,3 +19,7 @@ Taxicab distance equation from https://study.com/academy/lesson/taxicab-geometry
 A* algorithm from https://www.redblobgames.com/pathfinding/a-star/implementation.html
 
 "Top Down Earth" resource pack from https://beeler.itch.io/top-down-earth-tileset
+
+In-game menu move sound from NenadSimic on OGA
+
+In-game menu confirm sound from mixkit.co (CC0)

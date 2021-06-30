@@ -15,6 +15,8 @@ ALL_MENU_TILES = ["*Attack","*Assist","*Rally","Wait",
 "Items","*Mount/Dismount","*Trade","*Convoy",
  "*Rescue","*Units","*Options","*End"]
 
+MENU_ITEMS = {}
+
 class Constants():
     def __init__(self):
         super().__init__()
@@ -128,6 +130,15 @@ class damageOver(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = [self.x*C.scale,self.y*C.scale]
 
+def initMenuItems(parent):
+    menu_index = -1
+    #rework to only include relevant menu items
+    for item in ALL_MENU_TILES:
+        menu_index += 1
+        MENU_ITEMS[menu_index] = item
+        #below- no it doesn't, but it works for now
+        parent.current_menu_length = len(ALL_MENU_TILES)-1
+
 def showMenuTiles(parent):
     start_pos = [860,0]
     for item in ALL_MENU_TILES:
@@ -137,6 +148,14 @@ def showMenuTiles(parent):
         parent.fake_screen.blit(img.image, start_pos)
         parent.fake_screen.blit(text, (start_pos[0]+5,start_pos[1]+5))
 
+def showMenuCursor(parent):
+    item = MENU_ITEMS[parent.active_menu_index]
+    text = parent.fonts["SERIF_20"].render(item, 1, parent.colors["CREAM"])
+    img = overlayOver(image64="app/app_imgs/overlays/menu_tile_selected.png",image32="app/app_imgs/overlays/menu_tile_selected.png")
+    pos = [860,55*(parent.active_menu_index+1)]
+    parent.fake_screen.blit(img.image, pos)
+    parent.fake_screen.blit(text, (pos[0]+5,pos[1]+5))
+    
 def showTileTexts64(parent):
     #Get actual values from tile
     parent.avoid_amount = parent.tile_pos[0]

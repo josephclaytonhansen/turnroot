@@ -1,6 +1,6 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
-FRIEND, ENEMY, ALLY, TILE, showMenuTiles)
+FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems)
 from src.GAME_battle_map_sounds_backend import Fade
 
 GRID_COLOR = "white"
@@ -64,19 +64,43 @@ class sandbox():
         
         self.music_fade = [False, "init"]
         self.music_max_volume = 1
+        self.sfx_max_volume = .7
         
         self.show_combat = False
         self.combat_transition = False
         self.fc = 0
+        
         self.show_menu = False
+        self.action_confirmed = False
+        self.menu_cursor = False
+        self.active_menu_index = 0
+        self.menu_cursor_y_change = 0
+        self.current_menu_length = 11
+        self.menu_sound_played = False
     
     def initMusic(self,s):
         self.rain = pygame.mixer.Sound("app/app_sounds/music/"+s+"_rain"+".mp3")
         self.thunder = pygame.mixer.Sound("app/app_sounds/music/"+s+"_thunder"+".mp3")
+        self.special_music1 = None
+        self.special_music2 = None
+        self.special_music3 = None
+        self.special_music4 = None
+        #these blank slots allow for a boss theme- rain/thunder- and two other songs, which should be enough?
         self.rain.play()
         self.thunder.play()
+        
         self.rain.set_volume(0)
         self.thunder.set_volume(0)
+        self.menu_move = pygame.mixer.Sound("app/app_sounds/menu_move.wav")
+        self.menu_confirm = pygame.mixer.Sound("app/app_sounds/menu_confirm.wav")
+        self.transition_sound_combat = pygame.mixer.Sound("app/app_sounds/Swoosh.mp3")
+        
+    def updateVolumes(self):
+        #Call this on volume settings change!
+        for s in [self.menu_move, self.menu_confirm, self.transition_sound_combat]:
+            s.set_volume(self.sfx_max_volume)
+        for m in [self.rain, self.thunder, self.special_music1, self.special_music2, self.special_music3, self.special_music4]:
+            m.set_volume(self.music_max_volume)
 
     def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         #load variables and constants
@@ -128,17 +152,27 @@ class sandbox():
                     self.last_input = pygame.time.get_ticks()
                     self.idle = False
                     if event.key == pygame.K_UP:
-                        self.moved = True
-                        self.cursor_y_change = -C.scale
+                        if self.menu_cursor == False:
+                            self.moved = True
+                            self.cursor_y_change = -C.scale
+                        else:
+                            self.menu_cursor_y_change -= 55
+                            self.menu_sound_played = False
                     elif event.key == pygame.K_DOWN:
-                        self.cursor_y_change = C.scale
-                        self.moved = True
+                        if self.menu_cursor == False:
+                            self.cursor_y_change = C.scale
+                            self.moved = True
+                        else:
+                            self.menu_cursor_y_change += 55
+                            self.menu_sound_played = False
                     elif event.key == pygame.K_LEFT:
-                        self.cursor_x_change = -C.scale
-                        self.moved = True
+                        if self.menu_cursor == False:
+                            self.cursor_x_change = -C.scale
+                            self.moved = True
                     elif event.key == pygame.K_RIGHT:
-                        self.cursor_x_change = C.scale
-                        self.moved = True
+                        if self.menu_cursor == False:
+                            self.cursor_x_change = C.scale
+                            self.moved = True
                     #A key
                     elif event.key == pygame.K_a:
                         t = self.tiles[self.tile_pos[0]][self.tile_pos[1]]
@@ -147,18 +181,18 @@ class sandbox():
                             #if unit selected, "move" unit (really, confirm unit movement by deselecting the unit)
                             #This line turns on the menu for action selection
                             self.show_menu = True
-                            #this line confirms the action and moves on, so it ALWAYS has to be last
-                            self.current_unit = None
-                            #this is the battle transition- it's in the wrong place for now, so it's commented out
-                            #self.music_fade[1] = "in"
-                            #Fade(self)
-                            #self.show_combat = True
+                            #move cursor off grid and onto menu
+                            self.menu_cursor = True
+                            #this line confirms the action and moves on, so it has to be after the menu
+                            if self.action_confirmed:
+                                self.current_unit = None
                             
                         #if a unit is selected, we confirm the movement and ...take an action... but for now we deselect
                         if self.unit_selected == False:
                             self.Select()
                         else:
-                            self.Deselect()
+                            if self.action_confirmed:
+                                self.Deselect()
                         
                     #scale map
                     elif event.key == pygame.K_x:
@@ -183,6 +217,14 @@ class sandbox():
                             self.combat_transition = True
                             self.music_fade[1] = "out"
                             Fade(self)
+                            
+                    elif event.key == pygame.K_j:
+                    #this is the battle transition- it's in the wrong place for now. These should be menu actions, not key actions
+                        if self.unit_selected:
+                            self.transition_sound_combat.play()
+                            self.music_fade[1] = "in"
+                            Fade(self)
+                            self.show_combat = True
                     
                     #Shoulder, maybe? Toggle overlay mode
                     elif event.key == pygame.K_q:
@@ -215,10 +257,13 @@ class sandbox():
             #draw units on grid
             self.on_screen_units.draw(self.fullmap)
             
-            #draw cursor and map from camera
+            #draw cursor
             self.showCursor()
+                
+            #draw map
             self.fullmap_scaled = pygame.transform.scale(self.fullmap, (int(self.scales[self.scale] * self.fake_screen.get_width()), int(self.scales[self.scale] * self.fake_screen.get_height())))
             self.fake_screen.blit(self.fullmap_scaled, (0,0), self.camera)
+            
             #draw overlays and overlay text
             self.showOverlays()
             if C.scale == 64:
@@ -265,7 +310,11 @@ class sandbox():
             #show menu, if needed
             if self.show_menu:
                 showMenuTiles(self)
-            
+                #if menu is selected, draw the cursor on it 
+                if self.menu_cursor:
+                    initMenuItems(self)
+                    showMenuCursor(self)
+                
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
                 fit_to_rect = self.fake_rect.fit(self.screen_rect)
@@ -358,73 +407,89 @@ class sandbox():
         
     #update cursor/selected overlays
     def showCursor(self):
-        now = pygame.time.get_ticks()
-        self.current_tile_index = self.tile_pos[0]+(self.tile_pos[1]*C.grid_dimensions[1])
-        self.tile_pos[0] = int(self.cursor_pos[0] / C.scale) + self.tile_offset[0]
-        self.tile_pos[1] = int(self.cursor_pos[1] / C.scale) + self.tile_offset[1]
-        self.tmp_cursor = self.cursor_pos.copy()
-        
-        for j in self.move_over_group:
-            self.fullmap.blit(j.image,(j.x,j.y))
-        self.on_screen_units.draw(self.fullmap)
-        
-        if now - self.last_cursor_move >= self.cursor_move_cooldown:
-            self.cursor_pos[0] += self.cursor_x_change
-            self.cursor_pos[1] += self.cursor_y_change
-            #Move unit if selected
-            if self.current_unit != None:
-                tmp_unit = self.current_unit
-                self.units_pos[self.current_unit.x][self.current_unit.y] = None
-                self.current_unit.kill()
-                tmp_unit.x = int(self.cursor_pos[0] / C.scale) + self.tile_offset[0]
-                tmp_unit.y = int(self.cursor_pos[1] / C.scale) + self.tile_offset[1]
-                self.units_pos[int(self.cursor_pos[0] / C.scale) + self.tile_offset[0]][int(self.cursor_pos[1] / C.scale) + self.tile_offset[1]] = tmp_unit
-                tmp_unit.animateSprites()
-                self.on_screen_units.add(tmp_unit)
-                
-            if self.moved:
-                self.cursor_history.append([self.cursor_x_change,self.cursor_y_change])
-        
+        #move cursor on menu
+        if self.menu_cursor:
+            if self.menu_sound_played == False:
+                self.menu_move.play()
+                self.menu_sound_played = True
+            #cursor boundaries
+            if int(self.menu_cursor_y_change/55) >= self.current_menu_length:
+                self.active_menu_index = self.current_menu_length
+                self.menu_cursor_y_change = 0
+            elif int(self.menu_cursor_y_change/55) <= 0:
+                self.active_menu_index = 0
+                self.menu_cursor_y_change = 0
+            else:
+                self.active_menu_index = int(self.menu_cursor_y_change/55)
+        #move cursor on grid
+        else:
+            now = pygame.time.get_ticks()
+            self.current_tile_index = self.tile_pos[0]+(self.tile_pos[1]*C.grid_dimensions[1])
             self.tile_pos[0] = int(self.cursor_pos[0] / C.scale) + self.tile_offset[0]
             self.tile_pos[1] = int(self.cursor_pos[1] / C.scale) + self.tile_offset[1]
+            self.tmp_cursor = self.cursor_pos.copy()
+            
+            for j in self.move_over_group:
+                self.fullmap.blit(j.image,(j.x,j.y))
+            self.on_screen_units.draw(self.fullmap)
+            
+            if now - self.last_cursor_move >= self.cursor_move_cooldown:
+                self.cursor_pos[0] += self.cursor_x_change
+                self.cursor_pos[1] += self.cursor_y_change
+                #Move unit if selected
+                if self.current_unit != None:
+                    tmp_unit = self.current_unit
+                    self.units_pos[self.current_unit.x][self.current_unit.y] = None
+                    self.current_unit.kill()
+                    tmp_unit.x = int(self.cursor_pos[0] / C.scale) + self.tile_offset[0]
+                    tmp_unit.y = int(self.cursor_pos[1] / C.scale) + self.tile_offset[1]
+                    self.units_pos[int(self.cursor_pos[0] / C.scale) + self.tile_offset[0]][int(self.cursor_pos[1] / C.scale) + self.tile_offset[1]] = tmp_unit
+                    tmp_unit.animateSprites()
+                    self.on_screen_units.add(tmp_unit)
+                    
+                if self.moved:
+                    self.cursor_history.append([self.cursor_x_change,self.cursor_y_change])
+            
+                self.tile_pos[0] = int(self.cursor_pos[0] / C.scale) + self.tile_offset[0]
+                self.tile_pos[1] = int(self.cursor_pos[1] / C.scale) + self.tile_offset[1]
 
-            if self.cursor_pos[0] < 0:
-                self.cursor_pos[0] = 0
-            if self.tile_pos[0] >= C.grid_dimensions[0]-1:
-                self.cursor_pos[0] = int((C.grid_dimensions[0]-1)*C.scale/(self.scales[self.scale]/2))
-            if self.cursor_pos[1] < 0:
-                self.cursor_pos[1] = 0
-            if self.tile_pos[1] >= C.grid_dimensions[1]-1:
-                self.cursor_pos[1] = int((C.grid_dimensions[1]-1)*C.scale/(self.scales[self.scale]/2))
+                if self.cursor_pos[0] < 0:
+                    self.cursor_pos[0] = 0
+                if self.tile_pos[0] >= C.grid_dimensions[0]-1:
+                    self.cursor_pos[0] = int((C.grid_dimensions[0]-1)*C.scale/(self.scales[self.scale]/2))
+                if self.cursor_pos[1] < 0:
+                    self.cursor_pos[1] = 0
+                if self.tile_pos[1] >= C.grid_dimensions[1]-1:
+                    self.cursor_pos[1] = int((C.grid_dimensions[1]-1)*C.scale/(self.scales[self.scale]/2))
+                    
+                if self.unit_selected:
+                    t = (self.tile_pos[0], self.tile_pos[1])
+                    if t not in self.move_tiles:
+                        self.cursor_pos = self.tmp_cursor
                 
-            if self.unit_selected:
-                t = (self.tile_pos[0], self.tile_pos[1])
-                if t not in self.move_tiles:
-                    self.cursor_pos = self.tmp_cursor
-            
-            if len(self.cursor_history) > 3:
-                camera_pan_direction = self.cursor_history[0]
-                h_speed = C.scale
-                v_speed = C.scale
-                if camera_pan_direction[0] == -C.scale:
-                    self.camera.x -=h_speed
-                elif camera_pan_direction[0] == C.scale:
-                    self.camera.x +=h_speed
-                if camera_pan_direction[1] == C.scale:
-                    self.camera.y +=v_speed
-                elif camera_pan_direction[1] == -C.scale:
-                    self.camera.y -=v_speed
+                if len(self.cursor_history) > 3:
+                    camera_pan_direction = self.cursor_history[0]
+                    h_speed = C.scale
+                    v_speed = C.scale
+                    if camera_pan_direction[0] == -C.scale:
+                        self.camera.x -=h_speed
+                    elif camera_pan_direction[0] == C.scale:
+                        self.camera.x +=h_speed
+                    if camera_pan_direction[1] == C.scale:
+                        self.camera.y +=v_speed
+                    elif camera_pan_direction[1] == -C.scale:
+                        self.camera.y -=v_speed
 
-            self.last_cursor_move = now
-            
-        imgX = self.cursor_pos[0]
-        imgY = self.cursor_pos[1]
-        if C.CURSOR_OVER:
-            self.fullmap.blit(self.c_over.image, (self.cursor_pos[0]-(C.scale*3), self.cursor_pos[1]-(C.scale*3)))
-        if C.GRID_OVER:
-            if self.show_grid_at_scale:
-                self.fullmap.blit(self.grid.image, (self.camera.x, self.camera.y))
-        self.fullmap.blit(self.c_img, (imgX,imgY))
+                self.last_cursor_move = now
+                
+            imgX = self.cursor_pos[0]
+            imgY = self.cursor_pos[1]
+            if C.CURSOR_OVER:
+                self.fullmap.blit(self.c_over.image, (self.cursor_pos[0]-(C.scale*3), self.cursor_pos[1]-(C.scale*3)))
+            if C.GRID_OVER:
+                if self.show_grid_at_scale:
+                    self.fullmap.blit(self.grid.image, (self.camera.x, self.camera.y))
+            self.fullmap.blit(self.c_img, (imgX,imgY))
     
     def Select(self):
         #Currently you can select a FRIEND but not anything else, fix this later
@@ -476,6 +541,13 @@ class sandbox():
             self.on_screen_units.add(tmp_unit)
         self.unit_selected = False
         self.current_unit = None
+        #currently this exits the whole menu, which is fine, but obviously once there's more actions this should only go back one level
+        #So this block should be something like if self.show_menu == True and self.action_step == False..., haven't got that far yet
+        self.show_menu = False
+        self.action_confirmed = False
+        self.menu_cursor = False
+        self.active_menu_index = 0
+        self.menu_cursor_y_change = 0
     
     def initCombat(self):
         self.combat_surface = pygame.Surface((21*C.scale, 14*C.scale))
