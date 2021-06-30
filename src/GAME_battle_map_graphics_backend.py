@@ -4,6 +4,12 @@ TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"A
               30:"Raises avoidance except for flyers", 31:"Slows movement",32:"Neutral terrain",33:"Neutral terrain"}
 TILE_TYPE_NAMES = {0:"Floor", 1:"Floor",2:"Floor", 3:"Heal",
               30:"Forest", 31:"Shallow Water",32:"Floor",33:"Floor"}
+TILE_CONTENTS = {64:"friendly_unit", 122:"enemy_unit"}
+
+FRIEND = 0
+ENEMY = 1
+ALLY = 2
+TILE = 3
 
 class Constants():
     def __init__(self):
@@ -36,6 +42,7 @@ class Constants():
         self.SELECTION_OVERLAY_TYPE = g[17]
 
 C = Constants()
+print(C.grid_dimensions)
 
 class cursorOver(pygame.sprite.Sprite):
     def __init__(self,x,y,color):
@@ -189,10 +196,30 @@ class Tile(pygame.sprite.Sprite):
         
     def animateSprites(self):
         self.sprites = []
-        if C.scale == 64:
-            self.sprites.append(pygame.image.load('app/app_imgs/grass_test.png'))
-        elif C.scale == 32:
-            self.sprites.append(pygame.image.load('app/app_imgs/32grass_test.png'))
+        self.sprites.append(pygame.image.load('app/app_imgs/grass_test.png'))
+        self.current_sprite = 0
+        self.image = self.sprites[self.current_sprite]
+        self.rect = self.image.get_rect()
+        self.rect.topleft = [self.x*C.scale,self.y*C.scale]
+
+class gUnit(pygame.sprite.Sprite):
+    #rework
+    def __init__(self,x,y,unit):
+        super().__init__()
+        self.x = x
+        self.y = y
+        self.grid_pos = (x*C.grid_dimensions[0])+y
+        self.unit = unit
+        self.animateSprites()
+        
+    def animateSprites(self):
+        self.sprites = []
+        if self.unit == "friendly_unit":
+            self.sprites.append(pygame.image.load('app/app_imgs/tmp/friendly_unit.png'))
+            self.status = FRIEND
+        elif self.unit == "enemy_unit":
+            self.sprites.append(pygame.image.load('app/app_imgs/tmp/enemy_unit.png'))
+            self.status = ENEMY
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()

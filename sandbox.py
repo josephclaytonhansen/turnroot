@@ -1,5 +1,6 @@
 import pygame, sys, random, json
-from src.GAME_battle_map_graphics_backend import cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile
+from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
+FRIEND, ENEMY, ALLY, TILE)
 from src.GAME_battle_map_sounds_backend import Fade
 
 GRID_COLOR = "white"
@@ -50,8 +51,12 @@ class sandbox():
         self.tiles = {}
         
         self.tile_group = pygame.sprite.Group()
+        self.on_screen_units = pygame.sprite.Group()
         self.move_over_group = pygame.sprite.Group()
         self.graphics = pygame.sprite.Group()
+        
+        self.units_pos = {}
+        self.current_unit = None
         
         self.cursor_move_cooldown = cursor_speed
         self.idle_cooldown = 1400
@@ -136,13 +141,20 @@ class sandbox():
                     #A key
                     elif event.key == pygame.K_a:
                         t = self.tiles[self.tile_pos[0]][self.tile_pos[1]]
-                        #if unit selected AND combat selected- FIX THIS LATER
+                        
                         if self.unit_selected:
-                            #pull up battle screen and then self.Fade()
-                            self.music_fade[1] = "in"
-                            Fade(self)
-                            self.show_combat = True
-                        self.Select()
+                            #if unit selected, "move" unit (really, confirm unit movement by deselecting the unit)
+                            self.current_unit = None
+                            #this is the battle transition- it's in the wrong place for now
+                            #self.music_fade[1] = "in"
+                            #Fade(self)
+                            #self.show_combat = True
+                            
+                        #if a unit is selected, we confirm the movement and ...take an action... but for now we deselect
+                        if self.unit_selected == False:
+                            self.Select()
+                        else:
+                            self.Deselect()
                         
                     #scale map
                     elif event.key == pygame.K_x:
@@ -196,6 +208,8 @@ class sandbox():
             
             #draw grid
             self.tile_group.draw(self.fullmap)
+            #draw units on grid
+            self.on_screen_units.draw(self.fullmap)
             
             #draw cursor and map from camera
             self.showCursor()
@@ -248,7 +262,7 @@ class sandbox():
             if self.screen_rect.size != self.dimensions:
                 fit_to_rect = self.fake_rect.fit(self.screen_rect)
                 fit_to_rect.center = self.screen_rect.center
-                scaled = pygame.transform.scale(self.fake_screen, fit_to_rect.size)
+                scaled = pygame.transform.smoothscale(self.fake_screen, fit_to_rect.size)
                 self.screen.blit(scaled, fit_to_rect)
             else:
                 self.screen.blit(self.fake_screen, (0,0))
@@ -263,10 +277,15 @@ class sandbox():
         max_y = int(self.dimensions[1] / C.scale)
         for x in range(0,C.grid_dimensions[0]+1):
             self.tiles[x] = {}
+            self.units_pos[x]  = {}
             for y in range(0,C.grid_dimensions[1]+1):
+                self.units_pos[x][y] = None
                 self.tiles[x][y] = Tile(x,y,0,"ground")
                 self.tile_group.add(self.tiles[x][y])
                 self.graphics.add(self. tiles[x][y])
+                if (x+(y*C.grid_dimensions[1])) in TILE_CONTENTS:
+                    self.units_pos[x][y] = gUnit(x,y,TILE_CONTENTS[(x+(y*C.grid_dimensions[1]))])
+                    self.on_screen_units.add(self.units_pos[x][y])
                 
         if C.GRID_OVER:
             self.grid = gridOver(0,0,GRID_COLOR)
@@ -339,11 +358,22 @@ class sandbox():
         
         for j in self.move_over_group:
             self.fullmap.blit(j.image,(j.x,j.y))
+        self.on_screen_units.draw(self.fullmap)
         
         if now - self.last_cursor_move >= self.cursor_move_cooldown:
             self.cursor_pos[0] += self.cursor_x_change
             self.cursor_pos[1] += self.cursor_y_change
-            
+            #Move unit if selected
+            if self.current_unit != None:
+                tmp_unit = self.current_unit
+                self.units_pos[self.current_unit.x][self.current_unit.y] = None
+                self.current_unit.kill()
+                tmp_unit.x = int(self.cursor_pos[0] / C.scale) + self.tile_offset[0]
+                tmp_unit.y = int(self.cursor_pos[1] / C.scale) + self.tile_offset[1]
+                self.units_pos[int(self.cursor_pos[0] / C.scale) + self.tile_offset[0]][int(self.cursor_pos[1] / C.scale) + self.tile_offset[1]] = tmp_unit
+                tmp_unit.animateSprites()
+                self.on_screen_units.add(tmp_unit)
+                
             if self.moved:
                 self.cursor_history.append([self.cursor_x_change,self.cursor_y_change])
         
@@ -389,8 +419,13 @@ class sandbox():
         self.fullmap.blit(self.c_img, (imgX,imgY))
     
     def Select(self):
-        #currently selects tile- get unit from tile contents
+        #Currently you can select a FRIEND but not anything else, fix this later
         self.move_over_group.empty()
+        if self.units_pos[self.tile_pos[0]][self.tile_pos[1]] != None:
+            if self.units_pos[self.tile_pos[0]][self.tile_pos[1]].status == FRIEND:
+                self.current_unit = self.units_pos[self.tile_pos[0]][self.tile_pos[1]]
+        if self.current_unit != None:
+            self.unit_return = [self.current_unit.x,self.current_unit.y]
         #get move and damage from tile contents
         start = self.tile_pos
         s = start.copy()
@@ -420,7 +455,19 @@ class sandbox():
     
     def Deselect(self):
         self.move_over_group.empty()
+        #put unit back
+        if self.current_unit != None:
+            tmp_unit = self.current_unit
+            self.current_unit.kill()
+            pygame.display.update()
+            self.units_pos[tmp_unit.x][tmp_unit.y] = None
+            tmp_unit.x = self.unit_return[0]
+            tmp_unit.y = self.unit_return[1]
+            tmp_unit.animateSprites()
+            self.units_pos[tmp_unit.x][tmp_unit.y] = tmp_unit
+            self.on_screen_units.add(tmp_unit)
         self.unit_selected = False
+        self.current_unit = None
     
     def initCombat(self):
         self.combat_surface = pygame.Surface((21*C.scale, 14*C.scale))
