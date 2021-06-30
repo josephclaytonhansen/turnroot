@@ -4,7 +4,7 @@ TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"A
               30:"Raises avoidance except for flyers", 31:"Slows movement",32:"Neutral terrain",33:"Neutral terrain"}
 TILE_TYPE_NAMES = {0:"Floor", 1:"Floor",2:"Floor", 3:"Heal",
               30:"Forest", 31:"Shallow Water",32:"Floor",33:"Floor"}
-TILE_CONTENTS = {64:"friendly_unit", 122:"enemy_unit"}
+TILE_CONTENTS = {64:"friendly_unit", 162:"enemy_unit"}
 
 FRIEND = 0
 ENEMY = 1
@@ -14,6 +14,8 @@ TILE = 3
 ALL_MENU_TILES = ["*Attack","*Assist","*Rally","Wait",
 "Items","*Mount/Dismount","*Trade","*Convoy",
  "*Rescue","*Units","*Options","*End"]
+CURRENT_MENU_TILES = ALL_MENU_TILES.copy()
+#No, it doesn't, but it does for now. Get from unit later
 
 MENU_ITEMS = {}
 
@@ -133,15 +135,15 @@ class damageOver(pygame.sprite.Sprite):
 def initMenuItems(parent):
     menu_index = -1
     #rework to only include relevant menu items
-    for item in ALL_MENU_TILES:
+    for item in CURRENT_MENU_TILES:
         menu_index += 1
         MENU_ITEMS[menu_index] = item
         #below- no it doesn't, but it works for now
-        parent.current_menu_length = len(ALL_MENU_TILES)-1
+        parent.current_menu_length = len(CURRENT_MENU_TILES)-1
 
 def showMenuTiles(parent):
     start_pos = [860,0]
-    for item in ALL_MENU_TILES:
+    for item in CURRENT_MENU_TILES:
         start_pos[1] += 55
         img = overlayOver(image64="app/app_imgs/overlays/menu_tile.png",image32="app/app_imgs/overlays/menu_tile.png")
         text = parent.fonts["SERIF_20"].render(item, 1, parent.colors["CREAM"])

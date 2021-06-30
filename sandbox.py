@@ -1,6 +1,6 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
-FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems)
+FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, CURRENT_MENU_TILES)
 from src.GAME_battle_map_sounds_backend import Fade
 
 GRID_COLOR = "white"
@@ -77,6 +77,7 @@ class sandbox():
         self.menu_cursor_y_change = 0
         self.current_menu_length = 11
         self.menu_sound_played = False
+        self.menu_active = False
     
     def initMusic(self,s):
         self.rain = pygame.mixer.Sound("app/app_sounds/music/"+s+"_rain"+".mp3")
@@ -183,9 +184,25 @@ class sandbox():
                             self.show_menu = True
                             #move cursor off grid and onto menu
                             self.menu_cursor = True
+                            #select menu item
+                            if self.menu_cursor:
+                                if self.menu_active: #based on menu selection, do...
+                                    action = CURRENT_MENU_TILES[self.active_menu_index]
+                                    #Attack- Currently put unit down, fade into battle. Eventually it needs to select weapon, enemy, and THEN do all that. 
+                                    if action == CURRENT_MENU_TILES[0]:
+                                        self.action_confirmed = True
+                                        self.transition_sound_combat.play()
+                                        self.music_fade[1] = "in"
+                                        Fade(self)
+                                        self.show_combat = True
+                                    #Wait- put unit down and move on
+                                    elif action == CURRENT_MENU_TILES[3]:
+                                        self.action_confirmed = True
+
                             #this line confirms the action and moves on, so it has to be after the menu
                             if self.action_confirmed:
                                 self.current_unit = None
+                                self.menu_active = False
                             
                         #if a unit is selected, we confirm the movement and ...take an action... but for now we deselect
                         if self.unit_selected == False:
@@ -314,6 +331,7 @@ class sandbox():
                 if self.menu_cursor:
                     initMenuItems(self)
                     showMenuCursor(self)
+                    self.menu_active = True
                 
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
@@ -499,6 +517,7 @@ class sandbox():
                 self.current_unit = self.units_pos[self.tile_pos[0]][self.tile_pos[1]]
         if self.current_unit != None:
             self.unit_return = [self.current_unit.x,self.current_unit.y]
+            
         #get move and damage from tile contents
         start = self.tile_pos
         s = start.copy()
