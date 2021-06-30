@@ -55,7 +55,31 @@ class Constants():
         self.KEY_OVER32 = g[15]
         self.KEY_OVER_WIDE32 = g[16]
         self.SELECTION_OVERLAY_TYPE = g[17]
-
+        with open ("app/preferences.json", "r") as h:
+            l = json.load(h)
+        self.sfx_max_volume = l[0]
+        self.music_max_volume = l[1]
+        self.max_voices_volume = l[2]
+        self.uc_music = l[3]
+        self.subtitles = l[4]
+        self.smart_end = l[5]
+        self.cursor_memory = l[6]
+        self.hp_gauge_type = l[7]
+        self.x_axis = l[8]
+        self.y_axis = l[9]
+    def pack(self):
+        with open("src/tmp/sc.trecd", "w") as f:
+            d = [self.scale, self.fps, self.cursor_speed, self.grid_dimensions]
+            json.dump(d,f)
+        with open("src/tmp/sc2.trecd", "w") as da:
+            g = [self.CURSOR_OVER, self.GRID_OVER, self.GRID_OPACITY, self.SANS_GAME_FONT,self.SERIF_GAME_FONT,
+                 self.OVERLAY_PLACEMENTS64,self.OVERLAY_PLACEMENTS32,self.GUARD_ICON,self.AVOID_ICON,self.HEAL_ICON,
+                 SELF.GUARD_ICON32,self.AVOID_ICON32,self.HEAL_ICON32,self.KEY_OVER,self.KEY_OVER_WIDE,self.KEY_OVER32,self.KEY_OVER_WIDE32,self.SELECTION_OVERLAY_TYPE]
+            json.dump(g,da)
+        with open ("app/preferences.json", "r") as h:
+            l = [self.sfx_music_volume,self.music_max_volume,self.max_voices_volume,self.uc_music,self.subtitles,self.smart_end,self.cursor_memory,self.hp_gauge_type,self.x_axis,self.y_axis]
+            json.dump(l,h)
+            
 C = Constants()
 print(C.grid_dimensions)
 
@@ -297,7 +321,7 @@ def initFont(parent):
         else:
             n = "SERIF"
         font_path = "app/app_fonts/"+font
-        for size in [8,10,12,14,16,20,22,24,28,32,48]:
+        for size in [10,12,14,16,18,20,22,24,28,32,48]:
             font_size = size
             fontObj = pygame.font.Font(font_path, font_size)
             parent.fonts[n+"_"+str(font_size)] = fontObj

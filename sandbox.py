@@ -2,6 +2,7 @@ import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
 FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, CURRENT_MENU_TILES, initGrid, initFont)
 from src.GAME_battle_map_sounds_backend import Fade, initMusic, updateVolumes
+from src.GAME_battle_map_options_backend import initOptions, showOptions
 
 GRID_COLOR = "white"
 COLORS = {"CREAM":(238,238,230),"BLACK":(0,0,0),"WHITE":(255,255,255), "NID_PINK":(255,0,255),"MUTED_NAVY":(57,65,89), "MUTED_FOREST":(53,89,78), "LIGHT_GRASS":(153,207,174)}
@@ -63,8 +64,8 @@ class sandbox():
         self.clock = pygame.time.Clock()
         
         self.music_fade = [False, "init"]
-        self.music_max_volume = 1
-        self.sfx_max_volume = .7
+        self.music_max_volume = C.music_max_volume
+        self.sfx_max_volume = C.sfx_max_volume
         
         self.show_combat = False
         self.combat_transition = False
@@ -78,12 +79,18 @@ class sandbox():
         self.current_menu_length = 11
         self.menu_sound_played = False
         self.menu_active = False
+        
+        self.show_options = False
+        self.show_overlays = True
+        self.active_options_index = 0
+        self.option_cursor = False
 
     def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         #load variables and constants
         self.initInitialValues(dimensions, cursor_speed)
         initGrid(self)
         initFont(self)
+        initOptions(self)
         
         #init screen
         screen = pygame.display.set_mode(self.dimensions, flags=(pygame.RESIZABLE))
@@ -163,6 +170,7 @@ class sandbox():
                             #select menu item
                             if self.menu_cursor:
                                 if self.menu_active: #based on menu selection, do...
+                                    self.show_overlays = False
                                     action = CURRENT_MENU_TILES[self.active_menu_index]
                                     #Attack- Currently put unit down, fade into battle. Eventually it needs to select weapon, enemy, and THEN do all that. 
                                     if action == CURRENT_MENU_TILES[0]:
@@ -174,11 +182,19 @@ class sandbox():
                                     #Wait- put unit down and move on
                                     elif action == CURRENT_MENU_TILES[3]:
                                         self.action_confirmed = True
+                                    #Options- essentially do the whole menu thing all over again with Options
+                                    elif action == CURRENT_MENU_TILES[10]:
+                                        self.show_options = True
+                                        self.menu_active = False
+                                        self.show_menu = False
+                                        self.menu_cursor = False
+                                        self.option_cursor = True
 
                             #this line confirms the action and moves on, so it has to be after the menu
                             if self.action_confirmed:
                                 self.current_unit = None
                                 self.menu_active = False
+                                self.show_overlays = True
                             
                         #if a unit is selected, we confirm the movement and ...take an action... but for now we deselect
                         if self.unit_selected == False:
@@ -251,8 +267,8 @@ class sandbox():
             self.fake_screen.blit(self.fullmap_scaled, (0,0), self.camera)
             
             #draw overlays and overlay text
-            self.showOverlays()
-            if C.scale == 64:
+            if self.show_overlays:
+                self.showOverlays()
                 showTileTexts64(self)
                         
             #show combat
@@ -301,6 +317,10 @@ class sandbox():
                     initMenuItems(self)
                     showMenuCursor(self)
                     self.menu_active = True
+                
+            #show options, if needed
+            if self.show_options:
+                showOptions(self)
                 
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
@@ -372,6 +392,9 @@ class sandbox():
                 self.menu_cursor_y_change = 0
             else:
                 self.active_menu_index = int(self.menu_cursor_y_change/55)
+        #move cursor on options
+        elif self.option_cursor:
+            pass
         #move cursor on grid
         else:
             now = pygame.time.get_ticks()
@@ -389,6 +412,7 @@ class sandbox():
                 self.cursor_pos[1] += self.cursor_y_change
                 #Move unit if selected
                 if self.current_unit != None:
+                    #Currently the unit moves with the cursor, this is obviously not ideal but for sandboxing it's much easier than messing with A*
                     tmp_unit = self.current_unit
                     self.units_pos[self.current_unit.x][self.current_unit.y] = None
                     self.current_unit.kill()
@@ -455,7 +479,7 @@ class sandbox():
         start = self.tile_pos
         s = start.copy()
 
-        move = 3
+        move = 4
         damage = 1
         
         #use these to limit cursor movement
@@ -496,8 +520,11 @@ class sandbox():
         #currently this exits the whole menu, which is fine, but obviously once there's more actions this should only go back one level
         #So this block should be something like if self.show_menu == True and self.action_step == False..., haven't got that far yet
         self.show_menu = False
+        self.show_options = False
         self.action_confirmed = False
         self.menu_cursor = False
+        self.show_overlays = True
+        self.option_cursor = False
         self.active_menu_index = 0
         self.menu_cursor_y_change = 0
     
