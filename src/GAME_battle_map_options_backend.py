@@ -4,7 +4,7 @@ from src.GAME_battle_map_sounds_backend import updateVolumes
 
 def initOptions(parent):
     parent.labels = ["SFX volume","Music volume","Voices volume","Cutscene subtitles",
-                     "Smart end","Cursor memory","Cursor speed","Cursor overlay","Show grid","HP gauge type","X axis inverted","Y axis inverted"]
+                     "End turn","Cursor memory","Cursor speed","Cursor overlay","Show grid","HP gauge type","X axis inverted","Y axis inverted"]
     parent.hp_holder = ["None", "Basic", "Advanced"]
 
 def showOptions(parent):
@@ -153,18 +153,22 @@ def showOptions(parent):
             parent.fake_screen.blit(tf,(start_pos[0]+390,start_pos[1]+1))
         elif count == 4:
             if C.smart_end == True:
-                t = "Yes"
+                t = "Automatically"
+                h = 356
             if C.smart_end == False:
-                t = "No"
+                t = "Manually"
+                h = 370
             tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
-            parent.fake_screen.blit(tf,(start_pos[0]+390,start_pos[1]+1))
+            parent.fake_screen.blit(tf,(start_pos[0]+h,start_pos[1]+1))
         elif count == 5:
             if C.cursor_memory == True:
                 t = "Start on last"
+                h = 358
             if C.cursor_memory == False:
                 t = "Start on leader"
+                h = 350
             tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
-            parent.fake_screen.blit(tf,(start_pos[0]+360,start_pos[1]+1))
+            parent.fake_screen.blit(tf,(start_pos[0]+h,start_pos[1]+1))
         elif count == 6:
             t = str((100-C.cursor_speed))
             tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])

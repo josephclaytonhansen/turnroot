@@ -326,4 +326,3 @@ def initFont(parent):
             font_size = size
             fontObj = pygame.font.Font(font_path, font_size)
             parent.fonts[n+"_"+str(font_size)] = fontObj
-
