@@ -124,8 +124,8 @@ class sandbox():
         self.initCombat()
         
         pygame.display.set_caption(title)
-        #i = pygame.image.load(icon)
-        #pygame.display.set_icon(i)
+        i = pygame.image.load(icon)
+    pygame.display.set_icon(i)
 
         #Game loop
         while running:
@@ -567,4 +567,4 @@ class sandbox():
             self.down_key = pygame.K_DOWN
         
 bc = COLORS[random.choice(["BLACK","MUTED_NAVY","MUTED_FOREST","LIGHT_GRASS"])]            
-m = sandbox((21*C.scale,13*C.scale), "Sandbox", bc, "icon.png", bc, C.cursor_speed)
+m = sandbox((21*C.scale,13*C.scale), "Sandbox", bc, "app/app_imgs/icon.png", bc, C.cursor_speed)
