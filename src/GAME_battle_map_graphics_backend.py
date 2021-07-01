@@ -210,15 +210,10 @@ def showTileTexts64(parent):
         parent.fake_screen.blit(toggle_full_key_label_key, C.OVERLAY_PLACEMENTS64[25])
         parent.fake_screen.blit(toggle_full_key_label_text, C.OVERLAY_PLACEMENTS64[26])
         
-        toggle_menu_key_label_key = parent.fonts["SERIF_24"].render(parent.toggle_menu_key, 1, parent.colors["WHITE"])
-        toggle_menu_label_text = parent.fonts["SANS_16"].render(parent.toggle_menu_text, 1, parent.colors["BLACK"])
+        toggle_menu_key_label_key = parent.fonts["SERIF_24"].render(parent.toggle_danger_key, 1, parent.colors["WHITE"])
+        toggle_menu_label_text = parent.fonts["SANS_16"].render(parent.toggle_danger_text, 1, parent.colors["BLACK"])
         parent.fake_screen.blit(toggle_menu_key_label_key, C.OVERLAY_PLACEMENTS64[27])
         parent.fake_screen.blit(toggle_menu_label_text, C.OVERLAY_PLACEMENTS64[28])
-        
-        toggle_danger_label_key = parent.fonts["SERIF_24"].render(parent.toggle_danger_key, 1, parent.colors["WHITE"])
-        toggle_danger_label_text = parent.fonts["SANS_16"].render(parent.toggle_danger_text, 1, parent.colors["BLACK"])
-        parent.fake_screen.blit(toggle_danger_label_key, C.OVERLAY_PLACEMENTS64[29])
-        parent.fake_screen.blit(toggle_danger_label_text, C.OVERLAY_PLACEMENTS64[30])
     
     #Remove these if statements- a real level will have data for all tiles
     if parent.current_tile_index in TILE_TYPE_NAMES:

@@ -375,12 +375,10 @@ class sandbox():
         
         if self.idle:
             toggle_full_selection = overlayOver(image64=C.KEY_OVER,image32=C.KEY_OVER32)
-            toggle_damage = overlayOver(image64=C.KEY_OVER,image32=C.KEY_OVER32)
-            show_menu = overlayOver(image64=C.KEY_OVER_WIDE,image32=C.KEY_OVER32)
+            toggle_damage = overlayOver(image64=C.KEY_OVER_WIDE,image32=C.KEY_OVER32)
 
             self.fake_screen.blit(toggle_full_selection.image, C.OVERLAY_PLACEMENTS64[22])
             self.fake_screen.blit(toggle_damage.image, C.OVERLAY_PLACEMENTS64[23])
-            self.fake_screen.blit(show_menu.image, C.OVERLAY_PLACEMENTS64[24])
             
         if self.unit_selected:
             if C.SELECTION_OVERLAY_TYPE == "full":
