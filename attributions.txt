@@ -6,7 +6,7 @@ Other icons from Google Material Icons, www.iconsdb.com, or created for Turnroot
 
 GitHub user https://github.com/janbodnar made the skeleton for the web viewer
 
-StackOverflow user https://stackoverflow.com/users/8924713/thib for pixmap to data
+StackOverflow user Thib https://stackoverflow.com/users/8924713/thib for pixmap to data
 
 OGA "Insert Graphics Disc" resource pack from https://opengameart.org/users/buch / Michele "Buch" Bucelli
 
@@ -22,4 +22,9 @@ A* algorithm from https://www.redblobgames.com/pathfinding/a-star/implementation
 
 In-game menu move sound from NenadSimic on OGA
 
-In-game menu confirm sound from mixkit.co (CC0)
+In-game menu confirm sound from mixkit.co
+
+Battle transition effect from 
+maujihan maala- video at www.youtube.com/watch?v=DZz9SszSx5E, channel at https://www.youtube.com/channel/UCF6jHGy0LF2b-vEZR4uDNYA
+
+StackOverflow user Nkorth https://stackoverflow.com/users/685933/nkorth helped a LOT with pygame surface masking animations
