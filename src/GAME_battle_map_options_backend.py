@@ -120,6 +120,8 @@ def showOptions(parent):
                     
                 
         #for sliders do all the graphics for that
+        SELECTED_COLOR = "WHITE"
+        NORMAL_COLOR = "LIGHT_GRASS"
         if count < 3:
             img = overlayOver(image64="app/app_imgs/overlays/options_slider_back.png",image32="app/app_imgs/overlays/options_slider_back.png")
             parent.fake_screen.blit(img.image, (start_pos[0]+260, start_pos[1]+3))
@@ -149,7 +151,10 @@ def showOptions(parent):
                 t = "Yes"
             if C.subtitles == False:
                 t = "No"
-            tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            if count != parent.active_options_index:
+                tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            else:
+                tf = parent.fonts["SERIF_16"].render(t, 1, SELECTED_COLOR)
             parent.fake_screen.blit(tf,(start_pos[0]+390,start_pos[1]+1))
         elif count == 4:
             if C.smart_end == True:
@@ -158,7 +163,10 @@ def showOptions(parent):
             if C.smart_end == False:
                 t = "Manually"
                 h = 370
-            tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            if count != parent.active_options_index:
+                tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            else:
+                tf = parent.fonts["SERIF_16"].render(t, 1, SELECTED_COLOR)
             parent.fake_screen.blit(tf,(start_pos[0]+h,start_pos[1]+1))
         elif count == 5:
             if C.cursor_memory == True:
@@ -167,31 +175,49 @@ def showOptions(parent):
             if C.cursor_memory == False:
                 t = "Start on leader"
                 h = 350
-            tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            if count != parent.active_options_index:
+                tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            else:
+                tf = parent.fonts["SERIF_16"].render(t, 1, SELECTED_COLOR)
             parent.fake_screen.blit(tf,(start_pos[0]+h,start_pos[1]+1))
         elif count == 6:
             t = str((100-C.cursor_speed))
-            tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            if count != parent.active_options_index:
+                tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            else:
+                tf = parent.fonts["SERIF_16"].render(t, 1, SELECTED_COLOR)
             parent.fake_screen.blit(tf,(start_pos[0]+390,start_pos[1]+1))
         elif count == 7:
             if C.CURSOR_OVER == True:
                 t = "Show"
             if C.CURSOR_OVER == False:
                 t = "Hide"
-            tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            if count != parent.active_options_index:
+                tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            else:
+                tf = parent.fonts["SERIF_16"].render(t, 1, SELECTED_COLOR)
             parent.fake_screen.blit(tf,(start_pos[0]+380,start_pos[1]+1))
         elif count == 8:
             pass
         elif count == 9:
             t = C.hp_gauge_type
-            tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            if count != parent.active_options_index:
+                tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            else:
+                tf = parent.fonts["SERIF_16"].render(t, 1, SELECTED_COLOR)
             parent.fake_screen.blit(tf,(start_pos[0]+380,start_pos[1]+1))
         elif count == 10:
-            tfg = parent.fonts["SERIF_16"].render(str(C.x_axis), 1, parent.colors["LIGHT_GRASS"])
-            parent.fake_screen.blit(tfg,(start_pos[0]+380,start_pos[1]+1))
+            if count != parent.active_options_index:
+                tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            else:
+                tf = parent.fonts["SERIF_16"].render(t, 1, SELECTED_COLOR)
+            parent.fake_screen.blit(tf,(start_pos[0]+380,start_pos[1]+1))
         elif count == 11:
-            tfg = parent.fonts["SERIF_16"].render(str(C.y_axis), 1, parent.colors["LIGHT_GRASS"])
-            parent.fake_screen.blit(tfg,(start_pos[0]+380,start_pos[1]+1))
+            if count != parent.active_options_index:
+                tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
+            else:
+                tf = parent.fonts["SERIF_16"].render(t, 1, SELECTED_COLOR)
+            parent.fake_screen.blit(tf,(start_pos[0]+380,start_pos[1]+1))
                 
         text = parent.fonts["SERIF_16"].render(label, 1, parent.colors["CREAM"])
         parent.fake_screen.blit(text,start_pos)

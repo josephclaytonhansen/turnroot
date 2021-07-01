@@ -125,7 +125,7 @@ class sandbox():
         
         pygame.display.set_caption(title)
         i = pygame.image.load(icon)
-    pygame.display.set_icon(i)
+        pygame.display.set_icon(i)
 
         #Game loop
         while running:
