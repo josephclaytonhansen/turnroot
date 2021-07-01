@@ -60,13 +60,14 @@ class Constants():
         self.sfx_max_volume = l[0]
         self.music_max_volume = l[1]
         self.max_voices_volume = l[2]
-        self.uc_music = l[3]
-        self.subtitles = l[4]
-        self.smart_end = l[5]
-        self.cursor_memory = l[6]
-        self.hp_gauge_type = l[7]
-        self.x_axis = l[8]
-        self.y_axis = l[9]
+        self.subtitles = l[3]
+        self.smart_end = l[4]
+        self.cursor_memory = l[5]
+        self.hp_gauge_type = l[6]
+        self.x_axis = l[7]
+        self.y_axis = l[8]
+        self.axis_changed = False
+        
     def pack(self):
         with open("src/tmp/sc.trecd", "w") as f:
             d = [self.scale, self.fps, self.cursor_speed, self.grid_dimensions]
@@ -74,10 +75,10 @@ class Constants():
         with open("src/tmp/sc2.trecd", "w") as da:
             g = [self.CURSOR_OVER, self.GRID_OVER, self.GRID_OPACITY, self.SANS_GAME_FONT,self.SERIF_GAME_FONT,
                  self.OVERLAY_PLACEMENTS64,self.OVERLAY_PLACEMENTS32,self.GUARD_ICON,self.AVOID_ICON,self.HEAL_ICON,
-                 SELF.GUARD_ICON32,self.AVOID_ICON32,self.HEAL_ICON32,self.KEY_OVER,self.KEY_OVER_WIDE,self.KEY_OVER32,self.KEY_OVER_WIDE32,self.SELECTION_OVERLAY_TYPE]
+                 self.GUARD_ICON32,self.AVOID_ICON32,self.HEAL_ICON32,self.KEY_OVER,self.KEY_OVER_WIDE,self.KEY_OVER32,self.KEY_OVER_WIDE32,self.SELECTION_OVERLAY_TYPE]
             json.dump(g,da)
-        with open ("app/preferences.json", "r") as h:
-            l = [self.sfx_music_volume,self.music_max_volume,self.max_voices_volume,self.uc_music,self.subtitles,self.smart_end,self.cursor_memory,self.hp_gauge_type,self.x_axis,self.y_axis]
+        with open ("app/preferences.json", "w") as h:
+            l = [self.sfx_max_volume,self.music_max_volume,self.max_voices_volume,self.subtitles,self.smart_end,self.cursor_memory,self.hp_gauge_type,self.x_axis,self.y_axis]
             json.dump(l,h)
             
 C = Constants()

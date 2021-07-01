@@ -19,7 +19,7 @@ class sandbox():
         self.scales=[1.8,2.3,3]
         self.scale = 1
         self.show_grid_at_scale = True
-        self.cursor_pos = [0,0]
+        self.cursor_pos = [640,384]
         self.tile_pos = [0,0]
         self.tile_offset = [0,0]
         self.current_tile = [0,0]
@@ -44,6 +44,11 @@ class sandbox():
         self.toggle_danger_key = "W"
         self.toggle_danger_text = "Show danger area"
         
+        self.up_key = None
+        self.down_key = None
+        self.left_key = None
+        self.right_key = None
+        
         self.dimensions = dimensions
         self.last_cursor_move = pygame.time.get_ticks()
         self.last_input = pygame.time.get_ticks()
@@ -67,7 +72,7 @@ class sandbox():
         self.music_max_volume = C.music_max_volume
         self.sfx_max_volume = C.sfx_max_volume
         self.voices_max_volume = C.max_voices_volume
-        
+
         self.show_combat = False
         self.combat_transition = False
         self.fc = 0
@@ -84,8 +89,9 @@ class sandbox():
         self.show_options = False
         self.show_overlays = True
         self.active_options_index = 0
+        self.options_cursor_y_change = 0
         self.option_cursor = False
-        self.option_slider_edit = False
+        self.options_cursor_x_change = 0
 
     def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         #load variables and constants
@@ -93,6 +99,7 @@ class sandbox():
         initGrid(self)
         initFont(self)
         initOptions(self)
+        self.setAxis()
         
         #init screen
         screen = pygame.display.set_mode(self.dimensions, flags=(pygame.RESIZABLE))
@@ -135,30 +142,45 @@ class sandbox():
                 
                 #Key press
                 if event.type == pygame.KEYDOWN:
+                    if C.axis_changed:
+                        self.setAxis()
+                        C.axis_changed = False
                     self.last_input = pygame.time.get_ticks()
                     self.idle = False
-                    if event.key == pygame.K_UP:
+                    if event.key == self.up_key:
                         if self.menu_cursor == False:
                             self.moved = True
                             self.cursor_y_change = -C.scale
+                        if self.option_cursor == True:
+                            self.options_cursor_y_change -= 40
+                            self.options_cursor_x_change = 0
                         else:
                             self.menu_cursor_y_change -= 55
                             self.menu_sound_played = False
-                    elif event.key == pygame.K_DOWN:
+                    elif event.key == self.down_key:
                         if self.menu_cursor == False:
                             self.cursor_y_change = C.scale
                             self.moved = True
+                        if self.option_cursor == True:
+                            self.options_cursor_y_change += 40
+                            self.options_cursor_x_change = 0
                         else:
                             self.menu_cursor_y_change += 55
                             self.menu_sound_played = False
-                    elif event.key == pygame.K_LEFT:
+                    elif event.key == self.left_key:
                         if self.menu_cursor == False:
                             self.cursor_x_change = -C.scale
                             self.moved = True
-                    elif event.key == pygame.K_RIGHT:
+                        if self.option_cursor == True:
+                            self.options_cursor_x_change -= 5
+                            updateVolumes(self)
+                    elif event.key == self.right_key:
                         if self.menu_cursor == False:
                             self.cursor_x_change = C.scale
                             self.moved = True
+                        if self.option_cursor == True:
+                            self.options_cursor_x_change += 5
+                            updateVolumes(self)
                     #A key
                     elif event.key == pygame.K_a:
                         t = self.tiles[self.tile_pos[0]][self.tile_pos[1]]
@@ -396,7 +418,14 @@ class sandbox():
                 self.active_menu_index = int(self.menu_cursor_y_change/55)
         #move cursor on options
         elif self.option_cursor:
-            pass
+            if int(self.options_cursor_y_change/40) >= 12:
+                self.active_options_index = 12
+                self.options_cursor_y_change = 0
+            elif int(self.options_cursor_y_change/40) <= 0:
+                self.active_options_index = 0
+                self.options_cursor_y_change = 0
+            else:
+                self.active_options_index = int(self.options_cursor_y_change/40)
         #move cursor on grid
         else:
             now = pygame.time.get_ticks()
@@ -412,6 +441,9 @@ class sandbox():
             if now - self.last_cursor_move >= self.cursor_move_cooldown:
                 self.cursor_pos[0] += self.cursor_x_change
                 self.cursor_pos[1] += self.cursor_y_change
+                self.camera.x += self.cursor_x_change
+                self.camera.y += self.cursor_y_change
+                
                 #Move unit if selected
                 if self.current_unit != None:
                     #Currently the unit moves with the cursor, this is obviously not ideal but for sandboxing it's much easier than messing with A*
@@ -423,9 +455,6 @@ class sandbox():
                     self.units_pos[int(self.cursor_pos[0] / C.scale) + self.tile_offset[0]][int(self.cursor_pos[1] / C.scale) + self.tile_offset[1]] = tmp_unit
                     tmp_unit.animateSprites()
                     self.on_screen_units.add(tmp_unit)
-                    
-                if self.moved:
-                    self.cursor_history.append([self.cursor_x_change,self.cursor_y_change])
             
                 self.tile_pos[0] = int(self.cursor_pos[0] / C.scale) + self.tile_offset[0]
                 self.tile_pos[1] = int(self.cursor_pos[1] / C.scale) + self.tile_offset[1]
@@ -443,19 +472,6 @@ class sandbox():
                     t = (self.tile_pos[0], self.tile_pos[1])
                     if t not in self.move_tiles:
                         self.cursor_pos = self.tmp_cursor
-                
-                if len(self.cursor_history) > 3:
-                    camera_pan_direction = self.cursor_history[0]
-                    h_speed = C.scale
-                    v_speed = C.scale
-                    if camera_pan_direction[0] == -C.scale:
-                        self.camera.x -=h_speed
-                    elif camera_pan_direction[0] == C.scale:
-                        self.camera.x +=h_speed
-                    if camera_pan_direction[1] == C.scale:
-                        self.camera.y +=v_speed
-                    elif camera_pan_direction[1] == -C.scale:
-                        self.camera.y -=v_speed
 
                 self.last_cursor_move = now
                 
@@ -536,6 +552,20 @@ class sandbox():
         self.combat_surface.fill(self.colors["NID_PINK"])
         #UNCOMMENT THIS WHEN THERE'S SOMETHING ON THE SURFACE
         #self.combat_surface.set_colorkey(self.colors["NID_PINK"])
+    
+    def setAxis(self):
+        if C.x_axis == True:
+            self.left_key = pygame.K_RIGHT
+            self.right_key = pygame.K_LEFT
+        elif C.x_axis == False:
+            self.left_key = pygame.K_LEFT
+            self.right_key = pygame.K_RIGHT
+        if C.y_axis == True:
+            self.up_key = pygame.K_DOWN
+            self.down_key = pygame.K_UP
+        elif C.y_axis == False:
+            self.up_key = pygame.K_UP
+            self.down_key = pygame.K_DOWN
         
 bc = COLORS[random.choice(["BLACK","MUTED_NAVY","MUTED_FOREST","LIGHT_GRASS"])]            
 m = sandbox((21*C.scale,13*C.scale), "Sandbox", bc, "icon.png", bc, C.cursor_speed)

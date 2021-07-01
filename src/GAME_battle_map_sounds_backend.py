@@ -1,4 +1,5 @@
 import pygame
+from src.GAME_battle_map_graphics_backend import C
 def Fade(parent):
     d = parent.music_fade[1]
     animation_frames = round(parent.music_max_volume*100/12)
@@ -76,7 +77,11 @@ def updateVolumes(parent):
     #Call this on volume settings change!
     for s in [parent.menu_move, parent.menu_confirm, parent.transition_sound_combat]:
         s.set_volume(parent.sfx_max_volume)
-    for m in [parent.rain, parent.thunder, parent.special_music1, parent.special_music2, parent.special_music3, parent.special_music4]:
+    for m in [parent.rain]:
         m.set_volume(parent.music_max_volume)
+    C.sfx_max_volume = round(parent.sfx_max_volume,3)
+    C.music_max_volume = round(parent.music_max_volume,3)
+    C.max_voices_volume = round(parent.voices_max_volume,3)
+    C.pack()
 
 
