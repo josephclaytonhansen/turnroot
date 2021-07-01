@@ -1,6 +1,6 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
-FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, CURRENT_MENU_TILES, initGrid, initFont)
+FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, CURRENT_MENU_TILES, initGrid, initFont, centerCursor)
 from src.GAME_battle_map_sounds_backend import Fade, initMusic, updateVolumes
 from src.GAME_battle_map_options_backend import initOptions, showOptions
 
@@ -265,6 +265,7 @@ class sandbox():
                 #Key release
                 elif event.type == pygame.KEYUP:
                     if event.key in [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN]:
+                        centerCursor(self)
                         self.cursor_history = []
                         self.moved = False
                         self.cursor_x_change = 0

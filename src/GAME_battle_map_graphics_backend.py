@@ -326,3 +326,9 @@ def initFont(parent):
             font_size = size
             fontObj = pygame.font.Font(font_path, font_size)
             parent.fonts[n+"_"+str(font_size)] = fontObj
+
+def centerCursor(parent):
+    parent.camera.x = parent.cursor_pos[0] - 640
+    parent.camera.y = parent.cursor_pos[1] - 384
+
+        
