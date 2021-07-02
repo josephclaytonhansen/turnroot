@@ -118,7 +118,7 @@ class sandbox():
         self.fake_rect = self.fake_screen.get_rect()
         self.screen_rect = self.screen.get_rect()
         
-        initMusic(self,"fw")
+        initMusic(self,"cq")
         Fade(self)
         
         self.initCombat()

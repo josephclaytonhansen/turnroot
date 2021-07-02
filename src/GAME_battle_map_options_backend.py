@@ -199,11 +199,14 @@ def showOptions(parent):
             pass
         elif count == 9:
             t = C.hp_gauge_type
+            h = 380
+            if t == "Advanced":
+                h = 370
             if count != parent.active_options_index:
                 tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
             else:
                 tf = parent.fonts["SERIF_16"].render(t, 1, SELECTED_COLOR)
-            parent.fake_screen.blit(tf,(start_pos[0]+380,start_pos[1]+1))
+            parent.fake_screen.blit(tf,(start_pos[0]+h,start_pos[1]+1))
         elif count == 10:
             if C.x_axis == True:
                 t = "Yes"
