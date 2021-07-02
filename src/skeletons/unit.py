@@ -60,6 +60,7 @@ class Unit():
         self.exp_to_next_level = 100
         self.move = 0
         self.size = 1
+        self.current_hp = 0
         self.visibility_range = 0
         self.armored = False
         
@@ -169,7 +170,7 @@ class Unit():
                        "folder_index", "current_weapon_levels", "generic_stat_randomness", "generic_sprite_options",
                            "generic_gfx_options", "generic_stat_randomness_amount", "growth_rates", "current_goals",
                        "future_goals","past_classes", "armored", "status", "in_battle_dialogues", "status_duration",
-                       "current_bonuses", "current_penalties", "is_flying", "classification"]
+                       "current_bonuses", "current_penalties", "is_flying", "classification", "current_hp"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
@@ -197,7 +198,7 @@ class Unit():
                        "folder_index", "current_weapon_levels", "generic_stat_randomness", "generic_sprite_options",
                            "generic_gfx_options", "generic_stat_randomness_amount", "growth_rates","current_goals",
                        "future_goals", "past_classes", "armored", "status", "in_battle_dialogues", "status_duration",
-                       "current_bonuses","current_penalties", "is_flying", "classification"]
+                       "current_bonuses","current_penalties", "is_flying", "classification", "current_hp"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)

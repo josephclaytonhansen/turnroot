@@ -1,5 +1,6 @@
 import pygame, sys, random, json
 from src.skeletons.unit import Unit
+from src.skeletons.unit_class import unitClass
 #Overhaul later
 TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"Adds health each turn",
               30:"Raises avoidance except for flyers", 31:"Slows movement",32:"Neutral terrain",33:"Neutral terrain"}
@@ -7,17 +8,36 @@ TILE_TYPE_NAMES = {0:"Floor", 1:"Floor",2:"Floor", 3:"Heal",
               30:"Forest", 31:"Shallow Water",32:"Floor",33:"Floor"}
 #testing
 friendly_unit = Unit()
+friendly_unit.unit_class = unitClass()
+friendly_unit.unit_class.unit_class_name = "Fighter"
+friendly_unit.name = "Ya Boi"
 friendly_unit.move =4
 friendly_unit.is_friendly = True
 friendly_unit.is_ally = False
 friendly_unit.is_enemy = False
+friendly_unit.hp = 15
+friendly_unit.current_hp = 12
+friendly_unit.level = 2
+friendly_unit.exp = 36
 
+friendly_unit2 = Unit()
+friendly_unit2.unit_class = unitClass()
+friendly_unit2.name = "Chonk"
+friendly_unit2.unit_class.unit_class_name = "Chonky Boy"
+friendly_unit2.move =3
+friendly_unit2.is_friendly = True
+friendly_unit2.is_ally = False
+friendly_unit2.is_enemy = False
+friendly_unit2.hp = 22
+friendly_unit2.current_hp = 22
+friendly_unit2.level = 3
+friendly_unit2.exp = 80
+        
 enemy_unit = Unit()
-enemy_unit.move = 2
 enemy_unit.is_friendly = False
 enemy_unit.is_ally = False
 enemy_unit.is_enemy = True
-TILE_CONTENTS = {64: friendly_unit, 162:enemy_unit}
+TILE_CONTENTS = {64: friendly_unit, 162:enemy_unit, 246: friendly_unit2}
 
 FRIEND = 0
 ENEMY = 1
@@ -239,22 +259,22 @@ def showTileTexts64(parent):
     if parent.unit_selected:
         if C.SELECTION_OVERLAY_TYPE == "full":
         #get actual values from unit
-            class_text = parent.fonts["SERIF_16"].render("Soldier", 1, parent.colors["CREAM"])
+            class_text = parent.fonts["SERIF_16"].render(parent.current_unit.unit.unit_class.unit_class_name, 1, parent.colors["CREAM"])
             parent.fake_screen.blit(class_text, C.OVERLAY_PLACEMENTS64[13])
-            unit_name = parent.fonts["SERIF_28"].render("Talculí", 1, parent.colors["CREAM"])
+            unit_name = parent.fonts["SERIF_28"].render(parent.current_unit.unit.name, 1, parent.colors["CREAM"])
             parent.fake_screen.blit(unit_name, C.OVERLAY_PLACEMENTS64[14])
             hp_label = parent.fonts["SERIF_12"].render("HP", 1, parent.colors["CREAM"])
             parent.fake_screen.blit(hp_label, C.OVERLAY_PLACEMENTS64[15])
-            hp_text = parent.fonts["SERIF_28"].render("10/10", 1, parent.colors["CREAM"])
+            hp_text = parent.fonts["SERIF_28"].render(str(parent.current_unit.unit.current_hp)+"/"+str(parent.current_unit.unit.hp), 1, parent.colors["CREAM"])
             parent.fake_screen.blit(hp_text, C.OVERLAY_PLACEMENTS64[16])
-            level_text = parent.fonts["SERIF_20"].render("Lvl "+str(parent.level_number), 1, color)
+            level_text = parent.fonts["SERIF_20"].render("Lvl "+str(parent.current_unit.unit.level), 1, color)
             parent.fake_screen.blit(level_text, C.OVERLAY_PLACEMENTS64[12])
         else:
-            unit_name = parent.fonts["SERIF_20"].render("Talculí", 1, parent.colors["CREAM"])
+            unit_name = parent.fonts["SERIF_20"].render(parent.current_unit.unit.name, 1, parent.colors["CREAM"])
             parent.fake_screen.blit(unit_name, C.OVERLAY_PLACEMENTS64[18])
             hp_label = parent.fonts["SERIF_12"].render("HP", 1, parent.colors["CREAM"])
             parent.fake_screen.blit(hp_label, C.OVERLAY_PLACEMENTS64[19])
-            hp_text = parent.fonts["SERIF_20"].render("10/10", 1, parent.colors["CREAM"])
+            hp_text = parent.fonts["SERIF_20"].render(str(parent.current_unit.unit.current_hp)+"/"+str(parent.current_unit.unit.hp), 1, parent.colors["CREAM"])
             parent.fake_screen.blit(hp_text, C.OVERLAY_PLACEMENTS64[20])
 
 class Tile(pygame.sprite.Sprite):

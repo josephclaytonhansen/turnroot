@@ -391,7 +391,7 @@ class sandbox():
                 xp_bar = overlayOver(image64="app/app_imgs/overlays/xp_bar_001.png", image32="app/app_imgs/overlays/32xp_bar_001.png")
                 xp_crest = overlayOver(image64="app/app_imgs/overlays/xp_crest_001.png", image32="app/app_imgs/overlays/32xp_crest_001.png")
                 xp_count = 0
-                for x in range(int(((2*self.xp_amount)*(148/244)))):
+                for x in range(int(((2*self.current_unit.unit.exp)*(148/244)))):
                     xp_count +=1
                     xp_amount = overlayOver(image64="app/app_imgs/overlays/xp_bar_progress_001.png", image32="app/app_imgs/overlays/32xp_bar_progress_001.png")
                     self.fake_screen.blit(xp_amount.image, (C.OVERLAY_PLACEMENTS64[21][0]+(2*xp_count),C.OVERLAY_PLACEMENTS64[21][1]))
@@ -494,32 +494,32 @@ class sandbox():
         if self.current_unit != None:
             self.unit_return = [self.current_unit.x,self.current_unit.y]
             
-        #get move and damage from tile contents
-        start = self.tile_pos
-        s = start.copy()
-    
-        move = self.current_unit.unit.move
-        damage = 1
+            #get move and damage from tile contents
+            start = self.tile_pos
+            s = start.copy()
         
-        #use these to limit cursor movement
-        self.move_tiles = [(s[0],s[1])]
-        self.damage_tiles = []
-        self.unit_selected = True
-        self.idle = True
-        
-        rows = (move* 2) + 1
-        for x in range(-move+self.tile_pos[0]-damage,move+1+self.tile_pos[0]+damage):
-            for y in range(-move+self.tile_pos[1]-damage, move+1+self.tile_pos[1]+damage):
-                distance = abs(self.tile_pos[0] - x) + abs(self.tile_pos[1] - y)
-                if distance <= move:
-                    #and if tile is movable by unit/tile is empty
-                    m = moveOver(x*C.scale, y*C.scale)
-                    self.move_tiles.append((x,y))
-                    self.move_over_group.add(m)
-                elif distance > move and distance <= damage + move:
-                    d = damageOver(x*C.scale, y*C.scale)
-                    self.damage_tiles.append((x,y))
-                    self.move_over_group.add(d)
+            move = self.current_unit.unit.move
+            damage = 1
+            
+            #use these to limit cursor movement
+            self.move_tiles = [(s[0],s[1])]
+            self.damage_tiles = []
+            self.unit_selected = True
+            self.idle = True
+            
+            rows = (move* 2) + 1
+            for x in range(-move+self.tile_pos[0]-damage,move+1+self.tile_pos[0]+damage):
+                for y in range(-move+self.tile_pos[1]-damage, move+1+self.tile_pos[1]+damage):
+                    distance = abs(self.tile_pos[0] - x) + abs(self.tile_pos[1] - y)
+                    if distance <= move:
+                        #and if tile is movable by unit/tile is empty
+                        m = moveOver(x*C.scale, y*C.scale)
+                        self.move_tiles.append((x,y))
+                        self.move_over_group.add(m)
+                    elif distance > move and distance <= damage + move:
+                        d = damageOver(x*C.scale, y*C.scale)
+                        self.damage_tiles.append((x,y))
+                        self.move_over_group.add(d)
     
     def Deselect(self):
         self.move_over_group.empty()
