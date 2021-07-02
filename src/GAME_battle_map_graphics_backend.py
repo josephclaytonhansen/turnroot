@@ -37,7 +37,7 @@ enemy_unit = Unit()
 enemy_unit.is_friendly = False
 enemy_unit.is_ally = False
 enemy_unit.is_enemy = True
-TILE_CONTENTS = {64: friendly_unit, 162:enemy_unit, 246: friendly_unit2}
+TILE_CONTENTS = {64: friendly_unit, 162:enemy_unit, 280: friendly_unit2}
 
 FRIEND = 0
 ENEMY = 1
@@ -320,7 +320,9 @@ class gUnit(pygame.sprite.Sprite):
         self.rect.topleft = [self.x*C.scale,self.y*C.scale]
         
 #init tile grid- runs once
+count = 0
 def initGrid(parent):
+    global count
     parent.fullmap = pygame.Surface((C.grid_dimensions[0]*C.scale, C.grid_dimensions[1]*C.scale))
     parent.fullmap_rect = parent.fullmap.get_rect()
     max_x = int(parent.dimensions[0] / C.scale)
@@ -329,12 +331,13 @@ def initGrid(parent):
         parent.tiles[x] = {}
         parent.units_pos[x]  = {}
         for y in range(0,C.grid_dimensions[1]+1):
+            count += 1
             parent.units_pos[x][y] = None
             parent.tiles[x][y] = Tile(x,y,0,"ground")
             parent.tile_group.add(parent.tiles[x][y])
             parent.graphics.add(parent. tiles[x][y])
-            if (x+(y*C.grid_dimensions[1])) in TILE_CONTENTS:
-                parent.units_pos[x][y] = gUnit(x,y,TILE_CONTENTS[(x+(y*C.grid_dimensions[1]))])
+            if (count) in TILE_CONTENTS:
+                parent.units_pos[x][y] = gUnit(x,y,TILE_CONTENTS[count])
                 parent.on_screen_units.add(parent.units_pos[x][y])
             
     if C.GRID_OVER:
