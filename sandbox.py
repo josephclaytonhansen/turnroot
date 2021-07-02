@@ -242,6 +242,10 @@ class sandbox():
                             self.menu_active = False
                             self.Deselect()
                         #replace else with elif for different selection cases
+                        if self.option_cursor:
+                            C.pack()
+                            self.menu_active = False
+                            self.Deselect()
                         else:
                             print("nothing selected")
                     #fade out- replace trigger later

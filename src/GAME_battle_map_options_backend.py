@@ -116,9 +116,7 @@ def showOptions(parent):
                     elif C.y_axis == False:
                         C.y_axis = True
                 parent.options_cursor_x_change = 0
-        C.pack()
-                    
-                
+   
         #for sliders do all the graphics for that
         SELECTED_COLOR = "WHITE"
         NORMAL_COLOR = "LIGHT_GRASS"
@@ -207,12 +205,20 @@ def showOptions(parent):
                 tf = parent.fonts["SERIF_16"].render(t, 1, SELECTED_COLOR)
             parent.fake_screen.blit(tf,(start_pos[0]+380,start_pos[1]+1))
         elif count == 10:
+            if C.x_axis == True:
+                t = "Yes"
+            if C.x_axis == False:
+                t = "No"
             if count != parent.active_options_index:
                 tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
             else:
                 tf = parent.fonts["SERIF_16"].render(t, 1, SELECTED_COLOR)
             parent.fake_screen.blit(tf,(start_pos[0]+380,start_pos[1]+1))
         elif count == 11:
+            if C.y_axis == True:
+                t = "Yes"
+            if C.y_axis == False:
+                t = "No"
             if count != parent.active_options_index:
                 tf = parent.fonts["SERIF_16"].render(t, 1, parent.colors["LIGHT_GRASS"])
             else:
