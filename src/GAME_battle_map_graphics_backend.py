@@ -1,10 +1,23 @@
 import pygame, sys, random, json
+from src.skeletons.unit import Unit
 #Overhaul later
 TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"Adds health each turn",
               30:"Raises avoidance except for flyers", 31:"Slows movement",32:"Neutral terrain",33:"Neutral terrain"}
 TILE_TYPE_NAMES = {0:"Floor", 1:"Floor",2:"Floor", 3:"Heal",
               30:"Forest", 31:"Shallow Water",32:"Floor",33:"Floor"}
-TILE_CONTENTS = {64:"friendly_unit", 162:"enemy_unit"}
+#testing
+friendly_unit = Unit()
+friendly_unit.move =4
+friendly_unit.is_friendly = True
+friendly_unit.is_ally = False
+friendly_unit.is_enemy = False
+
+enemy_unit = Unit()
+enemy_unit.move = 2
+enemy_unit.is_friendly = False
+enemy_unit.is_ally = False
+enemy_unit.is_enemy = True
+TILE_CONTENTS = {64: friendly_unit, 162:enemy_unit}
 
 FRIEND = 0
 ENEMY = 1
@@ -275,10 +288,10 @@ class gUnit(pygame.sprite.Sprite):
         
     def animateSprites(self):
         self.sprites = []
-        if self.unit == "friendly_unit":
+        if self.unit.is_friendly and self.unit.is_ally == False:
             self.sprites.append(pygame.image.load('app/app_imgs/tmp/friendly_unit.png'))
             self.status = FRIEND
-        elif self.unit == "enemy_unit":
+        elif self.unit.is_friendly == False and self.unit.is_ally == False:
             self.sprites.append(pygame.image.load('app/app_imgs/tmp/enemy_unit.png'))
             self.status = ENEMY
         self.current_sprite = 0

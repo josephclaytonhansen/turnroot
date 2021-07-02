@@ -238,14 +238,12 @@ class sandbox():
                             self.show_grid_at_scale = True
                     #'B' key
                     elif event.key == pygame.K_s:
+                        if self.option_cursor:
+                            C.pack()
                         if self.unit_selected:
                             self.menu_active = False
                             self.Deselect()
                         #replace else with elif for different selection cases
-                        if self.option_cursor:
-                            C.pack()
-                            self.menu_active = False
-                            self.Deselect()
                         else:
                             print("nothing selected")
                     #fade out- replace trigger later
@@ -499,8 +497,8 @@ class sandbox():
         #get move and damage from tile contents
         start = self.tile_pos
         s = start.copy()
-
-        move = 4
+    
+        move = self.current_unit.unit.move
         damage = 1
         
         #use these to limit cursor movement
