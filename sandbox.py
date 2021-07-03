@@ -1,6 +1,6 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
-FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGrid, initFont, centerCursor)
+FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGrid, initFont, centerCursor, snapBack)
 from src.GAME_battle_map_sounds_backend import Fade, initMusic, updateVolumes
 from src.GAME_battle_map_options_backend import initOptions, showOptions
 
@@ -16,7 +16,7 @@ class sandbox():
         self.initMainWindow(dimensions, title, initial_bg, icon, bar_bg, cursor_speed)
     
     def initInitialValues(self, dimensions, cursor_speed):
-        self.scales=[1.8,2.3,3]
+        self.scales=[2.7,3.5,4.5]
         self.scale = 1
         self.show_grid_at_scale = True
         self.cursor_pos = [640,384]
@@ -86,6 +86,7 @@ class sandbox():
         self.menu_sound_played = False
         self.menu_active = False
         self.menu_initialized = False
+        self.move_cursor_back = False
         
         self.show_options = False
         self.show_overlays = True
@@ -155,7 +156,7 @@ class sandbox():
                         if self.option_cursor == True:
                             self.options_cursor_y_change -= 40
                             self.options_cursor_x_change = 0
-                        else:
+                        if self.menu_cursor and self.menu_active:
                             self.menu_cursor_y_change -= 55
                             self.menu_sound_played = False
                     elif event.key == self.down_key:
@@ -165,7 +166,7 @@ class sandbox():
                         if self.option_cursor == True:
                             self.options_cursor_y_change += 40
                             self.options_cursor_x_change = 0
-                        else:
+                        if self.menu_cursor and self.menu_active:
                             self.menu_cursor_y_change += 55
                             self.menu_sound_played = False
                     elif event.key == self.left_key:
@@ -184,11 +185,14 @@ class sandbox():
                             updateVolumes(self)
                     #A key
                     elif event.key == pygame.K_a:
+                        
                         t = self.tiles[self.tile_pos[0]][self.tile_pos[1]]
                         if self.unit_selected:
                             if self.menu_initialized == False:
                                 initMenuItems(self)
+                                print("init menu")
                                 self.menu_initialized = True
+                                
                             #if unit selected, "move" unit (really, confirm unit movement by deselecting the unit)
                             #This line turns on the menu for action selection
                             self.show_menu = True
@@ -220,17 +224,23 @@ class sandbox():
                                     elif action == "Dismount":
                                         self.current_unit.unit.is_currently_mounted = False
                                         initMenuItems(self)
+                                        self.move_cursor_back = True
                                         self.action_confirmed = True
+                                        self.menu_cursor = False
+                                        snapBack(self)
                                     elif action == "Mount":
                                         self.current_unit.unit.is_currently_mounted = True
                                         initMenuItems(self)
+                                        self.move_cursor_back = True
                                         self.action_confirmed = True
-
+                                        self.menu_cursor = False
+                                        snapBack(self)
                             #this line confirms the action and moves on, so it has to be after the menu
                             if self.action_confirmed:
                                 self.current_unit = None
                                 self.menu_active = False
                                 self.show_overlays = True
+                                self.menu_initialized = False
                             
                         #if a unit is selected, we confirm the movement and ...take an action... but for now we deselect
                         if self.unit_selected == False:
@@ -254,7 +264,6 @@ class sandbox():
                             C.pack()
                         if self.unit_selected:
                             self.menu_active = False
-                            self.menu_initialized = False
                             self.Deselect()
                         #replace else with elif for different selection cases
                         else:
@@ -537,18 +546,7 @@ class sandbox():
                         self.move_over_group.add(d)
     
     def Deselect(self):
-        self.move_over_group.empty()
-        #put unit back
-        if self.current_unit != None:
-            tmp_unit = self.current_unit
-            self.current_unit.kill()
-            pygame.display.update()
-            self.units_pos[tmp_unit.x][tmp_unit.y] = None
-            tmp_unit.x = self.unit_return[0]
-            tmp_unit.y = self.unit_return[1]
-            tmp_unit.animateSprites()
-            self.units_pos[tmp_unit.x][tmp_unit.y] = tmp_unit
-            self.on_screen_units.add(tmp_unit)
+        snapBack(self) 
         self.unit_selected = False
         self.current_unit = None
         #currently this exits the whole menu, which is fine, but obviously once there's more actions this should only go back one level
@@ -582,6 +580,7 @@ class sandbox():
         elif C.y_axis == False:
             self.up_key = pygame.K_UP
             self.down_key = pygame.K_DOWN
+
         
 bc = COLORS[random.choice(["BLACK","MUTED_NAVY","MUTED_FOREST","LIGHT_GRASS"])]            
 m = sandbox((21*C.scale,13*C.scale), "Sandbox", bc, "app/app_imgs/icon.png", bc, C.cursor_speed)

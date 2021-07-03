@@ -214,7 +214,7 @@ def initMenuItems(parent):
     for item in parent.current_unit.CURRENT_MENU_TILES:
         menu_index += 1
         MENU_ITEMS[menu_index] = item
-        parent.current_menu_length = len(parent.current_unit.CURRENT_MENU_TILES)
+        parent.current_menu_length = len(parent.current_unit.CURRENT_MENU_TILES)-1
 
 def showMenuTiles(parent):
     start_pos = [860,0]
@@ -371,5 +371,21 @@ def initFont(parent):
 def centerCursor(parent):
     parent.camera.x = parent.cursor_pos[0] - 640
     parent.camera.y = parent.cursor_pos[1] - 384
-
-        
+    
+def snapBack(parent):
+    parent.move_over_group.empty()
+    #put unit back
+    if parent.current_unit != None:
+        tmp_unit = parent.current_unit
+        parent.current_unit.kill()
+        pygame.display.update()
+        parent.units_pos[tmp_unit.x][tmp_unit.y] = None
+        tmp_unit.x = parent.unit_return[0]
+        tmp_unit.y = parent.unit_return[1]
+        tmp_unit.animateSprites()
+        parent.units_pos[tmp_unit.x][tmp_unit.y] = tmp_unit
+        parent.on_screen_units.add(tmp_unit)
+        parent.cursor_pos[0] = parent.unit_return[0] * C.scale
+        parent.cursor_pos[1] = parent.unit_return[1] * C.scale
+        centerCursor(parent)
+        parent.move_cursor_back = False
