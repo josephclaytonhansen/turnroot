@@ -216,6 +216,15 @@ class sandbox():
                                         self.show_menu = False
                                         self.menu_cursor = False
                                         self.option_cursor = True
+                                    #mount and dismount
+                                    elif action == "Dismount":
+                                        self.current_unit.unit.is_currently_mounted = False
+                                        initMenuItems(self)
+                                        self.action_confirmed = True
+                                    elif action == "Mount":
+                                        self.current_unit.unit.is_currently_mounted = True
+                                        initMenuItems(self)
+                                        self.action_confirmed = True
 
                             #this line confirms the action and moves on, so it has to be after the menu
                             if self.action_confirmed:
@@ -501,7 +510,10 @@ class sandbox():
             start = self.tile_pos
             s = start.copy()
         
-            move = self.current_unit.unit.move
+            if self.current_unit.unit.is_currently_mounted == False: #non-mounted units have one move stat
+                move = self.current_unit.unit.move
+            else:
+                move = self.current_unit.unit.move + self.current_unit.unit.unit_class.mounted_move_change #mounted units have two
             damage = 1
             
             #use these to limit cursor movement
