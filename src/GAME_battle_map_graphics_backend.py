@@ -9,9 +9,10 @@ TILE_TYPE_NAMES = {0:"Floor", 1:"Floor",2:"Floor", 3:"Heal",
 #testing
 friendly_unit = Unit()
 friendly_unit.unit_class = unitClass()
-friendly_unit.unit_class.unit_class_name = "Fighter"
-friendly_unit.name = "Ya Boi"
-friendly_unit.move =4
+friendly_unit.unit_class.unit_class_name = "Cowboy"
+friendly_unit.name = "Big Hat"
+friendly_unit.move =6
+friendly_unit.is_mounted = True
 friendly_unit.is_friendly = True
 friendly_unit.is_ally = False
 friendly_unit.is_enemy = False
@@ -44,18 +45,9 @@ ENEMY = 1
 ALLY = 2
 TILE = 3
 
-ALL_MENU_TILES = ["*Attack","*Assist","*Rally","Wait",
-"Items","*Mount/Dismount","*Trade","*Convoy",
- "*Rescue","*Units","*Options","*End"]
-CURRENT_MENU_TILES = ALL_MENU_TILES.copy()
-#No, it doesn't, but it does for now. Get from unit later
-#To be exact- if enemy units in danger area or move area (or max_range for weird stuff like Meteor), show attack
-#If allied units in assist max_radius, show assist
-#If allied unit adjacent, show rally/trade/rescue (if can be rescued, figure that out later)
-#If unit is mounted, show mount/dismount
-#If protagonist adjacent, or selected unit is protagonist, show convoy
-#Wait/options/units/end always show
-#So the only way there's ACTUALLY all items is if a mounted healer protagonist is adjacent to another unit
+ALL_MENU_TILES = ["Attack","Assist","Rally","Wait",
+"Items","Dismount","Trade","Convoy",
+ "Rescue","Units","Options","End"]
 
 MENU_ITEMS = {}
 
@@ -199,16 +191,22 @@ class damageOver(pygame.sprite.Sprite):
 
 def initMenuItems(parent):
     menu_index = -1
-    #rework to only include relevant menu items
-    for item in CURRENT_MENU_TILES:
+    parent.current_unit.CURRENT_MENU_TILES = ALL_MENU_TILES.copy()
+    #only include relevant menu items
+    if parent.current_unit.unit.is_mounted == False:
+        parent.current_unit.CURRENT_MENU_TILES.remove("Dismount")
+    if parent.current_unit.unit.is_lord == False: #this also needs to include adjacent!
+        parent.current_unit.CURRENT_MENU_TILES.remove("Convoy")
+    #also do rally, assist, trade, and rescue- all of these require "adjacent" data which I don't have yet
+        
+    for item in parent.current_unit.CURRENT_MENU_TILES:
         menu_index += 1
         MENU_ITEMS[menu_index] = item
-        #below- no it doesn't, but it works for now
-        parent.current_menu_length = len(CURRENT_MENU_TILES)-1
+        parent.current_menu_length = len(parent.current_unit.CURRENT_MENU_TILES)
 
 def showMenuTiles(parent):
     start_pos = [860,0]
-    for item in CURRENT_MENU_TILES:
+    for item in parent.current_unit.CURRENT_MENU_TILES:
         start_pos[1] += 55
         img = overlayOver(image64="app/app_imgs/overlays/menu_tile.png",image32="app/app_imgs/overlays/menu_tile.png")
         text = parent.fonts["SERIF_20"].render(item, 1, parent.colors["CREAM"])

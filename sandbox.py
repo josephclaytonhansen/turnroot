@@ -1,6 +1,6 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
-FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, CURRENT_MENU_TILES, initGrid, initFont, centerCursor)
+FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGrid, initFont, centerCursor)
 from src.GAME_battle_map_sounds_backend import Fade, initMusic, updateVolumes
 from src.GAME_battle_map_options_backend import initOptions, showOptions
 
@@ -85,6 +85,7 @@ class sandbox():
         self.current_menu_length = 11
         self.menu_sound_played = False
         self.menu_active = False
+        self.menu_initialized = False
         
         self.show_options = False
         self.show_overlays = True
@@ -184,8 +185,10 @@ class sandbox():
                     #A key
                     elif event.key == pygame.K_a:
                         t = self.tiles[self.tile_pos[0]][self.tile_pos[1]]
-                        
                         if self.unit_selected:
+                            if self.menu_initialized == False:
+                                initMenuItems(self)
+                                self.menu_initialized = True
                             #if unit selected, "move" unit (really, confirm unit movement by deselecting the unit)
                             #This line turns on the menu for action selection
                             self.show_menu = True
@@ -195,19 +198,19 @@ class sandbox():
                             if self.menu_cursor:
                                 if self.menu_active: #based on menu selection, do...
                                     self.show_overlays = False
-                                    action = CURRENT_MENU_TILES[self.active_menu_index]
+                                    action = self.current_unit.CURRENT_MENU_TILES[self.active_menu_index]
                                     #Attack- Currently put unit down, fade into battle. Eventually it needs to select weapon, enemy, and THEN do all that. 
-                                    if action == CURRENT_MENU_TILES[0]:
+                                    if action == "Attack":
                                         self.action_confirmed = True
                                         self.transition_sound_combat.play()
                                         self.music_fade[1] = "in"
                                         Fade(self)
                                         self.show_combat = True
                                     #Wait- put unit down and move on
-                                    elif action == CURRENT_MENU_TILES[3]:
+                                    elif action == "Wait":
                                         self.action_confirmed = True
                                     #Options- essentially do the whole menu thing all over again with Options
-                                    elif action == CURRENT_MENU_TILES[10]:
+                                    elif action == "Options":
                                         self.show_options = True
                                         self.menu_active = False
                                         self.show_menu = False
@@ -242,6 +245,7 @@ class sandbox():
                             C.pack()
                         if self.unit_selected:
                             self.menu_active = False
+                            self.menu_initialized = False
                             self.Deselect()
                         #replace else with elif for different selection cases
                         else:
@@ -341,7 +345,6 @@ class sandbox():
                 showMenuTiles(self)
                 #if menu is selected, draw the cursor on it 
                 if self.menu_cursor:
-                    initMenuItems(self)
                     showMenuCursor(self)
                     self.menu_active = True
                 
