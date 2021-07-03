@@ -195,20 +195,22 @@ def initMenuItems(parent):
     menu_index = -1
     parent.current_unit.CURRENT_MENU_TILES = ALL_MENU_TILES.copy()
     #only include relevant menu items
-    #With mounting- you can have Mount or Dismount, but never both
-    print(parent.current_unit.unit.is_currently_mounted)
-    if parent.current_unit.unit.is_mounted == False:
+    #Mounting- you can have Mount or Dismount, or neither, but never both
+    _M_ = parent.current_unit.unit.is_mounted | parent.current_unit.unit.is_flying
+    #both "mounted" and "flying" units get these options, so I've combined them into one flag
+    if not _M_:
         parent.current_unit.CURRENT_MENU_TILES.remove("Dismount")
         parent.current_unit.CURRENT_MENU_TILES.remove("Mount")
-    if parent.current_unit.unit.is_mounted == True and parent.current_unit.unit.is_currently_mounted == False:
+    if _M_ and parent.current_unit.unit.is_currently_mounted == False:
         parent.current_unit.CURRENT_MENU_TILES.remove("Dismount")
-        print("Switched to mount")
-    if parent.current_unit.unit.is_mounted == True and parent.current_unit.unit.is_currently_mounted == True:
+    if _M_ == True and parent.current_unit.unit.is_currently_mounted == True:
         parent.current_unit.CURRENT_MENU_TILES.remove("Mount")
-        print("Switched to dismount")    
+        
+    #Convoy
     if parent.current_unit.unit.is_lord == False: #this also needs to include adjacent!
         parent.current_unit.CURRENT_MENU_TILES.remove("Convoy")
     #also do rally, assist, trade, and rescue- all of these require "adjacent" data which I don't have yet
+        
     for item in parent.current_unit.CURRENT_MENU_TILES:
         menu_index += 1
         MENU_ITEMS[menu_index] = item
