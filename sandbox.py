@@ -136,7 +136,7 @@ class sandbox():
 
         #Game loop
         while running:
-            self.clock.tick(C.fps)
+            self.clock.tick(30)
             #idle timer
             now = pygame.time.get_ticks()
             if now - self.last_input >= self.idle_cooldown:
@@ -388,9 +388,10 @@ class sandbox():
             #show options, if needed
             if self.show_options:
                 showOptions(self)
-                
-            FPS = self.fonts["SERIF_12"].render(str(self.clock.get_fps()), 1, self.colors["BLACK"])
-            self.fake_screen.blit(FPS, (500,500))
+            
+            #for testing, comment out
+            #FPS = self.fonts["SERIF_12"].render(str(int(self.clock.get_fps())), 1, self.colors["BLACK"])
+            #self.fake_screen.blit(FPS, (1100,800))
             
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
