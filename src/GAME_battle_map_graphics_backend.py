@@ -369,8 +369,8 @@ def initFont(parent):
             parent.fonts[n+"_"+str(font_size)] = fontObj
 
 def centerCursor(parent):
-    parent.camera.x = parent.cursor_pos[0] - 640
-    parent.camera.y = parent.cursor_pos[1] - 384
+    parent.camera.x = parent.cursor_pos[0] - 640 * (3.5/parent.scales[parent.scale])
+    parent.camera.y = parent.cursor_pos[1] - 384 * (3.5/parent.scales[parent.scale])
     
 def snapBack(parent):
     parent.move_over_group.empty()

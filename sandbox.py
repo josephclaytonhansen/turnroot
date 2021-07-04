@@ -355,6 +355,7 @@ class sandbox():
                                 #transition complete
                                 self.combat_transition = False
                                 self.fc = 0
+                                self.show_combat = False
                             frame = frames[self.fc]
                             last_frame = pygame.time.get_ticks()
             

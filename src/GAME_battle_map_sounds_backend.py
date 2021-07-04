@@ -15,14 +15,10 @@ def Fade(parent):
         tf = parent.music_max_volume /100
 
         while thunder_s < parent.music_max_volume:
-
             if pygame.time.get_ticks() - now > increment:
                 rain_s -=.01
                 thunder_s += .01
                 frames += 1
-                if frames == animation_frames:
-                    #advance transition animation by 1
-                    pass
                 parent.rain.set_volume(rain_s)
                 parent.thunder.set_volume(thunder_s)
                 now = pygame.time.get_ticks()
@@ -38,9 +34,6 @@ def Fade(parent):
                 thunder_s -=.01
                 rain_s += .01
                 frames += 1
-                if frames == animation_frames:
-                    #advance transition animation by 1
-                    pass
                 parent.rain.set_volume(rain_s)
                 parent.thunder.set_volume(thunder_s)
                 now = pygame.time.get_ticks()
