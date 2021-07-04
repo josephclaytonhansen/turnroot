@@ -94,6 +94,11 @@ class sandbox():
         self.options_cursor_y_change = 0
         self.option_cursor = False
         self.options_cursor_x_change = 0
+        
+        self.in_battle = True
+        self.battle_phases = ["PLAYER", "ENEMY", "ALLY"]
+        self.battle_phases = self.battle_phases[0]
+        self.event_happening = False
 
     def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         #load variables and constants
@@ -330,13 +335,26 @@ class sandbox():
                 frame = frames[self.fc]
                 foreground = self.fake_screen
                 background = self.combat_surface
-                mask = pygame.image.load("app/app_imgs/transitions/map_to_combat/scene"+frame+".png").convert_alpha()
-                self.fake_screen.blit(foreground, (0,0))
-                masked = background.copy()
-                masked.set_colorkey((0,0,0))
-                masked.blit(mask, (0, 0), None, pygame.BLEND_RGBA_MULT)
-                self.fake_screen.blit(masked, (0, 0))
-                
+                #For performance reasons, the masking only happens during the transition. This will increase the FPS by like 10, at least, so it's very important
+                if self.music_fade[1] == "in":
+                    if self.fc != 11:
+                        mask = pygame.image.load("app/app_imgs/transitions/map_to_combat/scene"+frame+".png").convert_alpha()
+                        self.fake_screen.blit(foreground, (0,0))
+                        masked = background.copy()
+                        masked.set_colorkey((0,0,0))
+                        masked.blit(mask, (0, 0), None, pygame.BLEND_RGBA_MULT)
+                        self.fake_screen.blit(masked, (0, 0))
+                    else:
+                        self.fake_screen.blit(background, (0,0))
+                elif self.music_fade[1] == "out":
+                    if self.fc > 0:
+                        mask = pygame.image.load("app/app_imgs/transitions/map_to_combat/scene"+frame+".png").convert_alpha()
+                        self.fake_screen.blit(foreground, (0,0))
+                        masked = background.copy()
+                        masked.set_colorkey((0,0,0))
+                        masked.blit(mask, (0, 0), None, pygame.BLEND_RGBA_MULT)
+                        self.fake_screen.blit(masked, (0, 0))
+
                 #next frame
                 if self.combat_transition:
                     if self.music_fade[1] == "in":
@@ -371,6 +389,9 @@ class sandbox():
             if self.show_options:
                 showOptions(self)
                 
+            FPS = self.fonts["SERIF_12"].render(str(self.clock.get_fps()), 1, self.colors["BLACK"])
+            self.fake_screen.blit(FPS, (500,500))
+            
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
                 fit_to_rect = self.fake_rect.fit(self.screen_rect)
