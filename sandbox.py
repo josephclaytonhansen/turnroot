@@ -34,25 +34,33 @@ class sandbox():
         self.level_number = 1
         
         self.colors = COLORS
-         
+
+        self.k_sUP = None
+        self.k_sDOWN = None
+        self.k_sLEFT = None
+        self.k_sRIGHT = None
+        
+        self.k_dUP = pygame.K_i
+        self.k_dDOWN = pygame.K_k
+        self.k_dLEFT = pygame.K_j
+        self.k_dRIGHT = pygame.K_l
+        
+        self.kR2 = pygame.K_q
+        self.kB = pygame.K_s
+        self.kX = pygame.K_x
+        self.kA = pygame.K_a
+        self.kY = pygame.K_z
+        self.kHOME = pygame.K_SHIFT
+        self.kSELECT = pygame.K_RETURN
+        self.kR1 = pygame.K_TAB
+        self.kL2 = pygame.K_e
+        self.kL1 = pygame.K_r
+        
         self.toggle_full_key = "Q"
         self.toggle_full_key_text = "Basic overlay"
         
-        self.toggle_menu_key = "Z"
-        self.toggle_menu_text = "Menu"
-        
-        self.toggle_danger_key = "W"
+        self.toggle_danger_key = "R"
         self.toggle_danger_text = "Show danger area"
-        
-        self.up_key = None
-        self.down_key = None
-        self.left_key = None
-        self.right_key = None
-        
-        self.toggle_overlay_key = pygame.K_q
-        self.back_key = pygame.K_s
-        self.scale_key = pygame.K_x
-        self.select_key = pygame.K_a
         
         self.dimensions = dimensions
         self.last_cursor_move = pygame.time.get_ticks()
@@ -165,7 +173,7 @@ class sandbox():
                         C.axis_changed = False
                     self.last_input = pygame.time.get_ticks()
                     self.idle = False
-                    if event.key == self.up_key:
+                    if event.key == self.k_sUP:
                         if self.menu_cursor == False:
                             self.moved = True
                             self.cursor_y_change = -C.scale
@@ -177,7 +185,7 @@ class sandbox():
                             self.menu_sound_played = False
                         if self.item_cursor:
                             self.item_cursor_y_change -= 41
-                    elif event.key == self.down_key:
+                    elif event.key == self.k_sDOWN:
                         if self.menu_cursor == False:
                             self.cursor_y_change = C.scale
                             self.moved = True
@@ -189,14 +197,14 @@ class sandbox():
                             self.menu_sound_played = False
                         if self.item_cursor:
                             self.item_cursor_y_change += 41
-                    elif event.key == self.left_key:
+                    elif event.key == self.k_sLEFT:
                         if self.menu_cursor == False:
                             self.cursor_x_change = -C.scale
                             self.moved = True
                         if self.option_cursor == True:
                             self.options_cursor_x_change -= 5
                             updateVolumes(self)
-                    elif event.key == self.right_key:
+                    elif event.key == self.k_sRIGHT:
                         if self.menu_cursor == False:
                             self.cursor_x_change = C.scale
                             self.moved = True
@@ -204,7 +212,7 @@ class sandbox():
                             self.options_cursor_x_change += 5
                             updateVolumes(self)
                     #A key
-                    elif event.key == self.select_key:
+                    elif event.key == self.kA:
                         
                         t = self.tiles[self.tile_pos[0]][self.tile_pos[1]]
                         if self.unit_selected:
@@ -278,7 +286,7 @@ class sandbox():
                                 self.Deselect()
                         
                     #X key - scale map
-                    elif event.key == self.scale_key:
+                    elif event.key == self.kX:
                         self.scale +=1
                         if self.scale == 3:
                             self.scale = 0
@@ -287,7 +295,7 @@ class sandbox():
                         else:
                             self.show_grid_at_scale = True
                     #B key- deselect
-                    elif event.key == self.back_key:
+                    elif event.key == self.kB:
                         if self.option_cursor:
                             C.pack()
                         if self.unit_selected:
@@ -305,7 +313,7 @@ class sandbox():
                             Fade(self)
                     
                     #Q key - Toggle overlay mode
-                    elif event.key == self.toggle_overlay_key:
+                    elif event.key == self.kR2:
                         if self.unit_selected:
                             if C.SELECTION_OVERLAY_TYPE == "full":
                                 C.SELECTION_OVERLAY_TYPE = "small"
@@ -635,17 +643,17 @@ class sandbox():
     
     def setAxis(self):
         if C.x_axis == True:
-            self.left_key = pygame.K_RIGHT
-            self.right_key = pygame.K_LEFT
+            self.k_sLEFT = pygame.K_RIGHT
+            self.k_sRIGHT = pygame.K_LEFT
         elif C.x_axis == False:
-            self.left_key = pygame.K_LEFT
-            self.right_key = pygame.K_RIGHT
+            self.k_sLEFT = pygame.K_LEFT
+            self.k_sRIGHT = pygame.K_RIGHT
         if C.y_axis == True:
-            self.up_key = pygame.K_DOWN
-            self.down_key = pygame.K_UP
+            self.k_sUP = pygame.K_DOWN
+            self.k_sDOWN = pygame.K_UP
         elif C.y_axis == False:
-            self.up_key = pygame.K_UP
-            self.down_key = pygame.K_DOWN
+            self.k_sUP = pygame.K_UP
+            self.k_sDOWN = pygame.K_DOWN
 
         
 bc = COLORS[random.choice(["BLACK","MUTED_NAVY","MUTED_FOREST","LIGHT_GRASS"])]            
