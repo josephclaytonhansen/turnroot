@@ -239,7 +239,12 @@ def showMenuCursor(parent):
     pos = [860,55*(parent.active_menu_index+1)]
     parent.fake_screen.blit(img.image, pos)
     parent.fake_screen.blit(text, (pos[0]+5,pos[1]+5))
-    
+
+def showItemCursor(parent):
+    img = overlayOver(image64="app/app_imgs/overlays/item_selected.png",image32="app/app_imgs/overlays/item_selected.png")
+    pos = [700,41*(parent.active_item_index+1)]
+    parent.fake_screen.blit(img.image, (pos[0]+2,pos[1]+220))
+
 def showTileTexts64(parent):
     #Get actual values from tile
     parent.avoid_amount = parent.tile_pos[0]

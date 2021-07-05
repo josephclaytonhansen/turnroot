@@ -1,6 +1,6 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
-FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGrid, initFont, centerCursor, snapBack, showItems)
+FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGrid, initFont, centerCursor, snapBack, showItems, showItemCursor)
 from src.GAME_battle_map_sounds_backend import Fade, initMusic, updateVolumes
 from src.GAME_battle_map_options_backend import initOptions, showOptions
 
@@ -176,7 +176,7 @@ class sandbox():
                             self.menu_cursor_y_change -= 55
                             self.menu_sound_played = False
                         if self.item_cursor:
-                            self.item_cursor_y_change -= 40
+                            self.item_cursor_y_change -= 41
                     elif event.key == self.down_key:
                         if self.menu_cursor == False:
                             self.cursor_y_change = C.scale
@@ -188,7 +188,7 @@ class sandbox():
                             self.menu_cursor_y_change += 55
                             self.menu_sound_played = False
                         if self.item_cursor:
-                            self.item_cursor_y_change += 40
+                            self.item_cursor_y_change += 41
                     elif event.key == self.left_key:
                         if self.menu_cursor == False:
                             self.cursor_x_change = -C.scale
@@ -414,8 +414,8 @@ class sandbox():
             
             if self.show_items:
                 showItems(self)
-                #if self.item_cursor:
-                    #showItemCursor(self)
+                if self.item_cursor:
+                    showItemCursor(self)
             
             #for testing, comment out
             FPS = self.fonts["SERIF_12"].render(str(int(self.clock.get_fps())), 1, self.colors["BLACK"])
@@ -491,7 +491,7 @@ class sandbox():
                 self.active_menu_index = int(self.menu_cursor_y_change/55)
         #move cursor on options
         elif self.option_cursor:
-            if int(self.options_cursor_y_change/40) >= 12:
+            if int(self.options_cursor_y_change/40) > 12:
                 self.active_options_index = 12
                 self.options_cursor_y_change = 0
             elif int(self.options_cursor_y_change/40) <= 0:
@@ -501,10 +501,10 @@ class sandbox():
                 self.active_options_index = int(self.options_cursor_y_change/40)
         #move cursor on items
         elif self.item_cursor:
-            if int(self.item_cursor_y_change/40) >= 6:
+            if int(self.item_cursor_y_change/41) > 6:
                 self.active_item_index = 6
                 self.item_cursor_y_change = 0
-            elif int(self.item_cursor_y_change/40) <= 0:
+            elif int(self.item_cursor_y_change/41) <= 0:
                 self.active_item_index = 0
                 self.item_cursor_y_change = 0
             else:
