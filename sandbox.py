@@ -50,7 +50,7 @@ class sandbox():
         self.kX = pygame.K_x
         self.kA = pygame.K_a
         self.kY = pygame.K_z
-        self.kHOME = pygame.K_SHIFT
+        self.kHOME = pygame.K_RSHIFT
         self.kSELECT = pygame.K_RETURN
         self.kR1 = pygame.K_TAB
         self.kL2 = pygame.K_e
