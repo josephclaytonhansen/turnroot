@@ -1,6 +1,6 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
-FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGrid, initFont, centerCursor, snapBack)
+FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGrid, initFont, centerCursor, snapBack, showItems)
 from src.GAME_battle_map_sounds_backend import Fade, initMusic, updateVolumes
 from src.GAME_battle_map_options_backend import initOptions, showOptions
 
@@ -49,6 +49,11 @@ class sandbox():
         self.left_key = None
         self.right_key = None
         
+        self.toggle_overlay_key = pygame.K_q
+        self.back_key = pygame.K_s
+        self.scale_key = pygame.K_x
+        self.select_key = pygame.K_a
+        
         self.dimensions = dimensions
         self.last_cursor_move = pygame.time.get_ticks()
         self.last_input = pygame.time.get_ticks()
@@ -94,6 +99,12 @@ class sandbox():
         self.options_cursor_y_change = 0
         self.option_cursor = False
         self.options_cursor_x_change = 0
+        
+        self.item_cursor = False
+        self.item_cursor_action = None
+        self.show_items = False
+        self.active_item_index = 0
+        self.item_cursor_y_change = 0
         
         self.in_battle = True
         self.battle_phases = ["PLAYER", "ENEMY", "ALLY"]
@@ -164,6 +175,8 @@ class sandbox():
                         if self.menu_cursor and self.menu_active:
                             self.menu_cursor_y_change -= 55
                             self.menu_sound_played = False
+                        if self.item_cursor:
+                            self.item_cursor_y_change -= 40
                     elif event.key == self.down_key:
                         if self.menu_cursor == False:
                             self.cursor_y_change = C.scale
@@ -174,6 +187,8 @@ class sandbox():
                         if self.menu_cursor and self.menu_active:
                             self.menu_cursor_y_change += 55
                             self.menu_sound_played = False
+                        if self.item_cursor:
+                            self.item_cursor_y_change += 40
                     elif event.key == self.left_key:
                         if self.menu_cursor == False:
                             self.cursor_x_change = -C.scale
@@ -189,7 +204,7 @@ class sandbox():
                             self.options_cursor_x_change += 5
                             updateVolumes(self)
                     #A key
-                    elif event.key == pygame.K_a:
+                    elif event.key == self.select_key:
                         
                         t = self.tiles[self.tile_pos[0]][self.tile_pos[1]]
                         if self.unit_selected:
@@ -225,6 +240,14 @@ class sandbox():
                                         self.show_menu = False
                                         self.menu_cursor = False
                                         self.option_cursor = True
+                                    #Items- essentially do the whole menu thing all over again with Items
+                                    elif action == "Items":
+                                        self.show_items = True
+                                        self.menu_active = False
+                                        self.show_menu = False
+                                        self.menu_cursor = False
+                                        self.item_cursor = True
+                                        self.item_cursor_action = "EQUIP"
                                     #mount and dismount
                                     elif action == "Dismount":
                                         self.current_unit.unit.is_currently_mounted = False
@@ -254,8 +277,8 @@ class sandbox():
                             if self.action_confirmed:
                                 self.Deselect()
                         
-                    #scale map
-                    elif event.key == pygame.K_x:
+                    #X key - scale map
+                    elif event.key == self.scale_key:
                         self.scale +=1
                         if self.scale == 3:
                             self.scale = 0
@@ -263,8 +286,8 @@ class sandbox():
                             self.show_grid_at_scale = False
                         else:
                             self.show_grid_at_scale = True
-                    #'B' key
-                    elif event.key == pygame.K_s:
+                    #B key- deselect
+                    elif event.key == self.back_key:
                         if self.option_cursor:
                             C.pack()
                         if self.unit_selected:
@@ -281,8 +304,8 @@ class sandbox():
                             self.music_fade[1] = "out"
                             Fade(self)
                     
-                    #Shoulder, maybe? Toggle overlay mode
-                    elif event.key == pygame.K_q:
+                    #Q key - Toggle overlay mode
+                    elif event.key == self.toggle_overlay_key:
                         if self.unit_selected:
                             if C.SELECTION_OVERLAY_TYPE == "full":
                                 C.SELECTION_OVERLAY_TYPE = "small"
@@ -389,9 +412,14 @@ class sandbox():
             if self.show_options:
                 showOptions(self)
             
+            if self.show_items:
+                showItems(self)
+                #if self.item_cursor:
+                    #showItemCursor(self)
+            
             #for testing, comment out
-            #FPS = self.fonts["SERIF_12"].render(str(int(self.clock.get_fps())), 1, self.colors["BLACK"])
-            #self.fake_screen.blit(FPS, (1100,800))
+            FPS = self.fonts["SERIF_12"].render(str(int(self.clock.get_fps())), 1, self.colors["BLACK"])
+            self.fake_screen.blit(FPS, (1100,800))
             
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
@@ -471,6 +499,16 @@ class sandbox():
                 self.options_cursor_y_change = 0
             else:
                 self.active_options_index = int(self.options_cursor_y_change/40)
+        #move cursor on items
+        elif self.item_cursor:
+            if int(self.item_cursor_y_change/40) >= 6:
+                self.active_item_index = 6
+                self.item_cursor_y_change = 0
+            elif int(self.item_cursor_y_change/40) <= 0:
+                self.active_item_index = 0
+                self.item_cursor_y_change = 0
+            else:
+                self.active_item_index = int(self.item_cursor_y_change/40)
         #move cursor on grid
         else:
             now = pygame.time.get_ticks()
@@ -582,6 +620,11 @@ class sandbox():
         self.option_cursor = False
         self.active_menu_index = 0
         self.menu_cursor_y_change = 0
+        self.item_cursor = False
+        self.item_cursor_action = None
+        self.show_items = False
+        self.active_item_index = 0
+        self.item_cursor_y_change = 0
     
     def initCombat(self):
         self.combat_surface = pygame.Surface((21*C.scale, 14*C.scale))

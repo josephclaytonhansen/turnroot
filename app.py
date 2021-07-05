@@ -33,8 +33,8 @@ class retroLoader():
         self.last_cursor_move = pygame.time.get_ticks()
         self.b_pos = {64:"load",256:"create",448:"settings"}
         
-        self.move_sound = pygame.mixer.Sound("app/app_sounds/move.mp3")
-        self.select_sound = pygame.mixer.Sound("app/app_sounds/select.mp3")
+        self.move_sound = pygame.mixer.Sound("app/app_sounds/menu_move.wav")
+        self.select_sound = pygame.mixer.Sound("app/app_sounds/menu_confirm.wav")
         
         self.cursor_move_cooldown = cursor_speed
         clock = pygame.time.Clock()

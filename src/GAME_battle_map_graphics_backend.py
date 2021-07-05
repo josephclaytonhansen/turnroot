@@ -53,6 +53,8 @@ ALL_MENU_TILES = ["Attack","Assist","Rally","Wait",
 
 MENU_ITEMS = {}
 
+ITEM_poss = {"EQUIP":(700,200)}
+
 class Constants():
     def __init__(self):
         super().__init__()
@@ -224,6 +226,11 @@ def showMenuTiles(parent):
         text = parent.fonts["SERIF_20"].render(item, 1, parent.colors["CREAM"])
         parent.fake_screen.blit(img.image, start_pos)
         parent.fake_screen.blit(text, (start_pos[0]+5,start_pos[1]+5))
+        
+def showItems(parent):
+    pos = ITEM_poss[parent.item_cursor_action]
+    img = overlayOver(image64="app/app_imgs/overlays/items.png",image32="app/app_imgs/overlays/items.png")
+    parent.fake_screen.blit(img.image, pos)
 
 def showMenuCursor(parent):
     item = MENU_ITEMS[parent.active_menu_index]
