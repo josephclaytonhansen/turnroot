@@ -16,7 +16,9 @@ Shield (guard_001) by Abdullah Al Noman from the Noun Project
 
 Taxicab distance equation from https://study.com/academy/lesson/taxicab-geometry-history-formula.html 
 
-A* algorithm from https://www.redblobgames.com/pathfinding/a-star/implementation.html
+A* algorithm explanation from https://www.redblobgames.com/pathfinding/a-star/implementation.html
+
+A* algorithm implementation by Andreas (https://github.com/brean) from https://github.com/brean/python-pathfinding
 
 "Top Down Earth" resource pack from https://beeler.itch.io/top-down-earth-tileset
 
