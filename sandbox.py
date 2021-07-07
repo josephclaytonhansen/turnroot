@@ -3,6 +3,11 @@ from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver
 FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGrid, initFont, centerCursor, snapBack, showItems, showItemCursor)
 from src.GAME_battle_map_sounds_backend import Fade, initMusic, updateVolumes
 from src.GAME_battle_map_options_backend import initOptions, showOptions
+from src.GAME_battle_map_ai_backend import circleToSquare
+
+from src.libs.pathfinding.core.diagonal_movement import DiagonalMovement
+from src.libs.pathfinding.core.grid import Grid
+from src.libs.pathfinding.finder.a_star import AStarFinder
 
 GRID_COLOR = "white"
 COLORS = {"CREAM":(238,238,230),"BLACK":(0,0,0),"WHITE":(255,255,255), "NID_PINK":(255,0,255),"MUTED_NAVY":(57,65,89), "MUTED_FOREST":(53,89,78), "LIGHT_GRASS":(153,207,174)}
@@ -601,6 +606,16 @@ class sandbox():
             self.idle = True
             
             rows = (move* 2) + 1
+            #the move tiles are a (Manhattan) circle, but the A* algorithim takes Euclidean squares, so this generates one
+            self.square_tiles, self.square_tiles_index = circleToSquare(rows)
+            self.real_indices = [(s[0],s[1])]
+            self.real_indices_split = []
+            #square_tiles is what goes to A*- it's 0s and 1s broken into rows
+            #square_tiles_index is 0s and 1s but all in a list. It's a helper array for the most useful data
+            #real_indices takes the data from A* and relates it to the real grid. A* will give back an (x,y) for each path tile. The Nones in real_indices are 0s in A*,
+            #but the 1s in A* are actual grid coords in real_indices. And because the tiles are 1 to 1, every T/F (on path/not on path) A* returns
+            #is equal to an (x,y) on the grid. Note that real_indices isn't broken into rows- so we split it. A* > real_indices_split = path > grid
+
             for x in range(-move+self.tile_pos[0]-damage,move+1+self.tile_pos[0]+damage):
                 for y in range(-move+self.tile_pos[1]-damage, move+1+self.tile_pos[1]+damage):
                     distance = abs(self.tile_pos[0] - x) + abs(self.tile_pos[1] - y)
@@ -609,10 +624,17 @@ class sandbox():
                         m = moveOver(x*C.scale, y*C.scale)
                         self.move_tiles.append((x,y))
                         self.move_over_group.add(m)
+                        if self.square_tiles_index[len(self.move_tiles)] == "1":
+                            self.real_indices.append((x,y))
+                        else:
+                            self.real_indices.append(None)
                     elif distance > move and distance <= damage + move:
                         d = damageOver(x*C.scale, y*C.scale)
                         self.damage_tiles.append((x,y))
                         self.move_over_group.add(d)
+                        
+            for i in range(0, len(self.real_indices), rows):
+                self.real_indices_split.append(self.real_indices[i:i + rows])
     
     def Deselect(self):
         snapBack(self) 
