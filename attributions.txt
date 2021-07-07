@@ -30,3 +30,5 @@ Battle transition effect from
 maujihan maala- video at www.youtube.com/watch?v=DZz9SszSx5E, channel at https://www.youtube.com/channel/UCF6jHGy0LF2b-vEZR4uDNYA
 
 StackOverflow user Nkorth https://stackoverflow.com/users/685933/nkorth helped a LOT with pygame surface masking animations
+
+Ned Batchelder saved me five minutes with his list chunking function 
