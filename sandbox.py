@@ -4,7 +4,7 @@ FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGri
 from src.GAME_battle_map_sounds_backend import Fade, initMusic, updateVolumes
 from src.GAME_battle_map_options_backend import initOptions, showOptions
 
-from src.GAME_battle_map_ai_backend import circleToSquare
+from src.GAME_battle_map_ai_backend import circleToSquare, gridWeight
 
 from src.libs.pathfinding.core.diagonal_movement import DiagonalMovement
 from src.libs.pathfinding.core.grid import Grid
@@ -124,6 +124,8 @@ class sandbox():
         self.battle_phases = ["PLAYER", "ENEMY", "ALLY"]
         self.battle_phases = self.battle_phases[0]
         self.event_happening = False
+        
+        self.grid_to_astar = []
 
     def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         #load variables and constants
@@ -619,7 +621,12 @@ class sandbox():
                         d = damageOver(x*C.scale, y*C.scale)
                         self.damage_tiles.append((x,y))
                         self.move_over_group.add(d)
-    
+            
+            self.grid_to_astar = circleToSquare(move,s,self.move_tiles)
+            #Convert the Manhattan circle to a Euclidean square for the A*- NOTE that this does NOT take into account movement cost or obstacles, hence this:
+            gridWeight(self.grid_to_astar)
+            #doesn't work yet 
+            
     def Deselect(self):
         snapBack(self) 
         self.unit_selected = False
@@ -660,7 +667,6 @@ class sandbox():
         elif C.y_axis == False:
             self.k_sUP = pygame.K_UP
             self.k_sDOWN = pygame.K_DOWN
-
-        
+       
 bc = COLORS[random.choice(["BLACK","MUTED_NAVY","MUTED_FOREST","LIGHT_GRASS"])]            
 m = sandbox((21*C.scale,13*C.scale), "Sandbox", bc, "app/app_imgs/icon.png", bc, C.cursor_speed)
