@@ -133,7 +133,7 @@ class sandbox():
 
     def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         #init screen
-        screen = pygame.display.set_mode(dimensions, (pygame.RESIZABLE), 16)
+        screen = pygame.display.set_mode(dimensions, pygame.SHOWN, 16)
         screen.set_alpha(None)
         fake_screen = screen.copy()
         self.camera = fake_screen.get_rect()
@@ -689,5 +689,6 @@ class sandbox():
         self.path_found = True
 
        
-bc = COLORS[random.choice(["BLACK","MUTED_NAVY","MUTED_FOREST","LIGHT_GRASS"])]            
+bc = COLORS[random.choice(["BLACK","MUTED_NAVY","MUTED_FOREST"])]            
 m = sandbox((21*C.scale,13*C.scale), "Sandbox", bc, "app/app_imgs/icon.png", bc, C.cursor_speed)
+
