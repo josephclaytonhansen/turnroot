@@ -126,6 +126,9 @@ class sandbox():
         self.event_happening = False
         
         self.grid_to_astar = []
+        self.unit_return = [0,0]
+        self.l_move = 0
+        self.path_found = False
 
     def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         #load variables and constants
@@ -542,6 +545,8 @@ class sandbox():
                 self.cursor_pos[1] += self.cursor_y_change
                 self.camera.x += self.cursor_x_change
                 self.camera.y += self.cursor_y_change
+                if self.tile_pos != self.unit_return:
+                    self.path_found = False
                 
                 #Move unit if selected
                 if self.current_unit != None:
@@ -568,10 +573,14 @@ class sandbox():
                     self.cursor_pos[1] = int((C.grid_dimensions[1]-1)*C.scale/(self.scales[self.scale]/2))
                     
                 if self.unit_selected:
+                    if self.path_found == False:
+                        self.runAStar(self.grid_to_astar, self.unit_return, (self.tile_pos[0] - self.unit_return[0],self.tile_pos[1] - self.unit_return[1]), self.l_move)
                     t = (self.tile_pos[0], self.tile_pos[1])
                     if t not in self.move_tiles:
                         self.cursor_pos = self.tmp_cursor
-
+                
+                #currently this runs in the background without doing anything- testing the FPS for now. It's a placeholder, I'll use it
+                        #currently FPS drops by 3-5 frames... not ideal, hopefully FPS will improve when I'm done
                 self.last_cursor_move = now
                 
             imgX = self.cursor_pos[0]
@@ -601,6 +610,7 @@ class sandbox():
             else:
                 move = self.current_unit.unit.move + self.current_unit.unit.unit_class.mounted_move_change #mounted units have two
             damage = 1
+            self.l_move = move
             
             #use these to limit cursor movement
             self.move_tiles = [(s[0],s[1])]
@@ -667,6 +677,15 @@ class sandbox():
         elif C.y_axis == False:
             self.k_sUP = pygame.K_UP
             self.k_sDOWN = pygame.K_DOWN
+    
+    def runAStar(self,m, s, e, mo):
+        grid = Grid(matrix=m)
+        start = grid.node(mo,mo)
+        end = grid.node(e[1],e[0])
+        finder = AStarFinder(diagonal_movement=DiagonalMovement.never)
+        path, runs = finder.find_path(start, end, grid)
+        self.path_found = True
+
        
 bc = COLORS[random.choice(["BLACK","MUTED_NAVY","MUTED_FOREST","LIGHT_GRASS"])]            
 m = sandbox((21*C.scale,13*C.scale), "Sandbox", bc, "app/app_imgs/icon.png", bc, C.cursor_speed)
