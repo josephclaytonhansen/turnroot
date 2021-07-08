@@ -111,7 +111,6 @@ class Constants():
             json.dump(l,h)
             
 C = Constants()
-print(C.grid_dimensions)
 
 class cursorOver(pygame.sprite.Sprite):
     def __init__(self,x,y,color):
@@ -119,16 +118,10 @@ class cursorOver(pygame.sprite.Sprite):
         self.sprites = []
         self.x = x
         self.y = y 
-        if C.scale == 64:
-            if color == "white":
-                self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_white.png'))
-            if color == "black":
-                self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_black.png'))
-        elif C.scale == 32:
-            if color == "white":
-                self.sprites.append(pygame.image.load('app/app_imgs/32_cursor_over_white.png'))
-            if color == "black":
-                self.sprites.append(pygame.image.load('app/app_imgs/32_cursor_over_black.png'))
+        if color == "white":
+            self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_white.png').convert_alpha())
+        if color == "black":
+            self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_black.png').convert_alpha())
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
@@ -138,10 +131,7 @@ class overlayOver(pygame.sprite.Sprite):
     def __init__(self,image64,image32):
         super().__init__()
         self.sprites = []
-        if C.scale == 64:
-            self.sprites.append(pygame.image.load(image64))
-        elif C.scale == 32:
-            self.sprites.append(pygame.image.load(image32))
+        self.sprites.append(pygame.image.load(image64).convert_alpha())
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
 
@@ -153,11 +143,9 @@ class gridOver(pygame.sprite.Sprite):
         self.y = y 
         if C.scale == 64:
             if color == "white":
-                self.sprites.append(pygame.image.load('app/app_imgs/64_grid_white.png'))
+                self.sprites.append(pygame.image.load('app/app_imgs/64_grid_white.png').convert_alpha())
             elif color == "black":
-                self.sprites.append(pygame.image.load('app/app_imgs/64_grid_black.png'))
-        elif C.scale == 32:
-            pass
+                self.sprites.append(pygame.image.load('app/app_imgs/64_grid_black.png').convert_alpha())
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
@@ -170,9 +158,7 @@ class moveOver(pygame.sprite.Sprite):
         self.x = x
         self.y = y 
         if C.scale == 64:
-            self.sprites.append(pygame.image.load('app/app_imgs/64move.png'))
-        elif C.scale == 32:
-            self.sprites.append(pygame.image.load('app/app_imgs/32move.png'))
+            self.sprites.append(pygame.image.load('app/app_imgs/64move.png').convert_alpha())
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
@@ -185,9 +171,7 @@ class damageOver(pygame.sprite.Sprite):
         self.x = x
         self.y = y 
         if C.scale == 64:
-            self.sprites.append(pygame.image.load('app/app_imgs/64damage.png'))
-        elif C.scale == 32:
-            self.sprites.append(pygame.image.load('app/app_imgs/32damage.png'))
+            self.sprites.append(pygame.image.load('app/app_imgs/64damage.png').convert_alpha())
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
@@ -331,10 +315,10 @@ class gUnit(pygame.sprite.Sprite):
     def animateSprites(self):
         self.sprites = []
         if self.unit.is_friendly and self.unit.is_ally == False:
-            self.sprites.append(pygame.image.load('app/app_imgs/tmp/friendly_unit.png'))
+            self.sprites.append(pygame.image.load('app/app_imgs/tmp/friendly_unit.png').convert_alpha())
             self.status = FRIEND
         elif self.unit.is_friendly == False and self.unit.is_ally == False:
-            self.sprites.append(pygame.image.load('app/app_imgs/tmp/enemy_unit.png'))
+            self.sprites.append(pygame.image.load('app/app_imgs/tmp/enemy_unit.png').convert_alpha())
             self.status = ENEMY
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
@@ -390,7 +374,6 @@ def snapBack(parent):
     if parent.current_unit != None:
         tmp_unit = parent.current_unit
         parent.current_unit.kill()
-        pygame.display.update()
         parent.units_pos[tmp_unit.x][tmp_unit.y] = None
         tmp_unit.x = parent.unit_return[0]
         tmp_unit.y = parent.unit_return[1]

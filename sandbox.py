@@ -17,6 +17,7 @@ class sandbox():
     def __init__(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         super().__init__()
         pygame.display.init()
+        pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.mixer.init()
         pygame.font.init()
         self.initMainWindow(dimensions, title, initial_bg, icon, bar_bg, cursor_speed)
@@ -131,26 +132,28 @@ class sandbox():
         self.path_found = False
 
     def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
+        #init screen
+        screen = pygame.display.set_mode(dimensions, (pygame.RESIZABLE), 16)
+        screen.set_alpha(None)
+        fake_screen = screen.copy()
+        self.camera = fake_screen.get_rect()
+        self.fake_screen = fake_screen
+        self.screen = screen
+        self.icon = icon
+        
         #load variables and constants
         self.initInitialValues(dimensions, cursor_speed)
         initGrid(self)
         initFont(self)
         initOptions(self)
         self.setAxis()
+        pygame.event.set_allowed([pygame.QUIT, pygame.KEYDOWN, pygame.KEYUP, pygame.VIDEORESIZE])
         
-        #init screen
-        screen = pygame.display.set_mode(self.dimensions, flags=(pygame.RESIZABLE))
-        fake_screen = screen.copy()
-        self.camera = fake_screen.get_rect()
-        self.fake_screen = fake_screen
-        self.screen = screen
-        self.icon = icon
         running = True
         
         self.c_over = cursorOver(192,192,GRID_COLOR)
         
-        if C.scale == 64:
-            self.c_img = pygame.image.load("app/app_imgs/64cursor.png")
+        self.c_img = pygame.image.load("app/app_imgs/64cursor.png")
         
         self.fake_rect = self.fake_screen.get_rect()
         self.screen_rect = self.screen.get_rect()
@@ -166,7 +169,7 @@ class sandbox():
 
         #Game loop
         while running:
-            self.clock.tick(30)
+            self.clock.tick(40)
             #idle timer
             now = pygame.time.get_ticks()
             if now - self.last_input >= self.idle_cooldown:
@@ -229,7 +232,6 @@ class sandbox():
                         if self.unit_selected:
                             if self.menu_initialized == False:
                                 initMenuItems(self)
-                                print("init menu")
                                 self.menu_initialized = True
                                 
                             #if unit selected, "move" unit (really, confirm unit movement by deselecting the unit)
@@ -437,7 +439,7 @@ class sandbox():
                     showItemCursor(self)
             
             #for testing, comment out
-            FPS = self.fonts["SERIF_12"].render(str(int(self.clock.get_fps())), 1, self.colors["BLACK"])
+            FPS = self.fonts["SERIF_12"].render(str(round(self.clock.get_fps(),2)), 1, self.colors["BLACK"])
             self.fake_screen.blit(FPS, (1100,800))
             
             #fit screen to screen
