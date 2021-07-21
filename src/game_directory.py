@@ -4,22 +4,22 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 cd = os.getcwd()
-srcd = cd + '/tmp/game_dir.etmf'
+srcd = cd + '/src/tmp/game_dir.etmf'
 
 class gameDirectory():
     def __init__(self, parent):
         self.path = None
         self.path_can_change = True
+        self.parent = parent
     
     def pathDialog(self):
-        self.path = str(QFileDialog.getExistingDirectory(parent, "Select Folder"))
+        path = str(QFileDialog.getExistingDirectory(self.parent, "Select Folder"))
+        return path
     
     def changePath(self, path):
         self.path = path
 
-        if os.path.exists(self.path) == False:
-            
-            os.makedirs(self.path)
+        if os.path.exists(self.path):
             dirs = ["classes", "exp_types","sheets","units","weapon_types","weapons", "objects", "items", "exp_types",
                     "music", "graphics", "sounds", "dialogues", "events", "skills", "tactics", "skilled_blows", "game_data",
                     "levels"]

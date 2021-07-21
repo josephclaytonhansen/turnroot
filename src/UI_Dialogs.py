@@ -605,11 +605,13 @@ class textEntryDialog(QDialog):
         
         self.number = QLineEdit()
         self.number.setPlaceholderText(n)
-        self.number.setFont(font)
+        if font != None:
+            self.number.setFont(font)
         self.number.setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
         layout.addWidget(self.number)
         self.ok = QPushButton("Ok")
-        self.ok.setFont(font)
+        if font != None:
+            self.ok.setFont(font)
         self.ok.clicked.connect(self.change_value)
         layout.addWidget(self.ok)
         self.setLayout(layout)
