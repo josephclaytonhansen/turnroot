@@ -2,7 +2,6 @@ import sys, json, os
 import src.UI_colorTheme as UI_colorTheme
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from src.UI_updateJSON import updateJSON
@@ -14,6 +13,7 @@ from src.UI_unit_editor_wnd import UnitEditorWnd
 from src.UI_node_editor_wnd import NodeEditorWnd
 from src.UI_object_editor_wnd import ObjectEditorWnd
 from src.UI_portrait_editor_wnd import PortraitEditorWnd
+from src.UI_game_editor_wnd import GameEditorWnd
 from src.UI_node_preferences_dialog import NodePreferencesDialog
 from src.node_presets import NODES, Nodes
 from src.UI_WebViewer import webView
@@ -167,6 +167,12 @@ class mainN(UnitEditorWnd):
         super().__init__(parent)
         self.resize(QSize(1200,920))
         self.setMaximumSize(QSize(int(size.width()*2), int(size.height()*2)))
+        
+class mainG(GameEditorWnd):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.resize(QSize(1200,920))
+        self.setMaximumSize(QSize(int(size.width()*2), int(size.height()*2)))
 
 class mainO(ObjectEditorWnd):
     def __init__(self, parent):
@@ -241,6 +247,8 @@ class main(QMainWindow):
         self.object_editor = mainO(parent=self)
         self.m.addWidget(self.object_editor)
         self.portrait_editor = mainP(parent=self)
+        self.game_editor = mainG(parent=self)
+        self.m.addWidget(self.game_editor)
         self.m.addWidget(self.portrait_editor)
         self.m.setCurrentWidget(self.unit_editor)
         
@@ -394,8 +402,22 @@ class main(QMainWindow):
                 from main_menu_editor import main
             elif new_editor == 8:
                 from main_stores_editor import main
-            elif new_editor == 9:
-                from main_game_editor import main
+            elif new_editor == 10:
+                self.m.setCurrentWidget(self.game_editor)
+                self.menubar.setVisible(False)
+                self.fulls = True
+                self.fullScreenToggle()
+                self.resize(QSize(600,800))
+                self.setGeometry(
+    QStyle.alignedRect(
+        Qt.LeftToRight,
+        Qt.AlignCenter,
+        self.size(),
+        app.desktop().availableGeometry()
+        ))
+                self.old_pos = self.geometry()
+                self.toolbar.move(self.geometry().topLeft().x() - self.toolbar.width() - 20, self.geometry().topLeft().y() - 30)
+                self.setWindowTitle("Turnroot Game Editor")
                 
             
     def OptionsMenu(self):
@@ -504,3 +526,5 @@ def Go(go):
         window = main()
         window.show()
         a = app.exec_()
+        
+Go(True)
