@@ -19,6 +19,7 @@ class GameEditorWnd(QWidget):
         self.active_theme = active_theme
         self.check_tb = True
         #when loading, this also needs to change
+        self.weapon_rows = {}
         self.initUI()
         
         
@@ -41,7 +42,7 @@ class GameEditorWnd(QWidget):
         self.tscroll.setWidget(self.tabs)
         self.tscroll.setWidgetResizable(True)
         
-        self.tab_names = ["Essential Game Settings", "Misc", "Weapons", "Combat", "Units/Classes", "Map/Hub", "Relationships"]
+        self.tab_names = ["Essential Game Settings", "Misc", "Display", "Weapons", "Combat", "Units/Classes", "Map/Hub", "Relationships"]
         
         self.tabs_dict = {}
         for tab in self.tab_names:
@@ -64,7 +65,9 @@ class GameEditorWnd(QWidget):
         self.initWeapons()
         self.initCombat()
         self.initUC()
-        #init rest
+        self.initR()
+        self.initM()
+        self.initD()
     
     def initEsen(self):
         self.working_tab = self.tabs_dict["Essential Game Settings"]
@@ -109,9 +112,34 @@ class GameEditorWnd(QWidget):
                                                            o_list[q_list.index(q)],
                                                            colors[q_list.index(q)],
                                                            helpts[q_list.index(q)]))
+    def initD(self):
+        self.working_tab = self.tabs_dict["Display"]
+        self.working_tab_layout = self.working_tab.layout()
+        
+        q_list = ["Units can have how many skills equipped?",
+                  "Units can have how many items in inventory?",
+                  "How do skills display?",
+                  "How do units display?"
+                  ]
+        o_list = [["5", "6", "7"],
+                  ["5", "6","7","8"],
+                  ["In grid as icons", "In list as icons + name"],
+                  ["One page", "Multiple pages"]]
+        
+        colors = [[self.colors["GREY"],self.colors["GREY"],self.colors["GREY"]],
+                  [self.colors["GREY"],self.colors["GREY"],self.colors["GREY"],self.colors["GREY"]],
+                  [self.colors["BLUE"],self.colors["PURPLE"]],
+                  [self.colors["BLUE"],self.colors["PURPLE"]]
+                  ]
+        helpts = ["","","",""]
+        
+        for q in q_list:
+            self.working_tab_layout.addWidget(selectionRow(self, q,
+                                                           o_list[q_list.index(q)],
+                                                           colors[q_list.index(q)],
+                                                           helpts[q_list.index(q)]))
     
     def initWeapons(self):
-        self.weapon_rows = {}
         self.working_tab = self.tabs_dict["Weapons"]
         self.working_tab_layout = self.working_tab.layout()
         
@@ -194,10 +222,6 @@ class GameEditorWnd(QWidget):
                   "Are classes limited by previous class?",
                   "When reclassing, is there a grid of options or a list?",
                   "Can units reclass during combat, or only out of combat?",
-                  "Units can have how many skills equipped?",
-                  "Units can have how many items in inventory?",
-                  "How do skills display?",
-                  "How do units display?"
                   ]
         o_list = [["Yes", "No"],
                   ["Classes have stat growth rates", "Stat growth is just by unit rates"],
@@ -208,10 +232,6 @@ class GameEditorWnd(QWidget):
                   ["Yes", "No (units can reclass to any class)"],
                   ["List", "Grid"],
                   ["In combat", "Only out of combat"],
-                  ["5", "6", "7"],
-                  ["5", "6","7","8"],
-                  ["In grid as icons", "In list as icons + name"],
-                  ["One page", "Multiple pages"],
                   ]
         colors = [[self.colors["GREY"],self.colors["GREY"]],
                   [self.colors["GREY"],self.colors["GREY"]],
@@ -222,18 +242,99 @@ class GameEditorWnd(QWidget):
                   [self.colors["BLUE"],self.colors["PURPLE"]],
                   [self.colors["BLUE"],self.colors["PURPLE"]],
                   [self.colors["BLUE"],self.colors["PURPLE"]],
-                  [self.colors["GREY"],self.colors["GREY"],self.colors["GREY"]],
-                  [self.colors["GREY"],self.colors["GREY"],self.colors["GREY"],self.colors["GREY"]],
-                  [self.colors["BLUE"],self.colors["PURPLE"]],
-                  [self.colors["BLUE"],self.colors["PURPLE"]]
+                  
                   ]
-        helpts = ["","","","","","","","","","","","",""]
+        helpts = ["","","","","","","","",""]
         
         for q in q_list:
             self.working_tab_layout.addWidget(selectionRow(self, q,
                                                            o_list[q_list.index(q)],
                                                            colors[q_list.index(q)],
                                                            helpts[q_list.index(q)]))  
+    def initR(self):
+        self.working_tab = self.tabs_dict["Relationships"]
+        self.working_tab_layout = self.working_tab.layout()
+        
+        q_list = ["When can S level supports (marriage) occur?",
+                  "Can S level supports produce children?",
+                  "Do children units have paralogues?",
+                  "Can units 'pair up' or be assigned as 'adjutants'?",
+                  "Can units pick up or 'rescue' other units?",
+                  "Can units have linked attacks when adjacent?"
+                  ]
+        
+        o_list = [["Immediately once support is high enough", "Not until a game event"],
+                  ["Yes", "No"],
+                  ["Yes", "No"],
+                  ["Pair up", "Adjutants","Neither"],
+                  ["Yes", "No"],
+                  ["Yes", "No"]]
+        
+        colors = [[self.colors["BLUE"],self.colors["PURPLE"]],
+                  [self.colors["BLUE"],self.colors["PURPLE"]],
+                  [self.colors["BLUE"],self.colors["GREY"]],
+                  [self.colors["BLUE"],self.colors["PURPLE"],self.colors["RED"]],
+                  [self.colors["RED"],self.colors["BLUE"]],
+                  [self.colors["PURPLE"],self.colors["BLUE"]]
+                  ]
+        helpts = ["","","","","",""]
+        
+        for q in q_list:
+            w = selectionRow(self, q,
+                                                           o_list[q_list.index(q)],
+                                                           colors[q_list.index(q)],
+                                                           helpts[q_list.index(q)])
+            self.working_tab_layout.addWidget(w)
+            self.weapon_rows[q] = w
+            if q == "Do children units have paralogues?":
+                self.weapon_rows[q].setVisible(False)
+                
+    def initM(self):
+        self.working_tab = self.tabs_dict["Map/Hub"]
+        self.working_tab_layout = self.working_tab.layout()
+        
+        q_list = ["Does game have hub, map, or both?",
+                  "Do completed levels become shops?",
+                  "Are there travelling merchants?",
+                  "Can player shop in the hub?",
+                  "Does player have 'free time'?",
+                  "Can player use items on map?",
+                  "Does player choose missions from the hub or the map?",
+                  "Is hub accessed from map menu, or is map accessed from hub?"
+                  ]
+        
+        o_list = [["Map", "Hub", "Both"],
+                  ["Yes", "No"],
+                  ["Yes", "No"],
+                  ["Yes", "No"],
+                  ["Yes", "No"],
+                  ["Yes", "No"],
+                  ["Map", "Hub"],
+                  ["Map goes to hub", "Hub goes to map"],]
+        
+        colors = [[self.colors["RED"],self.colors["PURPLE"],self.colors["BLUE"]],
+                  [self.colors["BLUE"],self.colors["GREY"]],
+                  [self.colors["BLUE"],self.colors["GREY"]],
+                  [self.colors["PURPLE"],self.colors["BLUE"]],
+                  [self.colors["PURPLE"],self.colors["GREY"]],
+                  [self.colors["BLUE"],self.colors["GREY"]],
+                  [self.colors["BLUE"],self.colors["GREY"]],
+                  [self.colors["BLUE"],self.colors["GREY"]]
+                  ]
+        helpts = ["","","","","","","",""]
+        
+        for q in q_list:
+            w = selectionRow(self, q,
+                                                           o_list[q_list.index(q)],
+                                                           colors[q_list.index(q)],
+                                                           helpts[q_list.index(q)])
+            self.working_tab_layout.addWidget(w)
+            self.weapon_rows[q] = w
+            if q != "Does game have hub, map, or both?":
+                self.weapon_rows[q].setVisible(False)
+            if q == "Does game have hub, map, or both?":
+                self.weapon_rows[q].setVisible(True)
+                
     def getColors(self):
         blue = "#3372b0"
         red = "#f15f2a"
@@ -247,6 +348,7 @@ class GameEditorWnd(QWidget):
             if self.sender().row.options[o] != self.sender():
                 self.sender().row.options[o].setChecked(False)
         game_options[self.sender().row_name] = self.sender().name
+        
         if self.check_tb:
             if 'What is your game called?' in game_options:
                 if 'Set game folder' in game_options:
@@ -266,7 +368,7 @@ class GameEditorWnd(QWidget):
         elif self.sender().row_name == "What is your game called?":
             h = textEntryDialog(self)
             h.exec_()
-            if h.data != None:
+            if h.data != None and h.data != "":
                 self.sender().setText(h.data)
                 game_options[self.sender().row_name] = h.data
         
@@ -276,6 +378,43 @@ class GameEditorWnd(QWidget):
                 self.weapon_rows["What does item forging do?"].setVisible(True)
             else:
                 self.weapon_rows["What does item forging do?"].setVisible(False)
+        
+        #show children paralogues
+        elif self.sender().row_name == "Can S level supports produce children?":
+            if self.sender().text() == "Yes":
+                self.weapon_rows["Do children units have paralogues?"].setVisible(True)
+            else:
+                self.weapon_rows["Do children units have paralogues?"].setVisible(False)
+        
+        #change map/hub options/visiblity based on choice( this is a big one)
+        elif self.sender().row_name == "Does game have hub, map, or both?":
+            if self.sender().text() == "Hub":
+                self.weapon_rows["Can player shop in the hub?"].setVisible(True)
+                self.weapon_rows["Does player have 'free time'?"].setVisible(True)
+                
+                self.weapon_rows["Can player use items on map?"].setVisible(False)
+                self.weapon_rows["Do completed levels become shops?"].setVisible(False)
+                self.weapon_rows["Are there travelling merchants?"].setVisible(False)
+                
+            elif self.sender().text() == "Map":
+                self.weapon_rows["Can player shop in the hub?"].setVisible(False)
+                self.weapon_rows["Does player have 'free time'?"].setVisible(False)
+                
+                self.weapon_rows["Can player use items on map?"].setVisible(True)
+                self.weapon_rows["Do completed levels become shops?"].setVisible(True)
+                self.weapon_rows["Are there travelling merchants?"].setVisible(True)
+                
+            else: #both
+                self.weapon_rows["Does player choose missions from the hub or the map?"].setVisible(True)
+                self.weapon_rows["Does player have 'free time'?"].setVisible(False)
+                self.weapon_rows["Is hub accessed from map menu, or is map accessed from hub?"].setVisible(True)
+                self.weapon_rows["Can player use items on map?"].setVisible(True)
+                self.weapon_rows["Do completed levels become shops?"].setVisible(True)
+                self.weapon_rows["Are there travelling merchants?"].setVisible(True)
+                self.weapon_rows["Can player shop in the hub?"].setVisible(True)
+                self.weapon_rows["Does player have 'free time'?"].setVisible(True)
+                
+                
                 
         print(game_options)
 
