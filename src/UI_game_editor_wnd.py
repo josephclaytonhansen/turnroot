@@ -371,6 +371,9 @@ class GameEditorWnd(QWidget):
             if h.data != None and h.data != "":
                 self.sender().setText(h.data)
                 game_options[self.sender().row_name] = h.data
+                self.game_name = h.data
+                g = gameDirectory(self)
+                g.nameSrl()
         
         #show item forging specifics
         elif self.sender().row_name == "Is item forging enabled?":

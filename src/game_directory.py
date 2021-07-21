@@ -11,10 +11,18 @@ class gameDirectory():
         self.path = None
         self.path_can_change = True
         self.parent = parent
+        self.name = self.parent.game_name
     
     def pathDialog(self):
         path = str(QFileDialog.getExistingDirectory(self.parent, "Select Folder"))
         return path
+    
+    def nameSrl(self):
+        try:
+            with open(self.path+"/id.tsrl", "w") as u:
+                json.dump(self.name, u)
+        except:
+            pass
     
     def changePath(self, path):
         self.path = path
@@ -32,6 +40,7 @@ class gameDirectory():
                 
             with open(srcd, "w") as f:
                 json.dump({"current_game_directory":self.path},f)
+                self.nameSrl()
     
     def getPath(self):
         try:
