@@ -10,7 +10,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 from src.UI_game_editor_backend import selectionRow
 from src.game_directory import gameDirectory
 from src.UI_Dialogs import textEntryDialog
-
+import json
 game_options = {}
 
 class GameEditorWnd(QWidget):
@@ -363,6 +363,7 @@ class GameEditorWnd(QWidget):
             if g.path != None:
                 self.sender().setText(g.path)
                 game_options[self.sender().row_name] = g.path
+                self.game_path = g.path
                 
         #set game name        
         elif self.sender().row_name == "What is your game called?":
@@ -416,10 +417,13 @@ class GameEditorWnd(QWidget):
                 self.weapon_rows["Are there travelling merchants?"].setVisible(True)
                 self.weapon_rows["Can player shop in the hub?"].setVisible(True)
                 self.weapon_rows["Does player have 'free time'?"].setVisible(True)
-                
-                
-                
+                     
         print(game_options)
+        try:
+            with open(self.game_path+"/dat.trsl", "w") as g:
+                json.dump(game_options, g)
+        except:
+            pass
 
 
 
