@@ -68,6 +68,15 @@ class GameEditorWnd(QWidget):
         self.initR()
         self.initM()
         self.initD()
+        
+        g = gameDirectory(self)
+        g.getPath()
+        print(g.path)
+        if g.path != None:
+            self.tabs.tabBar().setEnabled(True)
+            self.check_tb = False
+            self.es_instr.setVisible(False)
+            self.game_path = g.path
     
     def initEsen(self):
         self.working_tab = self.tabs_dict["Essential Game Settings"]
@@ -177,7 +186,7 @@ class GameEditorWnd(QWidget):
                                                            helpts[q_list.index(q)])
             self.working_tab_layout.addWidget(w)
             self.weapon_rows[q] = w
-            if q == "What does item forging do?":
+            if q == "What does item forging do?" or q == "Does encumbrance affect movement or speed?":
                 self.weapon_rows[q].setVisible(False)
                 
     def initCombat(self):
@@ -189,11 +198,13 @@ class GameEditorWnd(QWidget):
                   "Enable 'extra' experience types in addition to weapon types (i.e. riding/flying)?",
                   "Can game map have random encounters?",
                   "Is the difficulty of random encounters calculated by map location or team level?",
-                  "Can time be turned back?"
+                  "Can time be turned back?",
+                  "How much damage do criticals do?",
                   ]
         o_list = [["Yes", "No"], ["Yes", "No"],["Yes", "No"],["Yes", "No"],
                   ["Map location", "Team level"],
-                  ["Yes", "No"]
+                  ["Yes", "No"],
+                  ["2x", "2.5x", "3x"]
                   ]
         colors = [[self.colors["PURPLE"],self.colors["BLUE"]],
                   [self.colors["PURPLE"],self.colors["BLUE"]],
@@ -201,8 +212,9 @@ class GameEditorWnd(QWidget):
                   [self.colors["BLUE"],self.colors["PURPLE"]],
                   [self.colors["BLUE"],self.colors["RED"]],
                   [self.colors["PURPLE"],self.colors["RED"]],
+                  [self.colors["RED"],self.colors["GREY"],self.colors["BLUE"]],
                   ]
-        helpts = ["","","","","",""]
+        helpts = ["","","","","","",""]
         
         for q in q_list:
             self.working_tab_layout.addWidget(selectionRow(self, q,
@@ -390,6 +402,13 @@ class GameEditorWnd(QWidget):
             else:
                 self.weapon_rows["Do children units have paralogues?"].setVisible(False)
         
+        #show encumbrance options
+        elif self.sender().row_name == "Do units have encumbrance (weapon weight affecting movement/speed)?":
+            if self.sender().text() == "Yes":
+                self.weapon_rows["Does encumbrance affect movement or speed?"].setVisible(True)
+            else:
+                self.weapon_rows["Does encumbrance affect movement or speed?"].setVisible(False)
+        
         #change map/hub options/visiblity based on choice( this is a big one)
         elif self.sender().row_name == "Does game have hub, map, or both?":
             if self.sender().text() == "Hub":
@@ -417,8 +436,7 @@ class GameEditorWnd(QWidget):
                 self.weapon_rows["Are there travelling merchants?"].setVisible(True)
                 self.weapon_rows["Can player shop in the hub?"].setVisible(True)
                 self.weapon_rows["Does player have 'free time'?"].setVisible(True)
-                     
-        print(game_options)
+
         try:
             with open(self.game_path+"/dat.trsl", "w") as g:
                 json.dump(game_options, g)

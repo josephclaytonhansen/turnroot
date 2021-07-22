@@ -11,7 +11,10 @@ class gameDirectory():
         self.path = None
         self.path_can_change = True
         self.parent = parent
-        self.name = self.parent.game_name
+        try:
+            self.name = self.parent.game_name
+        except:
+            pass
     
     def pathDialog(self):
         path = str(QFileDialog.getExistingDirectory(self.parent, "Select Folder"))
@@ -19,7 +22,7 @@ class gameDirectory():
     
     def nameSrl(self):
         try:
-            with open(self.path+"/id.tsrl", "w") as u:
+            with open(self.path+"/id.trsl", "w") as u:
                 json.dump(self.name, u)
         except:
             pass
@@ -47,6 +50,10 @@ class gameDirectory():
             with open(srcd, "r") as f:
                 data = json.load(f)
                 self.path = data["current_game_directory"]
+                if os.path.exists(self.path):
+                    print("exists")
+                else:
+                    self.path = None
         except:
             #get game directory from game editor"
             pass
