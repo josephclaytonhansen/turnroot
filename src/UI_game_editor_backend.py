@@ -200,6 +200,7 @@ class checkDialog(QDialog):
         task_index = -1
         for y in self.columns:
             self.columns[y].clear()
+            qApp.processEvents()
         while task_index < TOTAL_TASKS:
             task_index += 1
             self.errors[task_index] = self.ERROR_CHECK(task_index)
