@@ -35,6 +35,20 @@ def initEsen(self):
                                                        helpts[q_list.index(q)])
         self.working_tab_layout.addWidget(w)
         self.weapon_rows[q] = w
+    
+    #check and publish
+    self.check_for_errors = QPushButton("Check game for errors")
+    self.package = QPushButton("Create game package")
+    self.check_for_errors.setMinimumHeight(48)
+    self.package.setMinimumHeight(48)
+    self.package.setStyleSheet("background-color:"+active_theme.button_alt_color+";color:"+active_theme.button_alt_text_color)
+    self.check_for_errors.setStyleSheet("background-color:"+active_theme.window_background_color+";color:"+active_theme.window_text_color)
+    self.go_row = QWidget()
+    self.go_row_layout = QHBoxLayout()
+    self.go_row.setLayout(self.go_row_layout)
+    self.go_row_layout.addWidget(self.check_for_errors)
+    self.go_row_layout.addWidget(self.package)
+    self.working_tab_layout.addWidget(self.go_row)
         
 def initMisc(self):
     self.working_tab = self.tabs_dict["Misc"]
