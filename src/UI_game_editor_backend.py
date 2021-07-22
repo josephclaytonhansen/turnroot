@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import src.UI_colorTheme as UI_colorTheme
+from src.UI_updateJSON import updateJSON
 
 def selectionRow(parent, query, options, colors, helpt):
     row = QWidget()
@@ -38,3 +40,55 @@ def selectionRow(parent, query, options, colors, helpt):
     row_layout.addWidget(help_button)
 
     return row
+
+class checkDialog(QDialog):
+    def __init__(self,parent=None):
+        data = updateJSON()
+        self.active_theme = getattr(UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        
+        self.errors = {}
+        
+        self.progress = QProgressBar(self)
+        self.test = QPushButton("Test")
+        self.test.clicked.connect(self.runTest)
+        
+        layout = QVBoxLayout()
+        layout.setContentsMargins( 8,8,8,8)
+        layout.setSpacing(0)
+        
+        column_widget = QWidget()
+        column_widget_layout = QHBoxLayout()
+        column_widget.setLayout(column_widget_layout)
+        
+        self.columns = {}
+        for x in ["Fatal Error", "Warning", "Caution"]:
+            self.columns[x] = QListWidget()
+            self.columns[x].setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+            label = QLabel(x)
+            
+            g = QWidget()
+            g_layout = QVBoxLayout()
+            g.setLayout(g_layout)
+            g_layout.addWidget(label)
+            g_layout.addWidget(self.columns[x])
+            
+            column_widget_layout.addWidget(g)
+        
+        layout.addWidget(self.test)
+        layout.addWidget(self.progress)
+        layout.addWidget(column_widget)
+        
+        self.setLayout(layout)
+        self.show()
+    
+    def runTest(self):
+        self.completed = 0
+        task_index = -1
+        while self.completed < 100:
+            task_index += 1
+            self.errors[ERROR_CHECK[task_index]] = ERROR_CHECK[task_index].run()
+            self.completed += 0.01
+            self.progress.setValue(self.completed)
+            qApp.processEvents()

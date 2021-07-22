@@ -38,6 +38,7 @@ def initEsen(self):
     
     #check and publish
     self.check_for_errors = QPushButton("Check game for errors")
+    self.check_for_errors.clicked.connect(self.checkErrors)
     self.package = QPushButton("Create game package")
     self.check_for_errors.setMinimumHeight(48)
     self.package.setMinimumHeight(48)
@@ -311,3 +312,4 @@ def initM(self):
             self.weapon_rows[q].setVisible(False)
         if q == "Does game have hub, map, or both?":
             self.weapon_rows[q].setVisible(True)
+

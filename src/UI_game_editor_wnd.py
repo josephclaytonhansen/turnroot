@@ -17,6 +17,7 @@ from src.UI_game_editor_tabs import (initEsen,
         initM,
         initD)
 from src.UI_Dialogs import textEntryDialog
+from src.UI_game_editor_backend import checkDialog
 import json
 game_options = {}
 
@@ -196,3 +197,7 @@ class GameEditorWnd(QWidget):
                 json.dump(game_options, g)
         except:
             pass
+    
+    def checkErrors(self):
+        c = checkDialog(self)
+        c.exec_()
