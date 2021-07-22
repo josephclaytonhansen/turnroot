@@ -606,25 +606,25 @@ class turnroot(colorTheme):
     node_wire_error_color = "#EF3054"
     
     node_title_color = "#f8f5da"
-    node_title_background_color = "#99d3ae"
+    node_title_background_color = "#79a38e"
     node_background_color = "#43a188"
     node_text_color = "#f8f5da"
     node_wire_color = "#f8f5da"
     
     unit_editor_rule_0 = "#E1E1B4"
-    unit_editor_rule_1 = "#A5A960"
+    unit_editor_rule_1 = "#99d3ae"
     unit_editor_rule_2 = "#377560"
     unit_editor_rule_3 = "#325066"
     unit_editor_rule_4 = "#306173"
     unit_editor_rule_5 = "#37715F"
     
-    node_outliner_label_0 = "#AE462B"
-    node_outliner_label_1 = "#534E70"
-    node_outliner_label_2 = "#DDA448"
-    node_outliner_label_3 = "#E2C044"
+    node_outliner_label_0 = "#eef797"
+    node_outliner_label_1 = "#c2ed7b"
+    node_outliner_label_2 = "#54d66c"
+    node_outliner_label_3 = "#29c287"
     
-    unit_editor_slider_color_0 = "#f6faa7"
-    unit_editor_slider_color_1 = "#EF3054"
+    unit_editor_slider_color_0 = "#78f0bc"
+    unit_editor_slider_color_1 = "#eef7c1"
 
     level_editor = ["level_editor", window_background_color,list_background_color,
                     window_text_color,
@@ -740,6 +740,14 @@ class custom(colorTheme):
                    "unit_editor_rule_3", "unit_editor_rule_4", "unit_editor_rule_5"]
 
     groups = [level_editor, node_grid, unit_editor]
+
+
+
+
+
+
+
+
 
 
 
