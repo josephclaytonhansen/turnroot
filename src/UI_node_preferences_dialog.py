@@ -20,14 +20,14 @@ from src.UI_colorTheme import (
     rainforest,charcoal,
     ocean_waves
     ,chocolate,
-    chili_pepper,custom)
+    chili_pepper,turnroot,custom)
 
 color_themes_dict = [midnight_spark,
     sand_dunes,
     rainforest,charcoal,
     ocean_waves
     ,chocolate,
-    chili_pepper,custom]
+    chili_pepper,turnroot,custom]
 
 data = {"font_size": 15, "rfont_size": 15,
         "active_theme": "midnight_spark_yellow",

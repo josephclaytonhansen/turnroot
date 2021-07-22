@@ -31,7 +31,9 @@ app.setStyle(myStyle)
 screen = app.primaryScreen()
 size = screen.size()
 
-title = "Turnroot Unit Editor" 
+title = "Turnroot Unit Editor"
+
+testing = True
 
 if os.sep == "\\":
     font_string = "Lucida Sans Unicode"
@@ -50,7 +52,8 @@ class mainS(NodeEditorWnd):
         self.setMaximumSize(QSize(int(size.width()), int(size.height())))
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.context_menu)
-        
+    
+    #this is for the skill editor; right click to add nodes
     def context_menu(self, pos):
         context = QMenu(self)
         self.tmp_pos = QCursor.pos()
@@ -527,4 +530,4 @@ def Go(go):
         window.show()
         a = app.exec_()
         
-Go(True)
+Go(testing)

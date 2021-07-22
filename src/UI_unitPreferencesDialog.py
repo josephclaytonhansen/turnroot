@@ -17,14 +17,14 @@ from src.UI_colorTheme import (
     rainforest,charcoal,
     ocean_waves
     ,chocolate,
-    chili_pepper,custom)
+    chili_pepper,turnroot,custom)
 
 color_themes_dict = [midnight_spark,
     sand_dunes,
     rainforest,charcoal,
     ocean_waves
     ,chocolate,
-    chili_pepper,custom]
+    chili_pepper,turnroot,custom]
   
 #update portion ends here
 

@@ -174,12 +174,21 @@ class checkDialog(QDialog):
                         return[FATAL_ERROR, "Many game options not set"]
                     elif len(td) < 35:
                         return [WARNING, "Some game options not set"]
-                    elif len(td) < 50:
+                    elif len(td) < 46:
                         return [CAUTION, "Some game options may not be set"]
                     else:
                         return[NO_ERROR]
             except:
                 return [FATAL_ERROR, "Game folder not set"]
+        #check unit files for portraits
+        #check unit files for names
+        #check unit files for pronouns
+        #check unit files for classes
+        #check skills for connections
+        #check skills for event flow
+        #check weapons for weapon type
+        #check weapons combat stats
+        #check weapon pricing stats
                     
         else:
             return[NO_ERROR]
