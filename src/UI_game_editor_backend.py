@@ -7,7 +7,12 @@ def selectionRow(parent, query, options, colors, helpt):
     row_layout = QHBoxLayout()
     row.setLayout(row_layout)
     row.options = {}
-
+        
+    row.dL = QLabel()
+    row.dL.setMaximumWidth(10)
+    row.dL.setPixmap(QPixmap("src/ui_icons/off.png"))
+    row_layout.addWidget(row.dL)
+    
     query_box = QLabel(query)
     row_layout.addWidget(query_box)
     
@@ -31,5 +36,5 @@ def selectionRow(parent, query, options, colors, helpt):
     help_button.setStyleSheet("background-color: "+parent.active_theme.window_background_color+"; color:"+parent.active_theme.window_text_color)
     
     row_layout.addWidget(help_button)
-    
+
     return row

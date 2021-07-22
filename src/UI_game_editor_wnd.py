@@ -84,6 +84,10 @@ class GameEditorWnd(QWidget):
             self.check_tb = False
             self.es_instr.setVisible(False)
             self.game_path = g.path
+            try:
+                self.Load()
+            except:
+                pass
            
     def getColors(self):
         blue = "#3372b0"
@@ -91,9 +95,21 @@ class GameEditorWnd(QWidget):
         purple = "#7F55c7"
         grey = "#555555"
         self.colors = {"BLUE":blue,"RED":red,"PURPLE":purple,"GREY":grey}
-        
+    
+    def Load(self):
+        self.weapon_rows["What is your game called?"].dL.setPixmap(QPixmap("src/ui_icons/on.png"))
+        self.weapon_rows["Set game folder"].dL.setPixmap(QPixmap("src/ui_icons/on.png"))
+        with open(self.game_path+"/dat.trsl", "r") as g:
+            data = json.load(g)
+        for item in self.weapon_rows:
+            if item in data:
+                self.weapon_rows[item].options[data[item]].setChecked(True)
+                self.weapon_rows[item].dL.setPixmap(QPixmap("src/ui_icons/on.png"))
+                
+    
     def toggleOption(self):
         global game_options
+        self.sender().row.dL.setPixmap(QPixmap("src/ui_icons/on.png"))
         for o in self.sender().row.options:
             if self.sender().row.options[o] != self.sender():
                 self.sender().row.options[o].setChecked(False)
@@ -180,6 +196,3 @@ class GameEditorWnd(QWidget):
                 json.dump(game_options, g)
         except:
             pass
-
-
-

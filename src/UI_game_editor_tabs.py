@@ -19,17 +19,23 @@ def initEsen(self):
     self.es_instr = QLabel("Before you can edit most of the game settings, you need to set the game name and game folder. \nAll the files you create going forward are in the game folder.\nPlease make sure the folder you choose for the game folder is empty.")
     self.working_tab_layout.addWidget(self.es_instr)
         
-    q_list = ["What is your game called?","Set game folder", "What genres apply to your game?", "What should the end credits say?", "Supply your own cover art or have one auto-generated?"]
-    o_list = [["Edit"], ["Choose folder"], ["Edit"], ["Edit"], ["Supply my own", "Auto-generate"]]
-    colors = [[self.colors["GREY"]],[self.colors["GREY"]],[self.colors["GREY"]],[self.colors["GREY"]],
-              [self.colors["GREY"],self.colors["GREY"]]]
+    q_list = ["What is your game called?","Set game folder", "What should the end credits say?", "Supply your own cover art or have one auto-generated?"]
+    o_list = [["Edit"], ["Choose folder"], ["Edit"], ["Supply my own", "Auto-generate"]]
+    colors = [[self.colors["GREY"]],
+              [self.colors["GREY"]],
+              [self.colors["GREY"]],
+              [self.colors["GREY"],
+               self.colors["GREY"]]]
     helpts = ["","","","","",""]
     
     for q in q_list:
-        self.working_tab_layout.addWidget(selectionRow(self, q,
+        w = selectionRow(self, q,
                                                        o_list[q_list.index(q)],
                                                        colors[q_list.index(q)],
-                                                       helpts[q_list.index(q)]))
+                                                       helpts[q_list.index(q)])
+        self.working_tab_layout.addWidget(w)
+        self.weapon_rows[q] = w
+        
 def initMisc(self):
     self.working_tab = self.tabs_dict["Misc"]
     self.working_tab_layout = self.working_tab.layout()
@@ -51,10 +57,13 @@ def initMisc(self):
     helpts = ["","","","","",""]
     
     for q in q_list:
-        self.working_tab_layout.addWidget(selectionRow(self, q,
+        w = selectionRow(self, q,
                                                        o_list[q_list.index(q)],
                                                        colors[q_list.index(q)],
-                                                       helpts[q_list.index(q)]))
+                                                       helpts[q_list.index(q)])
+        self.working_tab_layout.addWidget(w)
+        self.weapon_rows[q] = w
+        
 def initD(self):
     self.working_tab = self.tabs_dict["Display"]
     self.working_tab_layout = self.working_tab.layout()
@@ -77,10 +86,12 @@ def initD(self):
     helpts = ["","","",""]
     
     for q in q_list:
-        self.working_tab_layout.addWidget(selectionRow(self, q,
+        w = selectionRow(self, q,
                                                        o_list[q_list.index(q)],
                                                        colors[q_list.index(q)],
-                                                       helpts[q_list.index(q)]))
+                                                       helpts[q_list.index(q)])
+        self.working_tab_layout.addWidget(w)
+        self.weapon_rows[q] = w
 
 def initWeapons(self):
     self.working_tab = self.tabs_dict["Weapons"]
@@ -151,10 +162,13 @@ def initCombat(self):
     helpts = ["","","","","","",""]
     
     for q in q_list:
-        self.working_tab_layout.addWidget(selectionRow(self, q,
+        w = selectionRow(self, q,
                                                        o_list[q_list.index(q)],
                                                        colors[q_list.index(q)],
-                                                       helpts[q_list.index(q)]))
+                                                       helpts[q_list.index(q)])
+        self.working_tab_layout.addWidget(w)
+        self.weapon_rows[q] = w
+        
 def initUC(self):
     self.working_tab = self.tabs_dict["Units/Classes"]
     self.working_tab_layout = self.working_tab.layout()
@@ -193,10 +207,13 @@ def initUC(self):
     helpts = ["","","","","","","","",""]
     
     for q in q_list:
-        self.working_tab_layout.addWidget(selectionRow(self, q,
+        w = selectionRow(self, q,
                                                        o_list[q_list.index(q)],
                                                        colors[q_list.index(q)],
-                                                       helpts[q_list.index(q)]))  
+                                                       helpts[q_list.index(q)])
+        self.working_tab_layout.addWidget(w)
+        self.weapon_rows[q] = w
+        
 def initR(self):
     self.working_tab = self.tabs_dict["Relationships"]
     self.working_tab_layout = self.working_tab.layout()
