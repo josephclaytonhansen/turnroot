@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
-import fnmatch
+import fnmatch, os, json
 
 TOTAL_TASKS = 10
 
@@ -11,6 +11,10 @@ FATAL_ERROR = "Fatal Error"
 WARNING = "Warning"
 CAUTION = "Caution"
 NO_ERROR = "No Error"
+
+TEXT = ["#fc8dad", "#fab491", "#d7f09e"]
+BACKGROUND = ["#520219", "#612508", "#384220"]
+EC = ["Fatal Error", "Warning", "Caution"]
 
 def selectionRow(parent, query, options, colors, helpt):
     row = QWidget()
@@ -72,9 +76,9 @@ class checkDialog(QDialog):
         column_widget.setLayout(column_widget_layout)
         
         self.columns = {}
-        for x in ["Fatal Error", "Warning", "Caution"]:
+        for x in EC:
             self.columns[x] = QListWidget()
-            self.columns[x].setStyleSheet("background-color: "+self.active_theme.list_background_color+";color: "+self.active_theme.window_text_color)
+            self.columns[x].setStyleSheet("background-color: "+BACKGROUND[EC.index(x)]+";color: "+TEXT[EC.index(x)])
             label = QLabel(x)
             
             g = QWidget()
@@ -88,7 +92,8 @@ class checkDialog(QDialog):
         layout.addWidget(self.test)
         layout.addWidget(self.progress)
         layout.addWidget(column_widget)
-        
+        layout.addWidget(QLabel("'Fatal Errors' prevent your game from being playable.\n 'Warnings' won't make your game unplayable, but they may seriously affect the final game.\n 'Caution' warnings may be safely disregarded sometimes.")) 
+
         self.setLayout(layout)
         self.show()
     
@@ -107,7 +112,7 @@ class checkDialog(QDialog):
                 else:
                     return [NO_ERROR]
             except:
-                return [FATAL_ERROR, "No unit folder in game folder"]
+                return [FATAL_ERROR, "Game folder not set"]
         #test class count
         elif n == 1:
             try:
@@ -121,7 +126,7 @@ class checkDialog(QDialog):
                 else:
                     return [NO_ERROR]
             except:
-                return [FATAL_ERROR, "No class folder in game folder"]
+                return [FATAL_ERROR, "Game folder not set"]
         #test weapon type count
         elif n == 2:
             try:
@@ -135,7 +140,7 @@ class checkDialog(QDialog):
                 else:
                     return [NO_ERROR]
             except:
-                return [FATAL_ERROR, "No weapon type folder in game folder"]
+                return [FATAL_ERROR, "Game folder not set"]
         #test skills count
         elif n == 3:
             try:
@@ -149,28 +154,49 @@ class checkDialog(QDialog):
                 else:
                     return [NO_ERROR]
             except:
-                return [FATAL_ERROR, "No skills folder in game folder"]
+                return [FATAL_ERROR, "Game folder not set"]
         #test items folder
         elif n == 4:
             try:
                 dirpath = self.parent.game_path+"/items"
                 return[NO_ERROR]
             except:
-                return [FATAL_ERROR, "No items folder in game folder"]
+                return [FATAL_ERROR, "Game folder not set"]
+        #check game options
+        elif n == 5:
+            try:
+                dirpath = self.parent.game_path+"/dat.trsl"
+                with open(dirpath, "r") as f:
+                    td = json.load(f)
+                    if len(td) == 0 :
+                        return[FATAL_ERROR, "No game options set"]
+                    elif len(td) < 30:
+                        return[FATAL_ERROR, "Many game options not set"]
+                    elif len(td) < 35:
+                        return [WARNING, "Some game options not set"]
+                    elif len(td) < 50:
+                        return [CAUTION, "Some game options may not be set"]
+                    else:
+                        return[NO_ERROR]
+            except:
+                return [FATAL_ERROR, "Game folder not set"]
+                    
         else:
             return[NO_ERROR]
+
     
     def runTest(self):
         self.completed = 0
         self.added_errors = []
         task_index = -1
+        for y in self.columns:
+            self.columns[y].clear()
         while task_index < TOTAL_TASKS:
             task_index += 1
             self.errors[task_index] = self.ERROR_CHECK(task_index)
             self.completed += (100 / TOTAL_TASKS)
             self.progress.setValue(self.completed)
             for k in self.errors:
-                print(k, self.errors[k])
                 if self.errors[k][0] != "No Error":
                     if self.errors[k][1] not in self.added_errors:
                         self.columns[self.errors[k][0]].addItem(self.errors[k][1])
