@@ -51,11 +51,10 @@ class gameDirectory():
                 data = json.load(f)
                 self.path = data["current_game_directory"]
                 if os.path.exists(self.path):
-                    print("exists")
+                    pass
                 else:
                     self.path = None
         except:
-            #get game directory from game editor"
             pass
             
         
