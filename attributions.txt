@@ -32,3 +32,5 @@ maujihan maala- video at www.youtube.com/watch?v=DZz9SszSx5E, channel at https:/
 StackOverflow user Nkorth https://stackoverflow.com/users/685933/nkorth helped a LOT with pygame surface masking animations
 
 Ned Batchelder saved me five minutes with his list chunking function 
+
+"wind_1", "wind_2", and "wind_3" from OGA, "wind_combined_001" was made by me with wind_1, wind_3, and some elk sounds from National Geographic

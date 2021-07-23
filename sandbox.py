@@ -17,8 +17,6 @@ class sandbox():
     def __init__(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         super().__init__()
         pygame.display.init()
-        if CA == False:
-            pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.mixer.init()
         pygame.font.init()
         self.initMainWindow(dimensions, title, initial_bg, icon, bar_bg, cursor_speed)
