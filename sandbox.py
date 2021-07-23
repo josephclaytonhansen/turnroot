@@ -350,6 +350,8 @@ class sandbox():
                     screen = pygame.display.set_mode((int(event.size[0]), int(event.size[1])), pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.RESIZABLE)
                     self.screen_rect = self.screen.get_rect()
                     self.fullmap = pygame.transform.scale(self.fullmap, (int(self.scales[self.scale] * self.fake_screen.get_width()), int(self.scales[self.scale] * self.fake_screen.get_height())))
+                    fit_to_rect = self.fake_rect.fit(self.screen_rect)
+                    fit_to_rect.center = self.screen_rect.center
             
             screen.fill(bar_bg)
             self.fake_screen.fill(initial_bg)
@@ -379,7 +381,7 @@ class sandbox():
                 frame = frames[self.fc]
                 foreground = self.fake_screen
                 background = self.combat_surface
-                #For performance reasons, the masking only happens during the transition. This will increase the FPS by like 10, at least, so it's very important
+                #For performance reasons, the masking only happens during the transition. This will increase the FPS by 10, at least, so it's very important
                 if self.music_fade[1] == "in":
                     if self.fc != 11:
                         if CA:
@@ -450,8 +452,6 @@ class sandbox():
             
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
-                fit_to_rect = self.fake_rect.fit(self.screen_rect)
-                fit_to_rect.center = self.screen_rect.center
                 scaled = pygame.transform.smoothscale(self.fake_screen, fit_to_rect.size)
                 self.screen.blit(scaled, fit_to_rect)
             else:
