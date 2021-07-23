@@ -1,6 +1,6 @@
 import pygame, sys, random, json
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
-FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGrid, initFont, centerCursor, snapBack, showItems, showItemCursor)
+FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGrid, initFont, centerCursor, snapBack, showItems, showItemCursor, CA)
 from src.GAME_battle_map_sounds_backend import Fade, initMusic, updateVolumes
 from src.GAME_battle_map_options_backend import initOptions, showOptions
 
@@ -17,7 +17,8 @@ class sandbox():
     def __init__(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         super().__init__()
         pygame.display.init()
-        pygame.mixer.pre_init(44100, 16, 2, 4096)
+        if CA == False:
+            pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.mixer.init()
         pygame.font.init()
         self.initMainWindow(dimensions, title, initial_bg, icon, bar_bg, cursor_speed)

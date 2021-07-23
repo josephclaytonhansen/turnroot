@@ -1,6 +1,9 @@
-import pygame, sys, random, json
+import pygame, sys, random, json, os
 from src.skeletons.unit import Unit
 from src.skeletons.unit_class import unitClass
+if os.sep == "\\":
+    CA = True
+    
 #Overhaul later
 TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"Adds health each turn",
               30:"Raises avoidance except for flyers", 31:"Slows movement",32:"Neutral terrain",33:"Neutral terrain"}
@@ -119,9 +122,15 @@ class cursorOver(pygame.sprite.Sprite):
         self.x = x
         self.y = y 
         if color == "white":
-            self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_white.png').convert_alpha())
+            if CA:
+                self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_white.png').convert_alpha())
+            else:
+                self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_white.png'))
         if color == "black":
-            self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_black.png').convert_alpha())
+            if CA:
+                self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_black.png').convert_alpha())
+            else:
+                self.sprites.append(pygame.image.load('app/app_imgs/64_cursor_over_black.png'))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
@@ -131,7 +140,10 @@ class overlayOver(pygame.sprite.Sprite):
     def __init__(self,image64,image32):
         super().__init__()
         self.sprites = []
-        self.sprites.append(pygame.image.load(image64).convert_alpha())
+        if CA:
+            self.sprites.append(pygame.image.load(image64).convert_alpha())
+        else:
+            self.sprites.append(pygame.image.load(image64))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
 
@@ -143,9 +155,15 @@ class gridOver(pygame.sprite.Sprite):
         self.y = y 
         if C.scale == 64:
             if color == "white":
-                self.sprites.append(pygame.image.load('app/app_imgs/64_grid_white.png').convert_alpha())
+                if CA:
+                    self.sprites.append(pygame.image.load('app/app_imgs/64_grid_white.png').convert_alpha())
+                else:
+                    self.sprites.append(pygame.image.load('app/app_imgs/64_grid_white.png'))
             elif color == "black":
-                self.sprites.append(pygame.image.load('app/app_imgs/64_grid_black.png').convert_alpha())
+                if CA:
+                    self.sprites.append(pygame.image.load('app/app_imgs/64_grid_black.png').convert_alpha())
+                else:
+                    self.sprites.append(pygame.image.load('app/app_imgs/64_grid_black.png'))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
@@ -158,7 +176,10 @@ class moveOver(pygame.sprite.Sprite):
         self.x = x
         self.y = y 
         if C.scale == 64:
-            self.sprites.append(pygame.image.load('app/app_imgs/64move.png').convert_alpha())
+            if CA:
+                self.sprites.append(pygame.image.load('app/app_imgs/64move.png').convert_alpha())
+            else:
+                self.sprites.append(pygame.image.load('app/app_imgs/64move.png'))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
@@ -171,7 +192,10 @@ class damageOver(pygame.sprite.Sprite):
         self.x = x
         self.y = y 
         if C.scale == 64:
-            self.sprites.append(pygame.image.load('app/app_imgs/64damage.png').convert_alpha())
+            if CA:
+                self.sprites.append(pygame.image.load('app/app_imgs/64damage.png').convert_alpha())
+            else:
+                self.sprites.append(pygame.image.load('app/app_imgs/64damage.png'))
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
         self.rect = self.image.get_rect()
@@ -315,10 +339,16 @@ class gUnit(pygame.sprite.Sprite):
     def animateSprites(self):
         self.sprites = []
         if self.unit.is_friendly and self.unit.is_ally == False:
-            self.sprites.append(pygame.image.load('app/app_imgs/tmp/friendly_unit.png').convert_alpha())
+            if CA:
+                self.sprites.append(pygame.image.load('app/app_imgs/tmp/friendly_unit.png').convert_alpha())
+            else:
+                self.sprites.append(pygame.image.load('app/app_imgs/tmp/friendly_unit.png'))
             self.status = FRIEND
         elif self.unit.is_friendly == False and self.unit.is_ally == False:
-            self.sprites.append(pygame.image.load('app/app_imgs/tmp/enemy_unit.png').convert_alpha())
+            if CA:
+                self.sprites.append(pygame.image.load('app/app_imgs/tmp/enemy_unit.png').convert_alpha())
+            else:
+                self.sprites.append(pygame.image.load('app/app_imgs/tmp/enemy_unit.png'))
             self.status = ENEMY
         self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
