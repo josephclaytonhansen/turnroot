@@ -134,7 +134,7 @@ class sandbox():
 
     def initMainWindow(self, dimensions, title, initial_bg, icon, bar_bg, cursor_speed):
         #init screen
-        screen = pygame.display.set_mode(dimensions, pygame.SHOWN, 16)
+        screen = pygame.display.set_mode(dimensions, (pygame.SHOWN | pygame.RESIZABLE), 16)
         screen.set_alpha(None)
         fake_screen = screen.copy()
         self.camera = fake_screen.get_rect()
@@ -170,7 +170,7 @@ class sandbox():
 
         #Game loop
         while running:
-            self.clock.tick(40)
+            self.clock.tick(60)
             #idle timer
             now = pygame.time.get_ticks()
             if now - self.last_input >= self.idle_cooldown:
@@ -349,10 +349,10 @@ class sandbox():
                 elif event.type == pygame.VIDEORESIZE:
                     screen = pygame.display.set_mode((int(event.size[0]), int(event.size[1])), pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.RESIZABLE)
                     self.screen_rect = self.screen.get_rect()
+                    self.fullmap = pygame.transform.scale(self.fullmap, (int(self.scales[self.scale] * self.fake_screen.get_width()), int(self.scales[self.scale] * self.fake_screen.get_height())))
             
             screen.fill(bar_bg)
             self.fake_screen.fill(initial_bg)
-            
             #draw grid
             self.tile_group.draw(self.fullmap)
             #draw units on grid
@@ -362,8 +362,7 @@ class sandbox():
             self.showCursor()
                 
             #draw map
-            self.fullmap_scaled = pygame.transform.scale(self.fullmap, (int(self.scales[self.scale] * self.fake_screen.get_width()), int(self.scales[self.scale] * self.fake_screen.get_height())))
-            self.fake_screen.blit(self.fullmap_scaled, (0,0), self.camera)
+            self.fake_screen.blit(self.fullmap, (0,0), self.camera)
             
             #draw overlays and overlay text
             if self.show_overlays:
@@ -383,7 +382,10 @@ class sandbox():
                 #For performance reasons, the masking only happens during the transition. This will increase the FPS by like 10, at least, so it's very important
                 if self.music_fade[1] == "in":
                     if self.fc != 11:
-                        mask = pygame.image.load("app/app_imgs/transitions/map_to_combat/scene"+frame+".png").convert_alpha()
+                        if CA:
+                            mask = pygame.image.load("app/app_imgs/transitions/map_to_combat/scene"+frame+".png").convert_alpha()
+                        else:
+                            mask = pygame.image.load("app/app_imgs/transitions/map_to_combat/scene"+frame+".png")
                         self.fake_screen.blit(foreground, (0,0))
                         masked = background.copy()
                         masked.set_colorkey((0,0,0))
@@ -393,7 +395,10 @@ class sandbox():
                         self.fake_screen.blit(background, (0,0))
                 elif self.music_fade[1] == "out":
                     if self.fc > 0:
-                        mask = pygame.image.load("app/app_imgs/transitions/map_to_combat/scene"+frame+".png").convert_alpha()
+                        if CA:
+                            mask = pygame.image.load("app/app_imgs/transitions/map_to_combat/scene"+frame+".png").convert_alpha()
+                        else:
+                            mask = pygame.image.load("app/app_imgs/transitions/map_to_combat/scene"+frame+".png")
                         self.fake_screen.blit(foreground, (0,0))
                         masked = background.copy()
                         masked.set_colorkey((0,0,0))
