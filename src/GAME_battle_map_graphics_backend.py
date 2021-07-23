@@ -3,6 +3,8 @@ from src.skeletons.unit import Unit
 from src.skeletons.unit_class import unitClass
 if os.sep == "\\":
     CA = True
+else:
+    CA = False
     
 #Overhaul later
 TILE_TYPES = {0:"Neutral terrain", 1:"Neutral terrain",2:"Neutral terrain", 3:"Adds health each turn",

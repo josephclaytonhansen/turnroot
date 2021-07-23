@@ -42,6 +42,7 @@ class sandbox():
         self.level_number = 1
         
         self.colors = COLORS
+        self.debug = False
 
         self.k_sUP = None
         self.k_sDOWN = None
@@ -325,6 +326,12 @@ class sandbox():
                             self.combat_transition = True
                             self.music_fade[1] = "out"
                             Fade(self)
+                            
+                    elif event.key == pygame.K_CAPSLOCK:
+                        if self.debug == True:
+                            self.debug = False
+                        else:
+                            self.debug = True
                     
                     #Q key - Toggle overlay mode
                     elif event.key == self.kR2:
@@ -447,8 +454,12 @@ class sandbox():
                     showItemCursor(self)
             
             #for testing, comment out
-            FPS = self.fonts["SERIF_12"].render(str(round(self.clock.get_fps(),2)), 1, self.colors["BLACK"])
-            self.fake_screen.blit(FPS, (1100,800))
+            if self.debug:
+                FPS = self.fonts["SERIF_12"].render(str(round(self.clock.get_fps(),2)), 1, self.colors["BLACK"])
+                self.fake_screen.blit(FPS, (1260,10))
+                FRAMES = self.fonts["SERIF_12"].render(str(pygame.time.get_ticks()), 1, self.colors["BLACK"])
+                self.fake_screen.blit(FRAMES, (1260,26))
+                
             
             #fit screen to screen
             if self.screen_rect.size != self.dimensions:
