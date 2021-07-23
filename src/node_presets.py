@@ -19,7 +19,9 @@ from src.node_presets_passive_skills import (combat_start, unit_initiates_combat
                                              weapon_experience_extra, level_experience_extra,
                                              ally_is_mounted, ally_is_male, ally_is_female,
                                              level_is_night, level_is_raining, level_is_foggy,
-                                             grant_bonus_to_unit_spd, grant_bonus_to_ally_spd)
+                                             grant_bonus_to_unit_spd, grant_bonus_to_ally_spd,
+                                             unit_is_flying, foe_is_flying, unit_is_paired,
+                                             damage_type_is_magic, damage_type_is_physical)
 
 from src.node_presets_combat_skills import (grant_bonus_to_unit_hit, grant_bonus_to_unit_avo,
                                             grant_bonus_to_unit_crt, unit_does_less_more_damage,
@@ -498,7 +500,10 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Foe -Charisma":penalize_foe_chr,"Foe -Dexterity":penalize_foe_dex,"Foe -Luck":penalize_foe_luc,
          "Turn is Odd":turn_is_odd, "Turn is Even":turn_is_even,
          "Disable Foe‘s 'Can Counter-Attack From Any Distance'":disable_counterattack_from_any_distance,
-         "Reset Attack Priority":reset_attack_priority,"Disable Foe‘s 'Effective Against X'":disable_effective_against}
+         "Reset Attack Priority":reset_attack_priority,"Disable Foe‘s 'Effective Against X'":disable_effective_against,
+         "Unit is Flying":unit_is_flying, "Foe is Flying":foe_is_flying,
+         "Unit is Paired Up":unit_is_paired,"Damage Type is Magic":damage_type_is_magic,
+         "Damage Type is Physical":damage_type_is_physical}
 
         
 NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Attacks",
@@ -525,7 +530,8 @@ NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Atta
                     "Foe -Defense","Foe -Resistance","Foe -Charisma","Foe -Luck", "Turn is Odd", "Turn is Even",
                     "Disable Foe‘s 'Effective Against X'", "Disable Foe‘s 'Can Counter-Attack From Any Distance'",
                     "Reset Attack Priority","Unit +Bonus Dexterity","Ally +Bonus Dexterity",
-                    "Foe -Dexterity"])
+                    "Foe -Dexterity","Unit is Flying", "Foe is Flying", "Unit is Paired Up",
+                    "Damage Type is Magic", "Damage Type is Physical"])
     
 class Nodes():
     def __init__(self, scene, name):

@@ -819,3 +819,15 @@ class unit_is_flying(is_):
 class foe_is_flying(is_):
     def __init__(self, scene, hexe="fif", which = "Foe", isa = "Flying"):
             super().__init__(isa, scene, which, hexe)
+            
+class unit_is_paired(is_):
+    def __init__(self, scene, hexe="uip", which = "Unit", isa = "Paired Up"):
+            super().__init__(isa, scene, which, hexe)
+            
+class damage_type_is_magic(is_):
+    def __init__(self, scene, hexe="dtm", which = "Damage Type", isa = "Magic"):
+            super().__init__(isa, scene, which, hexe)
+            
+class damage_type_is_physical(is_):
+    def __init__(self, scene, hexe="dtp", which = "Damage Type", isa = "Physical"):
+            super().__init__(isa, scene, which, hexe)

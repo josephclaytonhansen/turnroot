@@ -102,7 +102,8 @@ class mainS(NodeEditorWnd):
                         QAction("Foe Health Percentage", self), QAction("Unit is Mounted", self), QAction("Foe is Mounted", self),
                         QAction("Foe has Bonus", self), QAction("Foe has Penalty", self), QAction("Unit has Bonus", self),
                         QAction("Unit has Penalty", self), QAction("Ally is Mounted", self), QAction("Ally is Female", self),
-                        QAction("Ally is Male", self)]
+                        QAction("Ally is Male", self), QAction("Unit is Flying", self),QAction("Foe is Flying", self),
+                       QAction("Unit is Paired Up", self),QAction("Damage Type is Physical", self),QAction("Damage Type is Magic", self),]
         
         for n in con_actions:
             con.addAction(n)
