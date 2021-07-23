@@ -455,15 +455,15 @@ class sandbox():
             
             #for testing, comment out
             if self.debug:
-                FPS = self.fonts["SERIF_12"].render("FPS: "+str(round(self.clock.get_fps(),2)), 1, self.colors["CREAM"])
+                FPS = self.fonts["SERIF_12"].render("FPS: "+str(round(self.clock.get_fps(),2)), 1, self.colors["NID_PINK"])
                 self.fake_screen.blit(FPS, (1260,10))
                 if round(self.clock.get_fps(),2) > self.mFPS:
                     self.mFPS = round(self.clock.get_fps(),2)
-                MFPS = self.fonts["SERIF_12"].render("MFPS: "+str(self.mFPS), 1, self.colors["CREAM"])
+                MFPS = self.fonts["SERIF_12"].render("MFPS: "+str(self.mFPS), 1, self.colors["NID_PINK"])
                 self.fake_screen.blit(MFPS, (1260,26))
-                FRAMES = self.fonts["SERIF_12"].render("EFT: "+str(pygame.time.get_ticks()), 1, self.colors["CREAM"])
+                FRAMES = self.fonts["SERIF_12"].render("EFT: "+str(pygame.time.get_ticks()), 1, self.colors["NID_PINK"])
                 self.fake_screen.blit(FRAMES, (1260,42))
-                CPU = self.fonts["SERIF_12"].render("CPU: "+str(round(psutil.getloadavg()[0],2)), 1, self.colors["CREAM"])
+                CPU = self.fonts["SERIF_12"].render("CPU: "+str(round(psutil.getloadavg()[0],2)), 1, self.colors["NID_PINK"])
                 self.fake_screen.blit(CPU, (1260,58))
                 
             
