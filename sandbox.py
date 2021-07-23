@@ -1,4 +1,4 @@
-import pygame, sys, random, json
+import pygame, sys, random, json, psutil, os
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
 FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGrid, initFont, centerCursor, snapBack, showItems, showItemCursor, CA)
 from src.GAME_battle_map_sounds_backend import Fade, initMusic, updateVolumes
@@ -40,7 +40,9 @@ class sandbox():
         self.level_number = 1
         
         self.colors = COLORS
+        
         self.debug = False
+        self.mFPS = 0
 
         self.k_sUP = None
         self.k_sDOWN = None
@@ -325,7 +327,7 @@ class sandbox():
                             self.music_fade[1] = "out"
                             Fade(self)
                             
-                    elif event.key == pygame.K_CAPSLOCK:
+                    elif event.key == pygame.K_RCTRL:
                         if self.debug == True:
                             self.debug = False
                         else:
@@ -453,10 +455,16 @@ class sandbox():
             
             #for testing, comment out
             if self.debug:
-                FPS = self.fonts["SERIF_12"].render(str(round(self.clock.get_fps(),2)), 1, self.colors["BLACK"])
+                FPS = self.fonts["SERIF_12"].render("FPS: "+str(round(self.clock.get_fps(),2)), 1, self.colors["CREAM"])
                 self.fake_screen.blit(FPS, (1260,10))
-                FRAMES = self.fonts["SERIF_12"].render(str(pygame.time.get_ticks()), 1, self.colors["BLACK"])
-                self.fake_screen.blit(FRAMES, (1260,26))
+                if round(self.clock.get_fps(),2) > self.mFPS:
+                    self.mFPS = round(self.clock.get_fps(),2)
+                MFPS = self.fonts["SERIF_12"].render("MFPS: "+str(self.mFPS), 1, self.colors["CREAM"])
+                self.fake_screen.blit(MFPS, (1260,26))
+                FRAMES = self.fonts["SERIF_12"].render("EFT: "+str(pygame.time.get_ticks()), 1, self.colors["CREAM"])
+                self.fake_screen.blit(FRAMES, (1260,42))
+                CPU = self.fonts["SERIF_12"].render("CPU: "+str(round(psutil.getloadavg()[0],2)), 1, self.colors["CREAM"])
+                self.fake_screen.blit(CPU, (1260,58))
                 
             
             #fit screen to screen
