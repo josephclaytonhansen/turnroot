@@ -21,7 +21,8 @@ from src.node_presets_passive_skills import (combat_start, unit_initiates_combat
                                              level_is_night, level_is_raining, level_is_foggy,
                                              grant_bonus_to_unit_spd, grant_bonus_to_ally_spd,
                                              unit_is_flying, foe_is_flying, unit_is_paired,
-                                             damage_type_is_magic, damage_type_is_physical)
+                                             damage_type_is_magic, damage_type_is_physical,
+                                             grant_bonus_to_ally_all, grant_bonus_to_unit_all)
 
 from src.node_presets_combat_skills import (grant_bonus_to_unit_hit, grant_bonus_to_unit_avo,
                                             grant_bonus_to_unit_crt, unit_does_less_more_damage,
@@ -476,6 +477,7 @@ class not_event(QWidget):
     
 NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat Start": combat_start,
          "Unit Initiates Combat": unit_initiates_combat, "Foe Initiates Combat": foe_initiates_combat,
+         "Ally +Bonus All Stats":grant_bonus_to_ally_all, "Unit +Bonus All Stats":grant_bonus_to_unit_all,
          "Unit +Bonus Str/Mag": grant_bonus_to_unit_atk, "Unit +Bonus Defense": grant_bonus_to_unit_def,
          "Unit +Bonus Resistance": grant_bonus_to_unit_res,"Unit +Bonus Charisma": grant_bonus_to_unit_chr,
          "Unit +Bonus Dexterity": grant_bonus_to_unit_dex,"Unit +Bonus Luck": grant_bonus_to_unit_luc,
@@ -535,7 +537,7 @@ NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Atta
                     "Reset Attack Priority","Unit +Bonus Dexterity","Ally +Bonus Dexterity",
                     "Foe -Dexterity","Unit is Flying", "Foe is Flying", "Unit is Paired Up",
                     "Damage Type is Magic", "Damage Type is Physical", "Unit is Within N of Any Unit",
-                    "Unit Takes Damage", "Foe Takes Damage"])
+                    "Unit Takes Damage", "Foe Takes Damage", "Unit +Bonus All Stats", "Ally +Bonus All Stats"])
     
 class Nodes():
     def __init__(self, scene, name):

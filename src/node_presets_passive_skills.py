@@ -375,6 +375,10 @@ class unit_is_close_to_ally(QWidget):
         except:
             pass
        
+class grant_bonus_to_unit_all(grant_bonus_to_unit):
+    def __init__(self, scene,full_name="All Stats", short_name= "All", hexe="ube", desc = "all stats"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+
 class grant_bonus_to_unit_atk(grant_bonus_to_unit):
     def __init__(self, scene,full_name="Str/Mag", short_name= "Atk", hexe="uba", desc = "attack"):
             super().__init__(scene, full_name, short_name, desc, hexe)
@@ -401,6 +405,10 @@ class grant_bonus_to_unit_dex(grant_bonus_to_unit):
             
 class grant_bonus_to_unit_luc(grant_bonus_to_unit):
     def __init__(self, scene,full_name="Luck", short_name= "Luc", hexe="abl", desc = "luck"):
+            super().__init__(scene, full_name, short_name, desc, hexe)
+
+class grant_bonus_to_ally_all(grant_bonus_to_unit):
+    def __init__(self, scene,full_name="All Stats", short_name= "All", hexe="abe", desc = "all stats"):
             super().__init__(scene, full_name, short_name, desc, hexe)
             
 class grant_bonus_to_ally_atk(grant_bonus_to_ally):

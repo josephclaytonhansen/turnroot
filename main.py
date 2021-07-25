@@ -121,7 +121,8 @@ class mainS(NodeEditorWnd):
             fp.addAction(n)
             n.triggered.connect(self.submenu_item)
             
-        ub_actions = [QAction("Unit +Bonus Str/Mag", self),QAction("Unit +Bonus Defense", self),QAction("Unit +Bonus Resistance", self),
+        ub_actions = [QAction("Unit +Bonus All Stats", self),QAction("Unit +Bonus Str/Mag", self),QAction("Unit +Bonus Defense", self),
+                      QAction("Unit +Bonus Resistance", self),
                         QAction("Unit +Bonus Charisma", self),QAction("Unit +Bonus Luck", self),
                       QAction("Earn Extra Weapon EXP", self), QAction("Earn Extra Level EXP", self), QAction("Unit +Bonus Critical",self),
                       QAction("Unit +Bonus Speed",self),QAction("Unit +Bonus Dexterity",self)]
@@ -130,7 +131,8 @@ class mainS(NodeEditorWnd):
             ub.addAction(n)
             n.triggered.connect(self.submenu_item)
         
-        ab_actions = [QAction("Ally +Bonus Strength/Magic", self),QAction("Ally +Bonus Defense", self),QAction("Ally +Bonus Resistance", self),
+        ab_actions = [QAction("Ally +Bonus All Stats", self),QAction("Ally +Bonus Strength/Magic", self),
+                      QAction("Ally +Bonus Defense", self),QAction("Ally +Bonus Resistance", self),
                         QAction("Ally +Bonus Charisma", self),QAction("Ally +Bonus Luck", self),
                       QAction("Ally +Bonus Speed",self), QAction("Ally +Bonus Dexterity", self)]
         
