@@ -81,6 +81,7 @@ class mainS(NodeEditorWnd):
             n.triggered.connect(self.submenu_item)
             
         flow_actions = [QAction("Combat Start", self),QAction("Unit Initiates Combat", self),QAction("Foe Initiates Combat", self),
+                        QAction("Unit Takes Damage", self), QAction("Foe Takes Damage", self),
                         ]
         
         for n in flow_actions:
@@ -89,6 +90,7 @@ class mainS(NodeEditorWnd):
         
         econ_actions = [QAction("Level is Night", self), QAction("Level is Raining", self), QAction("Level is Foggy", self),
                         QAction("Turn is Odd", self), QAction("Turn is Even", self)]
+        
         econ.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         
         for n in econ_actions:
@@ -97,13 +99,14 @@ class mainS(NodeEditorWnd):
         
         con.addMenu(econ)
         
-        con_actions = [QAction("Unit is Adjacent to Ally", self), QAction("Unit is Within N of Ally", self),
+        con_actions = [QAction("Unit is Adjacent to Ally", self), QAction("Unit is Within N of Ally", self),QAction("Unit is Within N of Any Unit",self),
                         QAction("Unit Using Weapon Type", self), QAction("Foe Using Weapon Type", self), QAction("Unit Health Percentage", self),
                         QAction("Foe Health Percentage", self), QAction("Unit is Mounted", self), QAction("Foe is Mounted", self),
                         QAction("Foe has Bonus", self), QAction("Foe has Penalty", self), QAction("Unit has Bonus", self),
                         QAction("Unit has Penalty", self), QAction("Ally is Mounted", self), QAction("Ally is Female", self),
                         QAction("Ally is Male", self), QAction("Unit is Flying", self),QAction("Foe is Flying", self),
-                       QAction("Unit is Paired Up", self),QAction("Damage Type is Physical", self),QAction("Damage Type is Magic", self),]
+                       QAction("Unit is Paired Up", self),QAction("Damage Type is Physical", self),QAction("Damage Type is Magic", self)
+                       ]
         
         for n in con_actions:
             con.addAction(n)
