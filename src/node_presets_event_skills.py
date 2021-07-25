@@ -14,7 +14,7 @@ class event_(QWidget):
         self.scene = scene
         self.title=title
         self.desc=desc
-        self.inputs = [S_TRIGGER]
+        self.inputs = [S_BOOLEAN]
         self.outputs=[S_BOOLEAN]
         self.hex_output = hexe
         self.hexe = hexe
@@ -31,13 +31,13 @@ class event_(QWidget):
         self.line1_layout.setContentsMargins(0,0,0,0)
         self.line1.setLayout(self.line1_layout)
 
+        label1 = QLabel("T/F")
+        label1.setAlignment(Qt.AlignLeft)
+        self.line1_layout.addWidget(label1)
+        
         label2 = QLabel(self.desc)
         label2.setAlignment(Qt.AlignCenter)
         self.line1_layout.addWidget(label2)
-
-        label1 = QLabel("Event")
-        label1.setAlignment(Qt.AlignLeft)
-        self.line1_layout.addWidget(label1)
 
         label2 = QLabel("T/F")
         label2.setAlignment(Qt.AlignRight)
@@ -71,6 +71,14 @@ class foe_misses(event_):
             
 class unit_misses(event_):
     def __init__(self, scene, hexe="euh", title = "Foe Takes Damage", desc = "(T: Unit Hits / F: Unit Misses)", width = 620):
+            super().__init__(title, desc, scene, hexe, width)
+
+class unit_would_die(event_):
+    def __init__(self, scene, hexe="uwd", title = "Unit Would Die", desc = "T: Unit Receives a Killing Blow", width = 620):
+            super().__init__(title, desc, scene, hexe, width)
+
+class foe_would_die(event_):
+    def __init__(self, scene, hexe="fwd", title = "Foe Would Die", desc = "T: Foe Receives a Killing Blow", width = 620):
             super().__init__(title, desc, scene, hexe, width)
             
 class unit_is_close_to_any(QWidget):
@@ -147,3 +155,7 @@ class unit_is_close_to_any(QWidget):
 class unit_is_near_any(unit_is_close_to_any):
     def __init__(self, scene, hexe="ane", spaces = "Within N of", l =True):
             super().__init__(scene, spaces, hexe, l)
+
+class take_another_action(event_):
+    def __init__(self, scene, hexe="taa", title = "Take Another Action", desc = "T: Take Another Action", width = 640):
+            super().__init__(title, desc, scene, hexe, width)

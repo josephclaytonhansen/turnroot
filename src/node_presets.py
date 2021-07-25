@@ -36,7 +36,8 @@ from src.node_presets_combat_skills import (grant_bonus_to_unit_hit, grant_bonus
                                             turn_is_even, disable_counterattack_from_any_distance,
                                             reset_attack_priority,disable_effective_against)
 
-from src.node_presets_event_skills import (unit_is_near_any, foe_misses, unit_misses)
+from src.node_presets_event_skills import (unit_is_near_any, foe_misses, unit_misses,
+                                           foe_would_die, unit_would_die, take_another_action)
 
 from src.skeletons.weapon_types import weaponTypes
 import math, random, pickle
@@ -508,7 +509,8 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Unit is Flying":unit_is_flying, "Foe is Flying":foe_is_flying,
          "Unit is Paired Up":unit_is_paired,"Damage Type is Magic":damage_type_is_magic,
          "Damage Type is Physical":damage_type_is_physical, "Unit is Within N of Any Unit":unit_is_near_any,
-         "Unit Takes Damage":foe_misses, "Foe Takes Damage": unit_misses}
+         "Unit Takes Damage":foe_misses, "Foe Takes Damage": unit_misses, "Unit Would Die":unit_would_die,
+         "Foe Would Die":foe_would_die, "Take Another Action":take_another_action}
 
         
 NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Attacks",
@@ -537,7 +539,8 @@ NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Atta
                     "Reset Attack Priority","Unit +Bonus Dexterity","Ally +Bonus Dexterity",
                     "Foe -Dexterity","Unit is Flying", "Foe is Flying", "Unit is Paired Up",
                     "Damage Type is Magic", "Damage Type is Physical", "Unit is Within N of Any Unit",
-                    "Unit Takes Damage", "Foe Takes Damage", "Unit +Bonus All Stats", "Ally +Bonus All Stats"])
+                    "Unit Takes Damage", "Foe Takes Damage", "Unit +Bonus All Stats", "Ally +Bonus All Stats",
+                    "Foe Would Die", "Unit Would Die", "Take Another Action"])
     
 class Nodes():
     def __init__(self, scene, name):

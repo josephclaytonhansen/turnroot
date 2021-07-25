@@ -105,7 +105,8 @@ class mainS(NodeEditorWnd):
                         QAction("Foe has Bonus", self), QAction("Foe has Penalty", self), QAction("Unit has Bonus", self),
                         QAction("Unit has Penalty", self), QAction("Ally is Mounted", self), QAction("Ally is Female", self),
                         QAction("Ally is Male", self), QAction("Unit is Flying", self),QAction("Foe is Flying", self),
-                       QAction("Unit is Paired Up", self),QAction("Damage Type is Physical", self),QAction("Damage Type is Magic", self)
+                       QAction("Unit is Paired Up", self),QAction("Damage Type is Physical", self),QAction("Damage Type is Magic", self),
+                       QAction("Unit Would Die",self),QAction("Foe Would Die",self)
                        ]
         
         for n in con_actions:
@@ -149,7 +150,9 @@ class mainS(NodeEditorWnd):
             ui.addAction(n)
             n.triggered.connect(self.submenu_item)
         
-        se_actions = [QAction("Disable Foe‘s 'Effective Against X'", self),QAction("Reset Attack Priority", self),QAction("Disable Foe‘s 'Can Counter-Attack From Any Distance'", self),
+        se_actions = [QAction("Disable Foe‘s 'Effective Against X'", self),QAction("Reset Attack Priority", self),
+                      QAction("Disable Foe‘s 'Can Counter-Attack From Any Distance'", self),
+                      QAction("Take Another Action", self),
                         ]
         
         for n in se_actions:
