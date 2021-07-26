@@ -122,7 +122,7 @@ class UnitEditorWnd(QWidget):
             
     def classChange(self, s):
         global classes
-        if s != "":
+        if s != "" and s != "--Select--":
             self.unit.unit_class = classes[s]
             self.loadClass()
     
@@ -383,13 +383,7 @@ class UnitEditorWnd(QWidget):
             self.unit.parent = self
             #update graphics
             self.name_edit.setText(self.unit.name)
-
-            if self.unit.gender == genders().MALE:
-                self.gender_edit.setCurrentText("Male")
-            elif self.unit.gender == genders().FEMALE:
-                self.gender_edit.setCurrentText("Female")
-            elif self.unit.gender == genders().OTHER:
-                self.gender_edit.setCurrentText("Non-Binary")
+            self.getClassesInFolder()
             
             if self.unit.is_lord:
                 self.protag.setCheckState(2)
@@ -431,7 +425,7 @@ class UnitEditorWnd(QWidget):
                 if weapon_type in self.unit.affinities:
                     self.growth_multipliers_widgets[weapon_type].setValue(round(self.unit.affinities[weapon_type],1))
                 
-                number_to_value = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S"]
+                number_to_value = ["E", "E+", "D", "D+", "C", "C+", "B", "B+", "A", "A+", "S"]
                 
                 self.starting_type_sliders[weapon_type].setValue(number_to_value.index(self.unit.current_weapon_levels[weapon_type]))
                 
@@ -739,19 +733,22 @@ class UnitEditorWnd(QWidget):
             self.classesToDropDown(class_names)
                 
     def classesToDropDown(self, class_names):
-        self.title_edit.addItems(class_names)
+        for k in class_names:
+            if k in self.unit.past_classes:
+                self.title_edit.addItem(k)
+        self.title_edit.addItem("--Select--")
         self.title_edit.update()
         try:
             self.title_edit.setCurrentText(tmp_class_name)
         except:
-            pass
+            self.title_edit.setCurrentText("--Select--")
     
     def loadClass(self,name = None):
         try:
             self.class_name.setEnabled(False)
         except:
             pass
-        if name == None:
+        if name == None or name == "--Select--":
             try:
                 ac = self.loaded_class
                 ac.selfFromJSON(self.paths[ac.unit_class_name])
@@ -878,5 +875,6 @@ class UnitEditorWnd(QWidget):
     def baseClassPopup(self):
         p = baseClassesDialog(parent=self,font=self.body_font)
         p.exec_()
+        self.getClassesInFolder()
         if self.path != None:
             self.unit.selfToJSON(self.path)

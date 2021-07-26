@@ -159,7 +159,7 @@ class Unit():
     
     def selfToJSON(self, path, p = True):
         basic_attrs = ["name","title","unique","is_friendly","is_ally","is_lord","is_recruitable",
-                 "has_dialogue","is_permanently_dead","gender","pronouns","orientation",
+                 "has_dialogue","is_permanently_dead","pronouns",
                        "portraits","sprites","sounds","level","exp","exp_to_next_level","move","size",
                        "is_mounted","is_currently_mounted","weapon_exps","unit_classes_exps",
                        "unit_class","mastered_unit_classes","future_unit_classes","unique_classes",
@@ -187,7 +187,7 @@ class Unit():
     
     def selfFromJSON(self, path):
         basic_attrs = ["name","title","unique","is_friendly","is_ally","is_lord","is_recruitable",
-                 "has_dialogue","is_permanently_dead","gender","pronouns","orientation",
+                 "has_dialogue","is_permanently_dead","pronouns",
                        "portraits","sprites","sounds","level","exp","exp_to_next_level","move","size",
                        "is_mounted","is_currently_mounted","weapon_exps","unit_classes_exps",
                        "unit_class","mastered_unit_classes","future_unit_classes","unique_classes",
