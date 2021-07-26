@@ -82,7 +82,7 @@ class GameEditorWnd(QWidget):
         g.getPath()
         print(g.path)
 
-        if g.path != None and os.path.exists(g.path):
+        if g.path != "" and os.path.exists(g.path):
             self.parent.backButton.setEnabled(True)
             self.tabs.tabBar().setEnabled(True)
             self.check_tb = False

@@ -124,7 +124,10 @@ def initBasic(parent):
     parent.class_popup.setFont(header_font)
     name_row_layout.addWidget(parent.class_popup)
     
-    parent.getClassesInFolder()
+    try:
+        parent.getClassesInFolder()
+    except: #game folder is invalid
+        pass
     
     parent.basic_left_layout.addWidget(name_row)
     

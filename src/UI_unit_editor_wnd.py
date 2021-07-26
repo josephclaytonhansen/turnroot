@@ -801,7 +801,7 @@ class UnitEditorWnd(QWidget):
     
     def createClass(self):
         self.class_name.setEnabled(True)
-        self.class_name.setToolTip("Press enter to save class as 'class name.tructf' in game folder.\nOnce a class is named, changes will autosave.")
+        self.class_name.setToolTip("Press enter to save class as 'class name.tructf' in game folder.\nOnce a class is named, changes will autosave.\nIf field is disabled(can't type), click New Class")
         try:
             self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
             self.parent().parent().save_status.setToolTip("Class file not saved")

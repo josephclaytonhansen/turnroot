@@ -242,7 +242,7 @@ class main(QMainWindow):
         
         g= gameDirectory(self)
         g.getPath()
-        if g.path == None:
+        if g.path == "":
             self.backButton.setEnabled(False)
         
         self.optionsButton.triggered.connect(self.OptionsMenu)
@@ -274,7 +274,7 @@ class main(QMainWindow):
         self.dei = data["default_editor"]
         #get from prefs
         
-        if g.path == None:
+        if g.path == "":
             self.m.setCurrentWidget(self.game_editor)
         else:
             self.m.setCurrentWidget(self.editors[self.e_to_de.index(self.dei)])

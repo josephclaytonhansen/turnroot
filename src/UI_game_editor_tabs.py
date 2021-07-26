@@ -117,7 +117,8 @@ def initWeapons(self):
               "Do magic weapons gain full durability at the beginning of each battle?",
               "Do units have encumbrance (weapon weight affecting movement/speed)?",
               "Does encumbrance affect movement or speed?",
-              "Use prowess skills (as weapon experience levels up, prowess skill levels up)?"
+              "Use prowess skills (as weapon experience levels up, prowess skill levels up)?",
+              "Do skill levels have midpoints (i.e.: E goes to E+) or not (E goes to D)?"
               ]
     o_list = [["Yes", "No"], ["Yes", "No"],
               ["Bought like other items", "Learned with classes/experience level"],
@@ -126,7 +127,8 @@ def initWeapons(self):
               ["Yes", "No"],
               ["Yes", "No"],
               ["Movement", "Speed"],
-              ["Yes", "No"]]
+              ["Yes", "No"],
+              ["Use +", "Don't Use +"]]
     colors = [[self.colors["BLUE"],self.colors["PURPLE"]],
               [self.colors["BLUE"],self.colors["GREY"]],
               [self.colors["BLUE"],self.colors["PURPLE"]],
@@ -135,9 +137,10 @@ def initWeapons(self):
               [self.colors["PURPLE"],self.colors["BLUE"]],
               [self.colors["PURPLE"],self.colors["BLUE"]],
               [self.colors["GREY"],self.colors["GREY"]],
-              [self.colors["PURPLE"],self.colors["BLUE"]]
+              [self.colors["PURPLE"],self.colors["BLUE"]],
+               [self.colors["PURPLE"],self.colors["BLUE"]]
               ]
-    helpts = ["","","","","","","","",""]
+    helpts = ["","","","","","","","","",""]
     
     for q in q_list:
         w = selectionRow(self, q,
@@ -238,7 +241,8 @@ def initR(self):
               "Do children units have paralogues?",
               "Can units 'pair up' or be assigned as 'adjutants'?",
               "Can units pick up or 'rescue' other units?",
-              "Can units have linked attacks when adjacent?"
+              "Can units have linked attacks when adjacent?",
+              "Do relationship levels have midpoints (i.e.: E goes to E+) or not (E goes to D)?"
               ]
     
     o_list = [["Immediately once support is high enough", "Not until a game event"],
@@ -246,16 +250,18 @@ def initR(self):
               ["Yes", "No"],
               ["Pair up", "Adjutants","Neither"],
               ["Yes", "No"],
-              ["Yes", "No"]]
+              ["Yes", "No"],
+              ["Use +", "Don't Use +"]]
     
     colors = [[self.colors["BLUE"],self.colors["PURPLE"]],
               [self.colors["BLUE"],self.colors["PURPLE"]],
               [self.colors["BLUE"],self.colors["GREY"]],
               [self.colors["BLUE"],self.colors["PURPLE"],self.colors["RED"]],
               [self.colors["RED"],self.colors["BLUE"]],
-              [self.colors["PURPLE"],self.colors["BLUE"]]
+              [self.colors["PURPLE"],self.colors["BLUE"]],
+               [self.colors["PURPLE"],self.colors["BLUE"]]
               ]
-    helpts = ["","","","","",""]
+    helpts = ["","","","","","",""]
     
     for q in q_list:
         w = selectionRow(self, q,

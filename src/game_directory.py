@@ -53,7 +53,7 @@ class gameDirectory():
                 if os.path.exists(self.path):
                     pass
                 else:
-                    self.path = None
+                    self.path = ""
         except:
             pass
             
