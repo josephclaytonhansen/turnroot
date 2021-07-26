@@ -1064,6 +1064,3 @@ class classCriteriaDialog(QDialog):
             self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
         except:
             pass
-
-        
-{"mode":"full","isActive":false}

@@ -673,4 +673,3 @@ class baseClassesDialog(QDialog):
             except:
                 print(f.path," failed to load")
         return [class_names, cla]
-{"mode":"full","isActive":false}

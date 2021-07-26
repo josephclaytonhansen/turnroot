@@ -878,4 +878,3 @@ class UnitEditorWnd(QWidget):
         self.getClassesInFolder()
         if self.path != None:
             self.unit.selfToJSON(self.path)
-{"mode":"full","isActive":false}
