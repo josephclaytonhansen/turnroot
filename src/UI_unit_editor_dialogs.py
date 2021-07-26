@@ -12,13 +12,6 @@ from src.UI_TableModel import TableModel
 from src.skeletons.weapon_types import weaponTypes, expTypes
 from src.UI_unit_editor_more_dialogs import testGrowthDialog
 
-from src.game_directory import gameDirectory
-
-g = gameDirectory(None)
-PATH = g.getPath()
-if PATH == None:
-    PATH = "/"
-
 class growthRateDialog(QDialog):
     def __init__(self, parent=None,font=None):
         data = updateJSON()
@@ -82,7 +75,7 @@ class growthRateDialog(QDialog):
     def colorizeSlider(self, v):
         try:
             self.parent.loaded_class.growth_rates[self.list.currentItem().text()] = v
-            self.parent.loaded_class.selfToJSON(PATH+"/classes/"+self.class_name.text()+".tructf")
+            self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
         except:
             pass
             
@@ -163,7 +156,7 @@ class statBonusDialog(QDialog):
     def value_changed(self):
         try:
             self.parent.loaded_class.stat_bonuses[self.sender().name] = self.sender().value()
-            self.parent.loaded_class.selfToJSON(PATH+"/classes/"+self.class_name.text()+".tructf")
+            self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
         except:
             pass
 
@@ -579,7 +572,7 @@ class classSkillDialog(QDialog):
         try:
             self.parent.loaded_class.skill_criteria[self.skill_list.currentItem().text()] = i
             self.level_values[self.skill_list.currentItem().text()] = self.level.value()
-            self.parent.loaded_class.selfToJSON(PATH+"/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
+            self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
         except:
             print("no skills in list")
     
@@ -589,7 +582,7 @@ class classSkillDialog(QDialog):
     def remove_skill(self):
         try:
             self.parent.loaded_class.skills.remove(self.skill_list.currentItem().text())
-            self.parent.loaded_class.selfToJSON(PATH+"/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
+            self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
             self.fillList()
         except:
             pass
@@ -669,7 +662,7 @@ class loadSavedClass(QDialog):
         self.show()
         
     def getClassesInFolder(self):
-        file_list = getFiles(PATH+"/classes")[GET_FILES]
+        file_list = getFiles("src/skeletons/classes")[GET_FILES]
         class_names = []
         global classes
         classes = {}
@@ -1060,7 +1053,7 @@ class classCriteriaDialog(QDialog):
     def stat_criteria(self):
         try:
             self.parent.loaded_class.class_criteria_stats[self.sender().name] = self.sender().value()
-            self.parent.loaded_class.selfToJSON(PATH+"/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
+            self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
         except:
             pass
 
@@ -1068,8 +1061,9 @@ class classCriteriaDialog(QDialog):
     def weapon_criteria(self):
         try:
             self.parent.loaded_class.class_criteria_weapon_levels[self.sender().name] = self.sender().currentText()
-            self.parent.loaded_class.selfToJSON(PATH+"/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
+            self.parent.loaded_class.selfToJSON("src/skeletons/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
         except:
             pass
 
         
+{"mode":"full","isActive":false}
