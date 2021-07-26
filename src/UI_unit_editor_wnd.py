@@ -26,6 +26,10 @@ from src.UI_unit_editor_more_dialogs import (weakAgainstDialog, expTypesDialog, 
                                              classGraphicDialog,editUniversalWeaponTypes, editClassifications, statCapDialog,
                                              baseClassesDialog)
 
+from src.game_directory import gameDirectory
+directory = gameDirectory(None)
+directory.getPath()
+
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
 
@@ -600,53 +604,52 @@ class UnitEditorWnd(QWidget):
             
         s = self.class_name.text()
         self.loaded_class.unit_class_name = self.class_name.text()
-        if os.sep == "/":
-            self.loaded_class.selfToJSON("src/skeletons/classes/"+s+".tructf")
-        else:
-            self.loaded_class.selfToJSON("src\\skeletons\\classes\\"+s+".tructf")
+
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+s+".tructf")
+
         self.getClassesInFolder()
         self.loadClass(s)
 
     def minimum_level_change(self):
         self.loaded_class.minimum_level = self.minimum_level.value()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
 
     def is_mounted_change(self):
         self.loaded_class.is_mounted = self.is_mounted.isChecked()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
         
     def is_flying_change(self):
         self.loaded_class.is_flying = self.is_flying.isChecked()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
 
     def mounted_m_change(self):
         self.loaded_class.mounted_move_change = self.mounted_m.value()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
 
     def exp_m_change(self):
         self.loaded_class.exp_gained_multiplier = self.exp_m.value()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
     
     def class_worth_change(self):
         self.loaded_class.class_worth = self.class_worth.value()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
 
     def class_type_change(self):
         self.loaded_class.class_type = self.class_type.value()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
     
     def is_unique_change(self):
         self.loaded_class.unique_to_unit = self.is_unique.isChecked()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
     
     def is_visible_change(self):
         self.loaded_class.secret = self.is_unique.isChecked()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
 
     def growth_rates_dialog(self):
         u = growthRateDialog(parent=self,font=self.body_font)
         u.exec_()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
         
     def unit_growth_rates_dialog(self):
         u = unitGrowthRateDialog(parent=self,font=self.body_font)
@@ -659,22 +662,22 @@ class UnitEditorWnd(QWidget):
         o.exec_()
         self.d_tile_changes = o.table_data[5]
         self.loaded_class.dismounted_tile_changes = self.d_tile_changes
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
 
     def weak_against_dialog(self):
         w = weakAgainstDialog(parent=self,font=self.body_font)
         w.exec_()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
 
     def stat_bonuses_dialog(self):
         i = statBonusDialog(parent=self,font=self.body_font)
         i.exec_()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
     
     def class_graphics_dialog(self):
         l = classGraphicDialog(parent=self,font=self.body_font)
         l.exec_()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
 
     def weapon_type_toggle(self):
         w = self.sender().name
@@ -693,7 +696,7 @@ class UnitEditorWnd(QWidget):
             if w in self.loaded_class.disallowed_weapon_types:
                 self.loaded_class.disallowed_weapon_types.remove(w)
 
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
 
     def tactics_dialog(self):
         pass
@@ -701,7 +704,7 @@ class UnitEditorWnd(QWidget):
     def skills_dialog(self):
         y = classSkillDialog(parent=self,font=self.body_font)
         y.exec_()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
 
     def skilled_blows_dialog(self):
         pass
@@ -709,10 +712,10 @@ class UnitEditorWnd(QWidget):
     def next_classes_dialog(self):
         n = nextClassesDialog(parent=self,font=self.body_font)
         n.exec_()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
             
     def getClassesInFolder(self, b = True):
-        file_list = getFiles("src/skeletons/classes")[GET_FILES]
+        file_list = getFiles(directory.path+"/classes")[GET_FILES]
         class_names = []
         if hasattr(self.unit, "unit_class_name"):
             tmp_class_name = self.loaded_class_name
@@ -825,7 +828,7 @@ class UnitEditorWnd(QWidget):
     
     def class_desc_change(self):
         self.loaded_class.desc = self.sender().text()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
     
     def instance_stat_edit(self):
         u = instanceStatDialog(parent=self,font=self.body_font)
@@ -854,17 +857,17 @@ class UnitEditorWnd(QWidget):
         o.exec_()
         self.m_tile_changes = o.table_data[5]
         self.loaded_class.mounted_tile_changes = self.m_tile_changes
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
     
     def criteria_dialog(self):
         c = classCriteriaDialog(parent=self,font=self.body_font)
         c.exec_()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
     
     def exp_types_edit(self):
         e = expTypesDialog(parent=self,font=self.body_font)
         e.exec_()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+self.class_name.text()+".tructf")
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
     
     def stat_cap_change(self):
         p = statCapDialog(parent=self,font=self.body_font)

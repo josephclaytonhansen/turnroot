@@ -25,6 +25,10 @@ from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHel
 from src.UI_unit_editor_more_dialogs import (weakAgainstDialog, expTypesDialog, nextClassesDialog,
                                              classGraphicDialog,editUniversalWeaponTypes, editClassifications, statCapDialog)
 
+from src.game_directory import gameDirectory
+directory = gameDirectory(None)
+directory.getPath()
+
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
 

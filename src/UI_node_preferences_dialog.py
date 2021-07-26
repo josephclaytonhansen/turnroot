@@ -206,6 +206,15 @@ class NodePreferencesDialog(QDialog):
         self.ww_boxes_layout.addWidget(self.wire_width_selected)
         self.aes_layout.addWidget(self.ww_boxes, 8,1)
 
+        self.de_label = QLabel("Default editor")
+        self.de = QComboBox()
+        self.de.currentTextChanged.connect(self.default_editor_changed)
+        self.de.addItems(["Unit/Class Editor","Skill Editor", "Portrait Editor", "Object Editor", "Level Editor"])
+        self.de.setCurrentText(data["default_editor"])
+        self.de_label.setAlignment(Qt.AlignVCenter)
+        self.aes_layout.addWidget(self.de_label,9,0)
+        self.aes_layout.addWidget(self.de,9,1)
+        
         
         self.aes.setLayout(self.aes_layout)
         self.prefs_layout.addWidget(self.aes)
@@ -240,6 +249,10 @@ class NodePreferencesDialog(QDialog):
         with open("src/tmp/neec.json", "w") as write:
             edge_const[0] = self.sender().value()
             json.dump(edge_const, write)
+    
+    def default_editor_changed(self,s):
+        data["default_editor"] = s
+        dumpJSON(data) 
     
     def wireSelectedWidthChanged(self):
         with open("src/tmp/neec.json", "w") as write:
