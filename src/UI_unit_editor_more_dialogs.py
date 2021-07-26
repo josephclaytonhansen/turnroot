@@ -634,8 +634,7 @@ class baseClassesDialog(QDialog):
         c = self.getClassesInFolder()
         classes = c[0]
         for k in classes:
-            #THIS NEEDS TO CHANGE! Base classes are the ONLY kind that should show up
-            if c[1][k].class_type == "basic":
+            if c[1][k].class_type == "Basic":
                 classes.remove(c[1][k].unit_class_name)
         
         if len(classes) == 0:
@@ -665,6 +664,7 @@ class baseClassesDialog(QDialog):
         else:
             if self.sender().name not in self.parent.unit.past_classes:
                 self.parent.unit.past_classes.append(self.sender().name)
+        print(self.parent.unit.past_classes)
     
     def getClassesInFolder(self):
         file_list = getFiles(PATH+"/classes")[GET_FILES]
