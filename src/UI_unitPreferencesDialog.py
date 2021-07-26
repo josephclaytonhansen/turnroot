@@ -157,6 +157,15 @@ class unitOptionsDialog(QDialog):
         self.tis_slider.valueChanged.connect(self.tis_size_changed)
         self.aes_layout.addWidget(self.tis_slider,11,1)
         
+        self.de_label = QLabel("Default editor")
+        self.de = QComboBox()
+        self.de.currentTextChanged.connect(self.default_editor_changed)
+        self.de.addItems(["Unit/Class Editor","Skill Editor", "Portrait Editor", "Object Editor", "Level Editor"])
+        self.de.setCurrentText(data["default_editor"])
+        self.de_label.setAlignment(Qt.AlignVCenter)
+        self.aes_layout.addWidget(self.de_label,12,0)
+        self.aes_layout.addWidget(self.de,12,1)
+        
         self.aes.setLayout(self.aes_layout)
         self.prefs_layout.addWidget(self.aes)
         
@@ -206,6 +215,10 @@ class unitOptionsDialog(QDialog):
         rfont_size = i
         data["rfont_size"] = rfont_size
         dumpJSON(data)
+        
+    def default_editor_changed(self,s):
+        data["default_editor"] = s
+        dumpJSON(data) 
 
     def color_theme_changed(self, s):
         data = updateJSON()

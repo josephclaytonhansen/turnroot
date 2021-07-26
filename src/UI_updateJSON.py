@@ -12,6 +12,7 @@ def updateJSON():
         ah_tasks = data["ah_tasks"]
         ah_taskss = data["ah_taskss"]
         ah_overlays = data["ah_overlays"]
+        default_editor = data["default_editor"]
 
         read_file.close()
         return data

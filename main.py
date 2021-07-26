@@ -269,14 +269,15 @@ class main(QMainWindow):
         self.m.addWidget(self.game_editor)
         self.m.addWidget(self.portrait_editor)
         
-        self.editors = [self.unit_editor, self.skills_editor, self.object_editor, self.portrait_editor, self.game_editor]
-        self.dei = 0
+        self.editors = [self.unit_editor, self.skills_editor, self.object_editor, self.portrait_editor, None]
+        self.e_to_de = ["Unit/Class Editor","Skill Editor", "Object Editor", "Portrait Editor", "Level Editor"]
+        self.dei = data["default_editor"]
         #get from prefs
         
         if g.path == None:
             self.m.setCurrentWidget(self.game_editor)
         else:
-            self.m.setCurrentWidget(self.editors[self.dei])
+            self.m.setCurrentWidget(self.editors[self.e_to_de.index(self.dei)])
         
         self.setGeometry(
     QStyle.alignedRect(
