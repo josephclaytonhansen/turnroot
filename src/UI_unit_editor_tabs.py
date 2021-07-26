@@ -107,9 +107,18 @@ def initBasic(parent):
     parent.title_edit = QComboBox()
     parent.title_edit.setStyleSheet("background-color: "+active_theme.list_background_color+";")
     parent.title_edit.currentTextChanged.connect(parent.classChange)
-    parent.title_edit.setToolTip("Choose assigned class from existing classes (edit or create new in the Classes tab)")
+    parent.title_edit.setToolTip("Choose starting/current class from existing classes\n(edit or create new in the Classes tab)")
     parent.title_edit.setFont(header_font)
     name_row_layout.addWidget(parent.title_edit)
+    
+    parent.class_popup = QPushButton()
+    parent.class_popup.setIcon(QIcon("src/ui_icons/white/edit.png"))
+    parent.class_popup.setIconSize(QSize(48,48))
+    parent.class_popup.setStyleSheet("background-color: "+active_theme.list_background_color+";")
+    parent.class_popup.clicked.connect(parent.baseClassPopup)
+    parent.class_popup.setToolTip("Set other base class choices, for re-classing")
+    parent.class_popup.setFont(header_font)
+    name_row_layout.addWidget(parent.class_popup)
     
     parent.getClassesInFolder()
     

@@ -6,7 +6,7 @@ from src.skeletons.unit_class import unitClass
 from src.UI_TableModel import TableModel
 from src.node_backend import getFiles, File
 
-import json, math, random
+import json, math, random, os
 
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
@@ -23,7 +23,8 @@ from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHel
                                         instanceStatDialog, tileChangesDialog, unitGrowthRateDialog,
                                         classCriteriaDialog)
 from src.UI_unit_editor_more_dialogs import (weakAgainstDialog, expTypesDialog, nextClassesDialog,
-                                             classGraphicDialog,editUniversalWeaponTypes, editClassifications, statCapDialog)
+                                             classGraphicDialog,editUniversalWeaponTypes, editClassifications, statCapDialog,
+                                             baseClassesDialog)
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -605,7 +606,10 @@ class UnitEditorWnd(QWidget):
             
         s = self.class_name.text()
         self.loaded_class.unit_class_name = self.class_name.text()
-        self.loaded_class.selfToJSON("src/skeletons/classes/"+s+".tructf")
+        if os.sep == "/":
+            self.loaded_class.selfToJSON("src/skeletons/classes/"+s+".tructf")
+        else:
+            self.loaded_class.selfToJSON("src\\skeletons\\classes\\"+s+".tructf")
         self.getClassesInFolder()
         self.loadClass(s)
 
@@ -867,6 +871,12 @@ class UnitEditorWnd(QWidget):
     
     def stat_cap_change(self):
         p = statCapDialog(parent=self,font=self.body_font)
+        p.exec_()
+        if self.path != None:
+            self.unit.selfToJSON(self.path)
+    
+    def baseClassPopup(self):
+        p = baseClassesDialog(parent=self,font=self.body_font)
         p.exec_()
         if self.path != None:
             self.unit.selfToJSON(self.path)

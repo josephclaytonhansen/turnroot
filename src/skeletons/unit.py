@@ -83,7 +83,7 @@ class Unit():
         
         self.unit_class = None
         self.mastered_unit_classes = {}
-        self.past_classes = {}
+        self.past_classes = []
         self.future_unit_classes = {}
         self.unique_classes = {}
         self.unique_objects = {}

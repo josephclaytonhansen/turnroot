@@ -596,3 +596,80 @@ class statCapDialog(QDialog):
             self.parent.unit.stat_caps[self.sender().name] = self.sender().value()
         except:
             pass
+
+class baseClassesDialog(QDialog):
+    def __init__(self, parent=None,font=None):
+        data = updateJSON()
+        self.parent = parent
+        self.restart = False
+        self.body_font = font
+        self.h_font = QFont(self.body_font)
+        self.h_font.setPointSize(20)
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        super().__init__(parent)
+        
+        self.setStyleSheet("background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+        self.inner = QWidget()
+        self.layout = QGridLayout()
+        self.inner.setLayout(self.layout)
+        
+        self.outer_layout = QVBoxLayout()
+        self.layout.setContentsMargins(12,12,12,12)
+        self.tscroll = QScrollArea()
+        self.tscroll.setWidget(self.inner)
+        self.tscroll.setWidgetResizable(True)
+        info = QLabel("Base classes this unit can re-class to")
+        info.setToolTip("Applicable only for branching classes")
+        info.setFont(self.h_font)
+        self.outer_layout.addWidget(info)
+        self.outer_layout.addWidget(self.tscroll)
+        self.setLayout(self.outer_layout)
+       
+        c = self.getClassesInFolder()
+        classes = c[0]
+        for k in classes:
+            if c[1][k].class_type == "Basic":
+                classes.remove(c[1][k].unit_class_name)
+        
+        if len(classes) == 0:
+            classes = ["No saved classes"]
+        
+        self.rows = {}
+        self.checks = {}
+        row_count = 0
+        
+        for w in classes:
+            row_count+=1
+            l = QLabel(w)
+            l.setFont(self.body_font)
+            self.layout.addWidget(l,row_count,0,1,1)
+            
+            r = QCheckBox()
+            if w in self.parent.unit.past_classes:
+                r.setChecked(True)
+            r.name = w
+            r.stateChanged.connect(self.check)
+            if w != "No saved classes":
+                self.layout.addWidget(r,row_count,1,1,1)
+            
+    def check(self):
+        if self.sender().isChecked() == False:
+            self.parent.unit.past_classes.remove(self.sender().name)
+        else:
+            if self.sender().name not in self.parent.unit.past_classes:
+                self.parent.unit.past_classes.append(self.sender().name)
+        print(self.parent.unit.past_classes)
+    
+    def getClassesInFolder(self):
+        file_list = getFiles("src/skeletons/classes")[GET_FILES]
+        class_names = []
+        cla = {}
+        for f in file_list:
+            tmp_class = unitClass()
+            try:
+                tmp_class.selfFromJSON(f.path)
+                class_names.append(tmp_class.unit_class_name)
+                cla[tmp_class.unit_class_name] = tmp_class
+            except:
+                print(f.path," failed to load")
+        return [class_names, cla]
