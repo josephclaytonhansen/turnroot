@@ -10,6 +10,12 @@ from src.img_overlay import overlayTile
 from src.skeletons.unit_class import unitClass
 from src.skeletons.unit import Unit
 from src.skeletons.weapon_types import weaponTypes, expTypes
+from src.game_directory import gameDirectory
+
+g = gameDirectory(None)
+PATH = g.getPath()
+if PATH == None:
+    PATH = "/"
 
 class testGrowthDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -332,7 +338,7 @@ class nextClassesDialog(QDialog):
             self.loaded.next_classes.append(self.sender().name)
     
     def getClassesInFolder(self):
-        file_list = getFiles("src/skeletons/classes")[GET_FILES]
+        file_list = getFiles(PATH+"/classes")[GET_FILES]
         class_names = []
         for f in file_list:
             tmp_class = unitClass()
@@ -661,7 +667,7 @@ class baseClassesDialog(QDialog):
                 self.parent.unit.past_classes.append(self.sender().name)
     
     def getClassesInFolder(self):
-        file_list = getFiles("src/skeletons/classes")[GET_FILES]
+        file_list = getFiles(PATH+"/classes")[GET_FILES]
         class_names = []
         cla = {}
         for f in file_list:
