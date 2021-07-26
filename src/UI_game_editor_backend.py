@@ -3,6 +3,9 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
+from src.node_backend import getFiles, GET_FILES
+from src.skeletons.unit_class import unitClass
+from src.skeletons.unit import Unit
 import fnmatch, os, json
 
 TOTAL_TASKS = 10
@@ -180,6 +183,44 @@ class checkDialog(QDialog):
                         return[NO_ERROR]
             except:
                 return [FATAL_ERROR, "Game folder not set"]
+        #check each "basic" class to see if it's assigned to a unit
+        elif n == 6:
+            try:
+                count = 0
+                #dirpath = self.parent.game_path+"/classes"
+                dirpath = "src/skeletons/classes" #CHANGE THIS to above
+                file_list = getFiles(dirpath)[GET_FILES]
+                cla = {}
+                for f in file_list:
+                    tmp_class = unitClass()
+                    try:
+                        tmp_class.selfFromJSON(f.path)
+                        cla[tmp_class.unit_class_name] = tmp_class
+                    except:
+                        pass
+                dirpath2 = "src/skeletons/units" #CHANGE THIS
+                file_list = getFiles(dirpath2)[GET_FILES]
+                uni = {}
+                for f in file_list:
+                    tmp_unit = Unit()
+                    try:
+                        tmp_unit.selfFromJSON(f.path)
+                        uni[tmp_unit.name] = tmp_unit
+                    except:
+                        pass
+                for u in uni:
+                    for c in cla:
+                        print(c, uni[u].past_classes)
+                        if c in uni[u].past_classes:
+                            count +=1
+                if count == 0:
+                    return[FATAL_ERROR, "No base classes are assigned to units"]
+                elif count < len(cla):
+                    return[CAUTION, "Some base classes are not assigned to units, they will need an item to be usable in-game"]
+
+            except Exception as e:
+                print(e)
+                return [FATAL_ERROR, "Game folder not set"]
         #check unit files for portraits
         #check unit files for names
         #check unit files for pronouns
@@ -207,8 +248,11 @@ class checkDialog(QDialog):
             self.completed += (100 / TOTAL_TASKS)
             self.progress.setValue(self.completed)
             for k in self.errors:
-                if self.errors[k][0] != "No Error":
-                    if self.errors[k][1] not in self.added_errors:
-                        self.columns[self.errors[k][0]].addItem(self.errors[k][1])
-                        self.added_errors.append(self.errors[k][1])
+                try:
+                    if self.errors[k][0] != "No Error":
+                        if self.errors[k][1] not in self.added_errors:
+                            self.columns[self.errors[k][0]].addItem(self.errors[k][1])
+                            self.added_errors.append(self.errors[k][1])
+                except:
+                    pass
             qApp.processEvents()
