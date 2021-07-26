@@ -16,14 +16,15 @@ from src.UI_game_editor_tabs import (initEsen,
         initR,
         initM,
         initD)
-from src.UI_Dialogs import textEntryDialog
+from src.UI_Dialogs import textEntryDialog, infoClose
 from src.UI_game_editor_backend import checkDialog
-import json
+import json, os
 game_options = {}
 
 class GameEditorWnd(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.parent = parent
         self.active_theme = active_theme
         self.check_tb = True
         #when loading, this also needs to change
@@ -79,8 +80,10 @@ class GameEditorWnd(QWidget):
         
         g = gameDirectory(self)
         g.getPath()
+        print(g.path)
 
-        if g.path != None:
+        if g.path != None and os.path.exists(g.path):
+            self.parent.backButton.setEnabled(True)
             self.tabs.tabBar().setEnabled(True)
             self.check_tb = False
             self.es_instr.setVisible(False)
@@ -128,9 +131,14 @@ class GameEditorWnd(QWidget):
             g = gameDirectory(self)
             g.changePath(g.pathDialog())
             if g.path != None:
-                self.sender().setText(g.path)
-                game_options[self.sender().row_name] = g.path
-                self.game_path = g.path
+                if os.path.exists(g.path):
+                    self.sender().setText(g.path)
+                    game_options[self.sender().row_name] = g.path
+                    self.game_path = g.path
+                    self.parent.backButton.setEnabled(True)
+                else:
+                    g = infoClose(info = "Invalid path", parent = self)
+                    g.exec_()
                 
         #set game name        
         elif self.sender().row_name == "What is your game called?":

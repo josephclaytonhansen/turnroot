@@ -17,6 +17,7 @@ from src.UI_game_editor_wnd import GameEditorWnd
 from src.UI_node_preferences_dialog import NodePreferencesDialog
 from src.node_presets import NODES, Nodes
 from src.UI_WebViewer import webView
+from src.game_directory import gameDirectory
 import qtmodern.styles
 import qtmodern.windows, json
 
@@ -239,6 +240,11 @@ class main(QMainWindow):
         self.toolbar.addAction(self.optionsButton)
         self.toolbar.addAction(self.helpButton)
         
+        g= gameDirectory(self)
+        g.getPath()
+        if g.path == None:
+            self.backButton.setEnabled(False)
+        
         self.optionsButton.triggered.connect(self.OptionsMenu)
         self.backButton.triggered.connect(self.editorSelect)
         self.helpButton.triggered.connect((self.helpView))
@@ -262,7 +268,15 @@ class main(QMainWindow):
         self.game_editor = mainG(parent=self)
         self.m.addWidget(self.game_editor)
         self.m.addWidget(self.portrait_editor)
-        self.m.setCurrentWidget(self.unit_editor)
+        
+        self.editors = [self.unit_editor, self.skills_editor, self.object_editor, self.portrait_editor, self.game_editor]
+        self.dei = 0
+        #get from prefs
+        
+        if g.path == None:
+            self.m.setCurrentWidget(self.game_editor)
+        else:
+            self.m.setCurrentWidget(self.editors[self.dei])
         
         self.setGeometry(
     QStyle.alignedRect(
@@ -317,6 +331,7 @@ class main(QMainWindow):
             if new_editor == 0:
                 from main_level_editor import main
             elif new_editor == 1:
+                self.menubar.setVisible(True)
                 self.m.setCurrentWidget(self.skills_editor)
                 self.openButton.triggered.disconnect()
                 self.saveButton.triggered.disconnect()
