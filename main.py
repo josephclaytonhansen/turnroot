@@ -449,7 +449,7 @@ class main(QMainWindow):
                 
             
     def OptionsMenu(self):
-        if isinstance(self.m.currentWidget(), mainN):
+        if isinstance(self.m.currentWidget(), mainN) or isinstance(self.m.currentWidget(), mainG) or isinstance(self.m.currentWidget(), mainO) or isinstance(self.m.currentWidget(), mainP):
             p = unitOptionsDialog(parent=self,font=self.unit_editor.body_font)
             theme = p.exec_()
             data = updateJSON()
