@@ -79,8 +79,10 @@ def initMisc(self):
     helpts = [[None,["If enabled, player has customization options at the start of game", "This includes hair color, skin color, and hair style by default.","You can change this in the Flow Editor"],["font-size:24px;",None,None]],
               [None,["If enabled, player can type in their own name and change pronouns","You can edit those settings in the Unit Editor, when editing the protagonist"],["font-size:24px;",None]],
               [None,["Music can fade to combat music in combat", "Make sure to add both version in the Music folder","You can learn more in the Level Editor"],["font-size:24px;",None,None]],
-              [None,["The game will show up in the player's game list as this", "This is one of two required settings to access other editors"],["font-size:24px;",None]],
-              "","","","",""]
+              [None,["'Yes' means each map has at least 3 tracks", "Player turn (map), player turn (combat), and enemy turn"],["font-size:24px;",None]],
+              [None,["Video based will require you to create your own videos", "Because of the work involved in this, POB is generally recommended.","Fire Emblem: Sacred Stones is a great example of POB"],["font-size:24px;",None, None]],
+              [None,["'Yes' means you provide voice tracks for dialogue.", "No doesn't mean game doesn't have voices- you can use our generic sounds or provide your own.","Rather, No means that dialogue isn't being read word for word.","No is highly recommended"],["font-size:24px;",None,None,None]],
+              ]
     
     for q in q_list:
         w = selectionRow(self, q,
@@ -109,7 +111,10 @@ def initD(self):
               [self.colors["BLUE"],self.colors["PURPLE"]],
               [self.colors["BLUE"],self.colors["PURPLE"]]
               ]
-    helpts = ["","","",""]
+    helpts = [[None,["Set a cap on equipped skills", "Player can switch out equipped skills, this just limits how many can be equipped at a time"],["font-size:24px;",None]],
+              [None,["Set a cap on items", "Based on Game Editor settings, magic weapons may not be counted towards this total"],["font-size:24px;",None]],
+              [None,["Note that 'grid' will be a more compact display ", "Specifically, the player will be able to see unit information all in one place"],["font-size:24px;",None]],
+              [None,["This relates to skill display", "If 'List' and 'One Page' are both selected, the view will actually be two pages"],["font-size:24px;",None]]]
     
     for q in q_list:
         w = selectionRow(self, q,
