@@ -29,7 +29,6 @@ from src.game_directory import gameDirectory
 directory = gameDirectory(None)
 directory.getPath()
 game_options = directory.getGameOptions()
-print(game_options)
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)

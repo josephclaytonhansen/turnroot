@@ -4,6 +4,7 @@ from PyQt5.QtGui import *
 
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
+from src.UI_game_editor_dialogs import weaponTriangle
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
@@ -19,7 +20,12 @@ from src.UI_game_editor_tabs import (initEsen,
 from src.UI_Dialogs import textEntryDialog, infoClose, stackedInfoImgDialog
 from src.UI_game_editor_backend import checkDialog
 import json, os
-game_options = {}
+
+try:
+    with open(self.game_path+"/dat.trsl", "r") as g:
+        game_options = json.load(g)
+except:
+    game_options = {}
 
 class GameEditorWnd(QWidget):
     def __init__(self, parent=None):
@@ -64,6 +70,7 @@ class GameEditorWnd(QWidget):
             self.tabs.addTab(self.c_tab, self.tab_title)
             
         self.tabs.tabBar().setEnabled(False)
+        self.tabs.currentChanged.connect(self.tab_change)
         #until there's a name and a directory, you can't change tabs
         
         #self.tabs.currentChanged.connect(self.ctab_changed)
@@ -110,7 +117,11 @@ class GameEditorWnd(QWidget):
             if item in data:
                 self.weapon_rows[item].options[data[item]].setChecked(True)
                 self.weapon_rows[item].dL.setPixmap(QPixmap("src/ui_icons/on.png"))
-                
+    
+    def tab_change(self):
+        global game_options
+        with open(self.game_path+"/dat.trsl", "r") as g:
+            game_options = json.load(g)
     
     def toggleOption(self):
         global game_options
@@ -154,6 +165,7 @@ class GameEditorWnd(QWidget):
         
         #show item forging specifics
         elif self.sender().row_name == "Is item forging enabled?":
+            game_options[self.sender().row_name] = self.sender().text()
             if self.sender().text() == "Yes":
                 self.weapon_rows["What does item forging do?"].setVisible(True)
             else:
@@ -161,6 +173,7 @@ class GameEditorWnd(QWidget):
         
         #show children paralogues
         elif self.sender().row_name == "Can S level supports produce children?":
+            game_options[self.sender().row_name] = self.sender().text()
             if self.sender().text() == "Yes":
                 self.weapon_rows["Do children units have paralogues?"].setVisible(True)
                 self.parent.unit_editor.bio.setVisible(True)
@@ -170,13 +183,21 @@ class GameEditorWnd(QWidget):
         
         #show encumbrance options
         elif self.sender().row_name == "Do units have encumbrance (weapon weight affecting movement/speed)?":
+            game_options[self.sender().row_name] = self.sender().text()
             if self.sender().text() == "Yes":
                 self.weapon_rows["Does encumbrance affect movement or speed?"].setVisible(True)
             else:
                 self.weapon_rows["Does encumbrance affect movement or speed?"].setVisible(False)
         
+        #weapons triangle
+        elif self.sender().row_name == "Use weapon triangle?":
+            game_options[self.sender().row_name] = self.sender().text()
+            g = weaponTriangle(self)
+            g.exec_()
+        
         #change map/hub options/visiblity based on choice( this is a big one)
         elif self.sender().row_name == "Does game have hub, map, or both?":
+            game_options[self.sender().row_name] = self.sender().text()
             if self.sender().text() == "Hub":
                 self.weapon_rows["Can player shop in the hub?"].setVisible(True)
                 self.weapon_rows["Does player have 'free time'?"].setVisible(True)
@@ -205,8 +226,8 @@ class GameEditorWnd(QWidget):
         try:
             with open(self.game_path+"/dat.trsl", "w") as g:
                 json.dump(game_options, g)
-        except:
-            pass
+        except Exception as e:
+            print(e)
     
     def checkErrors(self):
         c = checkDialog(self)
