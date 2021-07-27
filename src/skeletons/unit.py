@@ -120,6 +120,10 @@ class Unit():
         self.growth_rates = {}
         self.current_goals = {}
         self.future_goals = {}
+        
+        self.pregnancy_type = ""
+        self.child = None
+        self.spouse = None
     
     def createUniversalStat(self, stat):
         stat = stat.lower()
@@ -170,7 +174,8 @@ class Unit():
                        "folder_index", "current_weapon_levels", "generic_stat_randomness", "generic_sprite_options",
                            "generic_gfx_options", "generic_stat_randomness_amount", "growth_rates", "current_goals",
                        "future_goals","past_classes", "armored", "status", "in_battle_dialogues", "status_duration",
-                       "current_bonuses", "current_penalties", "is_flying", "classification", "current_hp"]
+                       "current_bonuses", "current_penalties", "is_flying", "classification", "current_hp",
+                       "pregnancy_type", "child", "spouse"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)
@@ -198,7 +203,8 @@ class Unit():
                        "folder_index", "current_weapon_levels", "generic_stat_randomness", "generic_sprite_options",
                            "generic_gfx_options", "generic_stat_randomness_amount", "growth_rates","current_goals",
                        "future_goals", "past_classes", "armored", "status", "in_battle_dialogues", "status_duration",
-                       "current_bonuses","current_penalties", "is_flying", "classification", "current_hp"]
+                       "current_bonuses","current_penalties", "is_flying", "classification", "current_hp",
+                       "pregnancy_type", "child", "spouse"]
         
         for stat in universal_stats:
             basic_attrs.append(stat)

@@ -986,10 +986,16 @@ def initRelationships(parent):
     parent.bio = QWidget()
     bio_layout = QHBoxLayout()
     parent.bio.setLayout(bio_layout)
-    bio_label = QLabel("How does this unit have children?")
+    bio_label = QLabel("Can this unit:")
     bio_label.setFont(parent.body_font)
-    parent.can_impregnate = QRadioButton("Can impregnate")
-    parent.can_be_pregnant = QRadioButton("Can be pregnant")
+    parent.can_impregnate = QRadioButton("Impregnate")
+    parent.can_be_pregnant = QRadioButton("Be pregnant")
+    
+    for rb in [parent.can_impregnate, parent.can_be_pregnant]:
+        rb.name = rb.text()
+        rb.clicked.connect(parent.pregnancy_type_changed)
+        rb.setFont(parent.body_font)
+    
     bio_layout.addWidget(bio_label)
     bio_layout.addWidget(parent.can_impregnate)
     bio_layout.addWidget(parent.can_be_pregnant)

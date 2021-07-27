@@ -498,7 +498,15 @@ class UnitEditorWnd(QWidget):
             self.unit.personal_enemy = all_units[s]
         if self.path != None:
             self.unit.selfToJSON(self.path)
-        
+    
+    def pregnancy_type_changed(self):
+        try:
+            self.unit.pregnancy_type = self.sender().name
+            if self.path != None:
+                self.unit.selfToJSON(self.path)
+        except:
+            pass
+                
     def max_support_changed(self):
         try:
             self.unit.max_support_levels[self.selected_unit.name] = self.sender().text()
