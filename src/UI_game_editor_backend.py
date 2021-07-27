@@ -32,10 +32,12 @@ def selectionRow(parent, query, options, colors, helpt):
     row_layout.addWidget(row.dL)
     
     query_box = QLabel(query)
+    query_box.setFont(parent.body_font)
     row_layout.addWidget(query_box)
     
     for o in options:
         option = QPushButton(o)
+        option.setFont(parent.body_font)
         option.setMinimumHeight(48)
         option.name = o
         option.row = row

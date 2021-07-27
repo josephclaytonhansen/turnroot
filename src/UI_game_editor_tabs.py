@@ -41,6 +41,8 @@ def initEsen(self):
     self.check_for_errors.clicked.connect(self.checkErrors)
     self.package = QPushButton("Create game package")
     self.check_for_errors.setMinimumHeight(48)
+    self.package.setFont(self.body_font)
+    self.check_for_errors.setFont(self.body_font)
     self.package.setMinimumHeight(48)
     self.package.setStyleSheet("background-color:"+active_theme.button_alt_color+";color:"+active_theme.button_alt_text_color)
     self.check_for_errors.setStyleSheet("background-color:"+active_theme.window_background_color+";color:"+active_theme.window_text_color)

@@ -34,6 +34,7 @@ class GameEditorWnd(QWidget):
         
     def initUI(self):
         self.getColors()
+        self.body_font = self.parent.unit_editor.body_font
 
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)

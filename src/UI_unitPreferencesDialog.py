@@ -158,7 +158,9 @@ class unitOptionsDialog(QDialog):
         self.aes_layout.addWidget(self.tis_slider,11,1)
         
         self.de_label = QLabel("Default editor")
+        self.de_label.setFont(self.body_font)
         self.de = QComboBox()
+        self.de.setFont(self.body_font)
         self.de.currentTextChanged.connect(self.default_editor_changed)
         self.de.addItems(["Unit/Class Editor","Skill Editor", "Portrait Editor", "Object Editor", "Level Editor"])
         self.de.setCurrentText(data["default_editor"])
