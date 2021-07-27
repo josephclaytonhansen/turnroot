@@ -698,13 +698,16 @@ def initClasses(parent):
     parent.class_type.currentTextChanged.connect(parent.class_type_changed)
     parent.class_type.setFont(parent.body_font)
     working_tab_layout.addWidget(parent.class_type, 7, 3, 1,1)
-    if "How many levels of classes are there?" not in game_options:
-        parent.class_type.addItem("Basic")
-    else:
-        if game_options["How many levels of classes are there?"] == '2 (Basic, Advanced)':
-            parent.class_type.addItems(["Basic",'Advanced'])
+    try:
+        if "How many levels of classes are there?" not in game_options:
+            parent.class_type.addItem("Basic")
         else:
-            parent.class_type.addItems(["Basic", "Advanced", "Master"])
+            if game_options["How many levels of classes are there?"] == '2 (Basic, Advanced)':
+                parent.class_type.addItems(["Basic",'Advanced'])
+            else:
+                parent.class_type.addItems(["Basic", "Advanced", "Master"])
+    except:
+        parent.class_type.addItem("Basic")
     
     is_visible_label = QLabel("Secret class?")
     is_visible_label.setToolTip("If class is secret, it can't be normally achieved (level/criteria, if using), nor will it show up in class grid (if using).\nA secret class is given through a game event or item.\nFor example, a Lord could become a Great Lord at the right time.")
