@@ -777,6 +777,7 @@ class UnitEditorWnd(QWidget):
             self.is_flying.setChecked(ac.is_flying)
             self.class_worth.setValue(ac.class_worth)
             self.is_visible.setChecked(ac.secret)
+            self.class_type.setCurrentText(ac.class_type)
             
             for w in weaponTypes().data:
                 if w in ac.allowed_weapon_types:

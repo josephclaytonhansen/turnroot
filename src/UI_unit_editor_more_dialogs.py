@@ -301,9 +301,15 @@ class nextClassesDialog(QDialog):
 
         self.loaded = self.parent.loaded_class
         
-        classes = self.getClassesInFolder()
+        c = self.getClassesInFolder()
+        classes = c[0]
         if self.loaded.unit_class_name in classes:
             classes.remove(self.loaded.unit_class_name)
+            
+        for k in c[1]:
+            if c[1][k].class_type == "Basic":
+                if c[1][k].unit_class_name in classes:
+                    classes.remove(c[1][k].unit_class_name)
         
         if len(classes) == 0:
             classes = ["No saved classes"]
@@ -338,14 +344,16 @@ class nextClassesDialog(QDialog):
     def getClassesInFolder(self):
         file_list = getFiles(directory.path+"/classes")[GET_FILES]
         class_names = []
+        cla = {}
         for f in file_list:
             tmp_class = unitClass()
             try:
                 tmp_class.selfFromJSON(f.path)
                 class_names.append(tmp_class.unit_class_name)
+                cla[tmp_class.unit_class_name] = tmp_class
             except:
                 print(f.path," failed to load")
-        return class_names
+        return [class_names, cla]
 
 class classGraphicDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -633,7 +641,7 @@ class baseClassesDialog(QDialog):
         classes = c[0]
         for k in classes:
             #THIS NEEDS TO CHANGE! Base classes are the ONLY kind that should show up
-            if c[1][k].class_type == "Basic":
+            if c[1][k].class_type != "Basic":
                 classes.remove(c[1][k].unit_class_name)
         
         if len(classes) == 0:
