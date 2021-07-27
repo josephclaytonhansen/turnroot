@@ -1000,13 +1000,15 @@ def initRelationships(parent):
     bio_layout.addWidget(parent.can_be_pregnant)
     parent.supports_setup_layout.addWidget(parent.bio)
     parent.bio.setVisible(False)
-
-    if "Can S level supports produce children?" in game_options:
-        try:
-            if game_options["Can S level supports produce children?"] == "Yes":
-                parent.bio.setVisible(True)
-        except:
-            pass
+    
+    try:
+        if "Can S level supports produce children?" in game_options:
+            try:
+                if game_options["Can S level supports produce children?"] == "Yes":
+                    parent.bio.setVisible(True)
+            except:
+                pass
+    except:pass
     
     parent.supports_setup_layout.addSpacerItem(QSpacerItem(1, 200))
     

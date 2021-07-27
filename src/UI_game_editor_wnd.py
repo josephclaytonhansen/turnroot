@@ -20,12 +20,7 @@ from src.UI_game_editor_tabs import (initEsen,
 from src.UI_Dialogs import textEntryDialog, infoClose, stackedInfoImgDialog
 from src.UI_game_editor_backend import checkDialog
 import json, os
-
-try:
-    with open(self.game_path+"/dat.trsl", "r") as g:
-        game_options = json.load(g)
-except:
-    game_options = {}
+game_options = {}
 
 class GameEditorWnd(QWidget):
     def __init__(self, parent=None):
@@ -96,10 +91,7 @@ class GameEditorWnd(QWidget):
             self.check_tb = False
             self.es_instr.setVisible(False)
             self.game_path = g.path
-            try:
-                self.Load()
-            except:
-                pass
+            self.Load()
            
     def getColors(self):
         blue = "#3372b0"
@@ -114,14 +106,24 @@ class GameEditorWnd(QWidget):
         with open(self.game_path+"/dat.trsl", "r") as g:
             data = json.load(g)
         for item in self.weapon_rows:
-            if item in data:
-                self.weapon_rows[item].options[data[item]].setChecked(True)
-                self.weapon_rows[item].dL.setPixmap(QPixmap("src/ui_icons/on.png"))
+            try:
+                if item in data:
+                    self.weapon_rows[item].options[data[item]].setChecked(True)
+                    self.weapon_rows[item].dL.setPixmap(QPixmap("src/ui_icons/on.png"))
+            except:
+                pass
     
     def tab_change(self):
         global game_options
         with open(self.game_path+"/dat.trsl", "r") as g:
             game_options = json.load(g)
+            for item in self.weapon_rows:
+                try:
+                    if item in data:
+                        self.weapon_rows[item].options[data[item]].setChecked(True)
+                        self.weapon_rows[item].dL.setPixmap(QPixmap("src/ui_icons/on.png"))
+                except:
+                    pass
     
     def toggleOption(self):
         global game_options
