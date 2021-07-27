@@ -633,7 +633,7 @@ class baseClassesDialog(QDialog):
         classes = c[0]
         for k in classes:
             #THIS NEEDS TO CHANGE! Base classes are the ONLY kind that should show up
-            if c[1][k].class_type == "basic":
+            if c[1][k].class_type == "Basic":
                 classes.remove(c[1][k].unit_class_name)
         
         if len(classes) == 0:

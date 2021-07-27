@@ -645,6 +645,10 @@ class UnitEditorWnd(QWidget):
     def is_visible_change(self):
         self.loaded_class.secret = self.is_unique.isChecked()
         self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
+    
+    def class_type_changed(self):
+        self.loaded_class.class_type = self.sender().currentText()
+        self.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
 
     def growth_rates_dialog(self):
         u = growthRateDialog(parent=self,font=self.body_font)
@@ -773,7 +777,6 @@ class UnitEditorWnd(QWidget):
             self.is_flying.setChecked(ac.is_flying)
             self.class_worth.setValue(ac.class_worth)
             self.is_visible.setChecked(ac.secret)
-            self.is_unique.setChecked(ac.unique_to_unit)
             
             for w in weaponTypes().data:
                 if w in ac.allowed_weapon_types:
@@ -821,7 +824,6 @@ class UnitEditorWnd(QWidget):
         self.is_flying.setChecked(False)
         self.class_worth.setValue(1)
         self.is_visible.setChecked(False)
-        self.is_unique.setChecked(False)
         
         for w in weaponTypes().data:
             self.wt_checkboxes[w].setChecked(False)

@@ -28,6 +28,8 @@ from src.UI_unit_editor_more_dialogs import (weakAgainstDialog, expTypesDialog, 
 from src.game_directory import gameDirectory
 directory = gameDirectory(None)
 directory.getPath()
+game_options = directory.getGameOptions()
+print(game_options)
 
 with open("src/skeletons/universal_stats.json", "r") as stats_file:
     universal_stats =  json.load(stats_file)
@@ -679,17 +681,34 @@ def initClasses(parent):
     parent.is_flying.stateChanged.connect(parent.is_flying_change)
     working_tab_layout.addWidget(parent.is_flying, 6,3,1,1)
     
-    is_unique_label = QLabel("Unique to unit?")
-    is_unique_label.setToolTip("If class is unique to unit, minimum level/criteria will be ignored\nIf a unit has a unique class set (from the drop-down on the Basic tab), unit will start with that class")
-    is_unique_label.setFont(parent.body_font)
-    working_tab_layout.addWidget(is_unique_label, 7,2,1,1)
-
-    parent.is_unique = QCheckBox()
-    parent.is_unique.stateChanged.connect(parent.is_unique_change)
-    working_tab_layout.addWidget(parent.is_unique, 7,3,1,1)
+#     is_unique_label = QLabel("Unique to unit?")
+#     is_unique_label.setToolTip("If class is unique to unit, minimum level/criteria will be ignored\nIf a unit has a unique class set (from the drop-down on the Basic tab), unit will start with that class")
+#     is_unique_label.setFont(parent.body_font)
+#     working_tab_layout.addWidget(is_unique_label, 7,2,1,1)
+# 
+#     parent.is_unique = QCheckBox()
+#     parent.is_unique.stateChanged.connect(parent.is_unique_change)
+#     working_tab_layout.addWidget(parent.is_unique, 7,3,1,1)
+    class_type_label = QLabel("Class type/tier?")
+    class_type_label.setToolTip("Choose whether this is a Basic class or a higher tier (set tiers in the Game Editor)")
+    class_type_label.setFont(parent.body_font)
+    working_tab_layout.addWidget(class_type_label, 7, 2, 1, 1)
+    
+    class_type = QComboBox()
+    class_type.currentTextChanged.connect(parent.class_type_changed)
+    class_type.setFont(parent.body_font)
+    working_tab_layout.addWidget(class_type, 7, 3, 1,1)
+    if "How many levels of classes are there?" not in game_options:
+        class_type.addItem("Basic")
+    else:
+        if game_options["How many levels of classes are there?"] == '2 (Basic, Advanced)':
+            class_type.addItems(["Basic",'Advanced'])
+        else:
+            class_type.addItems(["Basic", "Advanced", "Master"])
+    
     
     is_visible_label = QLabel("Secret class?")
-    is_visible_label.setToolTip("If class is secret, it can't be normally achieved (level/criteria), nor will it show up in class grid (if using).\nA secret class is given through a game event.\nFor example, a Lord could become a Great Lord at the right time.")
+    is_visible_label.setToolTip("If class is secret, it can't be normally achieved (level/criteria, if using), nor will it show up in class grid (if using).\nA secret class is given through a game event or item.\nFor example, a Lord could become a Great Lord at the right time.")
     is_visible_label.setFont(parent.body_font)
     working_tab_layout.addWidget(is_visible_label, 8,2,1,1)
 

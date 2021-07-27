@@ -26,6 +26,14 @@ class gameDirectory():
                 json.dump(self.name, u)
         except:
             pass
+        
+    def getGameOptions(self):
+        try:
+            with open(self.path+"/dat.trsl", "r") as g:
+                    return json.load(g)
+        except Exception as e:
+            print(e)
+        
     
     def changePath(self, path):
         self.path = path
