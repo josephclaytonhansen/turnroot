@@ -364,7 +364,10 @@ class main(QMainWindow):
                 self.m.setCurrentWidget(self.unit_editor)
                 self.openButton.triggered.disconnect()
                 self.saveButton.triggered.disconnect()
-                self.newButton.triggered.disconnect()
+                try:
+                    self.newButton.triggered.disconnect()
+                except:
+                    pass
                 self.openButton.triggered.connect(self.unit_editor.loadFromFile)
                 self.saveButton.triggered.connect(self.unit_editor.unitToJSON)
                 self.unit_editor.loadClass()

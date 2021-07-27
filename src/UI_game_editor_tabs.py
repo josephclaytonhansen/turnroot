@@ -12,6 +12,7 @@ from src.game_directory import gameDirectory
 from src.UI_Dialogs import textEntryDialog
 import json
 
+
 def initEsen(self):
     self.working_tab = self.tabs_dict["Essential Game Settings"]
     self.working_tab_layout = self.working_tab.layout()
@@ -26,7 +27,11 @@ def initEsen(self):
               [self.colors["GREY"]],
               [self.colors["GREY"],
                self.colors["GREY"]]]
-    helpts = ["","","","","",""]
+    helpts = [[None,["The game will show up in the player's game list as this", "This is one of two required settings to access other editors"],["font-size:24px;",None]],
+              [None,["The game folder contains all the files in the game.","The necessary sub-folders are created automatically.","This is one of two required settings to access other editors","Note that changing the game folder will reset all game options"],["font-size:24px;",None,None, None]],
+              [None, ["Who are you/your team?", "This will allow you to show your team's names or aliases in the credits of the game"],["font-size:24px;",None]],
+              [None, ["What is the cover of your game?", "If you have your own cover artwork, you can upload it- otherwise, your cover will just be text"],["font-size:24px;",None]],
+              [],[],[]]
     
     for q in q_list:
         w = selectionRow(self, q,
@@ -71,7 +76,11 @@ def initMisc(self):
               [self.colors["RED"],self.colors["BLUE"]],
               [self.colors["BLUE"],self.colors["RED"]]
               ]
-    helpts = ["","","","","",""]
+    helpts = [[None,["If enabled, player has customization options at the start of game", "This includes hair color, skin color, and hair style by default.","You can change this in the Flow Editor"],["font-size:24px;",None,None]],
+              [None,["If enabled, player can type in their own name and change pronouns","You can edit those settings in the Unit Editor, when editing the protagonist"],["font-size:24px;",None]],
+              [None,["Music can fade to combat music in combat", "Make sure to add both version in the Music folder","You can learn more in the Level Editor"],["font-size:24px;",None,None]],
+              [None,["The game will show up in the player's game list as this", "This is one of two required settings to access other editors"],["font-size:24px;",None]],
+              "","","","",""]
     
     for q in q_list:
         w = selectionRow(self, q,
@@ -320,4 +329,4 @@ def initM(self):
             self.weapon_rows[q].setVisible(False)
         if q == "Does game have hub, map, or both?":
             self.weapon_rows[q].setVisible(True)
-
+    

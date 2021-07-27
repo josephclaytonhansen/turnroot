@@ -983,6 +983,26 @@ def initRelationships(parent):
     spacer_label.setAlignment(Qt.AlignCenter)
     parent.supports_setup_layout.addWidget(spacer_label)
     
+    parent.bio = QWidget()
+    bio_layout = QHBoxLayout()
+    parent.bio.setLayout(bio_layout)
+    bio_label = QLabel("How does this unit have children?")
+    bio_label.setFont(parent.body_font)
+    parent.can_impregnate = QRadioButton("Can impregnate")
+    parent.can_be_pregnant = QRadioButton("Can be pregnant")
+    bio_layout.addWidget(bio_label)
+    bio_layout.addWidget(parent.can_impregnate)
+    bio_layout.addWidget(parent.can_be_pregnant)
+    parent.supports_setup_layout.addWidget(parent.bio)
+    parent.bio.setVisible(False)
+
+    if "Can S level supports produce children?" in game_options:
+        try:
+            if game_options["Can S level supports produce children?"] == "Yes":
+                parent.bio.setVisible(True)
+        except:
+            pass
+    
     parent.supports_setup_layout.addSpacerItem(QSpacerItem(1, 200))
     
     personal_enemy_widget = QWidget()

@@ -50,6 +50,8 @@ def selectionRow(parent, query, options, colors, helpt):
         row_layout.addWidget(option)
 
     help_button = QPushButton()
+    help_button.h = helpt 
+    help_button.clicked.connect(parent.help_text)
     help_button.setIcon(QIcon("src/ui_icons/white/question-mark-4-32.png"))
     help_button.setIconSize(QSize(48,48))
     help_button.setMaximumWidth(48)
@@ -58,7 +60,7 @@ def selectionRow(parent, query, options, colors, helpt):
     row_layout.addWidget(help_button)
 
     return row
-
+    
 class checkDialog(QDialog):
     def __init__(self,parent=None):
         data = updateJSON()

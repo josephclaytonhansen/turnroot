@@ -16,7 +16,7 @@ from src.UI_game_editor_tabs import (initEsen,
         initR,
         initM,
         initD)
-from src.UI_Dialogs import textEntryDialog, infoClose
+from src.UI_Dialogs import textEntryDialog, infoClose, stackedInfoImgDialog
 from src.UI_game_editor_backend import checkDialog
 import json, os
 game_options = {}
@@ -163,8 +163,10 @@ class GameEditorWnd(QWidget):
         elif self.sender().row_name == "Can S level supports produce children?":
             if self.sender().text() == "Yes":
                 self.weapon_rows["Do children units have paralogues?"].setVisible(True)
+                self.parent.unit_editor.bio.setVisible(True)
             else:
                 self.weapon_rows["Do children units have paralogues?"].setVisible(False)
+                self.parent.unit_editor.bio.setVisible(False)
         
         #show encumbrance options
         elif self.sender().row_name == "Do units have encumbrance (weapon weight affecting movement/speed)?":
@@ -200,7 +202,6 @@ class GameEditorWnd(QWidget):
                 self.weapon_rows["Are there travelling merchants?"].setVisible(True)
                 self.weapon_rows["Can player shop in the hub?"].setVisible(True)
                 self.weapon_rows["Does player have 'free time'?"].setVisible(True)
-
         try:
             with open(self.game_path+"/dat.trsl", "w") as g:
                 json.dump(game_options, g)
@@ -210,3 +211,9 @@ class GameEditorWnd(QWidget):
     def checkErrors(self):
         c = checkDialog(self)
         c.exec_()
+        
+    def help_text(self):
+        img = self.sender().h[0]
+        info = self.sender().h[1]
+        row_styles = self.sender().h[2]
+        o = stackedInfoImgDialog(img, info, row_styles, parent=self)

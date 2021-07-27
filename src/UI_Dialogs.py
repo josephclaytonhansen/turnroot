@@ -70,15 +70,20 @@ class stackedInfoImgDialog(QDialog):
         super().__init__(parent)
         self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
         
+        self.setWindowFlags(Qt.Popup)
+        
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(8,8,8,8)
         self.layout.setSpacing(4)
         
-        self.img_label = QLabel()
-        self.img_label.setPixmap(QPixmap(img))
-        self.img_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        if img != None:
         
-        self.layout.addWidget(self.img_label)
+            self.img_label = QLabel()
+            self.img_label.setPixmap(QPixmap(img))
+            self.img_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            
+            self.layout.addWidget(self.img_label)
+            
         self.setLayout(self.layout)
         self.layout.setSizeConstraint( QLayout.SetFixedSize)
         self.show()
@@ -87,7 +92,14 @@ class stackedInfoImgDialog(QDialog):
         for x in range(0, self.rows):
             self.labels[x] = QLabel(self.info[x])
             self.labels[x].setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            self.labels[x].setStyleSheet(self.row_styles[x]+"background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+            try:
+                self.labels[x].setStyleSheet(self.row_styles[x]+"background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
+            except:
+                pass
+            try:
+                self.labels[x].setFont(parent.body_font)
+            except:
+                pass
             self.layout.addWidget(self.labels[x])
 
 class infoClose(QDialog):
