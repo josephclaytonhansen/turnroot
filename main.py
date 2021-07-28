@@ -1,9 +1,19 @@
-import sys, json, os
-import src.UI_colorTheme as UI_colorTheme
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+import qtmodern.styles
+import qtmodern.windows, json, time
 from PyQt5.QtWebEngineWidgets import QWebEngineView
+
+from random import choice
+app = QApplication([])
+from src.UI_Dialogs import ImgPopup
+quick_tip_imgs = ["src/ui_icons/logo-color.png"]
+quick_tip = ImgPopup(choice(quick_tip_imgs), parent=None)
+
+import sys, json, os, time
+import src.UI_colorTheme as UI_colorTheme
+
 from src.UI_updateJSON import updateJSON
 from src.game_directory import gameDirectory
 from src.UI_Dialogs import confirmAction, infoClose, switchEditorDialog, REPLACE_WINDOW, NEW_WINDOW
@@ -18,13 +28,10 @@ from src.UI_node_preferences_dialog import NodePreferencesDialog
 from src.node_presets import NODES, Nodes
 from src.UI_WebViewer import webView
 from src.game_directory import gameDirectory
-import qtmodern.styles
-import qtmodern.windows, json
+
 
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
-
-app = QApplication([])
 
 myStyle = ProxyStyle('Fusion')    
 app.setStyle(myStyle)
@@ -272,7 +279,6 @@ class main(QMainWindow):
         self.editors = [self.unit_editor, self.skills_editor, self.object_editor, self.portrait_editor, None]
         self.e_to_de = ["Unit/Class Editor","Skill Editor", "Object Editor", "Portrait Editor", "Level Editor"]
         self.dei = data["default_editor"]
-        #get from prefs
         
         if g.path == "":
             self.m.setCurrentWidget(self.game_editor)
@@ -555,6 +561,8 @@ class main(QMainWindow):
 def Go(go):
     if go:
         window = main()
+        time.sleep(.2)
+        quick_tip.close()
         window.show()
         a = app.exec_()
         

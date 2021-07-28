@@ -101,6 +101,32 @@ class stackedInfoImgDialog(QDialog):
             except:
                 pass
             self.layout.addWidget(self.labels[x])
+            
+class ImgPopup(QDialog):
+    def __init__(self, img, parent=None):
+        data = updateJSON()
+        self.img = img
+        super().__init__(parent)
+        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color: white; color: #333333;")
+        
+        self.setWindowFlags(Qt.Popup)
+        
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(8,8,8,8)
+        self.layout.setSpacing(4)
+        
+        if img != None:
+        
+            self.img_label = QLabel()
+            self.img_label.setPixmap(QPixmap(img))
+            self.img_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            
+            self.layout.addWidget(self.img_label)
+            
+        self.setLayout(self.layout)
+        self.layout.setSizeConstraint( QLayout.SetFixedSize)
+        self.show()
+        self.labels = {}
 
 class infoClose(QDialog):
     def __init__(self, info, parent=None):
