@@ -1,19 +1,20 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-import qtmodern.styles
-import qtmodern.windows, json, time
+from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 from random import choice
 app = QApplication([])
+
 from src.UI_Dialogs import ImgPopup
 quick_tip_imgs = ["src/ui_icons/logo-color.png"]
 quick_tip = ImgPopup(choice(quick_tip_imgs), parent=None)
 
+from PyQt5.QtWidgets import *
+import qtmodern.styles
+import qtmodern.windows
 import sys, json, os, time
 import src.UI_colorTheme as UI_colorTheme
-
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 from src.UI_updateJSON import updateJSON
 from src.game_directory import gameDirectory
 from src.UI_Dialogs import confirmAction, infoClose, switchEditorDialog, REPLACE_WINDOW, NEW_WINDOW
@@ -561,9 +562,9 @@ class main(QMainWindow):
 def Go(go):
     if go:
         window = main()
-        time.sleep(.2)
-        quick_tip.close()
+        time.sleep(.4)
         window.show()
+        quick_tip.close()
         a = app.exec_()
         
 Go(testing)
