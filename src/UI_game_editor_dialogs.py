@@ -259,6 +259,7 @@ class creditsDialog(QDialog):
         layout.addWidget(self.ok)
         
         self.setLayout(layout)
+        self.Load()
         self.show()
     
     def Load(self):
@@ -266,15 +267,20 @@ class creditsDialog(QDialog):
         g.getPath()
         try:
             with open(g.path+"/game_options/end_credits.trsl", "r") as f:
-                self.load_data = json.load(f)
-            assigns = []
-            for i in self.load_data:
-                    assigns[self.load_data.index(i)].setCurrentText(i)
+                order = json.load(f)
+                for k in self.roles:
+                    self.roles[k].setText(order[0][k])
+                for h in self.names:
+                    self.names[h].setPlainText(order[1][h])
         except Exception as e:
             print(e)
     
     def Save(self):
-        order = []
+        order = [[],[]]
+        for k in self.roles:
+            order[0].append(self.roles[k].text())
+        for h in self.names:
+            order[1].append(self.names[h].toPlainText())
         g = gameDirectory(self)
         g.getPath()
         with open(g.path+"/game_options/end_credits.trsl", "w") as f:
