@@ -225,6 +225,26 @@ class checkDialog(QDialog):
             except Exception as e:
                 print(e)
                 return [FATAL_ERROR, "Game folder not set"]
+        
+        #check end credits
+        elif n == 7:
+            try:
+                dirpath = self.parent.game_path+"/game_options/end_credits.trsl"
+                with open(dirpath, "r") as f:
+                    td = json.load(f)
+                    null_count = 0
+                    for k in td:
+                        for j in k:
+                            if j == "":
+                                null_count += 1
+                if null_count == 0:
+                    return [NO_ERROR]
+                else:
+                    return [CAUTION, "The end credits have "+str(null_count)+" blank spaces (this may be intentional)"]
+            except Exception as e:
+                print(e)
+                return [WARNING, "No end credits file"]
+        
         #check unit files for portraits
         #check unit files for names
         #check unit files for pronouns
