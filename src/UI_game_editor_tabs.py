@@ -76,7 +76,7 @@ def initMisc(self):
               [self.colors["RED"],self.colors["BLUE"]],
               [self.colors["BLUE"],self.colors["RED"]]
               ]
-    helpts = [[None,["If enabled, player has customization options at the start of game", "This includes hair color, skin color, and hair style by default.","You can change this in the Flow Editor"],["font-size:24px;",None,None]],
+    helpts = [[None,["If enabled, player has customization options at the start of game", "This includes hair color, skin color, and hair style by default."],["font-size:24px;",None]],
               [None,["If enabled, player can type in their own name and change pronouns","You can edit those settings in the Unit Editor, when editing the protagonist"],["font-size:24px;",None]],
               [None,["Music can fade to combat music in combat", "Make sure to add both version in the Music folder","You can learn more in the Level Editor"],["font-size:24px;",None,None]],
               [None,["'Yes' means each map has at least 3 tracks", "Player turn (map), player turn (combat), and enemy turn"],["font-size:24px;",None]],

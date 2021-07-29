@@ -15,7 +15,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 
 from src.skeletons.unit import Unit, universal_classifications
 
-from src.UI_Dialogs import confirmAction, popupInfo, infoClose
+from src.UI_Dialogs import confirmAction, popupInfo, infoClose, textEntryDialog
 from src.game_directory import gameDirectory
 from src.UI_unit_editor_tabs import (initUnit, initBasic, initAI, initWeaponAffinities, initClasses, initUnique, initRelationships, initActions)
 from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats,
@@ -328,9 +328,13 @@ class UnitEditorWnd(QWidget):
         q = QFileDialog(self)
         self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saving.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
         self.parent().parent().save_status.setToolTip("Unit file saving")
-        options = q.Options()
-        options |= q.DontUseNativeDialog
-        fileName, _ = q.getSaveFileName(None,"Save","","Turnroot Unit (*.truf)", options=options)
+#         options = q.Options()
+#         options |= q.DontUseNativeDialog
+#         fileName, _ = q.getSaveFileName(None,"Save","","Turnroot Unit (*.truf)", options=options)
+        h = textEntryDialog(self)
+        h.exec_()
+        fileName = directory.path + "/units/" + h.data
+        print(fileName)
         if fileName:
             self.path = fileName+".truf"
             g = infoClose("Saved unit as "+self.path+"\nAll changes to this unit will now autosave")

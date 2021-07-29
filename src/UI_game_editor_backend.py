@@ -243,7 +243,7 @@ class checkDialog(QDialog):
                     return [CAUTION, "The end credits have "+str(null_count)+" blank spaces (this may be intentional)"]
             except Exception as e:
                 print(e)
-                return [WARNING, "No end credits file"]
+                return [CAUTION, "No end credits file"]
             
         #check cover art
         elif n == 8:
