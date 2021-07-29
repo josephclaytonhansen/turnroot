@@ -195,12 +195,12 @@ class weaponTriangle(QDialog):
     def Load(self):
         g = gameDirectory(self)
         g.getPath()
-        with open(g.path+"/weapon_triangle.trsl", "r") as f:
-            self.load_data = json.load(f)
-        assigns = [self.left_1, self.left_2,
-                 self.top_1, self.top_2,
-                 self.right_1,self.right_2]
         try:
+            with open(g.path+"/weapon_triangle.trsl", "r") as f:
+                self.load_data = json.load(f)
+            assigns = [self.left_1, self.left_2,
+                     self.top_1, self.top_2,
+                     self.right_1,self.right_2]
             for i in self.load_data:
                     assigns[self.load_data.index(i)].setCurrentText(i)
         except Exception as e:
