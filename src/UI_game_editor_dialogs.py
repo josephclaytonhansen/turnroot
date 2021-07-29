@@ -28,7 +28,7 @@ class weaponTriangle(QDialog):
         self.ok = QPushButton(QIcon(), "Save and Close", self)
         self.ok.setFont(parent.body_font)
         self.ok.setMinimumHeight(48)
-        self.ok.setStyleSheet("background-color: "+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        self.ok.setStyleSheet("background-color: "+active_theme.button_alt_color+";color:"+active_theme.button_alt_text_color+";")
         self.ok.clicked.connect(self.ok_clicked)
         
         self.wt = QPushButton(QIcon(), "Edit Weapon Types", self)
