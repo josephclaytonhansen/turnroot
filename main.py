@@ -5,7 +5,7 @@ from random import choice
 app = QApplication([])
 
 from src.UI_Dialogs import ImgPopup
-quick_tip_imgs = ["src/ui_icons/logo-color.png"]
+quick_tip_imgs = ["src/ui_images/qut/qut_001.png","src/ui_images/qut/qut_002.png","src/ui_images/qut/qut_003.png"]
 quick_tip = ImgPopup(choice(quick_tip_imgs), parent=None)
 quick_tip.show()
 quick_tip.exec_()

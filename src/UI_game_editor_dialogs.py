@@ -21,7 +21,7 @@ class weaponTriangle(QDialog):
         self.back.move(0,0)
         self.back.raise_()
         
-        self.ok = QPushButton(QIcon(), "Ok", self)
+        self.ok = QPushButton(QIcon(), "Save and Close", self)
         self.ok.setFont(parent.body_font)
         self.ok.setMinimumHeight(48)
         self.ok.setStyleSheet("background-color: "+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
@@ -64,7 +64,7 @@ class weaponTriangle(QDialog):
         self.outliers_list.setStyleSheet("background-color: "+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
         
         self.ok.show()
-        self.ok.move(900, 380)
+        self.ok.move(860, 380)
         self.ok.raise_()
         
         self.wt.show()
