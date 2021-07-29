@@ -1,9 +1,9 @@
-from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtCore import QSize, Qt, QTimer
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QFont
 from src.UI_updateJSON import updateJSON
 import src.UI_colorTheme
-import shutil, os, pickle, json, sys
+import shutil, os, pickle, json, sys, time
 
 return_confirm = False
 chosen_object = None
@@ -126,6 +126,9 @@ class ImgPopup(QDialog):
         self.setLayout(self.layout)
         self.layout.setSizeConstraint( QLayout.SetFixedSize)
         self.show()
+        self.img_label.show()
+        timer = QTimer()
+        timer.singleShot(2000, self.close)
         self.labels = {}
 
 class infoClose(QDialog):

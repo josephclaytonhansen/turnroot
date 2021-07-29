@@ -7,11 +7,13 @@ app = QApplication([])
 from src.UI_Dialogs import ImgPopup
 quick_tip_imgs = ["src/ui_icons/logo-color.png"]
 quick_tip = ImgPopup(choice(quick_tip_imgs), parent=None)
+quick_tip.show()
+quick_tip.exec_()
 
 from PyQt5.QtWidgets import *
 import qtmodern.styles
 import qtmodern.windows
-import sys, json, os, time
+import sys, json, os
 import src.UI_colorTheme as UI_colorTheme
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -562,7 +564,6 @@ class main(QMainWindow):
 def Go(go):
     if go:
         window = main()
-        time.sleep(.4)
         window.show()
         quick_tip.close()
         a = app.exec_()
