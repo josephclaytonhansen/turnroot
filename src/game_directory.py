@@ -41,7 +41,7 @@ class gameDirectory():
         if os.path.exists(self.path):
             dirs = ["classes", "exp_types","sheets","units","weapon_types","weapons", "objects", "items", "exp_types",
                     "music", "graphics", "sounds", "dialogues", "events", "skills", "tactics", "skilled_blows", "game_data",
-                    "levels"]
+                    "levels", "game_options"]
             for d in dirs:
                 working_path = os.path.join(self.path, d)
                 try:

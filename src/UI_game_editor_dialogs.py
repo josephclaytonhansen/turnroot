@@ -15,7 +15,7 @@ class weaponTriangle(QDialog):
         active_theme = self.active_theme
         super().__init__(parent)
         self.parent = parent
-        self.setStyleSheet("font-size: "+str(data["font_size"])+"px; background-color:"+active_theme.window_background_color+";color:"+active_theme.window_text_color+";")
+        self.setStyleSheet("background-color:"+active_theme.window_background_color+";color:"+active_theme.window_text_color+";")
 
         self.setFixedSize(1000,450)
         
@@ -196,7 +196,7 @@ class weaponTriangle(QDialog):
         g = gameDirectory(self)
         g.getPath()
         try:
-            with open(g.path+"/weapon_triangle.trsl", "r") as f:
+            with open(g.path+"/game_options/weapon_triangle.trsl", "r") as f:
                 self.load_data = json.load(f)
             assigns = [self.left_1, self.left_2,
                      self.top_1, self.top_2,
@@ -212,5 +212,76 @@ class weaponTriangle(QDialog):
                  self.right_1.currentText(),self.right_2.currentText()]
         g = gameDirectory(self)
         g.getPath()
-        with open(g.path+"/weapon_triangle.trsl", "w") as f:
+        with open(g.path+"/game_options/weapon_triangle.trsl", "w") as f:
             json.dump(order, f)
+            
+class creditsDialog(QDialog):
+    def __init__(self,parent=None,font=None):
+        data = updateJSON()
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        active_theme = self.active_theme
+        super().__init__(parent)
+        self.setStyleSheet("background-color:"+active_theme.window_background_color+";color:"+active_theme.window_text_color+";")
+        
+        layout = QVBoxLayout()
+        layout.setContentsMargins( 8,8,8,8)
+        layout.setSpacing(0)
+        
+        self.rows = {}
+        self.roles = {}
+        self.names = {}
+        for x in range(0,13):
+            self.rows[x] = QWidget()
+            row_l = QHBoxLayout()
+            self.rows[x].setLayout(row_l)
+            title = QLineEdit()
+            self.roles[x] = title
+            title_label = QLabel("Role")
+            name = QTextEdit()
+            self.names[x] = name
+            name_label = QLabel("Name(s)")
+            for k in [title,name]:
+                k.setFont(parent.body_font)
+                k.setMaximumHeight(48)
+                k.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+            row_l.addWidget(title_label)
+            row_l.addWidget(title)
+            row_l.addWidget(name_label)
+            row_l.addWidget(name)
+            layout.addWidget(self.rows[x])
+        
+        
+        self.ok = QPushButton(QIcon(), "Save and Close", self)
+        self.ok.setFont(parent.body_font)
+        self.ok.setMinimumHeight(48)
+        self.ok.setStyleSheet("background-color: "+active_theme.button_alt_color+";color:"+active_theme.button_alt_text_color+";")
+        self.ok.clicked.connect(self.ok_clicked)
+        layout.addWidget(self.ok)
+        
+        self.setLayout(layout)
+        self.show()
+    
+    def Load(self):
+        g = gameDirectory(self)
+        g.getPath()
+        try:
+            with open(g.path+"/game_options/end_credits.trsl", "r") as f:
+                self.load_data = json.load(f)
+            assigns = []
+            for i in self.load_data:
+                    assigns[self.load_data.index(i)].setCurrentText(i)
+        except Exception as e:
+            print(e)
+    
+    def Save(self):
+        order = []
+        g = gameDirectory(self)
+        g.getPath()
+        with open(g.path+"/game_options/end_credits.trsl", "w") as f:
+            json.dump(order, f)
+        
+    
+    def ok_clicked(self):
+        self.return_confirm = True
+        self.Save()
+        self.close()
