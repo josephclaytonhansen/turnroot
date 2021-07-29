@@ -197,7 +197,6 @@ class weaponTriangle(QDialog):
         g.getPath()
         with open(g.path+"/weapon_triangle.trsl", "r") as f:
             self.load_data = json.load(f)
-            print(self.load_data)
         assigns = [self.left_1, self.left_2,
                  self.top_1, self.top_2,
                  self.right_1,self.right_2]

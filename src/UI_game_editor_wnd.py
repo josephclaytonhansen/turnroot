@@ -131,7 +131,6 @@ class GameEditorWnd(QWidget):
         for o in self.sender().row.options:
             if self.sender().row.options[o] != self.sender():
                 self.sender().row.options[o].setChecked(False)
-            print(self.sender().row.options[o].text(), self.sender().name)
             if self.sender().row.options[o].text() == self.sender().name:
                 self.sender().setChecked(True)
         game_options[self.sender().row_name] = self.sender().name

@@ -215,7 +215,6 @@ class checkDialog(QDialog):
                         pass
                 for u in uni:
                     for c in cla:
-                        print(c, uni[u].past_classes)
                         if c in uni[u].past_classes:
                             count +=1
                 if count == 0:
