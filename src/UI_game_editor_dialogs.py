@@ -286,7 +286,81 @@ class creditsDialog(QDialog):
         with open(g.path+"/game_options/end_credits.trsl", "w") as f:
             json.dump(order, f)
         
+    def ok_clicked(self):
+        self.return_confirm = True
+        self.Save()
+        self.close()
+
+class uploadGameArtDialog(QDialog):
+    def __init__(self,parent=None,font=None):
+        data = updateJSON()
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        active_theme = self.active_theme
+        super().__init__(parent)
+        self.setStyleSheet("background-color:"+active_theme.window_background_color+";color:"+active_theme.window_text_color+";")
+        
+        layout = QVBoxLayout()
+        layout.setContentsMargins( 8,8,8,8)
+        layout.setSpacing(0)
+        
+                
+        self.preview = QLabel()
+        self.preview.setMinimumHeight(400)
+        self.preview.setMaximumHeight(400)
+        self.preview.setMinimumWidth(400)
+        self.preview.setMaximumWidth(400)
+        layout.addWidget(self.preview)
+        
+        self.ok = QPushButton(QIcon(), "Save and Close", self)
+        self.ok.setFont(parent.body_font)
+        self.ok.setMinimumHeight(48)
+        self.ok.setStyleSheet("background-color: "+active_theme.button_alt_color+";color:"+active_theme.button_alt_text_color+";")
+        self.ok.clicked.connect(self.ok_clicked)
+        
+        self.upload = QPushButton(QIcon(), "Upload Image", self)
+        self.upload.setFont(parent.body_font)
+        self.upload.setMinimumHeight(48)
+        self.upload.setStyleSheet("background-color: "+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        self.upload.clicked.connect(self.upload_image)
+        layout.addWidget(self.upload)
+        layout.addWidget(self.ok)
+        
+        self.setLayout(layout)
+        self.Load()
+        self.show()
+        
+    def Load(self):
+        g = gameDirectory(self)
+        g.getPath()
+        try:
+            with open(g.path+"/game_options/cover_art.trsl", "r") as f:
+                self.image_path = json.load(f)
+                self.preview.setPixmap(QPixmap(self.image_path))
+        except Exception as e:
+            print(e)
     
+    def upload_image(self):
+        q = QFileDialog(self)
+        options = q.Options()
+        options |= q.DontUseNativeDialog
+        fileName, _ = q.getOpenFileName(None,"Open","","Image (*.png)", options=options)
+        if fileName:
+            if fileName.endswith(".png"):
+                self.image_path = fileName
+            else:
+                self.image_path = fileName+".png"
+            self.preview.setPixmap(QPixmap(self.image_path))
+        self.Save()
+    
+    def Save(self):
+        g = gameDirectory(self)
+        g.getPath()
+        try:
+            with open(g.path+"/game_options/cover_art.trsl", "w") as f:
+                json.dump(self.image_path, f)
+        except:
+            pass
+        
     def ok_clicked(self):
         self.return_confirm = True
         self.Save()

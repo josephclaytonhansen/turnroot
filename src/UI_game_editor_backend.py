@@ -244,6 +244,18 @@ class checkDialog(QDialog):
             except Exception as e:
                 print(e)
                 return [WARNING, "No end credits file"]
+            
+        #check cover art
+        elif n == 8:
+            try:
+                dirpath = self.parent.game_path+"/game_options/cover_art.trsl"
+                with open(dirpath, "r") as f:
+                    td = json.load(f)
+                    if os.path.exists(td) == False:
+                        return [WARNING, "Assigned cover art image could not be found"]
+            except Exception as e:
+                print(e)
+                return [CAUTION, "No cover art assigned (will be auto-generated)"]
         
         #check unit files for portraits
         #check unit files for names

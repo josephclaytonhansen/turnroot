@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 
 import src.UI_colorTheme as UI_colorTheme
 from src.UI_updateJSON import updateJSON
-from src.UI_game_editor_dialogs import weaponTriangle, creditsDialog
+from src.UI_game_editor_dialogs import weaponTriangle, creditsDialog, uploadGameArtDialog
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
@@ -203,6 +203,12 @@ class GameEditorWnd(QWidget):
         elif self.sender().row_name == "What should the end credits say?":
             game_options[self.sender().row_name] = self.sender().text()
             g = creditsDialog(self)
+            g.exec_()
+            
+        #game art
+        elif self.sender().row_name == "Supply your own cover art or have one auto-generated?":
+            game_options[self.sender().row_name] = self.sender().text()
+            g = uploadGameArtDialog(self)
             g.exec_()
         
         #change map/hub options/visiblity based on choice( this is a big one)
