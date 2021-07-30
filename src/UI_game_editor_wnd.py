@@ -212,7 +212,7 @@ class GameEditorWnd(QWidget):
                 g = uploadGameArtDialog(self)
                 g.exec_()
             else:
-                gameArtGenerate(parent)
+                gameArtGenerate(self)
         
         #change map/hub options/visiblity based on choice( this is a big one)
         elif self.sender().row_name == "Does game have hub, map, or both?":
