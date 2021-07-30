@@ -134,7 +134,7 @@ def initWeapons(self):
               "Do units have encumbrance (weapon weight affecting movement/speed)?",
               "Does encumbrance affect movement or speed?",
               "Use prowess skills (as weapon experience levels up, prowess skill levels up)?",
-              "Do skill levels have midpoints (i.e.: E goes to E+) or not (E goes to D)?"
+              "Do weapon experience levels have midpoints (i.e.: E goes to E+) or not (E goes to D)?"
               ]
     o_list = [["Yes", "No"], ["Yes", "No"],
               ["Bought like other items", "Learned with classes/experience level"],
@@ -156,7 +156,18 @@ def initWeapons(self):
               [self.colors["PURPLE"],self.colors["BLUE"]],
                [self.colors["PURPLE"],self.colors["BLUE"]]
               ]
-    helpts = ["","","","","","","","","",""]
+    helpts = [[None,["Set if weapon types have advantages over each other", "Clicking Yes will open the weapon triangle settings"],["font-size:24px;",None]],
+              [None,["Set if weapons have a set number of uses before breaking", "If yes, weapons can only be used X times. If no, weapons can be used forever.","This setting takes priority over if magic weapons gain durability- if this is set to no, that setting will do nothing"],["font-size:24px;",None,None]],
+              [None,["Set whether magic weapons are treated like normal items or gained through classes and experience", "'Normal' in this case means they can be bought, sold, stored, and traded"],["font-size:24px;",None]],
+              [None,["Item forging allows weapons to be repaired or turned into new, more powerful, weapons", "Clicking Yes will give you the option to choose how forging works"],["font-size:24px;",None]],
+              [None,["Choose what item forging accomplishes", "Click 'Enhance existing weapon' to choose between repairing or enhancing attributes"],["font-size:24px;",None]],
+              [None,["Set if magic weapon uses replenish at the beginning of each battle", "Generally, uses should only replenish if magic is learned.", "See 'How is Magic Gained?' to change this"],["font-size:24px;",None, None]],
+              [None,["Enable encumbrance", "If enabled, units' ability to carry heavy items is affected by the Constitution stat.","Otherwise, the Constitution stat is disabled game-wide"],["font-size:24px;",None]],
+              [None,["Change what encumbrance affects", "If a unit is carrying a lot of heavy stuff, this can affect EITHER how many tiles they can move OR their Speed stat."],["font-size:24px;",None]],
+              [None,["Enable or disable prowess skills gamewide", "A prowess skill levels up as weapon experience levels up.","Prowess skills automatically update- ie., there will only ever be one prowess skill per weapon type in a unit's skill list."],["font-size:24px;",None, None]],
+              [None,["Set how many weapon experience levels there are game wide", "Without midpoints, weapon experience goes E,D,C,B,A,S for a total of 6","With midpoints, weapon experience goes E,E+,D... A+,S for a total of 11"],["font-size:24px;",None, None]],
+              ]
+    
     
     for q in q_list:
         w = selectionRow(self, q,
