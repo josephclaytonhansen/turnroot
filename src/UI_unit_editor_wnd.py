@@ -352,17 +352,22 @@ class UnitEditorWnd(QWidget):
             self.unit.AI_sheets.append(self.dv_slider_dv)
 
         if self.path == None or self.path == '':
-            self.saveFileDialog()
-            if self.path == None or self.path == '':
-                c = infoClose("No file selected")
+            f = confirmAction("#Your file is not saved- click yes to attempt autosave")
+            f.exec_()
+            if f.return_confirm == False:
+                c = infoClose("Your changes will be lost")
                 c.exec_()
             else:
-                with open(self.path+".trui", "w") as w:
-                    json.dump(self.unit.AI_sheets, w)
-                self.unit.parent = self
-                self.unit.selfToJSON(self.path)
-                self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
-                self.parent().parent().save_status.setToolTip("Unit file saved")
+                try:
+                    with open(self.path+".trui", "w") as w:
+                        json.dump(self.unit.AI_sheets, w)
+                    self.unit.parent = self
+                    self.unit.selfToJSON(self.path)
+                    self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
+                    self.parent().parent().save_status.setToolTip("Unit file saved")
+                except:
+                    c = infoClose("No file found, your changes will be lost")
+                    c.exec_()
 
         else:
             with open(self.path+".trui", "w") as w:
