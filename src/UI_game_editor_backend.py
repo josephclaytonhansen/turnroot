@@ -292,3 +292,6 @@ class checkDialog(QDialog):
                 except: #no error
                     pass
             qApp.processEvents()
+            
+def gameArtGenerate(parent):
+    self.parent = parent

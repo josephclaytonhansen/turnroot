@@ -18,7 +18,7 @@ from src.UI_game_editor_tabs import (initEsen,
         initM,
         initD)
 from src.UI_Dialogs import textEntryDialog, infoClose, stackedInfoImgDialog
-from src.UI_game_editor_backend import checkDialog
+from src.UI_game_editor_backend import checkDialog, gameArtGenerate
 import json, os
 game_options = {}
 
@@ -116,7 +116,7 @@ class GameEditorWnd(QWidget):
     def tab_change(self):
         global game_options
         with open(self.game_path+"/dat.trsl", "r") as g:
-            game_options = json.load(g)
+            game_options = game_options | json.load(g)
             for item in self.weapon_rows:
                 try:
                     if item in data:
@@ -207,9 +207,12 @@ class GameEditorWnd(QWidget):
             
         #game art
         elif self.sender().row_name == "Supply your own cover art or have one auto-generated?":
-            game_options[self.sender().row_name] = self.sender().text()
-            g = uploadGameArtDialog(self)
-            g.exec_()
+            if self.sender().text() == "Supply my own":
+                game_options[self.sender().row_name] = self.sender().text()
+                g = uploadGameArtDialog(self)
+                g.exec_()
+            else:
+                gameArtGenerate(parent)
         
         #change map/hub options/visiblity based on choice( this is a big one)
         elif self.sender().row_name == "Does game have hub, map, or both?":
