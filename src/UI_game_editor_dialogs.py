@@ -6,6 +6,7 @@ import src.UI_colorTheme
 import shutil, os, pickle, json, sys
 from src.game_directory import gameDirectory
 from src.UI_unit_editor_more_dialogs import editUniversalWeaponTypes
+from src.UI_game_editor_backend import DragListWidget
 
 class weaponTriangle(QDialog):
     def __init__(self, parent=None):
@@ -404,7 +405,6 @@ class magicExperienceDialog(QDialog):
         
         self.parent = parent
         self.body_font = self.parent.body_font
-        self.body_font.setPointSize(20)
         
         layout = QVBoxLayout()
         layout.setContentsMargins(8,8,8,8)
@@ -447,27 +447,37 @@ class magicExperienceDialog(QDialog):
         self.top_layout.addWidget(dm_l)
         self.top_layout.addWidget(e_dm_n)
         
-        m_list = QListWidget()
-        m_list.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
-        m_list.setFont(self.body_font)
-        self.middle_layout.addWidget(m_list)
+        self.m_list = DragListWidget()
+        self.m_list.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        self.m_list.setFont(self.body_font)
+        self.middle_layout.addWidget(self.m_list)
         
-        dm_list = QListWidget()
-        dm_list.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
-        dm_list.setFont(self.body_font)
-        self.middle_layout.addWidget(dm_list)
+        self.dm_list = DragListWidget()
+        self.dm_list.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        self.dm_list.setFont(self.body_font)
+        self.middle_layout.addWidget(self.dm_list)
         
-        a_list = QListWidget()
-        a_list.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
-        a_list.setFont(self.body_font)
-        self.middle_layout.addWidget(a_list)
+        self.a_list = DragListWidget()
+        self.a_list.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        self.a_list.setFont(self.body_font)
+        self.middle_layout.addWidget(self.a_list)
         
-        a_l = QLabel("Weapon Types (Drag and Drop Types)")
+        a_l = QLabel("All Weapon Types (Drag and Drop Magic Types)")
         a_l.setFont(self.body_font)
         
         layout.addWidget(self.top)
         layout.addWidget(self.middle)
         layout.addWidget(a_l)
-        layout.addWidget(a_list)
+        layout.addWidget(self.a_list)
+        
+        self.loadWT()
+        
+    def loadWT(self):
+        with open("src/skeletons/universal_weapon_types.json", "r") as weapons_file:
+            self.wt_list = []
+            weapon_types = []
+            weapon_types = json.load(weapons_file)
+            self.wt_list = weapon_types.copy()
+            self.a_list.addItems(weapon_types)
         
         

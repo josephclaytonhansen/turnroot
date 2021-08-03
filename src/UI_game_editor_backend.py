@@ -295,3 +295,39 @@ class checkDialog(QDialog):
             
 def gameArtGenerate(parent):
     self.parent = parent
+    
+class DragListWidget(QListWidget):
+    def __init__(self, parent=None):
+        super(DragListWidget, self).__init__(parent)
+        self.setIconSize(QSize(124, 124))
+        self.setDragDropMode(QAbstractItemView.DragDrop)
+        self.setDefaultDropAction(Qt.MoveAction)
+        self.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.setAcceptDrops(True)
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.accept()
+        else:
+            super(DragListWidget, self).dragEnterEvent(event)
+
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.setDropAction(Qt.CopyAction)
+            event.accept()
+        else:
+            super(DragListWidget, self).dragMoveEvent(event)
+
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls() and g < 1:
+            event.setDropAction(Qt.CopyAction)
+            event.accept()
+            links = []
+            for url in event.mimeData().urls():
+                links.append(str(url.toLocalFile()))
+            self.emit(SIGNAL("dropped"), links)
+        else:
+            event.setDropAction(Qt.MoveAction)
+            super(DragListWidget, self).dropEvent(event)
+
+
