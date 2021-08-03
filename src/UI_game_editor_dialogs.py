@@ -462,15 +462,17 @@ class magicExperienceDialog(QDialog):
         self.a_list.setFont(self.body_font)
         self.middle_layout.addWidget(self.a_list)
         
-        a_l = QLabel("All Weapon Types (Drag and Drop Magic Types)")
-        a_l.setFont(self.body_font)
+        self.a_l = QLabel("All Weapon Types (Drag and Drop Magic Types)")
+        self.a_l.setFont(self.body_font)
         
         layout.addWidget(self.top)
         layout.addWidget(self.middle)
-        layout.addWidget(a_l)
+        layout.addWidget(self.a_l)
         layout.addWidget(self.a_list)
         
         self.loadWT()
+        self.a_list.items = self.getFromList(self.a_list)
+        print(self.a_list.items)
         
     def loadWT(self):
         with open("src/skeletons/universal_weapon_types.json", "r") as weapons_file:
@@ -479,5 +481,15 @@ class magicExperienceDialog(QDialog):
             weapon_types = json.load(weapons_file)
             self.wt_list = weapon_types.copy()
             self.a_list.addItems(weapon_types)
+    
+    def getFromList(self, l):
+        try:
+            count = l.count()
+            items = []
+            for x in range(0,count):
+                items.append(l.item(x))
+            return items
+        except:
+            return []
         
         
