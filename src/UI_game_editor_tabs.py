@@ -134,7 +134,8 @@ def initWeapons(self):
               "Do units have encumbrance (weapon weight affecting movement/speed)?",
               "Does encumbrance affect movement or speed?",
               "Use prowess skills (as weapon experience levels up, prowess skill levels up)?",
-              "Do weapon experience levels have midpoints (i.e.: E goes to E+) or not (E goes to D)?"
+              "Do weapon experience levels have midpoints (i.e.: E goes to E+) or not (E goes to D)?",
+              "Are magic weapon experience types combined or separate?"
               ]
     o_list = [["Yes", "No"], ["Yes", "No"],
               ["Bought like other items", "Learned with classes/experience level"],
@@ -144,7 +145,8 @@ def initWeapons(self):
               ["Yes", "No"],
               ["Movement", "Speed"],
               ["Yes", "No"],
-              ["Use +", "Don't Use +"]]
+              ["Use +", "Don't Use +"],
+              ["Combined", "Separate"]]
     colors = [[self.colors["BLUE"],self.colors["PURPLE"]],
               [self.colors["BLUE"],self.colors["GREY"]],
               [self.colors["BLUE"],self.colors["PURPLE"]],
@@ -154,7 +156,8 @@ def initWeapons(self):
               [self.colors["PURPLE"],self.colors["BLUE"]],
               [self.colors["GREY"],self.colors["GREY"]],
               [self.colors["PURPLE"],self.colors["BLUE"]],
-               [self.colors["PURPLE"],self.colors["BLUE"]]
+               [self.colors["PURPLE"],self.colors["BLUE"]],
+              [self.colors["BLUE"],self.colors["PURPLE"]]
               ]
     helpts = [[None,["Set if weapon types have advantages over each other", "Clicking Yes will open the weapon triangle settings"],["font-size:24px;",None]],
               [None,["Set if weapons have a set number of uses before breaking", "If yes, weapons can only be used X times. If no, weapons can be used forever.","This setting takes priority over if magic weapons gain durability- if this is set to no, that setting will do nothing"],["font-size:24px;",None,None]],
@@ -166,6 +169,7 @@ def initWeapons(self):
               [None,["Change what encumbrance affects", "If a unit is carrying a lot of heavy stuff, this can affect EITHER how many tiles they can move OR their Speed stat."],["font-size:24px;",None]],
               [None,["Enable or disable prowess skills gamewide", "A prowess skill levels up as weapon experience levels up.","Prowess skills automatically update- ie., there will only ever be one prowess skill per weapon type in a unit's skill list."],["font-size:24px;",None, None]],
               [None,["Set how many weapon experience levels there are game wide", "Without midpoints, weapon experience goes E,D,C,B,A,S for a total of 6","With midpoints, weapon experience goes E,E+,D... A+,S for a total of 11"],["font-size:24px;",None, None]],
+              [None,["Set how magical weapon experience works", "Combined means multiple weapon types gain the same weapon experience.", "Combined allows you to set which weapon types go into Magic and, optionally, Dark Magic (these can be re-named)","Separate will keep each weapon type gaining unique experience"],["font-size:24px;",None, None, None]],
               ]
     
     
