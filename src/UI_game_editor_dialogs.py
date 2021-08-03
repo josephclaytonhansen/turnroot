@@ -404,6 +404,7 @@ class magicExperienceDialog(QDialog):
         
         self.parent = parent
         self.body_font = self.parent.body_font
+        self.body_font.setPointSize(20)
         
         layout = QVBoxLayout()
         layout.setContentsMargins(8,8,8,8)
@@ -411,5 +412,62 @@ class magicExperienceDialog(QDialog):
         
         self.setLayout(layout)
         self.show()
+        
+        self.middle = QWidget()
+        self.top = QWidget()
+        self.middle_layout = QHBoxLayout()
+        self.top_layout = QHBoxLayout()
+        self.middle.setLayout(self.middle_layout)
+        self.top.setLayout(self.top_layout)
+        
+        m_l = QLabel("Magic")
+        m_l.setFont(self.body_font)
+        e_m_n = QPushButton()
+        e_m_n.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        e_m_n.setFont(self.body_font)
+        e_m_n.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
+        e_m_n.setIconSize(QSize(48,48))
+        e_m_n.setMaximumWidth(48)
+        e_m_n.setMinimumHeight(48)
+        e_m_n.setMaximumHeight(48)
+        
+        dm_l = QLabel("Dark Magic")
+        dm_l.setFont(self.body_font)
+        e_dm_n = QPushButton()
+        e_dm_n.setFont(self.body_font)
+        e_dm_n.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        e_dm_n.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
+        e_dm_n.setIconSize(QSize(48,48))
+        e_dm_n.setMaximumWidth(48)
+        e_dm_n.setMinimumHeight(48)
+        e_dm_n.setMaximumHeight(48)
+        
+        self.top_layout.addWidget(m_l)
+        self.top_layout.addWidget(e_m_n)
+        self.top_layout.addWidget(dm_l)
+        self.top_layout.addWidget(e_dm_n)
+        
+        m_list = QListWidget()
+        m_list.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        m_list.setFont(self.body_font)
+        self.middle_layout.addWidget(m_list)
+        
+        dm_list = QListWidget()
+        dm_list.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        dm_list.setFont(self.body_font)
+        self.middle_layout.addWidget(dm_list)
+        
+        a_list = QListWidget()
+        a_list.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        a_list.setFont(self.body_font)
+        self.middle_layout.addWidget(a_list)
+        
+        a_l = QLabel("Weapon Types (Drag and Drop Types)")
+        a_l.setFont(self.body_font)
+        
+        layout.addWidget(self.top)
+        layout.addWidget(self.middle)
+        layout.addWidget(a_l)
+        layout.addWidget(a_list)
         
         
