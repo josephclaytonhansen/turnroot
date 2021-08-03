@@ -93,6 +93,13 @@ class weaponTriangle(QDialog):
         self.reset_button.setStyleSheet("background-color: "+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
         self.reset_button.clicked.connect(self.reset_clicked)
         
+        self.use_magic_triangle = QCheckBox(self)
+        self.use_magic_triangle.stateChanged.connect(self.toggle_mt)
+        self.use_magic_triangle_label = QLabel(self)
+        self.use_magic_triangle_label.setText("Use magic triangle?")
+        self.use_magic_triangle_label.setToolTip("If checked, both triangles are editable. Otherwise, only the left triangle is editable. Use only non-magic weapons in this triangle")
+        self.use_magic_triangle_label.setFont(parent.body_font)
+        
         self.ok.show()
         self.ok.move(860, 380)
         self.ok.raise_()
@@ -138,12 +145,21 @@ class weaponTriangle(QDialog):
         self.outliers_label.raise_()
         
         self.triangle_label.show()
-        self.triangle_label.move(100,20)
+        self.triangle_label.move(220,20)
         self.triangle_label.raise_()
+        
+        self.use_magic_triangle_label.show()
+        self.use_magic_triangle_label.move(44,20)
+        self.use_magic_triangle_label.raise_()
+        
+        self.use_magic_triangle.show()
+        self.use_magic_triangle.move(160,20)
+        self.use_magic_triangle.raise_()
         
         self.loadWT()
         self.populateDD()
         self.Load()
+        self.toggle_mt()
         self.show()
     
     def loadWT(self):
@@ -153,6 +169,15 @@ class weaponTriangle(QDialog):
             weapon_types = json.load(weapons_file)
             self.wt_list = weapon_types.copy()
             self.outliers_list.addItems(weapon_types)
+    
+    def toggle_mt(self):
+        assigns = [self.left_2,self.top_2,self.right_2]
+        if self.use_magic_triangle.isChecked():
+            for k in assigns:
+                k.setVisible(True)
+        else:
+            for k in assigns:
+                k.setVisible(False)
     
     def populateDD(self):
         with open("src/skeletons/universal_weapon_types.json", "r") as weapons_file:
@@ -203,13 +228,17 @@ class weaponTriangle(QDialog):
                      self.right_1,self.right_2]
             for i in self.load_data:
                     assigns[self.load_data.index(i)].setCurrentText(i)
+            if self.load_data[len(self.load_data)-1] == True:
+                self.use_magic_triangle.setChecked(True)
+            else:
+                self.use_magic_triangle.setChecked(False)
         except Exception as e:
             print(e)
     
     def Save(self):
         order = [self.left_1.currentText(), self.left_2.currentText(),
                  self.top_1.currentText(), self.top_2.currentText(),
-                 self.right_1.currentText(),self.right_2.currentText()]
+                 self.right_1.currentText(),self.right_2.currentText(), self.use_magic_triangle.isChecked()]
         g = gameDirectory(self)
         g.getPath()
         with open(g.path+"/game_options/weapon_triangle.trsl", "w") as f:
