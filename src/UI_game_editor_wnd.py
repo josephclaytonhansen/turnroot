@@ -19,6 +19,7 @@ from src.UI_game_editor_tabs import (initEsen,
         initD)
 from src.UI_Dialogs import textEntryDialog, infoClose, stackedInfoImgDialog
 from src.UI_game_editor_backend import checkDialog, gameArtGenerate
+from src.UI_game_editor_dialogs import magicExperienceDialog
 import json, os
 game_options = {}
 
@@ -212,7 +213,14 @@ class GameEditorWnd(QWidget):
                 g = uploadGameArtDialog(self)
                 g.exec_()
             else:
-                gameArtGenerate(self)
+                gameArtGenerate(self) #Doesn't do anything (yet)
+        
+        #magic weapon experience handling
+        elif self.sender().row_name == "Are magic weapon experience types combined or separate?":
+            if self.sender().text() == "Combined":
+                game_options[self.sender().row_name] = self.sender().text()
+                s = magicExperienceDialog(self)
+                s.exec_()
         
         #change map/hub options/visiblity based on choice( this is a big one)
         elif self.sender().row_name == "Does game have hub, map, or both?":

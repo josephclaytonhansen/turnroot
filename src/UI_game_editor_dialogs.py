@@ -331,7 +331,6 @@ class uploadGameArtDialog(QDialog):
         layout = QVBoxLayout()
         layout.setContentsMargins( 8,8,8,8)
         layout.setSpacing(0)
-        
                 
         self.preview = QLabel()
         self.preview.setMinimumHeight(400)
@@ -394,3 +393,23 @@ class uploadGameArtDialog(QDialog):
         self.return_confirm = True
         self.Save()
         self.close()
+        
+class magicExperienceDialog(QDialog):
+    def __init__(self,parent=None,font=None):
+        data = updateJSON()
+        self.active_theme = getattr(src.UI_colorTheme, data["active_theme"])
+        active_theme = self.active_theme
+        super().__init__(parent)
+        self.setStyleSheet("background-color:"+active_theme.window_background_color+";color:"+active_theme.window_text_color+";")
+        
+        self.parent = parent
+        self.body_font = self.parent.body_font
+        
+        layout = QVBoxLayout()
+        layout.setContentsMargins(8,8,8,8)
+        layout.setSpacing(0)
+        
+        self.setLayout(layout)
+        self.show()
+        
+        
