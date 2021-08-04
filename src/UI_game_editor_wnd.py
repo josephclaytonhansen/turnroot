@@ -90,7 +90,7 @@ class GameEditorWnd(QWidget):
             self.parent.backButton.setEnabled(True)
             self.tabs.tabBar().setEnabled(True)
             self.check_tb = False
-            self.es_instr.setVisible(False)
+            self.es_instr.setText("The different colors on game options have significance- blue will result in a game that bears a resemblance to Fire Emblem: Awakening.\nPurple is somewhat similar to Fire Emblem: Three Houses.\nRed is similar to Fire Emblem: Sacred Stones.\nGrey is essentially unique.\nIf unsure of which option to choose on a given game option, refer back to previous choices and see which color you've chosen the most, and use that again.\n\n'Fire Emblem' and associated trademarks are copyrights of Intelligent Systems and are used for comparison only.")
             self.game_path = g.path
             self.Load()
            
@@ -141,7 +141,7 @@ class GameEditorWnd(QWidget):
                 if 'Set game folder' in game_options:
                     self.tabs.tabBar().setEnabled(True)
                     self.check_tb = False
-                    self.es_instr.setVisible(False)
+                    self.es_instr.setText("The different colors on game options have significance- blue will result in a game that bears a resemblance to Fire Emblem: Awakening.\nPurple is somewhat similar to Fire Emblem: Three Houses.\nRed is similar to Fire Emblem: Sacred Stones.\nGrey is essentially unique.\nIf unsure of which option to choose on a given game option, refer back to previous choices and see which color you've chosen the most, and use that again.\n\n'Fire Emblem' and associated trademarks are copyrights of Intelligent Systems and are used for comparison only.")  
                     
         #set game folder            
         if self.sender().row_name == "Set game folder":
