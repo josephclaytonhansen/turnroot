@@ -423,8 +423,8 @@ class magicExperienceDialog(QDialog):
         self.top.setLayout(self.top_layout)
         self.base.setLayout(self.base_layout)
         
-        m_l = QLabel("Magic")
-        m_l.setFont(self.body_font)
+        self.m_l = QLabel("Magic")
+        self.m_l.setFont(self.body_font)
         e_m_n = QPushButton()
         e_m_n.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
         e_m_n.setFont(self.body_font)
@@ -434,8 +434,8 @@ class magicExperienceDialog(QDialog):
         e_m_n.setMinimumHeight(48)
         e_m_n.setMaximumHeight(48)
         
-        dm_l = QLabel("Dark Magic")
-        dm_l.setFont(self.body_font)
+        self.dm_l = QLabel("Dark Magic")
+        self.dm_l.setFont(self.body_font)
         e_dm_n = QPushButton()
         e_dm_n.setFont(self.body_font)
         e_dm_n.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
@@ -445,9 +445,9 @@ class magicExperienceDialog(QDialog):
         e_dm_n.setMinimumHeight(48)
         e_dm_n.setMaximumHeight(48)
         
-        self.top_layout.addWidget(m_l)
+        self.top_layout.addWidget(self.m_l)
         self.top_layout.addWidget(e_m_n)
-        self.top_layout.addWidget(dm_l)
+        self.top_layout.addWidget(self.dm_l)
         self.top_layout.addWidget(e_dm_n)
         
         self.m_list = DragListWidget()
@@ -476,6 +476,7 @@ class magicExperienceDialog(QDialog):
         self.ok.setMaximumHeight(48)
         
         self.reset = QPushButton("Reset")
+        self.reset.clicked.connect(self.Reset)
         self.reset.setFont(self.body_font)
         self.reset.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
         self.reset.setMinimumHeight(48)
@@ -503,6 +504,15 @@ class magicExperienceDialog(QDialog):
             self.wt_list = weapon_types.copy()
             self.a_list.clear()
             self.a_list.addItems(weapon_types)
+    
+    def Reset(self):
+        self.m_list.clear()
+        self.dm_list.clear()
+        self.a_list.clear()
+        self.loadWT()
+    
+    def Rename(self):
+        
     
     def Save(self):
         g = gameDirectory(self)
