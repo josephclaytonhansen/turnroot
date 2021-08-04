@@ -150,11 +150,11 @@ class weaponTriangle(QDialog):
         self.triangle_label.raise_()
         
         self.use_magic_triangle_label.show()
-        self.use_magic_triangle_label.move(44,20)
+        self.use_magic_triangle_label.move(34,20)
         self.use_magic_triangle_label.raise_()
         
         self.use_magic_triangle.show()
-        self.use_magic_triangle.move(160,20)
+        self.use_magic_triangle.move(180,20)
         self.use_magic_triangle.raise_()
         
         self.loadWT()
@@ -470,7 +470,7 @@ class magicExperienceDialog(QDialog):
         layout.addWidget(self.a_l)
         layout.addWidget(self.a_list)
         
-        self.loadWT()
+        self.Load()
         self.a_list.items = self.getFromList(self.a_list)
         print(self.a_list.items)
         
@@ -480,7 +480,24 @@ class magicExperienceDialog(QDialog):
             weapon_types = []
             weapon_types = json.load(weapons_file)
             self.wt_list = weapon_types.copy()
+            self.a_list.clear()
             self.a_list.addItems(weapon_types)
+    
+    def Load(self):
+        g = gameDirectory(self)
+        g.getPath()
+        try:
+            with open(g.path+"/game_options/magic_triangle.trsl", "r") as f:
+                self.load_data = json.load(f)
+            lists = [self.m_list, self.dm_list, self.a_list]
+            count = -1
+            for i in self.load_data:
+                count +=1
+                lists[count].clear()
+                lists[count].addItems(i)
+                
+        except:
+            self.loadWT()
     
     def getFromList(self, l):
         try:
