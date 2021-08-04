@@ -415,10 +415,13 @@ class magicExperienceDialog(QDialog):
         
         self.middle = QWidget()
         self.top = QWidget()
+        self.base = QWidget()
         self.middle_layout = QHBoxLayout()
         self.top_layout = QHBoxLayout()
+        self.base_layout = QHBoxLayout()
         self.middle.setLayout(self.middle_layout)
         self.top.setLayout(self.top_layout)
+        self.base.setLayout(self.base_layout)
         
         m_l = QLabel("Magic")
         m_l.setFont(self.body_font)
@@ -465,14 +468,32 @@ class magicExperienceDialog(QDialog):
         self.a_l = QLabel("All Weapon Types (Drag and Drop Magic Types)")
         self.a_l.setFont(self.body_font)
         
+        self.ok = QPushButton("Save and Close")
+        self.ok.clicked.connect(self.Save)
+        self.ok.setFont(self.body_font)
+        self.ok.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        self.ok.setMinimumHeight(48)
+        self.ok.setMaximumHeight(48)
+        
+        self.reset = QPushButton("Reset")
+        self.reset.setFont(self.body_font)
+        self.reset.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        self.reset.setMinimumHeight(48)
+        self.reset.setMaximumHeight(48)
+        
+        self.base_layout.addWidget(self.reset)
+        self.base_layout.addWidget(self.ok)
+        
         layout.addWidget(self.top)
         layout.addWidget(self.middle)
         layout.addWidget(self.a_l)
         layout.addWidget(self.a_list)
+        layout.addWidget(self.base)
         
+        self.loadWT()
         self.Load()
-        self.a_list.items = self.getFromList(self.a_list)
-        print(self.a_list.items)
+        if self.getFromList(self.a_list) == []:
+            self.loadWT()
         
     def loadWT(self):
         with open("src/skeletons/universal_weapon_types.json", "r") as weapons_file:
@@ -482,6 +503,17 @@ class magicExperienceDialog(QDialog):
             self.wt_list = weapon_types.copy()
             self.a_list.clear()
             self.a_list.addItems(weapon_types)
+    
+    def Save(self):
+        g = gameDirectory(self)
+        g.getPath()
+        try:
+            data = [self.getFromList(self.m_list),self.getFromList(self.dm_list),self.getFromList(self.a_list)]
+            with open(g.path+"/game_options/magic_triangle.trsl", "w") as f:
+                json.dump(data, f)
+            self.close()
+        except Exception as e:
+            print(e)
     
     def Load(self):
         g = gameDirectory(self)
@@ -504,9 +536,10 @@ class magicExperienceDialog(QDialog):
             count = l.count()
             items = []
             for x in range(0,count):
-                items.append(l.item(x))
+                items.append(l.item(x).text())
             return items
-        except:
+        except Exception as e:
+            print(e)
             return []
         
         
