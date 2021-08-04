@@ -7,6 +7,7 @@ import shutil, os, pickle, json, sys
 from src.game_directory import gameDirectory
 from src.UI_unit_editor_more_dialogs import editUniversalWeaponTypes
 from src.UI_game_editor_backend import DragListWidget
+from src.UI_Dialogs import textEntryDialog
 
 class weaponTriangle(QDialog):
     def __init__(self, parent=None):
@@ -425,30 +426,34 @@ class magicExperienceDialog(QDialog):
         
         self.m_l = QLabel("Magic")
         self.m_l.setFont(self.body_font)
-        e_m_n = QPushButton()
-        e_m_n.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
-        e_m_n.setFont(self.body_font)
-        e_m_n.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
-        e_m_n.setIconSize(QSize(48,48))
-        e_m_n.setMaximumWidth(48)
-        e_m_n.setMinimumHeight(48)
-        e_m_n.setMaximumHeight(48)
+        self.e_m_n = QPushButton()
+        self.e_m_n.clicked.connect(self.Rename)
+        self.e_m_n.name = "Magic"
+        self.e_m_n.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        self.e_m_n.setFont(self.body_font)
+        self.e_m_n.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
+        self.e_m_n.setIconSize(QSize(48,48))
+        self.e_m_n.setMaximumWidth(48)
+        self.e_m_n.setMinimumHeight(48)
+        self.e_m_n.setMaximumHeight(48)
         
         self.dm_l = QLabel("Dark Magic")
         self.dm_l.setFont(self.body_font)
-        e_dm_n = QPushButton()
-        e_dm_n.setFont(self.body_font)
-        e_dm_n.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
-        e_dm_n.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
-        e_dm_n.setIconSize(QSize(48,48))
-        e_dm_n.setMaximumWidth(48)
-        e_dm_n.setMinimumHeight(48)
-        e_dm_n.setMaximumHeight(48)
+        self.e_dm_n = QPushButton()
+        self.e_dm_n.clicked.connect(self.Rename)
+        self.e_dm_n.name = "Dark Magic"
+        self.e_dm_n.setFont(self.body_font)
+        self.e_dm_n.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
+        self.e_dm_n.setIcon(QIcon(QPixmap("src/ui_icons/white/edit.png")))
+        self.e_dm_n.setIconSize(QSize(48,48))
+        self.e_dm_n.setMaximumWidth(48)
+        self.e_dm_n.setMinimumHeight(48)
+        self.e_dm_n.setMaximumHeight(48)
         
         self.top_layout.addWidget(self.m_l)
-        self.top_layout.addWidget(e_m_n)
+        self.top_layout.addWidget(self.e_m_n)
         self.top_layout.addWidget(self.dm_l)
-        self.top_layout.addWidget(e_dm_n)
+        self.top_layout.addWidget(self.e_dm_n)
         
         self.m_list = DragListWidget()
         self.m_list.setStyleSheet("background-color:"+active_theme.list_background_color+";color:"+active_theme.window_text_color+";")
@@ -512,7 +517,26 @@ class magicExperienceDialog(QDialog):
         self.loadWT()
     
     def Rename(self):
-        
+        g = gameDirectory(self)
+        g.getPath()
+        h = textEntryDialog(self)
+        h.exec_()
+        result = h.data
+        data = [self.m_l.text(), self.dm_l.text()]
+        if self.sender().name == self.m_l.text():
+            data = [result, self.dm_l.text()]
+        elif self.sender().name == self.dm_l.text():
+            data = [self.m_l.text(), result]
+        print(data)
+        try:
+            with open(g.path+"/game_options/magic_triangle_labels.trsl", "w") as f:
+                    json.dump(data,f)
+        except:
+            data = ["Magic", "Dark Magic"]
+            with open(g.path+"/game_options/magic_triangle_labels.trsl", "w") as f:
+                    json.dump(data,f)
+                    
+        self.Load()
     
     def Save(self):
         g = gameDirectory(self)
@@ -536,10 +560,18 @@ class magicExperienceDialog(QDialog):
             for i in self.load_data:
                 count +=1
                 lists[count].clear()
-                lists[count].addItems(i)
-                
+                lists[count].addItems(i)  
         except:
             self.loadWT()
+        try:
+            with open(g.path+"/game_options/magic_triangle_labels.trsl", "r") as f:
+                self.load_data = json.load(f)
+            self.e_m_n.name = self.load_data[0]
+            self.m_l.setText(self.load_data[0])
+            self.e_dm_n.name = self.load_data[1]
+            self.dm_l.setText(self.load_data[1])
+        except Exception as e:
+            print(e)
     
     def getFromList(self, l):
         try:
