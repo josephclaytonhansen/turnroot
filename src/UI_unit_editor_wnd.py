@@ -17,6 +17,7 @@ from src.skeletons.unit import Unit, universal_classifications
 
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose, textEntryDialog
 from src.game_directory import gameDirectory
+from src.UI_error_logging import errorLog
 from src.UI_unit_editor_tabs import (initUnit, initBasic, initAI, initWeaponAffinities, initClasses, initUnique, initRelationships, initActions)
 from src.UI_unit_editor_dialogs import (growthRateDialog, statBonusDialog, AIHelpDialog, editUniversalStats,
                                         classSkillDialog, loadSavedClass,
@@ -492,14 +493,14 @@ class UnitEditorWnd(QWidget):
             self.selected_unit = all_units[s]
             try:
                 self.support_difficulty_slider.setValue(self.unit.support_difficulty[self.selected_unit.name])
-            except:
-                pass
+            except Exception as e:
+                errorLog(e)
             try:
                 for rb in self.max_support_radio_buttons:
                     if rb.text() == self.unit.max_support_levels[self.selected_unit.name]:
                         rb.setChecked()
-            except:
-                pass
+            except Exception as e:
+                errorLog(e)
 
     
     def personal_enemy_changed(self, s):
@@ -513,24 +514,24 @@ class UnitEditorWnd(QWidget):
             self.unit.pregnancy_type = self.sender().name
             if self.path != None:
                 self.unit.selfToJSON(self.path)
-        except:
-            pass
+        except Exception as e:
+                errorLog(e)
                 
     def max_support_changed(self):
         try:
             self.unit.max_support_levels[self.selected_unit.name] = self.sender().text()
             if self.path != None:
                 self.unit.selfToJSON(self.path)
-        except:
-            pass
+        except Exception as e:
+                errorLog(e)
     
     def colorizeSliderB(self, v):
         try:
             self.unit.support_difficulty[self.selected_unit.name] = v
             if self.path != None:
                 self.unit.selfToJSON(self.path)
-        except:
-            pass
+        except Exception as e:
+                errorLog(e)
             
         v = v / 10
         color_left = QColor(active_theme.unit_editor_slider_color_0)
@@ -776,8 +777,8 @@ class UnitEditorWnd(QWidget):
             try:
                 ac = self.loaded_class
                 ac.selfFromJSON(self.paths[ac.unit_class_name])
-            except:
-                pass
+            except Exception as e:
+                errorLog(e)
         else:
             ac = unitClass()
             ac.selfFromJSON(self.paths[name])
@@ -803,8 +804,8 @@ class UnitEditorWnd(QWidget):
                     self.wt_checkboxes[w].setChecked(False)
                 if w in ac.disallowed_weapon_types:
                     self.wt_checkboxes[w].setChecked(False)
-        except:
-            pass
+        except Exception as e:
+            errorLog(e)
     
     def loadClassDialog(self):
         y = loadSavedClass(parent=self,font=self.body_font)
@@ -826,8 +827,8 @@ class UnitEditorWnd(QWidget):
         try:
             self.parent().parent().save_status.setPixmap(QPixmap("src/ui_icons/white/file_not_saved.png").scaled(int(int(data["icon_size"])/1.5),int(int(data["icon_size"])/1.5), Qt.KeepAspectRatio))
             self.parent().parent().save_status.setToolTip("Class file not saved")
-        except:
-            pass
+        except Exception as e:
+            errorLog(e)
         self.loaded_class = None
         self.loaded_class = unitClass()
         ac = self.loaded_class

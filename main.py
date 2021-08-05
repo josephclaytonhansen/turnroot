@@ -33,6 +33,7 @@ from src.UI_WebViewer import webView
 from src.game_directory import gameDirectory
 from src.UI_error_logging import errorLog, resetEl
 
+resetEl()
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
@@ -566,7 +567,6 @@ def Go(go):
         window = main()
         window.show()
         quick_tip.close()
-        resetEl()
         a = app.exec_()
         
 Go(testing)
