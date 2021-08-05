@@ -8,6 +8,7 @@ from src.game_directory import gameDirectory
 from src.UI_unit_editor_more_dialogs import editUniversalWeaponTypes
 from src.UI_game_editor_backend import DragListWidget
 from src.UI_Dialogs import textEntryDialog
+from src.UI_error_logging import errorLog
 
 class weaponTriangle(QDialog):
     def __init__(self, parent=None):
@@ -201,7 +202,7 @@ class weaponTriangle(QDialog):
                         self.outliers_list.addItems(self.wt_list)
                         
                     except Exception as e:
-                        pass
+                        errorLog(e)
     
     def ok_clicked(self):
         self.return_confirm = True
@@ -235,7 +236,7 @@ class weaponTriangle(QDialog):
             else:
                 self.use_magic_triangle.setChecked(False)
         except Exception as e:
-            print(e)
+            errorLog(e)
     
     def Save(self):
         order = [self.left_1.currentText(), self.left_2.currentText(),
@@ -304,7 +305,7 @@ class creditsDialog(QDialog):
                 for h in self.names:
                     self.names[h].setPlainText(order[1][h])
         except Exception as e:
-            print(e)
+            errorLog(e)
     
     def Save(self):
         order = [[],[]]
@@ -367,7 +368,7 @@ class uploadGameArtDialog(QDialog):
                 self.image_path = json.load(f)
                 self.preview.setPixmap(QPixmap(self.image_path))
         except Exception as e:
-            print(e)
+            errorLog(e)
     
     def upload_image(self):
         q = QFileDialog(self)
@@ -547,7 +548,7 @@ class magicExperienceDialog(QDialog):
                 json.dump(data, f)
             self.close()
         except Exception as e:
-            print(e)
+            errorLog(e)
     
     def Load(self):
         g = gameDirectory(self)
@@ -571,7 +572,7 @@ class magicExperienceDialog(QDialog):
             self.e_dm_n.name = self.load_data[1]
             self.dm_l.setText(self.load_data[1])
         except Exception as e:
-            print(e)
+            errorLog(e)
     
     def getFromList(self, l):
         try:
@@ -581,7 +582,7 @@ class magicExperienceDialog(QDialog):
                 items.append(l.item(x).text())
             return items
         except Exception as e:
-            print(e)
+            errorLog(e)
             return []
         
         

@@ -20,6 +20,7 @@ from src.UI_game_editor_tabs import (initEsen,
 from src.UI_Dialogs import textEntryDialog, infoClose, stackedInfoImgDialog
 from src.UI_game_editor_backend import checkDialog, gameArtGenerate
 from src.UI_game_editor_dialogs import magicExperienceDialog
+from src.UI_error_logging import errorLog
 import json, os
 game_options = {}
 
@@ -111,8 +112,8 @@ class GameEditorWnd(QWidget):
                 if item in data:
                     self.weapon_rows[item].options[data[item]].setChecked(True)
                     self.weapon_rows[item].dL.setPixmap(QPixmap("src/ui_icons/on.png"))
-            except:
-                pass
+            except Exception as e:
+                errorLog(e)
     
     def tab_change(self):
         global game_options
@@ -123,8 +124,8 @@ class GameEditorWnd(QWidget):
                     if item in data:
                         self.weapon_rows[item].options[data[item]].setChecked(True)
                         self.weapon_rows[item].dL.setPixmap(QPixmap("src/ui_icons/on.png"))
-                except:
-                    pass
+                except Exception as e:
+                    errorLog(e)
     
     def toggleOption(self):
         global game_options
@@ -254,7 +255,7 @@ class GameEditorWnd(QWidget):
             with open(self.game_path+"/dat.trsl", "w") as g:
                 json.dump(game_options, g)
         except Exception as e:
-            print(e)
+            errorLog(e)
     
     def checkErrors(self):
         c = checkDialog(self)

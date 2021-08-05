@@ -31,7 +31,7 @@ from src.UI_node_preferences_dialog import NodePreferencesDialog
 from src.node_presets import NODES, Nodes
 from src.UI_WebViewer import webView
 from src.game_directory import gameDirectory
-
+from src.UI_error_logging import errorLog, resetEl
 
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
@@ -375,8 +375,8 @@ class main(QMainWindow):
                 self.saveButton.triggered.disconnect()
                 try:
                     self.newButton.triggered.disconnect()
-                except:
-                    pass
+                except Exception as e:
+                    errorLog(e)
                 self.openButton.triggered.connect(self.unit_editor.loadFromFile)
                 self.saveButton.triggered.connect(self.unit_editor.unitToJSON)
                 self.unit_editor.loadClass()
@@ -566,6 +566,7 @@ def Go(go):
         window = main()
         window.show()
         quick_tip.close()
+        resetEl()
         a = app.exec_()
         
 Go(testing)

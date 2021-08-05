@@ -223,7 +223,6 @@ class checkDialog(QDialog):
                     return[CAUTION, "Some base classes are not assigned to units,\n they will need an item to be usable in-game"]
 
             except Exception as e:
-                print(e)
                 return [FATAL_ERROR, "Game folder not set"]
         
         #check end credits
@@ -242,7 +241,6 @@ class checkDialog(QDialog):
                 else:
                     return [CAUTION, "The end credits have "+str(null_count)+" blank spaces (this may be intentional)"]
             except Exception as e:
-                print(e)
                 return [CAUTION, "No end credits file"]
             
         #check cover art
@@ -254,7 +252,6 @@ class checkDialog(QDialog):
                     if os.path.exists(td) == False:
                         return [WARNING, "Assigned cover art image could not be found"]
             except Exception as e:
-                print(e)
                 return [CAUTION, "No cover art assigned (will be auto-generated)"]
         
         #check unit files for portraits

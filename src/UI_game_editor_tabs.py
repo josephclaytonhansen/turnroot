@@ -10,6 +10,7 @@ active_theme = getattr(UI_colorTheme, data["active_theme"])
 from src.UI_game_editor_backend import selectionRow
 from src.game_directory import gameDirectory
 from src.UI_Dialogs import textEntryDialog
+from src.UI_error_logging import errorLog
 import json
 
 
