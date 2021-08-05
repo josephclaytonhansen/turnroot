@@ -1,12 +1,12 @@
 import sys, json, pickle, os, psutil
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QColor, QPalette, QIcon
+from PyQt5.QtGui import QColor, QPalette, QIcon, QFont, QClipboard
 from src.UI_updateJSON import updateJSON, dumpJSON
 from src.UI_Dialogs import infoClose, colorThemeEdit, confirmAction
 
 ind = 0
-entries = ["Appearance"]
+entries = ["Appearance", "System"]
 returnv = False
 import src.UI_colorTheme
     
@@ -171,6 +171,37 @@ class unitOptionsDialog(QDialog):
         self.aes.setLayout(self.aes_layout)
         self.prefs_layout.addWidget(self.aes)
         
+        #new stack
+        self.ses = QWidget()
+        self.ses_layout = QGridLayout()
+        self.ses_layout.setSpacing(25)
+        
+        self.etl = QLabel("Error logs")
+        self.etl.setMaximumWidth(140)
+        self.etl.setFont(self.body_font)
+        self.etl.setAlignment(Qt.AlignVCenter)
+        self.ses_layout.addWidget(self.etl,0,0)
+        
+        self.ett = QTextEdit()
+        self.ett.setReadOnly(True)
+        self.ett.setStyleSheet("background-color:"+self.active_theme.list_background_color+";")
+        self.mfont = QFont('Monaco', 9, QFont.Light)
+        self.mfont.setKerning(False)
+        self.mfont.setFixedPitch(True)
+        self.ett.setFont(self.mfont)
+        with open("src/errors.txt", "r") as f:
+            self.ett.setText(f.read())
+        self.ses_layout.addWidget(self.ett,0,1)
+        
+        self.cet = QPushButton("Copy errors from this run and last run")
+        self.cet.setStyleSheet("background-color:"+self.active_theme.list_background_color+";")
+        self.cet.setFont(self.body_font)
+        self.cet.clicked.connect(self.copy_recent)
+        self.ses_layout.addWidget(self.cet,1,1)
+        
+        self.ses.setLayout(self.ses_layout)
+        self.prefs_layout.addWidget(self.ses)
+        
         #finalize layout
         
         self.prefs.setLayout(self.prefs_layout)
@@ -185,6 +216,21 @@ class unitOptionsDialog(QDialog):
 
     def cancel(self):
         self.close()
+        
+    def copy_recent(self, s):
+        cb = QApplication.clipboard()
+        cb.clear()
+        all_text = self.ett.toPlainText()
+        all_text = all_text.split("\n\n\n")
+        textl = len(all_text)
+        copy_text = all_text[textl-1] + all_text[textl-2]
+        copy_text = str(copy_text)
+        try:
+            cb.setText(copy_text)
+        except Exception as e:
+            print(e)
+        t = infoClose("Copied recent error logs to clipboard",self)
+        t.exec_()
 
     def colorThemeDialog(self):
         c = confirmAction(parent=self, s="edit this color theme")

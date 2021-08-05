@@ -4,6 +4,7 @@ from PyQt5.QtGui import QColor, QPalette, QIcon, QPixmap, QCursor, QFont
 from src.UI_updateJSON import updateJSON
 import src.UI_colorTheme
 import shutil, os, pickle, json, sys, time
+from src.UI_error_logging import errorLog
 
 return_confirm = False
 chosen_object = None
@@ -94,12 +95,12 @@ class stackedInfoImgDialog(QDialog):
             self.labels[x].setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             try:
                 self.labels[x].setStyleSheet(self.row_styles[x]+"background-color: "+self.active_theme.window_background_color+";color: "+self.active_theme.window_text_color)
-            except:
-                pass
+            except Exception as e:
+                errorLog(e)
             try:
                 self.labels[x].setFont(parent.body_font)
-            except:
-                pass
+            except Exception as e:
+                errorLog(e)
             self.layout.addWidget(self.labels[x])
             
 class ImgPopup(QDialog):
