@@ -594,7 +594,10 @@ class popupInfo(QDialog):
         layout.setSpacing(0)
         
         self.label =QLabel(self.info)
-        self.label.setFont(font)
+        try:
+            self.label.setFont(font)
+        except Exception as e:
+            errorLog(e)
         self.label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         layout.addWidget(self.label, 1)
         self.setLayout(layout)

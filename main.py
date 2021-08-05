@@ -6,7 +6,8 @@ app = QApplication([])
 
 from src.UI_Dialogs import ImgPopup
 quick_tip_imgs = ["src/ui_images/qut/qut_001.png","src/ui_images/qut/qut_002.png","src/ui_images/qut/qut_003.png",
-                  "src/ui_images/qut/qut_004.png"]
+                  "src/ui_images/qut/qut_004.png", "src/ui_images/qut/qut_005.png", "src/ui_images/qut/qut_006.png",
+                  "src/ui_images/qut/qut_007.png", "src/ui_images/qut/qut_008.png"]
 quick_tip = ImgPopup(choice(quick_tip_imgs), parent=None)
 quick_tip.show()
 quick_tip.exec_()
