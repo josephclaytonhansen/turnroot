@@ -13,6 +13,7 @@ from src.skeletons.weapon_types import weaponTypes, expTypes
 from src.UI_unit_editor_more_dialogs import testGrowthDialog
 
 from src.game_directory import gameDirectory
+from src.UI_error_logging import errorLog
 directory = gameDirectory(None)
 directory.getPath()
 
@@ -80,8 +81,8 @@ class growthRateDialog(QDialog):
         try:
             self.parent.loaded_class.growth_rates[self.list.currentItem().text()] = v
             self.parent.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
-        except:
-            pass
+        except Exception as e:
+            errorLog(e)
             
         v = v / 100
         color_left = QColor(self.active_theme.unit_editor_slider_color_0)
@@ -161,8 +162,8 @@ class statBonusDialog(QDialog):
         try:
             self.parent.loaded_class.stat_bonuses[self.sender().name] = self.sender().value()
             self.parent.loaded_class.selfToJSON(directory.path+"/classes/"+self.class_name.text()+".tructf")
-        except:
-            pass
+        except Exception as e:
+            errorLog(e)
 
 class AIHelpDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -578,7 +579,7 @@ class classSkillDialog(QDialog):
             self.level_values[self.skill_list.currentItem().text()] = self.level.value()
             self.parent.loaded_class.selfToJSON(directory.path+"/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
         except:
-            print("no skills in list")
+            errorLog("no skills in list")
     
     def row_changed(self,s):
         self.level.setValue(self.level_values[self.skill_list.currentItem().text()])
@@ -588,8 +589,8 @@ class classSkillDialog(QDialog):
             self.parent.loaded_class.skills.remove(self.skill_list.currentItem().text())
             self.parent.loaded_class.selfToJSON(directory.path+"/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
             self.fillList()
-        except:
-            pass
+        except Exception as e:
+            errorLog(e)
     
     def add_skill(self):
        self.parent.parent().setCurrentWidget(self.parent.parent().parent().skills_editor)
@@ -636,8 +637,8 @@ class classSkillDialog(QDialog):
             list_item.setText(d)
         try:
             self.level.setValue(self.level_values[1])
-        except:
-            pass
+        except Exception as e:
+            errorLog(e)
         self.level.update()
         
 class loadSavedClass(QDialog):
@@ -770,8 +771,8 @@ class instanceStatDialog(QDialog):
         try:
             self.parent.unit.generic_stat_randomness[self.list.currentItem().text()] = v
             self.parent.unit.selfToJSON(self.parent.path)
-        except:
-            pass
+        except Exception as e:
+            errorLog(e)
         v = v / 10
         color_left = QColor(self.active_theme.unit_editor_slider_color_0)
         color_right = QColor(self.active_theme.unit_editor_slider_color_1)
@@ -799,8 +800,8 @@ class instanceStatDialog(QDialog):
         try:
             self.parent.unit.generic_stat_randomness_amount[self.list.currentItem().text()] = self.amount.value()
             self.parent.unit.selfToJSON(self.parent.path)
-        except:
-            pass
+        except Exception as e:
+            errorLog(e)
         
 class tileChangesDialog(QDialog):
     def __init__(self, parent=None,font=None,r="dismounted"):
@@ -936,8 +937,8 @@ class unitGrowthRateDialog(QDialog):
             self.parent.unit.growth_rates[self.list.currentItem().text()] = v
             if self.parent.path != None:
                 self.unit.selfToJSON(self.parent.path)
-        except:
-            pass
+        except Exception as e:
+            errorLog(e)
             
         v = v / 100
         color_left = QColor(self.active_theme.unit_editor_slider_color_0)
@@ -1058,13 +1059,13 @@ class classCriteriaDialog(QDialog):
         try:
             self.parent.loaded_class.class_criteria_stats[self.sender().name] = self.sender().value()
             self.parent.loaded_class.selfToJSON(directory.path+"/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
-        except:
-            pass
+        except Exception as e:
+            errorLog(e)
 
     
     def weapon_criteria(self):
         try:
             self.parent.loaded_class.class_criteria_weapon_levels[self.sender().name] = self.sender().currentText()
             self.parent.loaded_class.selfToJSON(directory.path+"/classes/"+self.parent.loaded_class.unit_class_name+".tructf")
-        except:
-            pass
+        except Exception as e:
+            errorLog(e)

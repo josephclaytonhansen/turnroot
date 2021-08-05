@@ -26,6 +26,7 @@ from src.UI_unit_editor_more_dialogs import (weakAgainstDialog, expTypesDialog, 
                                              classGraphicDialog,editUniversalWeaponTypes, editClassifications, statCapDialog)
 
 from src.game_directory import gameDirectory
+from src.UI_error_logging import errorLog
 directory = gameDirectory(None)
 directory.getPath()
 game_options = directory.getGameOptions()
@@ -127,8 +128,8 @@ def initBasic(parent):
     
     try:
         parent.getClassesInFolder()
-    except: #game folder is invalid
-        pass
+    except Exception as e: #game folder is invalid
+        errorLog(e)
     
     parent.basic_left_layout.addWidget(name_row)
     

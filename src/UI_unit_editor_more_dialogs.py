@@ -12,6 +12,7 @@ from src.skeletons.unit import Unit
 from src.skeletons.weapon_types import weaponTypes, expTypes
 
 from src.game_directory import gameDirectory
+from src.UI_error_logging import errorLog
 directory = gameDirectory(None)
 directory.getPath()
 
@@ -351,8 +352,8 @@ class nextClassesDialog(QDialog):
                 tmp_class.selfFromJSON(f.path)
                 class_names.append(tmp_class.unit_class_name)
                 cla[tmp_class.unit_class_name] = tmp_class
-            except:
-                print(f.path," failed to load")
+            except Exception as e:
+                errorLog(e)
         return [class_names, cla]
 
 class classGraphicDialog(QDialog):
@@ -606,8 +607,8 @@ class statCapDialog(QDialog):
     def value_changed(self):
         try:
             self.parent.unit.stat_caps[self.sender().name] = self.sender().value()
-        except:
-            pass
+        except Exception as e:
+            errorLog(e)
 
 class baseClassesDialog(QDialog):
     def __init__(self, parent=None,font=None):
@@ -682,6 +683,6 @@ class baseClassesDialog(QDialog):
                 tmp_class.selfFromJSON(f.path)
                 class_names.append(tmp_class.unit_class_name)
                 cla[tmp_class.unit_class_name] = tmp_class
-            except:
-                print(f.path," failed to load")
+            except Exception as e:
+                errorLog(e)
         return [class_names, cla]
