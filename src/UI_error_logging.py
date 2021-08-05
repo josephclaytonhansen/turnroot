@@ -1,4 +1,4 @@
-import inspect, datetime, platform
+import inspect, datetime, platform, os
 reset = False
 def errorLog(e):
     filename = inspect.stack()[1].filename 
@@ -9,7 +9,13 @@ def resetEl():
     global reset
     if reset == False:
         now = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        with open("src/errors.txt", "w") as f:
-            f.truncate()
-            f.write("==========Turnroot instance started at "+now+"==========\n=========="+platform.platform()+"==========\n")
+        size = os.path.getsize("src/errors.txt")
+        print(size)
+        if size > 79000:
+            with open("src/errors.txt", "w") as f:
+                f.truncate()
+                f.write("==========Turnroot instance started at "+now+"==========\n=========="+platform.platform()+"==========\n")
+        else:
+            with open("src/errors.txt", "a") as f:
+                f.write("\n\n\n==========Turnroot instance started at "+now+"==========\n=========="+platform.platform()+"==========\n")
         reset = True
