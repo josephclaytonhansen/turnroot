@@ -1,4 +1,4 @@
-import inspect, datetime
+import inspect, datetime, platform
 reset = False
 def errorLog(e):
     filename = inspect.stack()[1].filename 
@@ -11,5 +11,5 @@ def resetEl():
         now = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         with open("src/errors.txt", "w") as f:
             f.truncate()
-            f.write("==========Turnroot instance started at "+now+"==========\n")
+            f.write("==========Turnroot instance started at "+now+"==========\n=========="+platform.platform()+"==========\n")
         reset = True
