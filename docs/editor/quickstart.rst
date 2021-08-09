@@ -27,7 +27,7 @@ This view is the **Game Editor**. This editor is where you set essential attribu
 
 A: Editor Selection
 --------------------
-Click this button to change which editor you're currently using. You can also press **Esc** to open editor selection. Right now, if you try to click on this, it won't let you. You can't change editors until your game has a name and a folder; we'll get to that in a second. 
+Click this button to change which editor you're currently using. You can also press **Esc** to open editor selection. Right now, if you try to click on this, it won't let you. You can't change editors until your game has a name and a folder; we'll get to that in a second, or jump to :ref:`start` to learn more.
 
 B: Options
 -----------
