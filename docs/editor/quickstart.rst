@@ -35,15 +35,28 @@ to learn more about the options dialog.
 
 C: Help
 ^^^^^^^^
+Click this to open Help resources. These range from creation checklists to keyboard shortcuts:
+.. image:: 001_hl.png
+   :alt: Screenshot of Turnroot help resources
+   :align: center
+
+One of the most important resources is the **Forums**, where you can ask questions/share your work with other Turnroot users. 
 
 D: Save status
 ^^^^^^^^^^^^^^^
+This will change based on the save status and the editor. When there's a line through it, your work needs saved. When there's a check in the middle, your work is saved. 
+
+Most things in the Turnroot Builder autosave. For example, as soon as do anything in the Game Editor, you'll notice the icon change. If you're working on something and you notice this icon is currently showing "Not Saved", you need to save your work to avoid losing changes. You'll learn more about this in documentation for the various editors.
 
 E: Menu bar
 ^^^^^^^^^^^^
+The options in the menu bar will change based on the editor. You'll always have Quit and Full Screen, which close the builder and make it fill your monitor, respectively. 
 
 F: Game editor
 ^^^^^^^^^^^^^^^
+The game editor is how you specify how your game works, and the attributes and options you want it to have. You'll notice there's a tab bar allowing you to scroll through groups of options; most editors in the builder have a tab bar, so if you're ever looking for something not on the screen, try switching tabs.
+
+The game editor shows up whenever you don't have a game you're currently working on- if you have already started work on a game, you'll see a different editor open up when you next start the builder. Like all editors, you can access the game editor from the editor selection menu (A) to change game settings at any point. You'll learn more about the game editor and how it works in the next document, :doc:`game_editor`. 
 
 .. _start:
 The first steps to your own game
