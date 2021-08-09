@@ -17,12 +17,13 @@ Installation / basic setup
 The first look: Turnroot Editor at a glance
 --------------------------------------------
 The first time you open the Turnroot Builder, this is what you'll see (minus, of course, the A-F labels):
-. image:: 001_fl_a.jpeg
+.. image:: 001_fl_a.jpeg
    :width: 600 px
    :scale: 100 %
    :alt: Screenshot of Turnroot Builder, showing initial appearance on first open, with labels (A-F) on different parts
    :align: center
 This view is the **Game Editor**. This editor is where you set essential attributes of your game. We'll dive into the Game Editor in the next document, but for now, let's focus on what's happening here. 
+
 A: Editor Selection
 --------------------
 
@@ -40,14 +41,6 @@ E: Menu bar
 
 F: Game editor
 ---------------
-   
-.. _prefs:
-Options/customization
-----------------------
-
-.. _help:
-Help: all the resources you need
----------------------------------
 
 .. _start:
 The first steps to your own game
