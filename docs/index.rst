@@ -10,8 +10,7 @@ Welcome to Turnroot's documentation!
    :maxdepth: 2
    :caption: Contents:
    
-   editor/quickstart
-
+   docs/editor/quickstart
 
 
 Indices and tables
