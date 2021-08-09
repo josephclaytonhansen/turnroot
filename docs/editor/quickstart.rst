@@ -55,9 +55,9 @@ The options in the menu bar will change based on the editor. You'll always have 
 
 F: Game editor
 ^^^^^^^^^^^^^^^
-The game editor is how you specify how your game works, and the attributes and options you want it to have. You'll notice there's a tab bar allowing you to scroll through groups of options; most editors in the builder have a tab bar, so if you're ever looking for something not on the screen, try switching tabs.
+The game editor is how you specify how your game works, and the attributes and options you want it to have.
 
-The game editor shows up whenever you don't have a game you're currently working on- if you have already started work on a game, you'll see a different editor open up when you next start the builder. Like all editors, you can access the game editor from the editor selection menu (A) to change game settings at any point. You'll learn more about the game editor and how it works in the next document, :doc:`game_editor`. 
+Like all editors, you can access the game editor from the editor selection menu (A) to change game settings at any point. You'll learn more about the game editor and how it works in the next document, :doc:`game_editor`. 
 
 .. _start:
 The first steps to your own game
