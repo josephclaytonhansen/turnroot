@@ -23,7 +23,7 @@ Help: all the resources you need
 ---------------------------------
 
 .. _start:
-The first, essential, steps to your own game
+The first steps to your own game
 ---------------------------------------------
 
-:doc:`editor/game_editor`
+Up next: the Game Editor > :doc:`game_editor`
