@@ -11,6 +11,10 @@ Welcome to Turnroot's documentation!
    :caption: Contents:
 
 
+Getting Started
+===============
+:doc:`quickstart`
+
 Indices and tables
 ==================
 
