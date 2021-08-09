@@ -27,9 +27,11 @@ This view is the **Game Editor**. This editor is where you set essential attribu
 
 A: Editor Selection
 --------------------
+Click this button to change which editor you're currently using. You can also press **Esc** to open editor selection. Right now, if you try to click on this, it won't let you. You can't change editors until your game has a name and a folder; we'll get to that in a second. 
 
 B: Options
 -----------
+Click this to open options. These are editor specific; different editors have different options. There are a few constants, though. You can always change the color theme, font size, icon size, and other appearance-related settings. You can also find error logs (for bug reporting.) Check out :doc: `customizing` to learn more about the options dialog.
 
 C: Help
 --------
