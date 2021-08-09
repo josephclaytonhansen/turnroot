@@ -13,7 +13,7 @@ Welcome to Turnroot's documentation!
 
 Getting Started
 ===============
-:doc:`quickstart`
+:doc:`editor/quickstart`
 
 Indices and tables
 ==================
