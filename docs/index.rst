@@ -16,8 +16,7 @@ Getting Started
 ===============
 :doc:`editor/quickstart`
 
-Indices and tables
+Search
 ==================
 
-* :ref:`genindex`
 * :ref:`search`
