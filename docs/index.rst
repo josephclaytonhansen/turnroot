@@ -12,9 +12,17 @@ Welcome to Turnroot's documentation!
    editor/quickstart
 
 
-Getting Started
-===============
+Getting Started / Builder Overview
+===================================
 :doc:`editor/quickstart`
+:doc:`editor/game_editor`
+
+Taking Your Game to The Next Level
+===================================
+
+Getting the Most out of Turnroot
+================================
+:doc:`editor/customizing`
 
 Search
 ==================
