@@ -9,8 +9,6 @@ Welcome to Turnroot's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   
-   docs/editor/quickstart
 
 
 Indices and tables
