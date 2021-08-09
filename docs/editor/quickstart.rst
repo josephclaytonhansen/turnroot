@@ -20,6 +20,7 @@ The first time you open the Turnroot Builder, this is what you'll see (minus, of
 
 .. image:: 001_fl_a.png
    :width: 600 px
+   :height: 447 px
    :scale: 100 %
    :alt: Screenshot of Turnroot Builder, showing initial appearance on first open, with labels (A-F) on different parts
    :align: center
@@ -31,7 +32,9 @@ Click this button to change which editor you're currently using. You can also pr
 
 B: Options
 -----------
-Click this to open options. These are editor specific; different editors have different options. There are a few constants, though. You can always change the color theme, font size, icon size, and other appearance-related settings. You can also find error logs (for bug reporting.) Check out :doc: `customizing` to learn more about the options dialog.
+Click this to open options. These are editor specific; different editors have different options. There are a few constants, though. You can always change the color theme, font size, icon size, and other appearance-related settings. You can also find error logs (for bug reporting.) Check out 
+:doc: `customizing`
+to learn more about the options dialog.
 
 C: Help
 --------
@@ -49,4 +52,5 @@ F: Game editor
 The first steps to your own game
 ---------------------------------------------
 
-Up next: the Game Editor > :doc:`game_editor`
+Up next: the Game Editor!
+:doc:`game_editor`
