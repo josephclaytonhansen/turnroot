@@ -18,7 +18,7 @@ The first look: Turnroot Editor at a glance
 --------------------------------------------
 The first time you open the Turnroot Builder, this is what you'll see (minus, of course, the A-F labels):
 
-.. image:: 001_fl_a.jpeg
+.. image:: 001_fl_a.png
    :width: 600 px
    :scale: 100 %
    :alt: Screenshot of Turnroot Builder, showing initial appearance on first open, with labels (A-F) on different parts
