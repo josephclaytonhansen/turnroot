@@ -26,4 +26,4 @@ Help: all the resources you need
 The first, essential, steps to your own game
 ---------------------------------------------
 
-:doc:`editor\game_editor`
+:doc:`editor/game_editor`
