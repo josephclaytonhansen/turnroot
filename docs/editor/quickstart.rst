@@ -19,9 +19,6 @@ The first look: Turnroot Editor at a glance
 The first time you open the Turnroot Builder, this is what you'll see (minus, of course, the A-F labels):
 
 .. image:: 001_fl_a.png
-   :width: 600 px
-   :height: 447 px
-   :scale: 100 %
    :alt: Screenshot of Turnroot Builder, showing initial appearance on first open, with labels (A-F) on different parts
    :align: center
 This view is the **Game Editor**. This editor is where you set essential attributes of your game. We'll dive into the Game Editor in the next document, but for now, let's focus on what's happening here. 
@@ -53,4 +50,5 @@ The first steps to your own game
 ---------------------------------------------
 
 Up next: the Game Editor!
+
 :doc:`game_editor`
