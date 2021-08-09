@@ -36,6 +36,7 @@ to learn more about the options dialog.
 C: Help
 ^^^^^^^^
 Click this to open Help resources. These range from creation checklists to keyboard shortcuts:
+
 .. image:: 001_hl.png
    :alt: Screenshot of Turnroot help resources
    :align: center
