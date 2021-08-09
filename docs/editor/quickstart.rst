@@ -30,7 +30,7 @@ Click this button to change which editor you're currently using. You can also pr
 B: Options
 -----------
 Click this to open options. These are editor specific; different editors have different options. There are a few constants, though. You can always change the color theme, font size, icon size, and other appearance-related settings. You can also find error logs (for bug reporting.) Check out 
-:doc: `customizing`
+:doc:`customizing`
 to learn more about the options dialog.
 
 C: Help
