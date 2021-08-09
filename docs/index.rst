@@ -9,6 +9,7 @@ Welcome to Turnroot's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   editor/quickstart
 
 
 Getting Started
