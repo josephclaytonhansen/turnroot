@@ -12,7 +12,7 @@ When you open the Turnroot Builder options, you'll be greeted with the appearanc
    :alt: Screenshot of Turnroot appearance options
    :align: center
 
-This will look the same across most editors; some editors do have specific items, which you can learn about in :ref:`extra_appearance`.
+This will look the same across most editors; some editors do have specific items.
 
 **Label font size** is the general text size across the builder. Most of the visible text will be affected by this slider.
 
@@ -61,7 +61,7 @@ When working on the Custom theme, try to think about contrast and how the text w
 
 ``button-alt-color`` and ``button-alt-text-color`` should have good contrast.
 
-The "unit rules" should also be visually distinct from each other. 
+The ``unit-editor-rules`` should also be visually distinct from each other. 
 
 .. _extra-appearance:
 Editor-specific appearance settings
