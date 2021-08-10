@@ -57,7 +57,7 @@ Make your own color theme
 --------------------------
 Making your own color theme is done in the same way as editing a theme- in fact, you could completely re-do all the color themes and make eight of your own. The **Custom** theme, however, is specifically provided for you to make your own. 
 
-When working on the Custom theme, try to think about contrast and how the text will appear against backgrounds. Specifically, you need ``list-background-color`` and ``window-background-color`` to have good contrast with ``window-text-color``. 80% of the UI elements use one of those two backgrounds and that text color. 
+When working on the Custom theme, try to think about contrast and how the text will appear against backgrounds. Specifically, you need ``list-background-color`` and ``window-background-color`` to have good contrast with ``window-text-color``. The majority of the UI elements use one of those two backgrounds and that text color. 
 
 ``button-alt-color`` and ``button-alt-text-color`` should have good contrast.
 
