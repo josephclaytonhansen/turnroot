@@ -116,6 +116,8 @@ class UnitEditorWnd(QWidget):
         
         if self.path != None:
             self.unit.selfToJSON(self.path)
+        else:
+            self.saveFileDialog()
         
     def classificationChange(self):
         s = self.sender().currentText()

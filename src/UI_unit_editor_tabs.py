@@ -46,6 +46,7 @@ def initUnit(parent):
     #get unit from file
     parent.unit = Unit()
     parent.unit.unit_class = unitClass()
+    parent.unit.parent = parent
         
 def initBasic(parent):
     parent.working_tab = parent.tabs_dict["Basic"]
