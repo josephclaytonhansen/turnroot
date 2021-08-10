@@ -118,6 +118,7 @@ class UnitEditorWnd(QWidget):
             self.unit.selfToJSON(self.path)
         else:
             self.saveFileDialog()
+            self.unitToJSON()
         
     def classificationChange(self):
         s = self.sender().currentText()
