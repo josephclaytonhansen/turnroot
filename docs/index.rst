@@ -21,6 +21,7 @@ Getting Started / Builder Overview
 
 Taking Your Game to The Next Level
 ===================================
+* :doc:`editor/game_errors`
 
 Getting the Most out of Turnroot
 ================================
