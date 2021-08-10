@@ -13,6 +13,11 @@ from src.skeletons.weapon_types import weaponTypes
 from src.UI_object_editor_dialogs import combatDialog, loadSavedWeapon, pricingDialog, abilitiesDialog
 from src.UI_object_editor_more_dialogs import forgingDialog, loadSavedHealing, healingAbilitiesDialog
 from src.UI_Dialogs import confirmAction, popupInfo, infoClose
+from src.game_directory import gameDirectory
+from src.UI_error_logging import errorLog
+directory = gameDirectory(None)
+directory.getPath()
+game_options = directory.getGameOptions()
 data = updateJSON()
 active_theme = getattr(UI_colorTheme, data["active_theme"])
 
@@ -118,6 +123,17 @@ class ObjectEditorWnd(QWidget):
         
         self.forging = QPushButton("Forge/Repair")
         self.forging.clicked.connect(self.forging_dialog)
+        self.forging.setVisible(False)
+    
+        try:
+            if "Is item forging enabled?" in game_options:
+                try:
+                    if game_options["Is item forging enabled?"] == "Yes":
+                        self.forging.setVisible(True)
+                except Exception as e:
+                    errorLog(e)
+        except Exception as e:errorLog(e)
+                                               
         
         self.type = QComboBox()
         self.type.currentTextChanged.connect(self.changeWeaponType)
@@ -343,6 +359,7 @@ class ObjectEditorWnd(QWidget):
         self.connect = QPushButton("Connect")
         
         self.forging = QPushButton("Forge/Repair")
+        self.forging_button = self.forging
         self.forging.clicked.connect(self.forging_dialog)
         
         self.abilities = QPushButton("Abilities")

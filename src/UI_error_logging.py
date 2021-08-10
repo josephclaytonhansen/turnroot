@@ -1,5 +1,6 @@
-import inspect, datetime, platform, os
+import inspect, datetime, platform, os, sys
 reset = False
+sys.stdout = open("src/errors.txt", 'a')
 def errorLog(e):
     filename = inspect.stack()[1].filename 
     with open("src/errors.txt", "a") as f:

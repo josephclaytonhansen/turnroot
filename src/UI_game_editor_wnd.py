@@ -174,8 +174,11 @@ class GameEditorWnd(QWidget):
             game_options[self.sender().row_name] = self.sender().text()
             if self.sender().text() == "Yes":
                 self.weapon_rows["What does item forging do?"].setVisible(True)
-            else:
+            elif self.sender().text() == "No":
+                y = infoClose("Due to a glitch, you may still be able to change item forging settings.\nThese changes will not show up in the game, nor will they show up once you restart Turnroot.\nPlease restart Turnroot before using the Object Editor.", self)
+                y.exec_()
                 self.weapon_rows["What does item forging do?"].setVisible(False)
+                self.parent.object_editor.forging.setEnabled(False)
         
         #show children paralogues
         elif self.sender().row_name == "Can S level supports produce children?":
@@ -223,6 +226,7 @@ class GameEditorWnd(QWidget):
                 s = magicExperienceDialog(self)
                 s.exec_()
         
+        #weapon experience midpoints
         elif self.sender().row_name == "Do weapon experience levels have midpoints (i.e.: E goes to E+) or not (E goes to D)?":
             game_options[self.sender().row_name] = self.sender().text()
             if self.sender().text() == "Use +":
@@ -234,6 +238,7 @@ class GameEditorWnd(QWidget):
                 for slider in self.parent.unit_editor.starting_type_sliders:
                     self.parent.unit_editor.starting_type_sliders[slider].mids = 6
                     self.parent.unit_editor.starting_type_sliders[slider].setRange(0,self.parent.unit_editor.starting_type_sliders[slider].mids-1)
+
         
         #change map/hub options/visiblity based on choice( this is a big one)
         elif self.sender().row_name == "Does game have hub, map, or both?":

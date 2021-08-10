@@ -102,7 +102,7 @@ def initD(self):
               "How do skills display?",
               "How do units display?"
               ]
-    o_list = [["5", "6", "7"],
+    o_list = [["3", "4", "5"],
               ["5", "6","7","8"],
               ["In grid as icons", "In list as icons + name"],
               ["One page", "Multiple pages"]]

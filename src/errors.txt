@@ -140,3 +140,15 @@ Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI
 Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''/Users/frozendessertsupplies/Desktop/example''
 Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'loadClass': 'None'
 Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'loadClass': 'can only concatenate str (not "NoneType") to str'
+
+
+
+==========Turnroot instance at 10/08/2021 14:36:37==========
+==========macOS-10.15.5-x86_64-i386-64bit==========
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''yrytryrt''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''/Users/frozendessertsupplies/Desktop/example''
+1
+11418
+/Users/frozendessertsupplies/Desktop/example
