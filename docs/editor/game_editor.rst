@@ -69,3 +69,14 @@ When you click this, it will give you a dialog with three columns of error types
    :align: center
 
 You can learn more about each specific error in :doc:`game_errors`- you don't have to worry about a deep-dive right now. No stress, you're still in the quick-start part of the documentation! For now, you should just know that errors may prevent your game from working correctly or being playable. Since you don't currently have a game ready to package, you can once again tuck this away for later and move on. 
+
+Other game options
+####################
+You can find an in-depth reference of what each of the options means at :doc:`game_options`. This is a "getting started" tutorial, so we'll move on to the next thing for now. Let me just leave you with a few quick tips about the game editor: 
+
+* Each choice has a color. Options with the same color work well together. 
+* Not all the game options have to be set now- you can do them at any time. However, setting as many as you can now helps prevent confusion later. 
+
+Let's go ahead and look at the editor you'll be seeing a lot going forward- the Unit/Class Editor!
+
+:doc:`unit_class_editor`
