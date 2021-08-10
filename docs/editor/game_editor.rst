@@ -79,4 +79,4 @@ You can find an in-depth reference of what each of the options means at :doc:`ga
 
 Let's go ahead and look at the editor you'll be seeing a lot going forward- the Unit/Class Editor!
 
-:doc:`unit_class_editor`
+Next document: :doc:`unit_class_editor`
