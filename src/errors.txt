@@ -22,3 +22,12 @@ Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI
 Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
 Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''Pee''
 Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''/Users/frozendessertsupplies/Desktop/test''
+
+
+
+==========Turnroot instance at 10/08/2021 09:59:45==========
+==========macOS-10.15.5-x86_64-i386-64bit==========
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_dialogs.py' using function 'Load': '[Errno 2] No such file or directory: '/Users/frozendessertsupplies/Desktop/example/game_options/cover_art.trsl''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_Dialogs.py' using function '__init__': 'unsupported operand type(s) for +: 'NoneType' and 'str''
