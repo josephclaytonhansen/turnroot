@@ -24,7 +24,7 @@ This is the front page of the editor, where the most basic attributes of a unit 
 AI
 ########
 
-.. image:: 003_ai.png
+.. image:: 003_uai.png
    :alt: Screenshot of Turnroot unit/class editor, AI tab
    :align: center
 
