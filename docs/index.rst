@@ -18,10 +18,12 @@ Getting Started / Builder Overview
 ===================================
 * :doc:`editor/quickstart`
 * :doc:`editor/game_editor`
+* :doc:`editor/unit_class_editor`
 
 Taking Your Game to The Next Level
 ===================================
 * :doc:`editor/game_errors`
+* :doc:`editor/game_options`
 
 Getting the Most out of Turnroot
 ================================
