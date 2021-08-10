@@ -223,6 +223,18 @@ class GameEditorWnd(QWidget):
                 s = magicExperienceDialog(self)
                 s.exec_()
         
+        elif self.sender().row_name == "Do weapon experience levels have midpoints (i.e.: E goes to E+) or not (E goes to D)?":
+            game_options[self.sender().row_name] = self.sender().text()
+            if self.sender().text() == "Use +":
+                for slider in self.parent.unit_editor.starting_type_sliders:
+                    self.parent.unit_editor.starting_type_sliders[slider].mids = 11
+                    self.parent.unit_editor.starting_type_sliders[slider].setRange(0,self.parent.unit_editor.starting_type_sliders[slider].mids-1)
+                    
+            else:
+                for slider in self.parent.unit_editor.starting_type_sliders:
+                    self.parent.unit_editor.starting_type_sliders[slider].mids = 6
+                    self.parent.unit_editor.starting_type_sliders[slider].setRange(0,self.parent.unit_editor.starting_type_sliders[slider].mids-1)
+        
         #change map/hub options/visiblity based on choice( this is a big one)
         elif self.sender().row_name == "Does game have hub, map, or both?":
             game_options[self.sender().row_name] = self.sender().text()

@@ -554,7 +554,8 @@ class UnitEditorWnd(QWidget):
         
     def colorizeSliderC(self, v):
         n = v
-        v = v / 11
+        mids = self.sender().mids
+        v = v / mids
         color_left = QColor(active_theme.unit_editor_slider_color_0)
         color_right = QColor(active_theme.unit_editor_slider_color_1)
         color_left_c = [color_left.red(), color_left.green(), color_left.blue()]
@@ -573,7 +574,11 @@ class UnitEditorWnd(QWidget):
             "QSlider::handle:vertical {\nbackground-color: "+str(QColor(new_color[0],new_color[1],new_color[2]).name())+";border-radius: 2px;width:40px;height:40px;}"
             )
         
-        number_to_value = ["E", "E+","D", "D+", "C", "C+", "B", "B+", "A", "A+", "S"]
+        if mids == 11:
+            number_to_value = ["E", "E+","D", "D+", "C", "C+", "B", "B+", "A", "A+", "S"]
+        else:
+            number_to_value = ["E","D","C","B","A","S"]
+            
         self.starting_level_labels[self.sender().name].setText(number_to_value[n])
         self.unit.current_weapon_levels[self.sender().name] = number_to_value[n]
         

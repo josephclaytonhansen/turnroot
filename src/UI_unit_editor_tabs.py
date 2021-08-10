@@ -527,11 +527,20 @@ def initWeaponAffinities(parent):
         
         parent.starting_type_sliders[weapon_type] = QSlider(Qt.Vertical)
         parent.starting_type_sliders[weapon_type].name = weapon_type
+        try:
+            if game_options["Do weapon experience levels have midpoints (i.e.: E goes to E+) or not (E goes to D)?"] == 1:
+                parent.starting_type_sliders[weapon_type].mids = 11
+            else:
+                parent.starting_type_sliders[weapon_type].mids = 6
+        except:
+            parent.starting_type_sliders[weapon_type].mids = 11
+ 
         parent.starting_type_sliders[weapon_type].valueChanged.connect(parent.colorizeSliderC)
         parent.starting_type_sliders[weapon_type].valueChanged.connect(parent.weapon_starting_level_changed)
         parent.starting_type_sliders[weapon_type].setValue(2)
         parent.starting_type_sliders[weapon_type].setValue(0)
-        parent.starting_type_sliders[weapon_type].setRange(0,10)
+        
+        parent.starting_type_sliders[weapon_type].setRange(0,parent.starting_type_sliders[weapon_type].mids-1)
         parent.starting_type_sliders[weapon_type].setSingleStep(1)
         
         weapon_type_layout.addWidget(parent.starting_type_sliders[weapon_type])
