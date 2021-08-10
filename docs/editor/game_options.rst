@@ -1,1 +1,2 @@
-
+Game Editor Options Reference
+==============================
