@@ -11,6 +11,9 @@ Welcome to Turnroot's documentation!
    :caption: Contents:
    editor/quickstart
    editor/game_editor
+   editor/unit_class_editor
+   editor/unit_class_editor_p2
+   
 Thanks for using Turnroot! If this is your first time using Turnroot, start with :doc:`editor/quickstart` and work your way through the "Getting Started" section. Otherwise, you can find what you need in the lists below. 
 
 
