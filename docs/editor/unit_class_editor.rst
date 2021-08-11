@@ -168,6 +168,8 @@ Again for the sake of keeping this simple, we're jumping to the **Relationships*
 
 You can't do almost anything in this tab right now. Also, depending on your game options, you may not be able to do anything at all. If you don't have the option to choose between "Can get pregnant" and "Can impregnate", you can't do anything here. I'm still going to explain how this tab works, however. 
 
+Support
+^^^^^^^^
 For each "team member" unit (remember, you can set this on the Basics tab), you have the option to set how high their max support can go, and how hard support is to gain. Each team member will show up in the list on the left. Clicking through them will allow you to set these settings for each unit. 
 
 Let me provide an example, so this makes more sense. Let's say you have two additional units, Test Unit A and Test Unit B. Both of these units are on the same team as Test Unit. Let's say Test Unit doesn't get along with Test Unit A but loves Test Unit B. Here's how you would set this:
@@ -181,14 +183,14 @@ Let me provide an example, so this makes more sense. Let's say you have two addi
 
 Pretty simple!
 
-A **personal enemy** is used in AI calculations. All you have to do to set a personal enemy for a unit is click on them from the list. 
+Personal Enemy
+^^^^^^^^^^^^^^^^^
+A **personal enemy** is used in AI calculations. All you have to do to set a personal enemy for a unit is click on them from the list.
 
 Children
 ^^^^^^^^^
-Now let's talk about children! You can, in the game options, turn on child units and allow them to be recruitable through paralogue battles. If you're not interested in that, you can turn it off and jump to the next section. 
+You can, in the game options, turn on child units and allow them to be recruitable through paralogue battles. If you're not interested in that, you can turn it off and ignore this. 
 
-A child unit comes from two units with an S support level- they have an average of their parents' stats, classes, and skills. For example, if Test Unit A has 19 strength when they gain S support with Test Unit, who has 8 strength, their child unit will have 14 strength. 
+The **Can impregnate** and **Can be pregnant** option allow you to set what effect this unit has on their children units. 
 
-A child unit will gain most of their traits from their mother, or from the unit that "Can be pregnant." Each unit that "Can be pregnant" has a child unit assigned to them, and they will always have this child no matter who the partner is. The partner contributes hair color, as well as stats/skills etc. Thus, a unit that "Can impregnate" determines hair color in their union. 
-
-You can read more about this in :doc:`marriage_and_children`. For now, since you don't have any other units, you can tuck this all away for later. 
+You can read more about what that means in :doc:`marriage_and_children`. For now, since you don't have any other units, you can tuck this all away for later. 
