@@ -11,7 +11,7 @@ Welcome to Turnroot's documentation!
    :caption: Contents:
    editor/quickstart
    editor/game_editor
-Thanks for using Turnroot! Please start with the first link in the Getting Started section below- it will lead you through all the steps you need to create a fully functional game. If you want to look up a specific editor, you can find editor overviews in the Getting Starting section. If you want to look up a more advanced functionality, such as nodes in the Skill Editor, you can find that in the other sections. Generally speaking, starting with the first link and moving through will be the best progression. 
+Thanks for using Turnroot! If this is your first time using Turnroot, start with :doc:`editor/quickstart` and work your way through the "Getting Started" section. Otherwise, you can find what you need in the lists below. 
 
 
 Getting Started / Builder Overview
