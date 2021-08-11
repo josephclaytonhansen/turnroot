@@ -35,6 +35,10 @@ Units
 * :doc:`editor/weapon_types`
 * :doc:`editor/marriage_and_children`
 
+Classes
+--------
+* :doc:`editor/class_qualifications`
+
 Getting the Most out of Turnroot
 ================================
 * :doc:`editor/customizing`
