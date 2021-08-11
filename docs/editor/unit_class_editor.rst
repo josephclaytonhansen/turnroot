@@ -129,3 +129,7 @@ Regardless, there's only one stat that must be higher than 0 for the unit to wor
 **Notes** lets you leave yourself notes about this unit- for example, "this unit doesn't have a class assigned yet". That was partially an example and partially a suggestion; your friendly neighborhood Test Unit does not, in fact, have a class assigned, so this would be a good note to leave. Go ahead and do that! It will save automatically.
 
 **Description** is the flavor text that will show in-game for this unit. 
+
+**Stat Growth Rates**, lastly, lets you set how likely the unit is to gain each stat when leveling up. This button also has a super useful test functionality where you can make sure level-ups will be unique and well-balanced. You can learn more about this in :doc:`stat_growth`.
+
+We've skipped over the big white button on this tab for now. That button, and the associated editor, are for working with **portraits**. That's an entirely different subject we'll get to. I bring this up as an example of how everything in the builder is connected; you will probably be switching between editors pretty often as you use it. 
