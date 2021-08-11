@@ -69,7 +69,7 @@ Minimum level and class qualifications
 
 * **Both** combines the two- once the unit hits the specified level, they have a % chance of being able to gain the class. This is the system *Fire Emblem: Three Houses* uses.
 
-Mounted and mounted movement
+Mounted, flying, mounted movement
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 A mounted class will put your unit on a horse, or a pegasus, or a giant eel-hound (Avatar: The Last Airbender style)... whatever the case may be, they will be mounted! This comes with a few changes: 
 
@@ -79,3 +79,37 @@ A mounted class will put your unit on a horse, or a pegasus, or a giant eel-houn
 * The unit will move on tiles differently- tiles that slow mounted units will slow the unit
 
 If you turn on the **Mounted?** checkbox, this class will be mounted. Directly underneath it, you have **Mounted movement+**; this allows to set how much their movement radius will be increased by. **It does not set the new movement radius!** To clarify: if the unit's movement is 4, and this is set to 2, they'd have a total movement radius of 6.
+
+There's another checkbox, further down- **Flying**. Flying used in combination with Mounted means that a unit will not be affected by any tile effects and can move on any tile except tall walls/cliffs/etc. Flying units don't have any tiles that slow them down, because they're in the air. Flying classes are, however, weak to arrows. If you remove the "Bow" weapon type from your game, you won't have this automatic weakness- rather, you'll have to set weapon effectiveness against flying per weapon. 
+
+You can turn on Flying by itself, but it won't affect anything unless Mounted is also turned on.
+
+Our Traveller class will not be mounted. You can leave all of this as is.
+
+Tiers
+@@@@@@
+
+The **Class type/tier?** drop-down lets you set what level this class is. Only **Basic** classes will show up in the class selection dialog for a unit; you can change a unit to a higher tier class in gameplay. For our Traveller class, we'll leave it as a Basic tier. 
+
+**Secret class?** requires a bit of preamble. When you can reclass a unit, you can either reclass them to a set few classes, or to all classes in the tier. *Fire Emblem: Three Houses* lets you reclass to any next-tier class. *Fire Emblem: Awakening* has specific classes after each class. You can set which of these options your game will use in the game options. 
+
+With that said, a **secret class** is a class that doesn't show up normally when reclassing. This class won't show up in that list- whether it's the full tier or the select list- EXCEPT for the specific unit that can use it. For example: the "Great Lord" class in *Fire Emblem: Awakening* is only available to a couple units. Only "Lord" units can see "Great Lord" in their reclass options. A similar case is "Enlightened One" in *Fire Emblem: Three Houses*. Essentially, a secret class is a unit-specific or event-given class. This description doesn't apply to our "Traveller", so you can leave it unchecked. 
+
+For more information about class tiers/secret classes, see :doc:`reclassing`. 
+
+EXP X
+@@@@@@@@
+
+**EXP Growth X** determines how quickly this unit levels up. You can use this to set it so units level up more quickly at base tiers, and level up more slowly (comparatively) at advanced tiers. This may seem weird, so think about it this way: a unit will probably get more kills per battle at a higher tier. If EXP growth stays constant, they'll actually level up much FASTER as a higher tier class because of this. Thus, by slowing down their experience at higher levels, you're actually balancing out their rate of growth between tiers. 
+
+You can also just leave all your classes at 1 if you don't want to do this. 
+
+For our Traveller, you can set it to something like 1.2, if you are balancing your tiers, or leave it at 1 otherwise. 
+
+**Class Value EXP X** determines how much EXP this class gives when *killed*. From the perspective of Test Unit, this may seem weird, but think about if you have an enemy boss that needs to give a higher reward for killing. By giving that boss a unique "Boss" class or something, and turning this up, you'll get more EXP from that kill. This is a very common mechanic in games of this sort. 
+
+You can leave this at 1 for our Traveller class.
+
+Both of the EXP X values go from .10 to 3.00. This is a multiplier: 1.0 means a normal level, 2.0 would be twice, and .5 would be half. 
+
+For more information about growth, see :doc:`unit_growth`. 
