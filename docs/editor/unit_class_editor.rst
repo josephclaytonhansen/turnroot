@@ -133,3 +133,27 @@ Regardless, there's only one stat that must be higher than 0 for the unit to wor
 **Stat Growth Rates**, lastly, lets you set how likely the unit is to gain each stat when leveling up. This button also has a super useful test functionality where you can make sure level-ups will be unique and well-balanced. You can learn more about this in :doc:`stat_growth`.
 
 We've skipped over the big white button on this tab for now. That button, and the associated editor, are for working with **portraits**. That's an entirely different subject we'll get to. I bring this up as an example of how everything in the builder is connected; you will probably be switching between editors pretty often as you use it. 
+
+Giving your unit weapon affinities
+###################################
+
+Now that you've got the barebones laid down on the Basics tab, we can move to the next tab! (That's not to say the Basic tab is complete; at the least, you need to assign classes.)
+This is what you should be seeing:
+
+.. image:: 003_wa.png
+   :alt: Screenshot of Turnroot unit/class editor, weapon affinities tab
+   :align: center
+
+This tab is incredibly simple, and it will probably take only a few seconds to use. Each slider represents how much **weapon type experience** the unit has at level 1. You can use this to give them a natural advantage or head start with weapon types. The number under each slider allows you to change how quickly they gain experience in this weapon type. This is an optional feature, you can leave all the numbers at 1 for normal growth. 
+
+There are two things to note here. 
+
+First, you may be expecting a wider range of weapon experience levels. To put it simply, you may find the "E-S" range limited, and be asking "what about E+ and D+ and all the other pluses?" No worries! You can absolutely change that! It's in the game options, so if you want to change it, switch editors and then come back. (Remember you can press Esc to switch editors.) 
+
+Second, you can also edit the **universal weapon types** here. Universal is not an exaggeration- any change made in this dialog will affect the entire game. You can also add/remove/edit weapon types in the game options. 
+
+Most things, you can change at any time. Weapon types are an exception of sorts. If you think about it, if you make a bunch of "shapeshifting" weapons and then delete "shapeshifting" as a weapon type, you now have a pile of weapons without a usable type. The weapons **simply will not appear in the game, anywhere!** Turnroot will, rather than allowing weapons that would give an error if used to be in the game, pull them out entirely. 
+
+Long story short: weapon types are one of the first things you should set when making a game, and you should not change them later. You can, if needed, just remember the dangers. 
+
+Go ahead and look over the weapon types and edit them to your liking, or just leave them as they are. You can learn more about editing them in :doc:`weapon_types`. 
