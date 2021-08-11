@@ -137,7 +137,7 @@ We've skipped over the big white button on this tab for now. That button, and th
 Giving your unit weapon affinities
 ###################################
 
-Now that you've got the barebones laid down on the Basics tab, we can move to the next tab! (That's not to say the Basic tab is complete; at the least, you need to assign classes.)
+Now that you've got the barebones laid down on the Basics tab, we can move to the next tab! (That's not to say the Basic tab is complete; at the least, you need to assign classes.) We can skip AI because our unit doesn't need it. We'll also be skipping actions for the sake of keeping this tutorial simple. This takes us to the **Weapon Affinities** tab. 
 This is what you should be seeing:
 
 .. image:: 003_wa.png
