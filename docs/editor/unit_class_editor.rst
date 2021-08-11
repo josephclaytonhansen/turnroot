@@ -114,4 +114,18 @@ The next row lets you set the **classification** of this unit. This is mainly us
 Base statistics: what do they mean, and how do I use them? 
 ############################################################
 
+.. image:: 003_br.png
+   :alt: Screenshot of Turnroot unit/class editor, showing the right portion of the Basics tab
+   :align: center
 
+On the right side of the editor, you can edit the **base statistics** and **statistic growth** rate of your unit. Base statistics determine who the unit is, and growth determines who the unit will become. You can hover over any of the statistics to learn what they influence. 
+
+This list may not match yours, by the way; you can disable Command and Endurance entirely in the game options. (Read about why you would do that in :doc:`game_options`)
+
+Regardless, there's only one stat that must be higher than 0 for the unit to work correctly: HP (health points).  **A unit with no health is dead.** Sounds obvious, I know, but a unit with max HP can't go 
+
+**Stat caps** lets you set the maximum amount this unit can have of each stat. If you hadn't guessed from the (if enabled), this can be turned on or off in the game options. 
+
+**Notes** lets you leave yourself notes about this unit- for example, "this unit doesn't have a class assigned yet". That was partially an example and partially a suggestion; your friendly neighborhood Test Unit does not, in fact, have a class assigned, so this would be a good note to leave. 
+
+**Description** is the flavor text that will show in-game for this unit. 
