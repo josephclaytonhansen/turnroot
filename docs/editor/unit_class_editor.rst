@@ -1,10 +1,10 @@
-Using the Unit/Class Editor
-============================
+Using the Unit/Class Editor, Part 1
+=====================================
 Now that you've set some basic game options, you can start learning about the other editors. We're starting with the unit/class editor because it's the default editor you'll see whenever you open Turnroot in the future.
 
-The unit/class editor is unique, in that it is used to create and edit two separate types of things.  However, units and classes are so closely connected that it made more sense to combine them this way. (Many rounds of testing always led us back here.) 
+The unit/class editor is unique, in that it is used to create and edit two separate types of things.  However, units and classes are so closely connected that it made more sense to combine them this way.
 
-Now, for some quick definitions: a **unit** is a character; a protagonist, an enemy, a team member, etc. A **class** defines how a unit behaves in combat, what weapons they can use, etc. These terms are used the same way they might be in a *Fire Emblem* game. 
+Some quick definitions: a **unit** is a character; a protagonist, an enemy, a team member, etc. A **class** defines how a unit behaves in combat, what weapons they can use, etc. These terms are used the same way they might be in a *Fire Emblem* game. 
 
 .. contents::
 
@@ -72,9 +72,7 @@ Graphics/Sounds
 
 Creating a unit
 ------------------------
-If you're ready to dive in, go ahead and keep reading! If you'd like to learn more about the overall interface first, go ahead and jump to the next document: :doc:`level_editor`.
-
-Let's go ahead and make a simple unit just to see how all this works. We're going to make a team member, so you can get your feet wet with the Relationships tab. Normally at this point, you would do some planning/brainstorming. We're going to do that for you so you can learn the interface; after that, you can start making the units of your dreams. 
+Let's go ahead and make a simple unit just to see how all this works. We're going to make a team member to skip the AI tab. Normally at this point, you would do some planning/brainstorming. We're going to do that for you so you can learn the interface; after that, you can start making the units of your dreams. 
 
 Basics and bare minimums
 #########################
@@ -91,13 +89,13 @@ So, without further ado, go ahead and give your unit a name by typing in a name 
 
 Once you press enter, you'll be prompted to enter a filename- go ahead and do that, something like "Test Unit", and click Ok. You are now auto-saving.
 
-Congratulations, you've just created a unit! If you open your game folder, you'll find two new files in your ``game_folder/units`` subfolder: ``Test Unit.truf``, and ``Test Unit.truf.trui``. 
+Congratulations, you've just created a unit! If you open your game folder, you'll find two new files in your ``game_folder/units`` subfolder: ``Test Unit.truf``, and ``Test Unit.truf.trui``. These are the files associated with your unit that will auto-save. You need both, don't delete one!
 
 There are two other fields in that screenshotted section; a **drop-down menu** and an **Edit button**. The Edit button allows you to set what classes this unit could have and the drop-down menu allows you to set the class the unit does have. This is less complicated than it sounds. Every unit can have at least one base class, and they can switch between them when reclassing. The drop-down menu lets you say which of these possible classes is the default, or the one they'll have in the game until changed. 
 
 Currently, you don't have any classes, which means you can't do anything with either of those options. We'll get there!
 
-There are a couple of other things you can do here. Note that you don't have to do anything in any order, once you have your unit named and saved, but you're already on this tab so you might as well. In case you're lost, here's a screenshot showing everything we'll be talking about:
+There are a couple of other things you can do here. In case you're lost, here's a screenshot showing everything we'll be talking about:
  
 .. image:: 003_ab.png
    :alt: Screenshot of Turnroot unit/class editor, showing the bottom left portion of the Basics tab
@@ -107,7 +105,7 @@ First, you need to set this unit's **pronouns**. This will affect how they are r
 
 Below this, you can set whether this unit is **generic** or not. A generic unit is a template for many clones or instances. These instances can have variations in appearance and stats. For example, an "enemy archer" could be just one unit- named "Enemy Archer", and you could give them variations to make the appearance of different units. To make a unit generic, click the **checkbox** next to "Generic". You can then set the variation options with the "Generic" button. 
 
-Team members are not generic, obviously, so you can move past this for now. 
+Team members are not generic, so you can move past this for now. 
 
 The next row lets you set the **classification** of this unit. This is mainly useful for weapon effectiveness; for example, if the unit is a dragon, they'll be weak against dragon-effective weapons. Click "Edit" to change the universal classifications. You can use this to change the theme of your game; changing fantasy to sci-fi, for example. You can leave your test unit as a Human. 
 
@@ -122,7 +120,7 @@ On the right side of the editor, you can edit the **base statistics** and **stat
 
 This list may not match yours, by the way; you can disable Command and Endurance entirely in the game options. (Read about why you would do that in :doc:`game_options`)
 
-Regardless, there's only one stat that must be higher than 0 for the unit to work correctly: HP (health points).  **A unit with no maximum health is dead.** (Sounds obvious, I know.)
+There's only one stat that must be higher than 0 for the unit to work correctly: HP (health points).  **A unit with no maximum health cannot be in combat/gain support/do anything.** 
 
 **Stat caps** lets you set the maximum amount this unit can have of each stat. If you hadn't guessed from the (if enabled), this can be turned on or off in the game options. 
 
@@ -132,12 +130,12 @@ Regardless, there's only one stat that must be higher than 0 for the unit to wor
 
 **Stat Growth Rates**, lastly, lets you set how likely the unit is to gain each stat when leveling up. This button also has a super useful test functionality where you can make sure level-ups will be unique and well-balanced. You can learn more about this in :doc:`stat_growth`.
 
-We've skipped over the big white button on this tab for now. That button, and the associated editor, are for working with **portraits**. That's an entirely different subject we'll get to. I bring this up as an example of how everything in the builder is connected; you will probably be switching between editors pretty often as you use it. 
+We've skipped over the big white button on this tab for now. That button, and the associated editor, are for working with **portraits**. I bring this up as an example of how everything in the builder is connected; you will probably be switching between editors pretty often as you use it. 
 
 Giving your unit weapon affinities
 ###################################
 
-Now that you've got the barebones laid down on the Basics tab, we can move to the next tab! (That's not to say the Basic tab is complete; at the least, you need to assign classes.) We can skip AI because our unit doesn't need it. We'll also be skipping actions for the sake of keeping this tutorial simple. This takes us to the **Weapon Affinities** tab. 
+Now that you've got the barebones laid down on the Basics tab, we can move to the next tab! We can skip AI because our unit doesn't need it. We'll also be skipping actions for the sake of keeping this tutorial simple. This takes us to the **Weapon Affinities** tab. 
 This is what you should be seeing:
 
 .. image:: 003_wa.png
@@ -166,7 +164,7 @@ Again for the sake of keeping this simple, we're jumping to the **Relationships*
    :alt: Screenshot of Turnroot unit/class editor, relationships tab
    :align: center
 
-You can't do almost anything in this tab right now. Also, depending on your game options, you may not be able to do anything at all. If you don't have the option to choose between "Can get pregnant" and "Can impregnate", you can't do anything here. I'm still going to explain how this tab works, however. 
+Note: you can't actually do much in this tab (yet!) You need other units.
 
 Support
 ^^^^^^^^
@@ -174,12 +172,12 @@ For each "team member" unit (remember, you can set this on the Basics tab), you 
 
 Let me provide an example, so this makes more sense. Let's say you have two additional units, Test Unit A and Test Unit B. Both of these units are on the same team as Test Unit. Let's say Test Unit doesn't get along with Test Unit A but loves Test Unit B. Here's how you would set this:
 
-* You would click on Test Unit A from the list on the left.
-* Now that Test Unit A is selected, you would set max support to be, let's say, C.
-* You would also move the slider towards the left; probably not all the way to "intensely dislikes", but definitely left of center.
-* Now it's time for Test Unit B. You would click on them from the list.
+* Click on Test Unit A from the list on the left.
+* Now that Test Unit A is selected, set max support to be, let's say, C.
+* Move the slider towards the left; probably not all the way to "intensely dislikes", but definitely left of center.
+* Now it's time for Test Unit B. Click on them from the list.
 * Doing this will reset the max support level and slider. You can click back to Test Unit A and see that the values will change to match. 
-*  With Test Unit B selected, you would set max support to S and move the slider to the right. 
+*  With Test Unit B selected, set max support to S and move the slider to the right. 
 
 Pretty simple!
 
@@ -189,8 +187,10 @@ A **personal enemy** is used in AI calculations. All you have to do to set a per
 
 Children
 ^^^^^^^^^
-You can, in the game options, turn on child units and allow them to be recruitable through paralogue battles. If you're not interested in that, you can turn it off and ignore this. 
+You can, in the game options, turn on child units and potentially allow them to be recruitable through paralogue battles. If you're not interested in that, you can turn it off and ignore this. 
 
 The **Can impregnate** and **Can be pregnant** option allow you to set what effect this unit has on their children units. 
 
 You can read more about what that means in :doc:`marriage_and_children`. For now, since you don't have any other units, you can tuck this all away for later. 
+
+In the next document you're going to make your first class. Feel free to take a breather or play around in the unit editor. The best way to learn how to use Turnroot is, ultimately, to use it. When you're ready, go ahead and continue: :doc:`unit_class_editor_p2`
