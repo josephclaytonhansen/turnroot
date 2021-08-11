@@ -126,6 +126,6 @@ Regardless, there's only one stat that must be higher than 0 for the unit to wor
 
 **Stat caps** lets you set the maximum amount this unit can have of each stat. If you hadn't guessed from the (if enabled), this can be turned on or off in the game options. 
 
-**Notes** lets you leave yourself notes about this unit- for example, "this unit doesn't have a class assigned yet". That was partially an example and partially a suggestion; your friendly neighborhood Test Unit does not, in fact, have a class assigned, so this would be a good note to leave. Go ahead and do that, and press Enter. (Isn't autosave great?)
+**Notes** lets you leave yourself notes about this unit- for example, "this unit doesn't have a class assigned yet". That was partially an example and partially a suggestion; your friendly neighborhood Test Unit does not, in fact, have a class assigned, so this would be a good note to leave. Go ahead and do that! It will save automatically.
 
 **Description** is the flavor text that will show in-game for this unit. 
