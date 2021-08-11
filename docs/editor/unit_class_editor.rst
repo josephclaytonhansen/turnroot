@@ -191,10 +191,4 @@ A child unit comes from two units with an S support level- they have an average 
 
 A child unit will gain most of their traits from their mother, or from the unit that "Can be pregnant." Each unit that "Can be pregnant" has a child unit assigned to them, and they will always have this child no matter who the partner is. The partner contributes hair color, as well as stats/skills etc. Thus, a unit that "Can impregnate" determines hair color in their union. 
 
-Two units can only have children if one unit "Can impregnate" and one unit "Can be pregnant". An S support level is not a guarantee of a child unit. 
-
-Each unit can only have S support with one unit- once they reach S support with a unit, no other units will be able to gain S support, even if they have the potential for it. 
-
-One other note: pronouns have no effect whatsoever on children units. A unit with "she/her" pronouns can impregnate if you set her to "Can impregnate." Pronouns only affect dialogue. 
-
 You can read more about this in :doc:`marriage_and_children`. For now, since you don't have any other units, you can tuck this all away for later. 
