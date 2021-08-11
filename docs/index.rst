@@ -19,6 +19,7 @@ Getting Started / Builder Overview
 * :doc:`editor/quickstart`
 * :doc:`editor/game_editor`
 * :doc:`editor/unit_class_editor`
+* :doc:`editor/unit_class_editor_p2`
 
 Taking Your Game to The Next Level
 ===================================
