@@ -37,7 +37,7 @@ Units
 * :doc:`editor/stat_growth`
 * :doc:`editor/weapon_types`
 * :doc:`editor/marriage_and_children`
-* :doc:`unit_growth`
+* :doc:`editor/unit_growth`
 
 Classes
 --------
