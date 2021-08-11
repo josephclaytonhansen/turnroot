@@ -73,9 +73,9 @@ Mounted and mounted movement
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 A mounted class will put your unit on a horse, or a pegasus, or a giant eel-hound (Avatar: The Last Airbender style)... whatever the case may be, they will be mounted! This comes with a few changes: 
 
-*The unit will have increased movement radius by default
-*The  unit  will have the option to Dismount; restoring their movement radius to normal. Once dismounted, they can mount again.
-*The unit will have a new momement type, which in turn will make them weak against certain weapons but may have positive effects. 
-*The unit will move on tiles differently- tiles that slow mounted units will slow the unit
+* The unit will have increased movement radius by default
+* The  unit  will have the option to Dismount; restoring their movement radius to normal. Once dismounted, they can mount again.
+* The unit will have a new momement type, which in turn will make them weak against certain weapons but may have positive effects. 
+* The unit will move on tiles differently- tiles that slow mounted units will slow the unit
 
 If you turn on the **Mounted?** checkbox, this class will be mounted. Directly underneath it, you have **Mounted movement+**; this allows to set how much their movement radius will be increased by. If the unit's movement is 4, and this is set to 2, they'd have a total movement radius of 6.
