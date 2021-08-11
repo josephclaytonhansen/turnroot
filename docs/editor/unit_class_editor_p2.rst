@@ -78,4 +78,4 @@ A mounted class will put your unit on a horse, or a pegasus, or a giant eel-houn
 * The unit will have a new momement type, which in turn will make them weak against certain weapons but may have positive effects. 
 * The unit will move on tiles differently- tiles that slow mounted units will slow the unit
 
-If you turn on the **Mounted?** checkbox, this class will be mounted. Directly underneath it, you have **Mounted movement+**; this allows to set how much their movement radius will be increased by. If the unit's movement is 4, and this is set to 2, they'd have a total movement radius of 6.
+If you turn on the **Mounted?** checkbox, this class will be mounted. Directly underneath it, you have **Mounted movement+**; this allows to set how much their movement radius will be increased by. **It does not set the new movement radius!** To clarify: if the unit's movement is 4, and this is set to 2, they'd have a total movement radius of 6.
