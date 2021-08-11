@@ -116,6 +116,7 @@ The bottom row: advanced options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: 004_bs.png
+   :alt: Bottom row of class options
    :align: center
 
 Each of these buttons adds features and functionality to a class. There's a lot here, and I don't want to overwhelm you, so we're going to skip over this for now. You can read about what these buttons do in :doc:`class_features`. 
@@ -128,11 +129,13 @@ At this point, if you've done everything on the top section and middle section, 
 Head back over to the "Basic" tab. You should see your Test Unit, still loaded and ready to edit. Click on the pencil icon next to the unit name, and you should see this:
 
 .. image:: 004_cd.png
+   :alt: Set classes dialog
    :align: center
    
 Click the checkbox next to Traveller and close the dialog. Now, when you go to the drop down list, you'll see this:
 
 .. image:: 004_dc.png
+   :alt: Set default class drop-down
    :align: center
    
 Go ahead and select Traveller from this list. Your Test Unit now has an assigned default class!
