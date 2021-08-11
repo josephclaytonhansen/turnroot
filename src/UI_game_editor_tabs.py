@@ -248,7 +248,7 @@ def initUC(self):
               [self.colors["BLUE"],self.colors["PURPLE"]],
               [self.colors["BLUE"],self.colors["GREY"],self.colors["PURPLE"]],
               [self.colors["BLUE"],self.colors["RED"]],
-              [self.colors["BLUE"],self.colors["PURPLE"]],
+              [self.colors["RED"],self.colors["BLUE"],self.colors["PURPLE"]],
               [self.colors["BLUE"],self.colors["PURPLE"]],
               [self.colors["BLUE"],self.colors["PURPLE"]],
               [self.colors["BLUE"],self.colors["PURPLE"]],
