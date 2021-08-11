@@ -25,6 +25,7 @@ Taking Your Game to The Next Level
 * :doc:`editor/game_errors`
 * :doc:`editor/game_options`
 * :doc:`editor/stat_growth`
+* :doc:`editor/weapon_types`
 
 Getting the Most out of Turnroot
 ================================
