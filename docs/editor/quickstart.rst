@@ -57,7 +57,7 @@ F: Game editor
 ^^^^^^^^^^^^^^^
 The game editor is how you specify how your game works, and the attributes and options you want it to have.
 
-Like all editors, you can access the game editor from the editor selection menu (A) to change game settings at any point. You'll learn more about the game editor and how it works in the next document, :doc:`game_editor`. 
+Like all editors, you can access the game editor from the editor selection menu (Esc) to change game settings at any point. You'll learn more about the game editor and how it works in the next document, :doc:`game_editor`. 
 
 .. _start:
 The first steps to your own game
