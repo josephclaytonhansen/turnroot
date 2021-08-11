@@ -80,7 +80,7 @@ A mounted class will put your unit on a horse, or a pegasus, or a giant eel-houn
 
 If you turn on the **Mounted?** checkbox, this class will be mounted. Directly underneath it, you have **Mounted movement+**; this allows to set how much their movement radius will be increased by. **It does not set the new movement radius!** To clarify: if the unit's movement is 4, and this is set to 2, they'd have a total movement radius of 6.
 
-There's another checkbox, further down- **Flying**. Flying used in combination with Mounted means that a unit will not be affected by any tile effects and can move on any tile except tall walls/cliffs/etc. Flying units don't have any tiles that slow them down, because they're in the air. Flying classes are, however, weak to arrows. If you remove the "Bow" weapon type from your game, you won't have this automatic weakness- rather, you'll have to set weapon effectiveness against flying per weapon. 
+There's another checkbox, further down- **Flying**. Flying used in combination with Mounted means that a unit will not be affected by any tile effects and can move on any tile except tall walls/cliffs/etc. Flying units don't have any tiles that slow them down, because they're in the air. Flying classes are, however, weak to arrows.
 
 You can turn on Flying by itself, but it won't affect anything unless Mounted is also turned on.
 
@@ -91,9 +91,7 @@ Tiers
 
 The **Class type/tier?** drop-down lets you set what level this class is. Only **Basic** classes will show up in the class selection dialog for a unit; you can change a unit to a higher tier class in gameplay. For our Traveller class, we'll leave it as a Basic tier. 
 
-**Secret class?** requires a bit of preamble. When you can reclass a unit, you can either reclass them to a set few classes, or to all classes in the tier. *Fire Emblem: Three Houses* lets you reclass to any next-tier class. *Fire Emblem: Awakening* has specific classes after each class. You can set which of these options your game will use in the game options. 
-
-With that said, a **secret class** is a class that doesn't show up normally when reclassing. This class won't show up in that list- whether it's the full tier or the select list- EXCEPT for the specific unit that can use it. For example: the "Great Lord" class in *Fire Emblem: Awakening* is only available to a couple units. Only "Lord" units can see "Great Lord" in their reclass options. A similar case is "Enlightened One" in *Fire Emblem: Three Houses*. Essentially, a secret class is a unit-specific or event-given class. This description doesn't apply to our "Traveller", so you can leave it unchecked. 
+**Secret class?** is a class that doesn't show up normally when reclassing. This class won't show up in that list- whether it's the full tier or the select list- EXCEPT for the specific unit that can use it. For example: the "Great Lord" class in *Fire Emblem: Awakening* is only available to a couple units. A similar case is "Enlightened One" in *Fire Emblem: Three Houses*. Essentially, a secret class is a unit-specific or event-given class. This description doesn't apply to our "Traveller", so you can leave it unchecked. 
 
 For more information about class tiers/secret classes, see :doc:`reclassing`. 
 
