@@ -22,10 +22,17 @@ Getting Started / Builder Overview
 
 Taking Your Game to The Next Level
 ===================================
+
+Game
+-----
 * :doc:`editor/game_errors`
 * :doc:`editor/game_options`
+
+Units
+-----
 * :doc:`editor/stat_growth`
 * :doc:`editor/weapon_types`
+* :doc:`editor/marriage_and_children`
 
 Getting the Most out of Turnroot
 ================================
