@@ -111,3 +111,33 @@ You can leave this at 1 for our Traveller class.
 Both of the EXP X values go from .10 to 3.00. This is a multiplier: 1.0 means a normal level, 2.0 would be twice, and .5 would be half. 
 
 For more information about growth, see :doc:`unit_growth`. 
+
+The bottom row: advanced options
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: 004_bs.png
+   :align: center
+
+Each of these buttons adds features and functionality to a class. There's a lot here, and I don't want to overwhelm you, so we're going to skip over this for now. You can read about what these buttons do in :doc:`class_features`. 
+
+Assigning classes to unit
+############################
+
+At this point, if you've done everything on the top section and middle section, your class is ready to go! You should come back and work on those bottom section buttons at some point, but for now, let's go ahead and assign our Test Unit this class. 
+
+Head back over to the "Basic" tab. You should see your Test Unit, still loaded and ready to edit. Click on the pencil icon next to the unit name, and you should see this:
+
+.. image:: 004_cd.png
+   :align: center
+   
+Click the checkbox next to Traveller and close the dialog. Now, when you go to the drop down list, you'll see this:
+
+.. image:: 004_dc.png
+   :align: center
+   
+Go ahead and select Traveller from this list. Your Test Unit now has an assigned default class!
+
+What have you done so far?
+---------------------------
+
+At this point, you've learned how the game options work and set some, created a unit, created a class, and assigned the class to the unit. This is incredible progress! Our next task is going to be making a generic enemy unit. This will show you how the features we've skipped over so far in the unit editor work. When you're ready, head over to :doc:`unit_class_editor_p3`. 
