@@ -183,6 +183,8 @@ Pretty simple!
 
 A **personal enemy** is used in AI calculations. All you have to do to set a personal enemy for a unit is click on them from the list. 
 
+Children
+^^^^^^^^^
 Now let's talk about children! You can, in the game options, turn on child units and allow them to be recruitable through paralogue battles. If you're not interested in that, you can turn it off and jump to the next section. 
 
 A child unit comes from two units with an S support level- they have an average of their parents' stats, classes, and skills. For example, if Test Unit A has 19 strength when they gain S support with Test Unit, who has 8 strength, their child unit will have 14 strength. 
