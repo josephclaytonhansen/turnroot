@@ -714,6 +714,8 @@ def initClasses(parent):
         else:
             if game_options["How many levels of classes are there?"] == '2 (Basic, Advanced)':
                 parent.class_type.addItems(["Basic",'Advanced'])
+            elif game_options["How many levels of classes are there?"] == "4 (Basic, Advanced, Master, Expert)":
+                parent.class_type.addItems(["Basic",'Advanced', 'Master', 'Expert'])
             else:
                 parent.class_type.addItems(["Basic", "Advanced", "Master"])
     except:

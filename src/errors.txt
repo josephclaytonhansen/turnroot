@@ -4,3 +4,57 @@ Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI
 Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
 Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''yrytryrt''
 Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''/Users/frozendessertsupplies/Desktop/example''
+1
+13244
+/Users/frozendessertsupplies/Desktop/example
+
+
+
+==========Turnroot instance at 11/08/2021 10:33:22==========
+==========macOS-10.15.5-x86_64-i386-64bit==========
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''yrytryrt''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''/Users/frozendessertsupplies/Desktop/example''
+1
+843
+/Users/frozendessertsupplies/Desktop/example
+/Users/frozendessertsupplies/Desktop/example/units/Test Unit
+
+
+
+==========Turnroot instance at 11/08/2021 10:46:30==========
+==========macOS-10.15.5-x86_64-i386-64bit==========
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''yrytryrt''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''/Users/frozendessertsupplies/Desktop/example''
+1
+1748
+/Users/frozendessertsupplies/Desktop/example
+
+
+
+==========Turnroot instance at 11/08/2021 11:06:45==========
+==========macOS-10.15.5-x86_64-i386-64bit==========
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''yrytryrt''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_game_editor_wnd.py' using function 'Load': ''/Users/frozendessertsupplies/Desktop/example''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+1
+2593
+/Users/frozendessertsupplies/Desktop/example
+
+
+
+==========Turnroot instance at 11/08/2021 13:01:11==========
+==========macOS-10.15.5-x86_64-i386-64bit==========
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+1
+4363

@@ -238,7 +238,7 @@ def initUC(self):
               ["Yes", "No"],
               ["Level based", "Criteria based", "Both"],
               ["Yes", "No"],
-              ["2 (Basic, Advanced)", "3 (Basic, Advanced, Master)"],
+              ["2 (Basic, Advanced)", "3 (Basic, Advanced, Master)", "4 (Basic, Advanced, Master, Expert)"],
               ["Yes", "No (units can reclass to any class)"],
               ["List", "Grid"],
               ["In combat", "Only out of combat"],
