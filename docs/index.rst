@@ -42,6 +42,7 @@ Units
 Classes
 --------
 * :doc:`editor/class_qualifications`
+* :doc:`editor/reclassing`
 
 Getting the Most out of Turnroot
 ================================
