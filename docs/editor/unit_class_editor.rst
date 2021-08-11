@@ -157,3 +157,42 @@ Most things, you can change at any time. Weapon types are an exception of sorts.
 Long story short: weapon types are one of the first things you should set when making a game, and you should not change them later. You can, if needed, just remember the dangers. 
 
 Go ahead and look over the weapon types and edit them to your liking, or just leave them as they are. You can learn more about editing them in :doc:`weapon_types`. 
+
+Relationships: Test Unit + other units
+##########################################
+Again for the sake of keeping this simple, we're jumping to the **Relationships** tab. This is what you'll see there: 
+
+.. image:: 003_r.png
+   :alt: Screenshot of Turnroot unit/class editor, relationships tab
+   :align: center
+
+You can't do almost anything in this tab right now. Also, depending on your game options, you may not be able to do anything at all. If you don't have the option to choose between "Can get pregnant" and "Can impregnate", you can't do anything here. I'm still going to explain how this tab works, however. 
+
+For each "team member" unit (remember, you can set this on the Basics tab), you have the option to set how high their max support can go, and how hard support is to gain. Each team member will show up in the list on the left. Clicking through them will allow you to set these settings for each unit. 
+
+Let me provide an example, so this makes more sense. Let's say you have two additional units, Test Unit A and Test Unit B. Both of these units are on the same team as Test Unit. Let's say Test Unit doesn't get along with Test Unit A but loves Test Unit B. Here's how you would set this:
+
+* You would click on Test Unit A from the list on the left.
+* Now that Test Unit A is selected, you would set max support to be, let's say, C.
+* You would also move the slider towards the left; probably not all the way to "intensely dislikes", but definitely left of center.
+* Now it's time for Test Unit B. You would click on them from the list.
+* Doing this will reset the max support level and slider. You can click back to Test Unit A and see that the values will change to match. 
+*  With Test Unit B selected, you would set max support to S and move the slider to the right. 
+
+Pretty simple!
+
+A **personal enemy** is used in AI calculations. All you have to do to set a personal enemy for a unit is click on them from the list. 
+
+Now let's talk about children! You can, in the game options, turn on child units and allow them to be recruitable through paralogue battles. If you're not interested in that, you can turn it off and jump to the next section. 
+
+A child unit comes from two units with an S support level- they have an average of their parents' stats, classes, and skills. For example, if Test Unit A has 19 strength when they gain S support with Test Unit, who has 8 strength, their child unit will have 14 strength. 
+
+A child unit will gain most of their traits from their mother, or from the unit that "Can be pregnant." Each unit that "Can be pregnant" has a child unit assigned to them, and they will always have this child no matter who the partner is. The partner contributes hair color, as well as stats/skills etc. Thus, a unit that "Can impregnate" determines hair color in their union. 
+
+Two units can only have children if one unit "Can impregnate" and one unit "Can be pregnant". An S support level is not a guarantee of a child unit. 
+
+Each unit can only have S support with one unit- once they reach S support with a unit, no other units will be able to gain S support, even if they have the potential for it. 
+
+One other note: pronouns have no effect whatsoever on children units. A unit with "she/her" pronouns can impregnate if you set her to "Can impregnate." Pronouns only affect dialogue. 
+
+You can read more about this in :doc:`marriage_and_children`. For now, since you don't have any other units, you can tuck this all away for later. 
