@@ -40,6 +40,8 @@ Units
 * :doc:`editor/weapon_types`
 * :doc:`editor/marriage_and_children`
 * :doc:`editor/unit_growth`
+* :doc:`editor/generic`
+* :doc:`editor/making_your_own_ai`
 
 Classes
 --------
