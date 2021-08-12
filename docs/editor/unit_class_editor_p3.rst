@@ -57,7 +57,7 @@ Before diving in and making changes, let's break down how this editor works. The
 
 The AI editor is easier to experience than to explain, so let's load an AI and start modifying it to our liking. Don't worry, this is simpler than it sounds. Go to the bottom section and open up the drop-down menu: 
 
-.. image:: 003_aip.png
+.. image:: 005_aip.png
    :alt: Screenshot of Turnroot unit editor showing AI presets
    :align: center
 
