@@ -79,4 +79,6 @@ The anatomy of a rule is as follows, from left to right: priority, instruction, 
    
 You'll notice the new slider values are similar, but definitely different. If you keep the sliders similar to the preset, the unit will behave similar to but slightly different from how the preset name would lead you to believe. In this case, "Mindless Creature" implies that this unit will attack whatever is nearest, even if it's a bad decision strategically. With the sliders where they are, that's true. You can also create a entirely new AI by changing the sliders drastically. The choice is yours! 
 
-If you're wondering how you can test out your AI, you can do it in the Level Editor. 
+If you're wondering how you can test out your AI, you can do it in the Level Editor.
+
+That's it! You've created a barebones enemy with stat variations and AI. 
