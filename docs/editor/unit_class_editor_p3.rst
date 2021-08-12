@@ -18,3 +18,10 @@ At this point, you're fully equipped to create the skeleton of a new unit- go ah
    :align: center
    
 I've made my enemy unit a "monster", just for giggles. 
+
+Changing the Generic stat variation
+------------------------------------
+From the Unit Editor, you can change the stat variation of generic units and the appearance variation. You can change the weapon and class variations from the Level Editor- don't worry about this for now. (You can find more information about that in :doc:`generic`.) We're going to focus on the stats, since we haven't looked at graphics yet.
+
+Copies of a generic unit that differ in some way are referred to as **instances**. Stat variations means instances can have a stat higher or lower than the base stat by a set amount. Obviously, in order for instances to have stat variations, the generic unit needs to have base stats. Go ahead and give your unit some base stats- for reference, here are mine:
+
