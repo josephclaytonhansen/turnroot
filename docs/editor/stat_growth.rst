@@ -5,7 +5,7 @@ Stat Growth
 
 How does stat growth work?
 -----------------------------
-When a unit levels up, they will *always* gain +1 in at least one stat as well as HP. To make sure of this, if a level up results in no stat growth, or just HP, one stat will be picked at random to receive a boost. 
+Usually, when a unit levels up, they will *always* gain +1 in at least one stat as well as HP. To make sure of this, if a level up results in no stat growth, or just HP, one stat will be picked at random to receive a boost. 
 
 **To ensure that HP always gains, you should set the growth rate for HP to 100%.** Actually, it's there by default, so as long as you leave that slider alone, it will work as expected. (If you want to make HP *not* a given, you can still adjust it!)
 
@@ -47,7 +47,7 @@ Here's what you might see after running those tests:
    :alt: Screenshot of Turnroot stat growth rate tester
    :align: center
    
-You'll notice that HP is +10, meaning each level up gave HP. The variation score is 71%, which means the level ups are unpredicatable. Things are looking good, in other words.
+You'll notice that HP is +10, meaning each level up gave HP. The variation score is 71%, which means the level ups are unpredictable. Things are looking good, in other words.
 
 To help your variation score, no stat should have a 100% growth chance except HP. Also, no stat should have a 0% growth chance. 
 
