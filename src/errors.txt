@@ -58,3 +58,16 @@ Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI
 Error from caller '/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
 1
 4363
+
+
+
+==========Turnroot instance at 12/08/2021 18:58:19==========
+==========Windows-10-10.0.19041-SP0==========
+Error from caller 'T:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'T:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller 'T:\GitHub\turnroot\src\UI_object_editor_wnd.py' using function 'initWeapons': 'argument of type 'NoneType' is not iterable'
+[Errno 2] No such file or directory: '/dat.trsl'
+1
+[Errno 2] No such file or directory: '/dat.trsl'
+4913
+
