@@ -19,7 +19,7 @@ Unit stat growth vs. unit + class stat growth: which to choose?
 -----------------------------------------------------------------
 With unit stat growth, no matter the class, level ups will always have the same chances of growth. This is a fairly common choice in games of this genre; if someone has a natural talent for magic, for example, and they're set as a brawling class, they're not going to start gaining stats helpful to brawling just because of the class. 
 
-With both, units can "lean into" their clas and gain stats useful for it. This could come with some cons: if a magic unit is assigned a brawling class and starts learning Strength, they're missing out on their *real* strength: magic. 
+With both, units can "lean into" their class and gain stats useful for it. This could come with some cons: if a magic unit is assigned a brawling class and starts learning Strength, they're missing out on their *real* strength: magic. 
 
 Both options make for a very interesting game style! The choice is yours. 
 
