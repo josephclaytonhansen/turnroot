@@ -149,6 +149,9 @@ class testGrowthDialog(QDialog):
         self.l = prob
         self.total_l = int((self.rolls / self.rt*len(actual_outcomes)))
         self.total_l = 100  - self.total_l
+        self.total_l += 5
+        if self.total_l> 100:
+            self.total_l = 100
         
         if self.total_l >= 65:
             self.good_bad.setPixmap(QPixmap("src/ui_icons/white/good.png"))
