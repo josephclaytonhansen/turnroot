@@ -62,8 +62,8 @@ Minimum level and class qualifications
 
 * **Criteria-based** means the unit must meet requirements in weapon experience and/or stats. Rather than "the unit can get it or not", the unit has a % chance of getting the class based on how many of the requirements they meet. 
 
-  Here's an example: Let's say you have a class that required a C+ in flying, a B in lance, and a C in sword. If your unit 
-  had a C in flying, a B in lance, and a D+ in sword, they would have a 88% 
+  Here's an example: Let's say you have a class that required an A in lance, a B in dark magic, and a B in riding. If your unit 
+  had a B+ in lance, a B in dark magic, and a B in riding, they would have a 89% 
   chance of being to gain this class, regardless of level. To learn more about how this works, see 
   :doc:`class_qualifications`.
 
