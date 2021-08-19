@@ -33,3 +33,22 @@ Go ahead and play around with this spreadsheet: you can only check or uncheck ch
     <iframe width = "700" height = "700" src="https://docs.google.com/spreadsheets/d/1ev_DIvSOgZz5jcThcGsDVVWPjpN4Z7UeiaJNQp_fZmc/edit?usp=sharing&amp;widget=true&amp;headers=false&amp;rm=minimal&amp;chrome=false"></iframe>
     
 `Class qualifications interactive spreadsheet <https://docs.google.com/spreadsheets/d/1ev_DIvSOgZz5jcThcGsDVVWPjpN4Z7UeiaJNQp_fZmc/edit?usp=sharing>`_.
+
+The spreadsheet (and the next section) doesn't account for if you turn off "+" skill levels. (This is a rarer use case.) The formula still works without "+"s, exactly the same, no fear.
+
+How does the formula actually work, though?
+#############################################
+
+If bowing down to the mighty spreadsheet and trusting it blindly isn't doing it for you, I totally get that. Here's the formula breakdown: be warned, it's a bit technical.
+
+For each skill type (S), let the needed skill level be given a number equal to the number of skill levels leading to the needed level. Let this number be Sn. (For example, a D would have an Sn of 3: E, E+, D = 3.) 
+
+Let the acquired skill level be Sa. This number is calculated the same, unless Sa > Sn, in which case Sa = Sn. (If a unit is overqualified, it doesn't boost their chances.)
+
+Let ``Sd = abs(Sa - Sn)``. 
+
+Let ``Sp = Sa - 1.5S x d``.
+
+For each S, let A...Z be S. Let N be the total number of S. (The first S would be A, the next B.) Let ``P = {Ap + Bp...+Np}``.
+
+Let C be the final percentage. ``C = P - (.05 x (100 - P))``.
