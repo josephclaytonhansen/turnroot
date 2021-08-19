@@ -47,7 +47,7 @@ Let the acquired skill level be Sa. This number is calculated the same, unless S
 
 Let ``Sd = abs(Sa - Sn)``. 
 
-Let ``Sp = Sa - 1.5S x d``.
+Let ``Sp = Sa - 1.5 x Sd``.
 
 For each S, let A...Z be S. Let N be the total number of S. (The first S would be A, the next B.) Let ``P = {Ap + Bp...+Np}``.
 
