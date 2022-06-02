@@ -410,8 +410,11 @@ class PreferencesDialog(QDialog):
             self.file_modes = json.load(f)
 
         self.file_count = -1
-        with open("/Users/frozendessertsupplies/Documents/GitHub/turnroot/src/essential_files.json", "r") as f:
-            files = json.load(f)
+        files = ["aic.json", "aic.taic", "dugc.tsgr",
+                 "game_dir.etmf", "kybs_def.trkp", "kybs.trkp",
+                 "lsf.taic", "neec.json", "nenc.json", "nesc.json",
+                 "node_preferences.json", "nsp.trnes", "preferences.json",
+                 "rsp.tmp", "uctp.tmp", "uwad.tdndf", "wer.taic"]
             
         for file in files:
             file = "src/tmp/" + file
