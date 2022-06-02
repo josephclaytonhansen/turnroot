@@ -1,4 +1,7 @@
-import pygame, sys, random, json, psutil, os
+try:
+    import sys, json, pickle, os, psutil, pygame
+except:
+    import sys, json, pickle, os, pygame
 from src.GAME_battle_map_graphics_backend import (cursorOver, gridOver, moveOver, damageOver, C, overlayOver, showTileTexts64, Tile, gUnit, TILE_CONTENTS,
 FRIEND, ENEMY, ALLY, TILE, showMenuTiles, showMenuCursor, initMenuItems, initGrid, initFont, centerCursor, snapBack, showItems, showItemCursor, CA)
 from src.GAME_battle_map_sounds_backend import Fade, initMusic, updateVolumes

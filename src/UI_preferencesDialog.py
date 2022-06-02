@@ -1,4 +1,7 @@
-import sys, json, pickle, os, psutil
+try:
+    import sys, json, pickle, os, psutil
+except:
+    import sys, json, pickle, os
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
@@ -235,8 +238,11 @@ class PreferencesDialog(QDialog):
         self.folder_size.setAlignment(Qt.AlignVCenter)
         self.sys_layout.addWidget(self.folder_size, 4, 0)
         
-        self.process = psutil.Process(os.getpid())
-        self.ram_usage = (self.process.memory_info().vms)
+        try:
+            self.process = psutil.Process(os.getpid())
+            self.ram_usage = (self.process.memory_info().vms)
+        except:
+            self.ram_usage = 0
         
         self.ram_label = QLabel("Turnroot Level Editor is currently using "+str(round(self.ram_usage / 1000000, 2))+" MB of RAM")
         self.ram_label.setAlignment(Qt.AlignVCenter)

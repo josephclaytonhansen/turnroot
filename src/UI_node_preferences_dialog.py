@@ -1,4 +1,7 @@
-import sys, json, pickle, os, psutil
+try:
+    import sys, json, pickle, os, psutil
+except:
+    import sys, json, pickle, os
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QColor, QPalette, QIcon
