@@ -164,8 +164,8 @@ class mainS(NodeEditorWnd):
             ui.addAction(n)
             n.triggered.connect(self.submenu_item)
         
-        se_actions = [QAction("Disable Foe‘s 'Effective Against X'", self),QAction("Reset Attack Priority", self),
-                      QAction("Disable Foe‘s 'Can Counter-Attack From Any Distance'", self),
+        se_actions = [QAction("Disable Foe's 'Effective Against X'", self),QAction("Reset Attack Priority", self),
+                      QAction("Disable Foe's 'Can Counter-Attack From Any Distance'", self),
                       QAction("Take Another Action", self),
                         ]
         

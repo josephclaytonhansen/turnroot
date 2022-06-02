@@ -352,7 +352,7 @@ class turn_is_even(can_cannot):
             super().__init__(scene, action, which, direction, hexe,width=400)
             
 class disable_effective_against(can_cannot):
-    def __init__(self, scene, hexe="dea", which = "Disable", direction=" Foe‘s 'Effective Against X'", action = ""):
+    def __init__(self, scene, hexe="dea", which = "Disable", direction=" Foe's 'Effective Against X'", action = ""):
             super().__init__(scene, action, which, direction, hexe,width=500)
             
 class reset_attack_priority(can_cannot):
@@ -360,5 +360,5 @@ class reset_attack_priority(can_cannot):
             super().__init__(scene, action, which, direction, hexe,width=440)
 
 class disable_counterattack_from_any_distance(can_cannot):
-    def __init__(self, scene, hexe="nlc", which = "Disable", direction=" Foe‘s 'Can Counter-Attack From Any Distance'", action = ""):
+    def __init__(self, scene, hexe="nlc", which = "Disable", direction=" Foe's 'Can Counter-Attack From Any Distance'", action = ""):
             super().__init__(scene, action, which, direction, hexe,width=780)

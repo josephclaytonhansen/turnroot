@@ -45,3 +45,39 @@ Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 
 Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
 Error from caller 'E:\GitHub\turnroot\src\UI_game_editor_wnd.py' using function 'Load': ''Test''
 Error from caller 'E:\GitHub\turnroot\src\UI_game_editor_wnd.py' using function 'Load': ''E:/TR-TEST''
+
+
+
+==========Turnroot instance at 02/06/2022 18:11:08==========
+==========Windows-10-10.0.19041-SP0==========
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller 'E:\GitHub\turnroot\src\UI_game_editor_wnd.py' using function 'Load': ''Test''
+Error from caller 'E:\GitHub\turnroot\src\UI_game_editor_wnd.py' using function 'Load': ''E:/TR-TEST''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'loadClass': 'None'
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'loadClass': 'can only concatenate str (not "NoneType") to str'
+
+
+
+==========Turnroot instance at 02/06/2022 18:14:18==========
+==========Windows-10-10.0.19041-SP0==========
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller 'E:\GitHub\turnroot\src\UI_game_editor_wnd.py' using function 'Load': ''Test''
+Error from caller 'E:\GitHub\turnroot\src\UI_game_editor_wnd.py' using function 'Load': ''E:/TR-TEST''
+Error from caller 'E:\GitHub\turnroot\src\UI_Dialogs.py' using function '__init__': 'unsupported operand type(s) for +: 'NoneType' and 'str''
+Error from caller 'E:\GitHub\turnroot\src\UI_Dialogs.py' using function '__init__': 'unsupported operand type(s) for +: 'NoneType' and 'str''
+Error from caller 'E:\GitHub\turnroot\src\UI_Dialogs.py' using function '__init__': 'unsupported operand type(s) for +: 'NoneType' and 'str''
+Error from caller 'E:\GitHub\turnroot\src\UI_Dialogs.py' using function '__init__': 'unsupported operand type(s) for +: 'NoneType' and 'str''
+Error from caller 'E:\GitHub\turnroot\src\UI_Dialogs.py' using function '__init__': 'unsupported operand type(s) for +: 'NoneType' and 'str''
+Error from caller 'E:\GitHub\turnroot\src\UI_Dialogs.py' using function '__init__': 'unsupported operand type(s) for +: 'NoneType' and 'str''
+Error from caller 'E:\GitHub\turnroot\src\UI_Dialogs.py' using function '__init__': 'unsupported operand type(s) for +: 'NoneType' and 'str''
+
+
+
+==========Turnroot instance at 02/06/2022 18:15:27==========
+==========Windows-10-10.0.19041-SP0==========
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+Error from caller 'E:\GitHub\turnroot\src\UI_game_editor_wnd.py' using function 'Load': ''Test''
+Error from caller 'E:\GitHub\turnroot\src\UI_game_editor_wnd.py' using function 'Load': ''E:/TR-TEST''

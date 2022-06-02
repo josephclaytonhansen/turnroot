@@ -291,7 +291,7 @@ class checkDialog(QDialog):
             qApp.processEvents()
             
 def gameArtGenerate(parent):
-    self.parent = parent
+    pass
     
 class DragListWidget(QListWidget):
     def __init__(self, parent=None):
