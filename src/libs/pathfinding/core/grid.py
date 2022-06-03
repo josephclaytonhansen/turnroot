@@ -5,7 +5,7 @@ try:
     USE_NUMPY = True
 except ImportError:
     USE_NUMPY = False
-from pathfinding.core.diagonal_movement import DiagonalMovement
+from src.libs.pathfinding.core.diagonal_movement import DiagonalMovement
 
 
 def build_nodes(width, height, matrix=None, inverse=False):
