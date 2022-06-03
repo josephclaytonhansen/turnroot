@@ -282,9 +282,13 @@ class resourcePackDialog(QDialog):
     def text_changed(self, s):
         global current_pack, pack_infos
         current_pack = s
-        with open(resource_pack_path+"/"+s+"/info.txt", "r") as read_file:
-                self.info = read_file.read()
-                read_file.close()
+        try:
+            with open(resource_pack_path+"/"+s+"/info.txt", "r") as read_file:
+                    self.info = read_file.read()
+                    read_file.close()
+        except:
+           self.c = infoClose("No info.txt found") 
+           self.info = "No info.txt found"
         self.c = infoClose("You'll need to restart the level editor for this change to take effect")
         self.c.exec_()
         if self.c.return_confirm:
