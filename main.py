@@ -94,7 +94,7 @@ class mainS(NodeEditorWnd):
             nop.addAction(n)
             n.triggered.connect(self.submenu_item)
             
-        flow_actions = [QAction("Combat Start", self),QAction("Unit Initiates Combat", self),QAction("Foe Initiates Combat", self),
+        flow_actions = [QAction("N% Chance", self), QAction("Combat Start", self),QAction("Unit Initiates Combat", self),QAction("Foe Initiates Combat", self),
                         QAction("Unit Takes Damage", self), QAction("Foe Takes Damage", self),
                         ]
         
@@ -164,7 +164,7 @@ class mainS(NodeEditorWnd):
             ui.addAction(n)
             n.triggered.connect(self.submenu_item)
         
-        se_actions = [QAction("Disable Foe's 'Effective Against X'", self),QAction("Reset Attack Priority", self),
+        se_actions = [
                       QAction("Disable Foe's 'Can Counter-Attack From Any Distance'", self),
                       QAction("Take Another Action", self),
                         ]

@@ -34,9 +34,9 @@ from src.node_presets_combat_skills import (grant_bonus_to_unit_hit, grant_bonus
                                             penalize_foe_res,penalize_foe_chr,
                                             penalize_foe_dex,penalize_foe_luc,turn_is_odd,
                                             turn_is_even, disable_counterattack_from_any_distance,
-                                            reset_attack_priority,disable_effective_against)
+                                            disable_effective_against)
 
-from src.node_presets_event_skills import (unit_is_near_any, foe_misses, unit_misses,
+from src.node_presets_event_skills import (unit_is_near_any, foe_misses, unit_misses, percent_chance,
                                            foe_would_die, unit_would_die, take_another_action)
 
 from src.skeletons.weapon_types import weaponTypes
@@ -505,11 +505,12 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Foe -Charisma":penalize_foe_chr,"Foe -Dexterity":penalize_foe_dex,"Foe -Luck":penalize_foe_luc,
          "Turn is Odd":turn_is_odd, "Turn is Even":turn_is_even,
          "Disable Foe's 'Can Counter-Attack From Any Distance'":disable_counterattack_from_any_distance,
-         "Reset Attack Priority":reset_attack_priority,"Disable Foe's 'Effective Against X'":disable_effective_against,
+         "Disable Foe's 'Effective Against X'":disable_effective_against,
          "Unit is Flying":unit_is_flying, "Foe is Flying":foe_is_flying,
          "Unit is Paired Up":unit_is_paired,"Damage Type is Magic":damage_type_is_magic,
          "Damage Type is Physical":damage_type_is_physical, "Unit is Within N of Any Unit":unit_is_near_any,
          "Unit Takes Damage":foe_misses, "Foe Takes Damage": unit_misses, "Unit Would Die":unit_would_die,
+         "N% Chance":percent_chance,
          "Foe Would Die":foe_would_die, "Take Another Action":take_another_action}
 
         
@@ -536,7 +537,7 @@ NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Atta
                     "Ally +Bonus Speed","Foe -Speed","Foe -Str/Mag",
                     "Foe -Defense","Foe -Resistance","Foe -Charisma","Foe -Luck", "Turn is Odd", "Turn is Even",
                     "Disable Foe's 'Effective Against X'", "Disable Foe's 'Can Counter-Attack From Any Distance'",
-                    "Reset Attack Priority","Unit +Bonus Dexterity","Ally +Bonus Dexterity",
+                    "Unit +Bonus Dexterity","Ally +Bonus Dexterity", "N% Chance",
                     "Foe -Dexterity","Unit is Flying", "Foe is Flying", "Unit is Paired Up",
                     "Damage Type is Magic", "Damage Type is Physical", "Unit is Within N of Any Unit",
                     "Unit Takes Damage", "Foe Takes Damage", "Unit +Bonus All Stats", "Ally +Bonus All Stats",

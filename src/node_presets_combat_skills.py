@@ -80,7 +80,7 @@ class grant_to_unit(QWidget):
         self.hex_output = self.hexe + "." + s_dict[self.current_operation] + ":" +str(round(self.bonus_amount.value(),1)) + ":"
         
         self.n.storage = [self.current_operation, round(self.bonus_amount.value(),1)]
-
+        
 class does_less_more_damage(QWidget):
     def __init__(self, scene, hexe):
         QObject.__init__(self)
@@ -354,10 +354,6 @@ class turn_is_even(can_cannot):
 class disable_effective_against(can_cannot):
     def __init__(self, scene, hexe="dea", which = "Disable", direction=" Foe's 'Effective Against X'", action = ""):
             super().__init__(scene, action, which, direction, hexe,width=500)
-            
-class reset_attack_priority(can_cannot):
-    def __init__(self, scene, hexe="rap", which = "Reset", direction=" Attack Priority", action = ""):
-            super().__init__(scene, action, which, direction, hexe,width=440)
 
 class disable_counterattack_from_any_distance(can_cannot):
     def __init__(self, scene, hexe="nlc", which = "Disable", direction=" Foe's 'Can Counter-Attack From Any Distance'", action = ""):

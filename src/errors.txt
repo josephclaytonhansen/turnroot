@@ -24,3 +24,124 @@ Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 
 1
 848
 E:/TR-TEST
+
+
+
+==========Turnroot instance at 02/06/2022 19:03:10==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+1
+1280
+E:/TR-TEST
+<PyQt5.QtWidgets.QGraphicsTextItem object at 0x0000019929209F70>
+clicked list item  advantage over the weak
+D1B0
+D1D0
+D230
+D2D0
+D330
+D2B0
+&D1B0:0:D1D0:0&*&D1D0:0:D230:0&*&D230:0:D2D0:0&*&D230:0:D330:0&*&D230:0:D2B0:0&*
+<src.UI_node_outliner_label.OutlinerGraphicFlag_Filter object at 0x0000019929235E50>
+<src.UI_node_outliner_label.OutlinerGraphicFlag_Filter object at 0x0000019929235E50>
+<src.UI_node_outliner_label.OutlinerGraphicFlag_Filter object at 0x0000019929235DC0>
+<src.UI_node_outliner_label.OutlinerGraphicFlag_Filter object at 0x0000019929235DC0>
+<src.UI_node_outliner_header.OutlinerGraphicsHeader object at 0x0000019929209E50>
+<PyQt5.QtWidgets.QGraphicsTextItem object at 0x0000019929235310>
+clicked list item  destroy the weak
+A7F0
+A7C0
+A850
+A8E0
+A970
+AA00
+&A7F0:0:A7C0:0&*&A7C0:0:AA00:0&*&AA00:0:A850:0&*&AA00:0:A8E0:0&*&AA00:0:A970:0&*
+<PyQt5.QtWidgets.QGraphicsTextItem object at 0x0000019929235670>
+clicked list item  prey on the weak
+ABE0
+AC40
+AC70
+AD00
+AD90
+AE20
+&ABE0:0:AC40:0&*&AC40:0:AD90:0&*&AD90:0:AC70:0&*&AD90:0:AD00:0&*&AD90:0:AE20:0&*
+1
+1
+
+
+
+==========Turnroot instance at 02/06/2022 19:13:10==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+1
+2816
+E:/TR-TEST
+
+
+
+==========Turnroot instance at 02/06/2022 19:29:39==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+
+
+
+==========Turnroot instance at 02/06/2022 19:30:32==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+
+
+
+==========Turnroot instance at 02/06/2022 19:31:34==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+
+
+
+==========Turnroot instance at 02/06/2022 19:31:50==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+
+
+
+==========Turnroot instance at 02/06/2022 19:32:30==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+1
+4897
+E:/TR-TEST
+
+
+
+==========Turnroot instance at 02/06/2022 19:33:36==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+1
+5330
+E:/TR-TEST
+!W: Socket::removeEdge wanna remove edge <src.UI_node_edge.Edge object at 0x000001E019C9D610> from self.edges but it's not in the list!
+
+
+
+==========Turnroot instance at 02/06/2022 19:35:36==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+1
+5900
+E:/TR-TEST
+3460
+6D90
+D460
+&D460:0:6D90:1&*
+3460
+6D90
+D460
+&D460:0:6D90:1&*

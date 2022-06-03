@@ -64,6 +64,71 @@ class event_(QWidget):
             self.n.content.eval_order.setEnabled(False)
         except:
             pass
+    
+class n_percent_chance(QWidget):
+    def __init__(self, scene, desc, hexe, full_name):
+        QObject.__init__(self)
+        self.scene = scene
+        self.hexe = hexe
+        self.desc = desc
+        self.full_name = full_name
+        self.title="N% Chance"
+        self.inputs = [S_NUMBER]
+        self.outputs=[S_TRIGGER]
+        self.hex_output = self.hexe+""
+        self.chain = 0
+        self.width=640
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.line1.setLayout(self.line1_layout)
+
+        label2 = QLabel("Skill has % chance of triggering")
+        label2.setAlignment(Qt.AlignCenter)
+        self.line1_layout.addWidget(label2)
+        
+        self.bonus_amount = QDoubleSpinBox()
+        self.bonus_amount.setRange(00,100)
+        self.bonus_amount.setValue(0.0)
+        self.bonus_amount.setSingleStep(1.0)
+        self.bonus_amount.valueChanged.connect(self.change_chance)
+        
+        self.contents = [self.line1, self.bonus_amount]
+        self.socket_content_index = 0
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 200)
+        self.n.node_preset = self
+        
+        self.n.sw = ["self.bonus_amount"]
+        self.n.storage = [0]
+    
+    def updateEmission(self):
+        try:
+            self.n.outputs[0].emission = self.hex_output
+        except:
+            pass
+    
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
+                #self.chain+=len(self.n.inputs[0].edges)-1
+            self.n.content.eval_order.setValue(self.chain)
+            self.n.content.eval_order.setEnabled(False)
+        except:
+            pass
+    
+    def change_chance(self,i):
+        self.hex_output = "nchance." ":" +str(round(self.bonus_amount.value(),1)) + ":"
+
+        self.n.storage = [round(self.bonus_amount.value(),1)]
+
+class percent_chance(n_percent_chance):
+    def __init__(self, scene,full_name="N% Chance", hexe="npc", desc = "N% chance"):
+            super().__init__(scene, full_name, desc, hexe)
 
 class foe_misses(event_):
     def __init__(self, scene, hexe="efh", title = "Unit Takes Damage", desc = "(T: Foe Hits / F: Foe Misses)", width = 620):
@@ -74,12 +139,13 @@ class unit_misses(event_):
             super().__init__(title, desc, scene, hexe, width)
 
 class unit_would_die(event_):
-    def __init__(self, scene, hexe="uwd", title = "Unit Would Die", desc = "T: Unit Receives a Killing Blow", width = 620):
+    def __init__(self, scene, hexe="uwd", title = "Unit Would Die", desc = "T: Unit Receives a Killing Blow (this skill will intervene)", width = 620):
             super().__init__(title, desc, scene, hexe, width)
 
 class foe_would_die(event_):
-    def __init__(self, scene, hexe="fwd", title = "Foe Would Die", desc = "T: Foe Receives a Killing Blow", width = 620):
+    def __init__(self, scene, hexe="fwd", title = "Foe Will Die", desc = "T: Foe Receives a Killing Blow (this skill will occur after foe's death)", width = 620):
             super().__init__(title, desc, scene, hexe, width)
+
             
 class unit_is_close_to_any(QWidget):
     def __init__(self, scene, spaces, hexe, l=False):
