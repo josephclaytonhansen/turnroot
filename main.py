@@ -88,7 +88,9 @@ class mainS(NodeEditorWnd):
         for y in submenus:
             y.setStyleSheet("background-color: "+active_theme.node_background_color+"; color: "+active_theme.node_text_color+"; padding: 2px;font-size: "+str(data["font_size"]))
         
-        nop_actions = [QAction("Math", self),QAction("Compare Numbers", self),QAction("Convert T/F to Event", self), QAction("And", self),
+        nop_actions = [QAction("Math", self),QAction("Compare Numbers", self),
+                       QAction("Convert Event to T/F"),QAction("Convert T/F to Event", self),
+                       QAction("And (If X and Y are True)", self),
                        QAction("A or B", self), QAction("Not (If A is False, True)",self)]
         for n in nop_actions:
             nop.addAction(n)
@@ -120,7 +122,7 @@ class mainS(NodeEditorWnd):
                         QAction("Unit has Penalty", self), QAction("Ally is Mounted", self), QAction("Ally is Female", self),
                         QAction("Ally is Male", self), QAction("Unit is Flying", self),QAction("Foe is Flying", self),
                        QAction("Unit is Paired Up", self),QAction("Damage Type is Physical", self),QAction("Damage Type is Magic", self),
-                       QAction("Unit Would Die",self),QAction("Foe Would Die",self)
+                       QAction("Unit Would Die",self),QAction("Foe Will Die",self)
                        ]
         
         for n in con_actions:

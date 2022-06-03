@@ -14,8 +14,8 @@ class event_(QWidget):
         self.scene = scene
         self.title=title
         self.desc=desc
-        self.inputs = [S_BOOLEAN]
-        self.outputs=[S_BOOLEAN]
+        self.inputs = [S_TRIGGER]
+        self.outputs=[S_TRIGGER]
         self.hex_output = hexe
         self.hexe = hexe
         self.chain = 1
@@ -31,7 +31,7 @@ class event_(QWidget):
         self.line1_layout.setContentsMargins(0,0,0,0)
         self.line1.setLayout(self.line1_layout)
 
-        label1 = QLabel("T/F")
+        label1 = QLabel(">")
         label1.setAlignment(Qt.AlignLeft)
         self.line1_layout.addWidget(label1)
         
@@ -39,7 +39,7 @@ class event_(QWidget):
         label2.setAlignment(Qt.AlignCenter)
         self.line1_layout.addWidget(label2)
 
-        label2 = QLabel("T/F")
+        label2 = QLabel(">")
         label2.setAlignment(Qt.AlignRight)
         self.line1_layout.addWidget(label2)
         
@@ -131,19 +131,19 @@ class percent_chance(n_percent_chance):
             super().__init__(scene, full_name, desc, hexe)
 
 class foe_misses(event_):
-    def __init__(self, scene, hexe="efh", title = "Unit Takes Damage", desc = "(T: Foe Hits / F: Foe Misses)", width = 620):
+    def __init__(self, scene, hexe="efh", title = "Unit Takes Damage", desc = "(Foe Hits / Foe Misses)", width = 620):
             super().__init__(title, desc, scene, hexe, width)
             
 class unit_misses(event_):
-    def __init__(self, scene, hexe="euh", title = "Foe Takes Damage", desc = "(T: Unit Hits / F: Unit Misses)", width = 620):
+    def __init__(self, scene, hexe="euh", title = "Foe Takes Damage", desc = "(Unit Hits / Unit Misses)", width = 620):
             super().__init__(title, desc, scene, hexe, width)
 
 class unit_would_die(event_):
-    def __init__(self, scene, hexe="uwd", title = "Unit Would Die", desc = "T: Unit Receives a Killing Blow (this skill will intervene)", width = 620):
+    def __init__(self, scene, hexe="uwd", title = "Unit Would Die", desc = "Unit Receives a Killing Blow (this skill will intervene)", width = 750):
             super().__init__(title, desc, scene, hexe, width)
 
 class foe_would_die(event_):
-    def __init__(self, scene, hexe="fwd", title = "Foe Will Die", desc = "T: Foe Receives a Killing Blow (this skill will occur after foe's death)", width = 620):
+    def __init__(self, scene, hexe="fwd", title = "Foe Will Die", desc = "Foe Receives a Killing Blow (this skill occurs after foe's death)", width = 840):
             super().__init__(title, desc, scene, hexe, width)
 
             

@@ -8,7 +8,6 @@ from src.UI_node_socket import (Socket,S_TRIGGER, S_FILE, S_OBJECT, S_NUMBER, S_
 from src.UI_node_edge import Edge, EDGE_TYPE_BEZIER, EDGE_TYPE_DIRECT
 from src.node_presets import Nodes, NODES, NODE_KEYS
 
-from src.UI_node_outliner import outlinerWnd, OutlinerScene
 from src.UI_skill_preview_wnd import skillPreview
 
 import src.UI_colorTheme as UI_colorTheme
@@ -46,29 +45,29 @@ class NodeEditorWnd(QWidget):
 
         self.lower_half_preview = skillPreview(parent=self, scene = self.scene)
         self.scene.preview = self.lower_half_preview
-        self.lower_half_outliner = outlinerWnd(scene=OutlinerScene(),parent_scene=self.scene)
+        #self.lower_half_outliner = outlinerWnd(scene=OutlinerScene(),parent_scene=self.scene)
         
-        self.scroll_area = QScrollArea()
-        self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
-        self.scroll_area.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
+        #self.scroll_area = QScrollArea()
+        #self.scroll_area.setWidgetResizable(True)
+        #self.scroll_area.setHorizontalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
+        #self.scroll_area.setVerticalScrollBarPolicy( Qt.ScrollBarAlwaysOff )
         
         self.lower_half_layout = QHBoxLayout()
         self.lower_half_layout.setContentsMargins(0,0,0,0)
         self.lower_half_layout.setSpacing(0)
         self.lower_half.setLayout(self.lower_half_layout)
         
-        self.scroll_area.setWidget(self.lower_half_outliner)
+        #self.scroll_area.setWidget(self.lower_half_outliner)
         
-        self.lower_half_layout.addWidget(self.lower_half_preview, 65)
-        self.lower_half_layout.addWidget(self.scroll_area, 35)
+        self.lower_half_layout.addWidget(self.lower_half_preview, 100)
+        #self.lower_half_layout.addWidget(self.scroll_area, 35)
         
-        self.scroll_area.setMaximumWidth(400)
+        #self.scroll_area.setMaximumWidth(400)
         
         self.layout.addWidget(self.lower_half, 25)
         
-        self.lower_half_outliner.setMaximumWidth(400)
-        self.lower_half_outliner.setMinimumWidth(400)
+        #self.lower_half_outliner.setMaximumWidth(400)
+        #self.lower_half_outliner.setMinimumWidth(400)
         
         self.show()
         

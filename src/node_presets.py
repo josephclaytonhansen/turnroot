@@ -328,6 +328,49 @@ class bool_to_event(QWidget):
             self.n.content.eval_order.setEnabled(False)
         except:
             pass
+
+class event_to_bool(QWidget):
+    def __init__(self, scene):
+        QObject.__init__(self)
+        self.scene = scene
+        self.title="Convert Event to T/F"
+        self.inputs = [S_TRIGGER]
+        self.outputs=[S_BOOLEAN]
+        self.hex_output = "etb"
+        self.chain = 1
+        
+        self.line1 = QWidget()
+        self.line1_layout = QHBoxLayout()
+        self.line1_layout.setSpacing(8)
+        self.line1_layout.setContentsMargins(0,0,0,0)
+        self.line1.setLayout(self.line1_layout)
+
+        label2 = QLabel("From Event to T/F")
+        label2.setAlignment(Qt.AlignRight)
+        self.line1_layout.addWidget(label2)
+        
+        self.contents = [self.line1]
+        self.socket_content_index = 0
+        
+        self.n = Node(self.scene, self.title, self.inputs, self.outputs, self.contents, self.socket_content_index, 160)
+        self.n.node_preset = self
+    
+    def updateEmission(self):
+        try:
+            self.n.outputs[0].emission = self.hex_output
+        except:
+            pass
+    
+    def updateReception(self):
+        try:
+            self.n.inputs[0].reception = self.n.inputs[0].edges[0].start_socket.emission
+
+            self.chain = self.n.inputs[0].edges[0].start_socket.node.node_preset.chain + 1
+                #self.chain+=len(self.n.inputs[0].edges)-1
+            self.n.content.eval_order.setValue(self.chain)
+            self.n.content.eval_order.setEnabled(False)
+        except:
+            pass
         
 class and_event(QWidget):
     def __init__(self, scene):
@@ -486,7 +529,7 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Ally +Bonus Strength/Magic": grant_bonus_to_ally_atk, "Ally +Bonus Defense": grant_bonus_to_ally_def,
          "Ally +Bonus Resistance": grant_bonus_to_ally_res,"Ally +Bonus Charisma": grant_bonus_to_ally_chr,
          "Ally +Bonus Dexterity": grant_bonus_to_ally_dex,"Ally +Bonus Luck": grant_bonus_to_ally_luc,
-         "Convert T/F to Event": bool_to_event, "And": and_event, "Unit is Using Weapon Type": unit_using_weapon_type,
+         "Convert T/F to Event": bool_to_event, "Convert Event to T/F": event_to_bool, "And (If X and Y are True)": and_event, "Unit is Using Weapon Type": unit_using_weapon_type,
          "Foe is Using Weapon Type": foe_using_weapon_type, "Unit Health Percentage":unit_health_percentage,
          "Foe Health Percentage":foe_health_percentage, "A or B": or_event, "Not (If A is False, True)": not_event,
          "Foe is Mounted":foe_is_mounted, "Unit is Mounted":unit_is_mounted, "Foe Has Bonus":foe_has_bonus,
@@ -511,7 +554,7 @@ NODES = {"Math": number_number_math, "Compare Numbers": compare_numbers, "Combat
          "Damage Type is Physical":damage_type_is_physical, "Unit is Within N of Any Unit":unit_is_near_any,
          "Unit Takes Damage":foe_misses, "Foe Takes Damage": unit_misses, "Unit Would Die":unit_would_die,
          "N% Chance":percent_chance,
-         "Foe Would Die":foe_would_die, "Take Another Action":take_another_action}
+         "Foe Will Die":foe_would_die, "Take Another Action":take_another_action}
 
         
 NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Attacks",
@@ -524,7 +567,7 @@ NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Atta
              "Unit is Adjacent to Ally", "Unit is Within N of Ally",
              "Ally +Bonus Str/Mag", "Ally +Bonus Defense",
              "Ally +Bonus Resistance", "Ally +Bonus Charisma", "Ally +Bonus Luck",
-             "Convert T/F to Event", "And", "Unit is Using Weapon Type",
+             "Convert T/F to Event", "And (If X and Y are True)", "Unit is Using Weapon Type",
              "Foe is Using Weapon Type", "Unit Health Percentage",
                     "Foe Health Percentage", "Not (If A is False, True)",
                     "A or B", "Foe is Mounted", "Unit is Mounted",
@@ -541,7 +584,7 @@ NODE_KEYS = sorted(["Foe Cannot Counter-Attack","Counter-Attacks Before Foe Atta
                     "Foe -Dexterity","Unit is Flying", "Foe is Flying", "Unit is Paired Up",
                     "Damage Type is Magic", "Damage Type is Physical", "Unit is Within N of Any Unit",
                     "Unit Takes Damage", "Foe Takes Damage", "Unit +Bonus All Stats", "Ally +Bonus All Stats",
-                    "Foe Would Die", "Unit Would Die", "Take Another Action"])
+                    "Foe Will Die", "Unit Would Die", "Take Another Action", "Convert Event to T/F"])
     
 class Nodes():
     def __init__(self, scene, name):
