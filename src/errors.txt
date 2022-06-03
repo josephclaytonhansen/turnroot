@@ -2,3 +2,24 @@
 ==========Windows-10-10.0.19044-SP0==========
 Error from caller 'e:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
 Error from caller 'e:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+
+
+
+==========Turnroot instance at 03/06/2022 16:34:54==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'e:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'e:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+
+
+
+==========Turnroot instance at 03/06/2022 16:55:35==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'e:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'e:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+
+
+
+==========Turnroot instance at 03/06/2022 17:07:34==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'e:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'e:\GitHub\turnroot\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
