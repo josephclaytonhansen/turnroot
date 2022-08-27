@@ -63,4 +63,10 @@ def set_colors(palette):
             dpg.add_theme_color(dpg.mvThemeCol_FrameBg, htr("button_alt_color"), category=dpg.mvThemeCat_Core)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBgHovered, lighten(htr("button_alt_color"),10), category=dpg.mvThemeCat_Core)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBgActive, htr("node_selected_color"), category=dpg.mvThemeCat_Core)
+            dpg.add_theme_color(dpg.mvThemeCol_SliderGrab, htr("list_background_color"), category=dpg.mvThemeCat_Core)
+            dpg.add_theme_color(dpg.mvThemeCol_SliderGrabActive, htr("node_wire_color"), category=dpg.mvThemeCat_Core)
+            dpg.add_theme_color(dpg.mvThemeCol_ResizeGrip, darken(htr("window_background_color"),10), category=dpg.mvThemeCat_Core)
+            dpg.add_theme_color(dpg.mvThemeCol_ResizeGripHovered, htr("node_selected_color"), category=dpg.mvThemeCat_Core)
+            dpg.add_theme_color(dpg.mvThemeCol_ResizeGripActive, htr("node_selected_color"), category=dpg.mvThemeCat_Core)
+            dpg.add_theme_color(dpg.mvThemeCol_CheckMark, htr("list_background_color"), category=dpg.mvThemeCat_Core)
     return global_theme

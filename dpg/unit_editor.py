@@ -25,9 +25,14 @@ def add_unit_editor(params={}):
         dpg.add_text("This is a slider")
     
     set_item_color(slider_int, "button_alt_text_color")
-    with dpg.menu_bar(parent="unit_editor"):
+    dpg.add_checkbox(parent = "unit_editor")
+    add_menu()
+
+    g.editors.append("unit_editor")
+    
+def add_menu():
+        with dpg.menu_bar(parent="unit_editor"):
             with dpg.menu(label="File"):
                 dpg.add_menu_item(label="Save", callback=None)
                 dpg.add_menu_item(label="Save As", callback=None)
     
-    g.editors.append("unit_editor")

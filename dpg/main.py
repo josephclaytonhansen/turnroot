@@ -1,4 +1,4 @@
-from viewport import init_viewport
+from viewport import *
 from unit_editor import add_unit_editor
 import dearpygui.dearpygui as dpg
 from ui_set_global_colors import set_colors
@@ -10,6 +10,8 @@ dpg.create_context()
 dpg.bind_theme(set_colors(g.color_theme))
 set_fonts()
 init_viewport(True)
+add_global_menu()
+
 add_unit_editor()
 
 if not g.debug:
