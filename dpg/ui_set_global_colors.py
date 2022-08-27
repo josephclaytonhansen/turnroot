@@ -6,13 +6,43 @@ def htr(h):
     w = tuple(int(w[i:i+2], 16) for i in (0, 2, 4))
     return w
 
+def lighten(t, i = 10):
+    w =  list(t)
+    w[0] += i
+    w[1] += i
+    w[2] += i
+    return tuple(w)
+
+def darken(t, i =10):
+    w =  list(t)
+    w[0] -= i
+    w[1] -= i
+    w[2] -= i
+    return tuple(w)
+
 def set_colors(palette):
     g.color_theme = palette
     with dpg.theme() as global_theme:
         with dpg.theme_component(dpg.mvAll):
+            for c in [
+                dpg.mvStyleVar_FrameRounding,
+                dpg.mvStyleVar_ScrollbarRounding,
+                dpg.mvStyleVar_ScrollbarRounding,
+                dpg.mvStyleVar_TabRounding,
+                dpg.mvStyleVar_GrabRounding,
+                dpg.mvStyleVar_GrabRounding,
+                dpg.mvStyleVar_PopupRounding,
+                dpg.mvStyleVar_ChildRounding,
+                ]:
+                
+                dpg.add_theme_style(c, g.corners_round, category=dpg.mvThemeCat_Core)
+                
             dpg.add_theme_color(dpg.mvThemeCol_WindowBg, htr("window_background_color"), category=dpg.mvThemeCat_Core)
             dpg.add_theme_color(dpg.mvThemeCol_Text, htr("window_text_color"), category=dpg.mvThemeCat_Core)
             dpg.add_theme_color(dpg.mvThemeCol_Border, htr("list_background_color"), category=dpg.mvThemeCat_Core)
             dpg.add_theme_color(dpg.mvThemeCol_TitleBg, htr("list_background_color"), category=dpg.mvThemeCat_Core)
             dpg.add_theme_color(dpg.mvThemeCol_TitleBgActive, htr("list_background_color"), category=dpg.mvThemeCat_Core)
+            dpg.add_theme_color(dpg.mvThemeCol_Button, htr("list_background_color"), category=dpg.mvThemeCat_Core)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, lighten(htr("list_background_color"),15), category=dpg.mvThemeCat_Core)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, darken(htr("list_background_color"),15), category=dpg.mvThemeCat_Core)
     return global_theme
