@@ -4,6 +4,9 @@ from globals import globals as g
 from ui_set_item_color import set_item_color
 
 def add_unit_editor(params={}):
+    add_menu()
+    g.editors.append("unit_editor")
+    
     line1 = PercentageBasedLayoutHelper(parent = "unit_editor")
     line1.add_widget(d.add_button(label="25%", tag="b1"), 25.0)
     line1.add_widget(d.add_button(label="75%", tag="b2"), 75.0)
@@ -25,10 +28,9 @@ def add_unit_editor(params={}):
         d.add_text("This is a slider")
     
     set_item_color(slider_int, "button_alt_text_color")
-    d.add_checkbox(parent = "unit_editor")
-    add_menu()
-
-    g.editors.append("unit_editor")
+    
+    with d.group(horizontal=True, parent="unit_editor"):
+        d.add_checkbox(parent = "unit_editor", label = "This is a checkbox")
     
 def add_menu():
         with d.menu_bar(parent="unit_editor"):
