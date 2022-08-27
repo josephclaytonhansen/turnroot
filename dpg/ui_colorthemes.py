@@ -742,6 +742,16 @@ class custom(colorTheme):
     groups = [level_editor, node_grid, unit_editor]
 
 
+colorthemes = {"midnight_spark": midnight_spark(),
+               "sand_dunes": sand_dunes(), 
+               "rainforest": rainforest(), 
+               "charcoal": charcoal(), 
+               "ocean_waves": ocean_waves(), 
+               "chocolate": chocolate(), 
+               "chili_pepper": chili_pepper(), 
+               "turnroot": turnroot(), 
+               "custom": custom(), 
+               }
 
 
 
