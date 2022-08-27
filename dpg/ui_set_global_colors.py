@@ -45,6 +45,7 @@ def set_colors(palette):
                 
                 d.add_theme_style(c, g.corners_round, category=d.mvThemeCat_Core)
                 
+            d.add_theme_color(d.mvThemeCol_PopupBg, darken(htr("node_grid_lines_color"),5), category=d.mvThemeCat_Core)
             d.add_theme_color(d.mvThemeCol_WindowBg, htr("window_background_color"), category=d.mvThemeCat_Core)
             d.add_theme_color(d.mvThemeCol_ScrollbarBg, htr("node_grid_lines_color"), category=d.mvThemeCat_Core)
             d.add_theme_color(d.mvThemeCol_MenuBarBg, htr("node_grid_lines_color"), category=d.mvThemeCat_Core)
