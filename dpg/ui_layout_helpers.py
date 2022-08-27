@@ -1,16 +1,16 @@
-import dearpygui.dearpygui as dpg
+import dearpygui.dearpygui as d
 
 class PercentageBasedLayoutHelper:
     def __init__(self, parent=""):
-        self.table_id = dpg.add_table(header_row=False, policy=dpg.mvTable_SizingStretchProp, parent=parent)
-        self.stage_id = dpg.add_stage()
-        dpg.push_container_stack(self.stage_id)
+        self.table_id = d.add_table(header_row=False, policy=d.mvTable_SizingStretchProp, parent=parent)
+        self.stage_id = d.add_stage()
+        d.push_container_stack(self.stage_id)
         
     def add_widget(self, uuid, percentage):
-        dpg.add_table_column(init_width_or_weight=percentage/100.0, parent=self.table_id)
-        dpg.set_item_width(uuid, -1)
+        d.add_table_column(init_width_or_weight=percentage/100.0, parent=self.table_id)
+        d.set_item_width(uuid, -1)
 
     def submit(self):
-        dpg.pop_container_stack() # pop stage
-        with dpg.table_row(parent=self.table_id):
-            dpg.unstage(self.stage_id)
+        d.pop_container_stack() # pop stage
+        with d.table_row(parent=self.table_id):
+            d.unstage(self.stage_id)
