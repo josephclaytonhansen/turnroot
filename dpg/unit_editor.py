@@ -25,8 +25,8 @@ def add_unit_editor(params={}):
         d.add_checkbox(parent = "unit_editor", label = "This is a checkbox")
     
 def add_menu():
-        with d.menu_bar(parent="unit_editor"):
-            with d.menu(label="File"):
-                d.add_menu_item(label="Save", callback=None)
-                d.add_menu_item(label="Save As", callback=None)
+    with d.menu_bar(parent="unit_editor"):
+        with d.menu(label="File"):
+            d.add_menu_item(label="Save", callback=None)
+            d.add_menu_item(label="Save As", callback=None)
     
