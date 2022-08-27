@@ -1,7 +1,7 @@
 import dearpygui.dearpygui as dpg
 from ui_layout_helpers import *
 from globals import globals as g
-
+from ui_set_item_color import set_item_color
 
 def add_unit_editor(params={}):
     line1 = PercentageBasedLayoutHelper(parent = "unit_editor")
@@ -19,5 +19,15 @@ def add_unit_editor(params={}):
     line3.add_widget(dpg.add_button(label="25%", tag="b6"), 25.0)
     line3.add_widget(dpg.add_button(label="50%", tag="b7"), 50.0)
     line3.submit()
+    
+    with dpg.group(horizontal=True, parent="unit_editor"):
+        slider_int = dpg.add_slider_int(width=100)
+        dpg.add_text("This is a slider")
+    
+    set_item_color(slider_int, "button_alt_text_color")
+    with dpg.menu_bar(parent="unit_editor"):
+            with dpg.menu(label="File"):
+                dpg.add_menu_item(label="Save", callback=None)
+                dpg.add_menu_item(label="Save As", callback=None)
     
     g.editors.append("unit_editor")

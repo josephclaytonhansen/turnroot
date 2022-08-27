@@ -6,11 +6,14 @@ from ui_set_global_font import set_fonts
 import ui_colorthemes
 from globals import globals as g
 
+dpg.create_context()
+
+dpg.bind_theme(set_colors(g.color_theme))
+set_fonts()
 init_viewport(True)
 add_unit_editor()
 
-set_fonts()
-dpg.bind_theme(set_colors(ui_colorthemes.ocean_waves()))
+
 
 if not g.debug:
     dpg.set_primary_window("unit_editor", True)

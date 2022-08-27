@@ -1,5 +1,7 @@
+import ui_colorthemes
+
 class globals:
     editors = []
-    color_theme = None
-    corners_round = 8
-    debug = False
+    color_theme = ui_colorthemes.turnroot()
+    corners_round = 5
+    debug = True
