@@ -1,6 +1,7 @@
 import dearpygui.dearpygui as d
-from viewport import EditorGlobals
 from globals import globals as g
+class EditorGlobals():
+    pass
 
 class PercentageBasedLayoutHelper:
     def __init__(self, parent=""):
@@ -29,8 +30,6 @@ def buildUnitEditor():
 
         d.add_table_column(init_width_or_weight=.5)
         d.add_table_column(init_width_or_weight=.5)
-
-        # once it reaches the end of the columns
         
         for i in range(0, 1):
             with d.table_row(height=6) as f:
