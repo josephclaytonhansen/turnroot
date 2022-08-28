@@ -37,5 +37,7 @@ def init_viewport(use_screeninfo=True):
 
     d.setup_dearpygui()
     d.show_viewport()
+    if not g.debug:
+        d.set_primary_window("unit_editor", True)
 
         

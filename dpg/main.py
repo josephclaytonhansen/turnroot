@@ -16,9 +16,6 @@ init_viewport(True)
 add_global_menu()
 
 add_unit_editor()
-
-if not g.debug:
-    d.set_primary_window("unit_editor", True)
     
 d.start_dearpygui()
 d.destroy_context()

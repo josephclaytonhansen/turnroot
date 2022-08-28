@@ -26,12 +26,13 @@ def buildUnitEditor():
     g.u = EditorGlobals()
 
     with d.table(header_row=False, resizable=False, policy=d.mvTable_SizingStretchSame,
-                borders_outerH=False, borders_innerV=False, borders_innerH=False, borders_outerV=False, parent = "unit_editor"):
+                borders_outerH=g.debug, borders_innerV=g.debug, borders_innerH=g.debug, borders_outerV=g.debug, parent = "unit_editor"):
 
-        d.add_table_column(init_width_or_weight=.5)
-        d.add_table_column(init_width_or_weight=.5)
+        d.add_table_column(init_width_or_weight=.50-(g.item_spacing/170))
+        d.add_table_column(init_width_or_weight=.0+((g.item_spacing/170)/2))
+        d.add_table_column(init_width_or_weight=.50-(g.item_spacing/170))
         
-        for i in range(0, 1):
+        for i in range(0, 1, 2):
             with d.table_row(height=6) as f:
                 g.unit_editor_rows.append(f)
                 for j in range(0, 3):
@@ -39,4 +40,5 @@ def buildUnitEditor():
                         g.unit_editor_cells.append(cell)
         
         g.unit_editor_left = g.unit_editor_cells[0]
-        g.unit_editor_right = g.unit_editor_cells[1]
+        g.unit_editor_gutter = g.unit_editor_cells[1]
+        g.unit_editor_right = g.unit_editor_cells[2]
