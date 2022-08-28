@@ -6,9 +6,16 @@ from ui_set_global_font import set_fonts
 from globals import globals as g
 import json
 import ui_colorthemes
+from unit_editor import unit_editor_update_height
 from os.path import exists
 
 d.create_context()
+
+def getGeometry():
+    g.current_height = d.get_viewport_client_height()
+    unit_editor_update_height()
+
+d.set_viewport_resize_callback(callback=getGeometry)
 
 if not exists("user_preferences.trup"): 
     with open("user_preferences.trup", "w") as f:
