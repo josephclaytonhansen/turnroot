@@ -70,4 +70,4 @@ def BuildTable(cont, widths, parent):
                         with d.table_cell() as cell:
                             cont.cells.append(cell)
         
-        return cont.cells
+        cont.columns = cont.cells

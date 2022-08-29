@@ -1,8 +1,9 @@
+from ctypes import alignment
 from subprocess import call
 import dearpygui.dearpygui as d
 from ui_layout_helpers import *
 from globals import globals as g
-from ui_set_item_color import set_item_color
+from ui_set_item_color import *
 import unit_editor_callbacks as c
 
 class Widgets():
@@ -29,11 +30,24 @@ def populate():
     with d.group(horizontal=True, parent=left):
         w.left_portrait_spacing = d.add_spacer(width=0,height = 400)
         w.portrait = d.add_image_button(height = 400, width=300, texture_tag=ImageToTexture("assets/ui_graphics/portrait_editor_placeholder.png"))
+
+    #Use this format for a percentage-based row: create a Widgets() row, then BuildTable()
+    w.name_row = Widgets()
+    BuildTable(w.name_row,[55,35,10],left)
     
-    BuildTable(w,[55,30,15],left)
+    d.add_spacer(parent=w.name_row.columns[0], height = int((0.466 * (g.padding*2 + g.text_size)/2)))
+    
+    tmp = d.add_text(parent=w.name_row.columns[1], default_value="Current class")
+    #set padding to 0
+    set_item_style(tmp, 0, d.mvStyleVar_ItemSpacing)
+    
+    w.name = d.add_input_text(parent=w.name_row.columns[0], callback=c.basic, hint="Unit Name",width=-1,height =-1)
+    w.current_class = d.add_combo(parent=w.name_row.columns[1], callback=c.basic, items=["Myrmidon", "Assassin"], width=-1)
+    d.add_image_button(parent=w.name_row.columns[2],texture_tag=ImageToTexture("assets/ui_icons/white/edit.png"))
             
 def make_functions():
-   #set_item_color(w.class_label, "white")
+   set_item_color(w.current_class, "list_background_color")
+   set_item_color(w.name, "list_background_color")
    d.set_item_user_data("save", "user data")
 
 def add_menu():
