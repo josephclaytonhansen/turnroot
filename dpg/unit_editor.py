@@ -3,7 +3,7 @@ from subprocess import call
 import dearpygui.dearpygui as d
 from ui_layout_helpers import *
 from globals import globals as g
-from ui_set_item_color import *
+from ui_item_style_helpers import *
 import unit_editor_callbacks as c
 
 class Widgets():
@@ -35,18 +35,31 @@ def populate():
     w.name_row = Widgets()
     BuildTable(w.name_row,[55,35,10],left)
     
-    d.add_spacer(parent=w.name_row.columns[0], height = int((0.466 * (g.padding*2 + g.text_size)/2)))
+    #d.add_spacer(parent=w.name_row.columns[0], height = int((0.466 * (g.padding*2 + g.text_size)/2)))
     
-    tmp = d.add_text(parent=w.name_row.columns[1], default_value="Current class")
-    #set padding to 0
-    set_item_style(tmp, 0, d.mvStyleVar_ItemSpacing)
+    i = -1
+    for x in ["Unit name", "Current class"]:
+        i +=1
+        tmp = d.add_text(parent=w.name_row.columns[i], default_value=x)
+        #set padding to 0
+        set_item_style(tmp, 0, d.mvStyleVar_ItemSpacing)
+        set_font_size(tmp, -1)
+        with d.tooltip(parent=tmp):
+            tt = g.tooltips.unit_editor[x].split(":")
+            d.add_text(tt[0])
+            if len(tt) > 1:
+                d.add_image(ImageToTexture(tt[1]))
     
     w.name = d.add_input_text(parent=w.name_row.columns[0], callback=c.basic, hint="Unit Name",width=-1,height =-1)
+    set_font_size(w.name, 1)
+    
     w.current_class = d.add_combo(parent=w.name_row.columns[1], callback=c.basic, items=["Myrmidon", "Assassin"], width=-1)
+    set_font_size(w.current_class, 1)
     d.add_image_button(parent=w.name_row.columns[2],texture_tag=ImageToTexture("assets/ui_icons/white/edit.png"))
             
 def make_functions():
-   set_item_color(w.current_class, "list_background_color")
+   set_item_colors(w.current_class, ["window_background_color", "button_alt_color"],
+                   [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
    set_item_color(w.name, "list_background_color")
    d.set_item_user_data("save", "user data")
 

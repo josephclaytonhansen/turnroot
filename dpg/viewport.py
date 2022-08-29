@@ -2,6 +2,7 @@ import dearpygui.dearpygui as d
 from screeninfo import get_monitors
 from globals import globals as g
 from unit_editor import unit_editor_update_height, unit_editor_centers_in_column, ue_arrange, ue_no_arrange
+from ui_tooltips import Tooltips
 
 def getGeometry():
     g.current_height = d.get_viewport_client_height()
@@ -16,6 +17,7 @@ def add_global_menu():
             d.add_checkbox(label="Pick Me", callback=None)
 
 def init_viewport(use_screeninfo=True):
+    g.tooltips = Tooltips()
     d.set_viewport_resize_callback(callback=getGeometry)
     if use_screeninfo:
         for m in get_monitors():
