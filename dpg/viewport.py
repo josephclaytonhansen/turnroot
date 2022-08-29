@@ -1,11 +1,12 @@
 import dearpygui.dearpygui as d
 from screeninfo import get_monitors
 from globals import globals as g
-from unit_editor import unit_editor_update_height
+from unit_editor import unit_editor_update_height, unit_editor_centers_in_column, ue_arrange, ue_no_arrange
 
 def getGeometry():
     g.current_height = d.get_viewport_client_height()
     unit_editor_update_height()
+    unit_editor_centers_in_column()
 
 def add_global_menu():
     with d.viewport_menu_bar():
@@ -37,7 +38,12 @@ def init_viewport(use_screeninfo=True):
 
     d.setup_dearpygui()
     d.show_viewport()
-    if not g.debug:
-        d.set_primary_window("unit_editor", True)
+    d.set_primary_window("unit_editor", True)
 
+#This should be a toolbar/menu button - allows layouts to drap and drop columns
+def global_arrange():
+    ue_arrange()
+
+def global_no_arrange():
+    ue_no_arrange()
         

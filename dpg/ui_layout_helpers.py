@@ -25,8 +25,8 @@ def buildUnitEditor():
     g.unit_editor_cells = []
     g.u = EditorGlobals()
 
-    with d.table(header_row=False, resizable=False, policy=d.mvTable_SizingStretchSame,
-                borders_outerH=g.debug, borders_innerV=g.debug, borders_innerH=g.debug, borders_outerV=g.debug, parent = "unit_editor"):
+    with d.table(reorderable=False,header_row=False, resizable=False, policy=d.mvTable_SizingStretchProp,
+                borders_outerH=g.debug, borders_innerV=g.debug, borders_innerH=g.debug, borders_outerV=g.debug, parent = "unit_editor") as g.unit_editor_table:
 
         d.add_table_column(init_width_or_weight=.50-(g.item_spacing/170))
         d.add_table_column(init_width_or_weight=.0+((g.item_spacing/170)/2))
