@@ -9,7 +9,7 @@ class globals:
     window_padding = 25
     text_size = 18
     mono_text_size = 14
-    debug = False
+    debug = True
     current_height = 771
     prefs = {"color_theme":color_theme.tag, 
              "corners_round":corners_round,

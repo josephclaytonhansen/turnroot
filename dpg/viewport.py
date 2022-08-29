@@ -30,11 +30,11 @@ def init_viewport(use_screeninfo=True):
     with d.window(tag="unit_editor", label = "unit_editor", width = 600, height = 600, no_collapse=True, min_size=[300,300]):
         pass
 
-    if g.debug:
-        d.show_item_registry()
-        d.show_debug()
-        d.show_metrics()
-        d.show_style_editor()
+    # if g.debug:
+    #     d.show_item_registry()
+    #     d.show_debug()
+    #     d.show_metrics()
+    #     d.show_style_editor()
 
     d.setup_dearpygui()
     d.show_viewport()

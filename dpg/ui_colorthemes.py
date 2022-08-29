@@ -5,6 +5,7 @@ class colorTheme:
 class midnight_spark(colorTheme):
     name = "Midnight Spark"
     tag = "midnight_spark"
+    white = "#ffffff"
     window_background_color = "#26385a"
     node_grid_background_color = "#0a1c3d"
     node_grid_lines_color = "#112c5c"
@@ -88,6 +89,7 @@ class midnight_spark(colorTheme):
 class sand_dunes(colorTheme):
     name = "Sand Dunes"
     tag = "sand_dunes"
+    white = "#ffffff"
     window_background_color = "#f0be86"
     list_background_color = "#b8936a"
     window_text_color = "#573a29"
@@ -173,6 +175,7 @@ class sand_dunes(colorTheme):
 class rainforest(colorTheme):
     name = "Rainforest Dusk"
     tag = "rainforest"
+    white = "#ffffff"
     workspace_background_color = "#789187"
     list_background_color = "#6d8f6f"
     window_text_color = "#fff4be"
@@ -256,6 +259,7 @@ class rainforest(colorTheme):
 class charcoal(colorTheme):
     name = "Charcoal"
     tag = "charcoal"
+    white = "#ffffff"
     window_background_color = "#222222"
     list_background_color = "#545454"
     button_alt_color = "#e6e6e6"
@@ -336,6 +340,7 @@ class charcoal(colorTheme):
 class ocean_waves(colorTheme):
     name = "Ocean Waves"
     tag = "ocean_waves"
+    white = "#ffffff"
     window_background_color = "#568EBF"
     button_alt_color = "#D2F2F9"
     button_alt_text_color = "#7AA6CD"
@@ -416,6 +421,7 @@ class ocean_waves(colorTheme):
 class chocolate(colorTheme):
     name = "Chocolate"
     tag = "chocolate"
+    white = "#ffffff"
     window_background_color = "#5c2e24"
     list_background_color = "#733A2D"
     window_text_color = "#DB8C50"
@@ -502,6 +508,7 @@ class chocolate(colorTheme):
 class chili_pepper(colorTheme):
     name = "Chili Pepper"
     tag = "chili_pepper"
+    white = "#ffffff"
     window_background_color = "#C0414A"
     list_background_color = "#f2eae4"
     window_text_color = "#262523"
@@ -586,6 +593,7 @@ class chili_pepper(colorTheme):
 class turnroot(colorTheme):
     name = "Turnroot"
     tag = "turnroot"
+    white = "#ffffff"
     window_background_color = "#5b6067"
     node_grid_background_color = "#5b6067"
     node_grid_lines_color = "#6b7077"
@@ -669,6 +677,7 @@ class turnroot(colorTheme):
 class custom(colorTheme):
     name = "Custom"
     tag = "custom"
+    white = "#ffffff"
     window_background_color = "#000000"
     button_alt_color = "#000000"
     button_alt_text_color = "#FFFFFF"
