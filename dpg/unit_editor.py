@@ -25,12 +25,15 @@ def populate():
     left = g.unit_editor_left
     right = g.unit_editor_right
     
-    """left column"""
     #use this format (group, spacer, item) to center something of fixed width in a column
     #don't forget to add it to unit_editor_centers_in_column()
     with d.group(horizontal=True, parent=left):
         w.left_portrait_spacing = d.add_spacer(width=0,height = 400)
-        w.portrait = d.add_image_button(height = 400, width=300, texture_tag=ImageToTexture("assets/ui_graphics/portrait_editor_placeholder.png"))
+        w.portrait = d.add_image_button(
+            height = 400, 
+            width=300, 
+            texture_tag=ImageToTexture("assets/ui_graphics/portrait_editor_placeholder.png"
+                                                                ))
         with d.tooltip(parent=w.portrait) as f:
             make_tooltip(g.tooltips.unit_editor, "Portrait button", f)
 
@@ -72,7 +75,9 @@ def add_menu():
     
 def unit_editor_update_height():
     for row in g.unit_editor_rows:
-            d.configure_item(row, height=int(g.current_height/len(g.unit_editor_rows)-(g.window_padding*2)-30))
+            d.configure_item(row, 
+                             height=int(g.current_height/len(g.unit_editor_rows)-(g.window_padding*2)-30)
+                             )
 
 def center_in_column(n, spacer, width):
     p = 1/n
