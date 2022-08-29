@@ -5,6 +5,7 @@ from ui_layout_helpers import *
 from globals import globals as g
 from ui_item_style_helpers import *
 import unit_editor_callbacks as c
+from ui_tooltips import make_tooltip
 
 class Widgets():
     pwm = 2.26666
@@ -30,6 +31,8 @@ def populate():
     with d.group(horizontal=True, parent=left):
         w.left_portrait_spacing = d.add_spacer(width=0,height = 400)
         w.portrait = d.add_image_button(height = 400, width=300, texture_tag=ImageToTexture("assets/ui_graphics/portrait_editor_placeholder.png"))
+        with d.tooltip(parent=w.portrait) as f:
+            make_tooltip(g.tooltips.unit_editor, "Portrait button", f)
 
     #Use this format for a percentage-based row: create a Widgets() row, then BuildTable()
     w.name_row = Widgets()
@@ -44,11 +47,8 @@ def populate():
         #set padding to 0
         set_item_style(tmp, 0, d.mvStyleVar_ItemSpacing)
         set_font_size(tmp, -1)
-        with d.tooltip(parent=tmp):
-            tt = g.tooltips.unit_editor[x].split(":")
-            d.add_text(tt[0])
-            if len(tt) > 1:
-                d.add_image(ImageToTexture(tt[1]))
+        with d.tooltip(parent=tmp) as f:
+            make_tooltip(g.tooltips.unit_editor, x, f)
     
     w.name = d.add_input_text(parent=w.name_row.columns[0], callback=c.basic, hint="Unit Name",width=-1,height =-1)
     set_font_size(w.name, 1)
