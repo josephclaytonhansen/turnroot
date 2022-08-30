@@ -73,3 +73,9 @@ def item_spacing(sender, app_data, user_data):
     g.item_spacing = app_data
     d.bind_theme(set_colors(g.color_theme))
     SaveUserPrefs()
+
+def ChangeBaseStatGrowth(sender, app_data, user_data):
+    print(sender,app_data,user_data)
+
+def ChangeBaseStat(sender, app_data, user_data):
+    print(sender,app_data,user_data)

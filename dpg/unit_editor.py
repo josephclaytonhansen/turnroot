@@ -112,16 +112,16 @@ def populate():
     #right side
     d.add_text(default_value="Stats", parent=right)
     with d.collapsing_header(label="Base stats", parent=right, default_open=True) as h:
-        w.hp = d.add_input_int(label="HP", min_value=0, min_clamped=True, width=-g.text_size*6)
-        w.strength = d.add_input_int(label="Strength", min_clamped=True, min_value=0, width=-g.text_size*6)
-        w.speed = d.add_input_int(label="Speed", min_clamped=True, min_value=0, width=-g.text_size*6)
-        w.defense = d.add_input_int(label="Defense", min_clamped=True, min_value=0, width=-g.text_size*6)
-        w.resistance = d.add_input_int(label="Resistance", min_clamped=True, min_value=0, width=-g.text_size*6)
-        w.magic = d.add_input_int(label="Magic", min_value=0, min_clamped=True, width=-g.text_size*6)
-        w.luck = d.add_input_int(label="Luck", min_value=0, min_clamped=True, width=-g.text_size*6)
-        w.charisma = d.add_input_int(label="Charisma", min_clamped=True, min_value=0, width=-g.text_size*6)
-        w.skill = d.add_input_int(label="Skill", min_value=0, min_clamped=True, width=-g.text_size*6)
-        w.dexterity = d.add_input_int(label="Dexterity", min_clamped=True, min_value=0, width=-g.text_size*6)
+        w.hp = d.add_input_int(label="HP", min_value=0, min_clamped=True, width=-g.text_size*6,callback=c.ChangeBaseStat)
+        w.strength = d.add_input_int(label="Strength", min_clamped=True, min_value=0, width=-g.text_size*6,callback=c.ChangeBaseStat)
+        w.speed = d.add_input_int(label="Speed", min_clamped=True, min_value=0, width=-g.text_size*6,callback=c.ChangeBaseStat)
+        w.defense = d.add_input_int(label="Defense", min_clamped=True, min_value=0, width=-g.text_size*6,callback=c.ChangeBaseStat)
+        w.resistance = d.add_input_int(label="Resistance", min_clamped=True, min_value=0, width=-g.text_size*6,callback=c.ChangeBaseStat)
+        w.magic = d.add_input_int(label="Magic", min_value=0, min_clamped=True, width=-g.text_size*6,callback=c.ChangeBaseStat)
+        w.luck = d.add_input_int(label="Luck", min_value=0, min_clamped=True, width=-g.text_size*6,callback=c.ChangeBaseStat)
+        w.charisma = d.add_input_int(label="Charisma", min_clamped=True, min_value=0, width=-g.text_size*6,callback=c.ChangeBaseStat)
+        w.skill = d.add_input_int(label="Skill", min_value=0, min_clamped=True, width=-g.text_size*6,callback=c.ChangeBaseStat)
+        w.dexterity = d.add_input_int(label="Dexterity", min_clamped=True, min_value=0, width=-g.text_size*6,callback=c.ChangeBaseStat)
         
         d.add_spacer(height=g.item_spacing)
         
@@ -139,11 +139,47 @@ def populate():
             make_tooltip(g.tooltips.unit_editor, "Compare stats", f)
         with d.tooltip(parent=w.all_growth_stats) as f:
             make_tooltip(g.tooltips.unit_editor, "All growth stats", f)
-            
+    
+    with d.collapsing_header(label="Growth rates", parent=right, default_open=False) as h:
+        tmp = d.add_text("Ctrl+Click to enter a value with your keyboard")
+        set_item_style(tmp, 0, d.mvStyleVar_FramePadding)
+        set_font_size(tmp, -2)
+        
+        w.hp_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="HP",callback=c.ChangeBaseStatGrowth)
+        w.strength_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Strength",callback=c.ChangeBaseStatGrowth)
+        w.speed_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Speed",callback=c.ChangeBaseStatGrowth)
+        w.defense_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Defense",callback=c.ChangeBaseStatGrowth)
+        w.resistance_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Resistance",callback=c.ChangeBaseStatGrowth)
+        w.magic_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Magic",callback=c.ChangeBaseStatGrowth)
+        w.luck_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Luck",callback=c.ChangeBaseStatGrowth)
+        w.charisma_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Charisma",callback=c.ChangeBaseStatGrowth)
+        w.skill_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Skill",callback=c.ChangeBaseStatGrowth)
+        w.dexterity_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Dexterity",callback=c.ChangeBaseStatGrowth)
     
             
 class Colors():
     def set(self):
+        set_item_colors(w.hp_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
+                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
+        set_item_colors(w.strength_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
+                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
+        set_item_colors(w.speed_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
+                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
+        set_item_colors(w.defense_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
+                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
+        set_item_colors(w.resistance_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
+                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
+        set_item_colors(w.magic_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
+                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
+        set_item_colors(w.luck_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
+                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
+        set_item_colors(w.charisma_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
+                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
+        set_item_colors(w.skill_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
+                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
+        set_item_colors(w.dexterity_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
+                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
+        
         set_item_color(w.font_size, "node_grid_background_color", d.mvThemeCol_FrameBg)
         set_item_colors(w.current_class, ["window_background_color", "button_alt_color"],
                         [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
@@ -167,6 +203,28 @@ w.colors = Colors()
 def make_functions():
    d.set_item_user_data(w.theme_menu, w)
    d.set_item_user_data(w.font_size, w)
+   
+   d.set_item_user_data(w.hp, "hp")
+   d.set_item_user_data(w.strength, "strength")
+   d.set_item_user_data(w.speed, "speed")
+   d.set_item_user_data(w.defense, "defense")
+   d.set_item_user_data(w.resistance, "resistance")
+   d.set_item_user_data(w.magic, "magic")
+   d.set_item_user_data(w.luck, "luck")
+   d.set_item_user_data(w.charisma, "charisma")
+   d.set_item_user_data(w.skill, "skill")
+   d.set_item_user_data(w.dexterity, "dexterity")
+   
+   d.set_item_user_data(w.hp_base_rate, "hp")
+   d.set_item_user_data(w.strength_base_rate, "strength")
+   d.set_item_user_data(w.speed_base_rate, "speed")
+   d.set_item_user_data(w.defense_base_rate, "defense")
+   d.set_item_user_data(w.resistance_base_rate, "resistance")
+   d.set_item_user_data(w.magic_base_rate, "magic")
+   d.set_item_user_data(w.luck_base_rate, "luck")
+   d.set_item_user_data(w.charisma_base_rate, "charisma")
+   d.set_item_user_data(w.skill_base_rate, "skill")
+   d.set_item_user_data(w.dexterity_base_rate, "dexterity")
 
 def add_menu():
     with d.menu_bar(parent="unit_editor"):
