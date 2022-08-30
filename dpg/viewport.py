@@ -19,7 +19,7 @@ def add_global_menu():
 def init_viewport(use_screeninfo=True):
     g.tooltips = Tooltips()
     g.is_arranging = False
-    g.can_resize_columns = True
+    g.can_resize_columns = False
     d.set_viewport_resize_callback(callback=getGeometry)
     if use_screeninfo:
         for m in get_monitors():

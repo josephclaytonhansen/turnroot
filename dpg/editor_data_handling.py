@@ -17,3 +17,16 @@ def LoadUserPrefs():
             g.window_padding = g.prefs["window_padding"]
             g.mono_text_size = g.prefs["mono_text_size"]
             g.text_size = g.prefs["text_size"]
+
+def SaveUserPrefs():
+    with open("user_preferences.trup", "w") as f:
+        g.prefs["color_theme"] = ui_colorthemes.colorthemes[g.color_theme.tag].tag
+        g.prefs["corners_round"] = g.corners_round
+        g.prefs["padding"] = g.padding
+        g.prefs["item_spacing"] = g.item_spacing
+        g.prefs["window_padding"] = g.window_padding
+        g.prefs["mono_text_size"] = g.mono_text_size
+        g.prefs["text_size"] = g.text_size
+        json.dump(g.prefs, f)
+    
+    

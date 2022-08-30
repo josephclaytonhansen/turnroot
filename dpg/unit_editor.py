@@ -1,5 +1,3 @@
-from ctypes import alignment, resize
-from subprocess import call
 import dearpygui.dearpygui as d
 from ui_layout_helpers import *
 from globals import globals as g
@@ -7,6 +5,7 @@ from game_options import game_options as go
 from ui_item_style_helpers import *
 import unit_editor_functions as c
 from ui_tooltips import make_tooltip
+from ui_colorthemes import colorthemes as themes
 
 class Widgets():
     pwm = 2.26666
@@ -28,6 +27,7 @@ def add_unit_editor(params={}):
     populate()
     unit_editor_centers_in_column()
     make_functions()
+    w.colors.set()
     g.editors.append("unit_editor")
     
     
@@ -142,19 +142,24 @@ def populate():
             
     
             
-def make_functions():
-   set_item_colors(w.current_class, ["window_background_color", "button_alt_color"],
-                   [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
-   set_item_colors(w.pronouns, ["window_background_color", "button_alt_color"],
-                   [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
-   set_item_color(w.name, "list_background_color")
-   for x in [w.strength, w.hp, w.speed, w.defense, w.magic, w.resistance, w.luck, w.charisma, w.skill, w.dexterity]:
-       set_item_color(x, "node_grid_background_color", d.mvThemeCol_FrameBg)
+class Colors():
+    def set(self):
+        set_item_colors(w.current_class, ["window_background_color", "button_alt_color"],
+                        [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
+        set_item_colors(w.pronouns, ["window_background_color", "button_alt_color"],
+                        [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
+        set_item_colors(w.theme_menu, ["window_background_color", "button_alt_color"],
+                        [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
+        set_item_color(w.name, "list_background_color")
+        for x in [w.strength, w.hp, w.speed, w.defense, w.magic, w.resistance, w.luck, w.charisma, w.skill, w.dexterity]:
+            set_item_color(x, "node_grid_background_color", d.mvThemeCol_FrameBg)
 
-   set_item_color(w.notes, "list_background_color")
-   set_item_color(w.desc, "list_background_color")
+        set_item_color(w.notes, "list_background_color")
+        set_item_color(w.desc, "list_background_color")
+w.colors = Colors()
    
-   d.set_item_user_data("save", "user data")
+def make_functions():
+   d.set_item_user_data(w.theme_menu, w)
 
 def add_menu():
     with d.menu_bar(parent="unit_editor"):
@@ -164,8 +169,14 @@ def add_menu():
             d.add_menu_item(label="Save As", callback=None)
         with d.menu(label="View"):
             d.add_checkbox(label="Arrange Layout", callback=arrange, tag="arrange")
-            d.add_checkbox(label="Re-Size Columns", callback=resize, tag="resize", default_value=True)
-    
+            d.add_checkbox(label="Re-size Columns", callback=resize, tag="resize", default_value=False)
+            w.theme_menu_label = d.add_text("Color theme:")
+            set_item_style(w.theme_menu_label, 0, d.mvStyleVar_ItemSpacing)
+            set_font_size(w.theme_menu_label, -1)
+            w.theme_menu = d.add_combo(default_value=g.color_theme.tag,
+                                       items=[themes[t].tag for t in themes],
+                                       callback=c.color_theme)
+            
 def unit_editor_update_height():
     for row in g.unit_editor_rows:
             d.configure_item(row, 
