@@ -1,5 +1,5 @@
 from viewport import *
-from unit_editor import add_unit_editor
+from unit_editor import add_unit_editor, ue_do
 import dearpygui.dearpygui as d
 from ui_set_global_colors import set_colors
 from ui_set_global_font import set_fonts
@@ -13,9 +13,12 @@ d.bind_theme(set_colors(g.color_theme))
 set_fonts()    
 
 init_viewport(True)
-add_global_menu()
+#add_global_menu()
 
 add_unit_editor()
     
-d.start_dearpygui()
+while d.is_dearpygui_running():
+    d.render_dearpygui_frame()
+    ue_do()
+    
 d.destroy_context()

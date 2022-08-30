@@ -29,7 +29,7 @@ def init_viewport(use_screeninfo=True):
     else:
         d.create_viewport(title='Turnroot 0.0.1', width=800, height=600, clear_color=(25, 25, 25), x_pos = 0, y_pos = 0)
         
-    with d.window(tag="unit_editor", label = "unit_editor", width = 600, height = 600, no_collapse=True, min_size=[300,300]):
+    with d.window(tag="unit_editor", label = "unit_editor", width = 600, height = 600, no_collapse=True, min_size=[300,300], menubar=True):
         pass
 
     # if g.debug:

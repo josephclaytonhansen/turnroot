@@ -3,18 +3,28 @@ from subprocess import call
 import dearpygui.dearpygui as d
 from ui_layout_helpers import *
 from globals import globals as g
+from game_options import game_options as go
 from ui_item_style_helpers import *
-import unit_editor_callbacks as c
+import unit_editor_functions as c
 from ui_tooltips import make_tooltip
 
 class Widgets():
     pwm = 2.26666
-
 w = Widgets()
 
+#remove this in favor of save/load, temporarily for dev
+class Unit():
+    is_generic = False
+    is_avatar = False
+    has_stats = True
+u = Unit()
+
+#you can only be editing one thing at a time, technically, so this works
+g.is_editing = u
+
 def add_unit_editor(params={}):
-    add_menu()
     buildUnitEditor()
+    add_menu()
     populate()
     unit_editor_centers_in_column()
     make_functions()
@@ -24,7 +34,8 @@ def add_unit_editor(params={}):
 def populate():
     left = g.unit_editor_left
     right = d.add_child_window(parent=g.unit_editor_right)
-
+    w.left = left
+    w.right = right
     
     #use this format (group, spacer, item) to center something of fixed width in a column
     #don't forget to add it to unit_editor_centers_in_column()
@@ -65,25 +76,28 @@ def populate():
     
     w.left_lower = d.add_child_window(parent=left)
     
-    with d.collapsing_header(label="Basic attributes", parent=w.left_lower) as f:
+    with d.collapsing_header(label="Basic attributes", parent=w.left_lower, default_open=True) as f:
         w.pronouns_row = Widgets()
         BuildTable(w.pronouns_row,[50,50], f)
         
         w.pronouns_label = d.add_text(parent=w.pronouns_row.columns[0], default_value="Pronouns")
         set_item_style(w.pronouns_label, 0, d.mvStyleVar_ItemSpacing)
         set_font_size(w.pronouns_label, -1)
-        w.pronouns = d.add_combo(parent=w.pronouns_row.columns[0], callback=c.basic,
+        w.pronouns = d.add_combo(parent=w.pronouns_row.columns[0],
                     items=["He/him", "She/her", "They/them", "Custom pronouns"], width=-1)
         
-        w.is_ = d.add_radio_button(["Avatar/Player Character","Friendly Unit", "Enemy Unit", "NPC"],
+        w.is_ = d.add_radio_button(go["unit_types"], callback=c.unit_type_pipe,
                                 parent=w.pronouns_row.columns[1])
 
         set_item_style(w.is_, 0, d.mvStyleVar_FramePadding)
-        with d.collapsing_header(label="What do these mean?", parent = w.pronouns_row.columns[1]) as t:
-            set_font_size(t, -2)
-            w.basic_info = d.add_text(default_value="text", parent = t)
+        t = d.add_button(label="What do these mean?", parent = w.pronouns_row.columns[1])
+        set_font_size(t, -2)
+        with d.tooltip(parent=t) as f:
+            for ty in go["unit_types"]:
+                u = d.add_text(default_value=g.tooltips.unit_editor[ty], parent =f)
+                set_font_size(u, -2)
         
-    with d.collapsing_header(label="Notes", parent=w.left_lower) as f:
+    with d.collapsing_header(label="Notes", parent=w.left_lower, default_open=False) as f:
         w.notes_row = Widgets()
         BuildTable(w.notes_row,[50,50], f)
         
@@ -97,7 +111,7 @@ def populate():
     
     #right side
     d.add_text(default_value="Stats", parent=right)
-    with d.collapsing_header(label="Base stats", parent=right) as h:
+    with d.collapsing_header(label="Base stats", parent=right, default_open=True) as h:
         w.hp = d.add_input_int(label="HP", min_value=0, min_clamped=True, width=-g.text_size*6)
         w.strength = d.add_input_int(label="Strength", min_clamped=True, min_value=0, width=-g.text_size*6)
         w.speed = d.add_input_int(label="Speed", min_clamped=True, min_value=0, width=-g.text_size*6)
@@ -118,6 +132,8 @@ def populate():
                      parent=w.base_stats_buttons_row.columns[0],width=-1)
         w.all_growth_stats =d.add_button(label="Stats + class stats", 
                      parent=w.base_stats_buttons_row.columns[1],width=-1)
+        w.stat_variation =d.add_button(label="Stat variation", 
+                     parent=w.base_stats_buttons_row.columns[1],width=-1, show=False)
 
         with d.tooltip(parent=w.compare_stats) as f:
             make_tooltip(g.tooltips.unit_editor, "Compare stats", f)
@@ -170,4 +186,16 @@ def ue_arrange():
 
 def ue_no_arrange():
     d.configure_item(w.unit_editor_table, header_row=False, reorderable=False)
+    
+def ue_do():
+    if g.is_editing.is_generic == True:
+        c.show_stat_variation(w)
+    else:
+        c.hide_stat_variation(w)
+    if g.is_editing.is_avatar == True:
+        pass
+    if g.is_editing.has_stats == True:
+        c.show_stats(w)
+    else:
+        c.hide_stats(w)
     
