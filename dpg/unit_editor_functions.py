@@ -5,6 +5,7 @@ from ui_set_global_font import set_fonts
 import dearpygui.dearpygui as d
 from editor_data_handling import SaveUserPrefs
 from ui_item_style_helpers import *
+from ui_layout_helpers import TimedInfoMessage
 
 def basic(sender, app_data, user_data):
     print(sender, app_data, user_data)
@@ -58,6 +59,7 @@ def font(sender, app_data, user_data):
     g.font_family = app_data
     set_fonts(label="Assets/Fonts/"+app_data+"-Regular.ttf")
     SaveUserPrefs()
+    TimedInfoMessage("Requires restart", g.active_window_widgets.status_bar)
     
 def window_padding(sender, app_data, user_data):
     g.window_padding = app_data

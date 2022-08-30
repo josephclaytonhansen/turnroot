@@ -27,11 +27,11 @@ def init_viewport(use_screeninfo=True):
                 screen_width = m.width
                 screen_height = m.height
 
-        d.create_viewport(title='Turnroot 0.0.1', width=int(screen_width*0.75), height=int(screen_height*0.75), clear_color=g.clear_color, x_pos = int(screen_width * .125), y_pos = int(screen_height * .125))
+        d.create_viewport(title='Turnroot 0.0.1', width=int(screen_width*0.75), height=int(screen_height*0.75), min_width=900,clear_color=g.clear_color, x_pos = int(screen_width * .125), y_pos = int(screen_height * .125))
     else:
         d.create_viewport(title='Turnroot 0.0.1', width=800, height=600, clear_color=(25, 25, 25), x_pos = 0, y_pos = 0)
         
-    with d.window(tag="unit_editor", label = "unit_editor", width = 600, height = 600, no_collapse=True, min_size=[300,300], menubar=True) as unit_editor:
+    with d.window(tag="unit_editor", label = "unit_editor", width = 600, height = 600, no_collapse=True, menubar=True) as unit_editor:
         g.active_window = unit_editor
 
     # if g.debug:

@@ -12,6 +12,8 @@ class globals:
     debug = False
     font_family = "Assets/Fonts/FiraCode-Regular.ttf"
     current_height = 771
+    now = 0
+    timeout = 0
     prefs = {"color_theme":color_theme.tag, 
              "corners_round":corners_round,
              "padding":padding,

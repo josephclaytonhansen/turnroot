@@ -1,5 +1,8 @@
 import dearpygui.dearpygui as d
 from globals import globals as g
+from datetime import datetime, timedelta
+
+from ui_item_style_helpers import set_item_color
 
 def ImageToTexture(path):
     width, height, channels, data = d.load_image(path)
@@ -7,6 +10,12 @@ def ImageToTexture(path):
         texture_id = d.add_static_texture(width, height, data)
     return texture_id
 
+def TimedInfoMessage(message, status_bar, time=4):
+    g.timeout = datetime.now() + timedelta(seconds=time)
+    d.configure_item(status_bar, label=message)
+    set_item_color(status_bar, "node_selected_color", d.mvThemeCol_TextDisabled)
+
+    
 
 class PercentageBasedLayoutHelper:
     def __init__(self, parent=""):

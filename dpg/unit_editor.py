@@ -1,3 +1,4 @@
+from cgitb import enable
 import dearpygui.dearpygui as d
 from ui_layout_helpers import *
 from globals import globals as g
@@ -6,10 +7,12 @@ from ui_item_style_helpers import *
 import unit_editor_functions as c
 from ui_tooltips import make_tooltip
 from ui_colorthemes import colorthemes as themes
+from datetime import datetime
 
 class Widgets():
     pwm = 2.26666
 w = Widgets()
+g.active_window_widgets = w
 
 #remove this in favor of save/load, temporarily for dev
 class Unit():
@@ -23,8 +26,8 @@ g.is_editing = u
 
 def add_unit_editor(params={}):
     buildUnitEditor()
-    add_menu()
     populate()
+    add_menu()
     unit_editor_centers_in_column()
     make_functions()
     w.colors.set()
@@ -127,6 +130,12 @@ def populate():
         w.skill = d.add_slider_int(label="Skill", min_value=0, max_value=100,clamped=True,callback=c.ChangeBaseStat)
         w.dexterity = d.add_slider_int(label="Dexterity", max_value=100,clamped=True, min_value=0,callback=c.ChangeBaseStat)
         
+        t = d.add_button(label="What about inheritance?")
+        set_font_size(t, -2)
+        with d.tooltip(parent=t) as f:
+            u = d.add_text(default_value=g.tooltips.unit_editor["what_about_inheritance"], parent =f)
+            set_font_size(u, -2)
+        
         d.add_spacer(height=g.item_spacing)
         
         w.base_stats_buttons_row = Widgets()
@@ -163,37 +172,22 @@ def populate():
             
 class Colors():
     def set(self):
-        set_item_colors(w.hp_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
-                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
-        set_item_colors(w.strength_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
-                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
-        set_item_colors(w.speed_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
-                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
-        set_item_colors(w.defense_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
-                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
-        set_item_colors(w.resistance_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
-                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
-        set_item_colors(w.magic_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
-                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
-        set_item_colors(w.luck_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
-                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
-        set_item_colors(w.charisma_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
-                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
-        set_item_colors(w.skill_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
-                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
-        set_item_colors(w.dexterity_base_rate, ["window_background_color", "window_background_color", "list_background_color"],
+        for x in [w.hp_base_rate, w.strength_base_rate,
+                  w.speed_base_rate, w.defense_base_rate,
+                  w.resistance_base_rate, w.magic_base_rate,
+                  w.luck_base_rate, w.charisma_base_rate,
+                  w.skill_base_rate, w.dexterity_base_rate]:
+            set_item_colors(x, ["window_background_color", "window_background_color", "list_background_color"],
                         [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
         
         set_item_color(w.font_size, "node_grid_background_color", d.mvThemeCol_FrameBg)
-        set_item_colors(w.current_class, ["window_background_color", "button_alt_color"],
+        
+        for x in [w.current_class, w.pronouns, w.theme_menu, w.font]:
+            set_item_colors(x, ["window_background_color", "button_alt_color"],
                         [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
-        set_item_colors(w.pronouns, ["window_background_color", "button_alt_color"],
-                        [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
-        set_item_colors(w.theme_menu, ["window_background_color", "button_alt_color"],
-                        [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
-        set_item_colors(w.font, ["window_background_color", "button_alt_color"],
-                        [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
+            
         set_item_color(w.name, "list_background_color")
+        
         for x in [w.strength, w.hp, w.speed, w.defense,
                   w.magic, w.resistance, w.luck, w.charisma,
                   w.skill, w.dexterity, w.padding, w.window_padding,
@@ -232,11 +226,13 @@ def make_functions():
    d.set_item_user_data(w.dexterity_base_rate, "dexterity")
 
 def add_menu():
+    w.status_bar = None
     with d.menu_bar(parent="unit_editor"):
         with d.menu(label="File"):
             d.add_menu_item(label="Save", callback=c.basic, tag="save")
             d.set_item_user_data("save", "user data")
             d.add_menu_item(label="Save As", callback=None)
+            
         with d.menu(label="View"):
             d.add_checkbox(label="Arrange Layout", callback=arrange, tag="arrange")
             d.add_checkbox(label="Re-size Columns", callback=resize, tag="resize", default_value=False)
@@ -271,9 +267,14 @@ def add_menu():
                 w.window_padding = d.add_input_int(min_clamped=True,max_clamped=True,
                                           min_value=0,max_value=30,step=0,
                                           callback=c.window_padding, default_value=g.window_padding)
+        
+        w.info_left = d.add_spacer(width=0)
+        with d.menu(label="",enabled=False) as w.status_bar:
+            pass
             
             
 def unit_editor_update_height():
+    d.configure_item(w.info_left, width=d.get_viewport_width()-400)
     for row in g.unit_editor_rows:
             d.configure_item(row, 
                              height=int(g.current_height/len(g.unit_editor_rows)-(g.window_padding*2)-30)
@@ -314,6 +315,11 @@ def resize():
         d.configure_item(g.unit_editor_table, resizable=True)
     
 def ue_do():
+    try:
+        if g.now > g.timeout:
+            d.configure_item(w.status_bar, label="")
+    except:
+        d.configure_item(w.status_bar, label="")
     if g.is_editing.is_generic == True:
         c.show_stat_variation(w)
     else:

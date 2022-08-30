@@ -13,6 +13,7 @@ class Tooltips():
     "Generic Unit":"Generic Unit: A templated unit meant to be copy-and-pasted; for example, a Soldier or a Ruffian.\nGeneric units can have random variation in base stats, classes, skills, and items",
     "Unique Unit":"Unique Unit: A named unit- there can be only one.\nFor team members, bosses, etc.",
     "NPC": "NPC: A unit that does not appear in combat, and has no stats/items/classes as a result.\nFor merchants and background characters",
+    "what_about_inheritance":"Base stats no longer apply if a unit is a child unit.\nInstead,the child unit takes an average of the parent unit's stats.\nYou can leave base stats at 0 in this case."
 }
     
 def make_tooltip(source, query, parent):
