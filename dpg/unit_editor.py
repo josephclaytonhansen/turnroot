@@ -23,7 +23,8 @@ def add_unit_editor(params={}):
     
 def populate():
     left = g.unit_editor_left
-    right = g.unit_editor_right
+    right = d.add_child_window(parent=g.unit_editor_right)
+
     
     #use this format (group, spacer, item) to center something of fixed width in a column
     #don't forget to add it to unit_editor_centers_in_column()
@@ -59,11 +60,84 @@ def populate():
     w.current_class = d.add_combo(parent=w.name_row.columns[1], callback=c.basic, items=["Myrmidon", "Assassin"], width=-1)
     set_font_size(w.current_class, 1)
     d.add_image_button(parent=w.name_row.columns[2],texture_tag=ImageToTexture("assets/ui_icons/white/edit.png"))
+    
+    d.add_spacer(height=g.item_spacing,parent=left)
+    
+    w.left_lower = d.add_child_window(parent=left)
+    
+    with d.collapsing_header(label="Basic attributes", parent=w.left_lower) as f:
+        w.pronouns_row = Widgets()
+        BuildTable(w.pronouns_row,[50,50], f)
+        
+        w.pronouns_label = d.add_text(parent=w.pronouns_row.columns[0], default_value="Pronouns")
+        set_item_style(w.pronouns_label, 0, d.mvStyleVar_ItemSpacing)
+        set_font_size(w.pronouns_label, -1)
+        w.pronouns = d.add_combo(parent=w.pronouns_row.columns[0], callback=c.basic,
+                    items=["He/him", "She/her", "They/them", "Custom pronouns"], width=-1)
+        
+        w.is_ = d.add_radio_button(["Avatar/Player Character","Friendly Unit", "Enemy Unit", "NPC"],
+                                parent=w.pronouns_row.columns[1])
+
+        set_item_style(w.is_, 0, d.mvStyleVar_FramePadding)
+        with d.collapsing_header(label="What do these mean?", parent = w.pronouns_row.columns[1]) as t:
+            set_font_size(t, -2)
+            w.basic_info = d.add_text(default_value="text", parent = t)
+        
+    with d.collapsing_header(label="Notes", parent=w.left_lower) as f:
+        w.notes_row = Widgets()
+        BuildTable(w.notes_row,[50,50], f)
+        
+        tmp = d.add_text(default_value="Notes\n(not added to game)",parent=w.notes_row.columns[0])
+        set_font_size(tmp, -1)
+        w.notes = d.add_input_text(multiline=True,parent=w.notes_row.columns[0],width=-1)
+        
+        tmp = d.add_text(default_value="Description\n(added to game as flavor text)",parent=w.notes_row.columns[1])
+        w.desc = d.add_input_text(multiline=True,parent=w.notes_row.columns[1],width=-1)
+        set_font_size(tmp, -1)
+    
+    #right side
+    d.add_text(default_value="Stats", parent=right)
+    with d.collapsing_header(label="Base stats", parent=right) as h:
+        w.hp = d.add_input_int(label="HP", min_value=0, min_clamped=True, width=-g.text_size*6)
+        w.strength = d.add_input_int(label="Strength", min_clamped=True, min_value=0, width=-g.text_size*6)
+        w.speed = d.add_input_int(label="Speed", min_clamped=True, min_value=0, width=-g.text_size*6)
+        w.defense = d.add_input_int(label="Defense", min_clamped=True, min_value=0, width=-g.text_size*6)
+        w.resistance = d.add_input_int(label="Resistance", min_clamped=True, min_value=0, width=-g.text_size*6)
+        w.magic = d.add_input_int(label="Magic", min_value=0, min_clamped=True, width=-g.text_size*6)
+        w.luck = d.add_input_int(label="Luck", min_value=0, min_clamped=True, width=-g.text_size*6)
+        w.charisma = d.add_input_int(label="Charisma", min_clamped=True, min_value=0, width=-g.text_size*6)
+        w.skill = d.add_input_int(label="Skill", min_value=0, min_clamped=True, width=-g.text_size*6)
+        w.dexterity = d.add_input_int(label="Dexterity", min_clamped=True, min_value=0, width=-g.text_size*6)
+        
+        d.add_spacer(height=g.item_spacing)
+        
+        w.base_stats_buttons_row = Widgets()
+        BuildTable(w.base_stats_buttons_row,[50,50], h)
+        
+        w.compare_stats = d.add_button(label="Compare to other units", 
+                     parent=w.base_stats_buttons_row.columns[0],width=-1)
+        w.all_growth_stats =d.add_button(label="Stats + class stats", 
+                     parent=w.base_stats_buttons_row.columns[1],width=-1)
+
+        with d.tooltip(parent=w.compare_stats) as f:
+            make_tooltip(g.tooltips.unit_editor, "Compare stats", f)
+        with d.tooltip(parent=w.all_growth_stats) as f:
+            make_tooltip(g.tooltips.unit_editor, "All growth stats", f)
+            
+    
             
 def make_functions():
    set_item_colors(w.current_class, ["window_background_color", "button_alt_color"],
                    [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
+   set_item_colors(w.pronouns, ["window_background_color", "button_alt_color"],
+                   [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
    set_item_color(w.name, "list_background_color")
+   for x in [w.strength, w.hp, w.speed, w.defense, w.magic, w.resistance, w.luck, w.charisma, w.skill, w.dexterity]:
+       set_item_color(x, "node_grid_background_color", d.mvThemeCol_FrameBg)
+
+   set_item_color(w.notes, "list_background_color")
+   set_item_color(w.desc, "list_background_color")
+   
    d.set_item_user_data("save", "user data")
 
 def add_menu():
