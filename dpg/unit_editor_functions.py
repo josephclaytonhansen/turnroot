@@ -54,15 +54,21 @@ def font_size(sender, app_data, user_data):
     g.text_size = app_data
     set_fonts()
     SaveUserPrefs()
+    TimedInfoMessage("Requires restart- no changes will be visible", g.active_window_widgets.status_bar)
 
 def font(sender, app_data, user_data):
     g.font_family = app_data
     set_fonts(label="Assets/Fonts/"+app_data+"-Regular.ttf")
     SaveUserPrefs()
-    TimedInfoMessage("Requires restart", g.active_window_widgets.status_bar)
+    TimedInfoMessage("Requires restart- no changes will be visible", g.active_window_widgets.status_bar)
     
 def window_padding(sender, app_data, user_data):
     g.window_padding = app_data
+    d.bind_theme(set_colors(g.color_theme))
+    SaveUserPrefs()
+
+def corners_round(sender, app_data, user_data):
+    g.corners_round = app_data
     d.bind_theme(set_colors(g.color_theme))
     SaveUserPrefs()
 

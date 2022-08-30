@@ -1,4 +1,3 @@
-from cgitb import enable
 import dearpygui.dearpygui as d
 from ui_layout_helpers import *
 from globals import globals as g
@@ -7,7 +6,6 @@ from ui_item_style_helpers import *
 import unit_editor_functions as c
 from ui_tooltips import make_tooltip
 from ui_colorthemes import colorthemes as themes
-from datetime import datetime
 
 class Widgets():
     pwm = 2.26666
@@ -172,14 +170,6 @@ def populate():
             
 class Colors():
     def set(self):
-        for x in [w.hp_base_rate, w.strength_base_rate,
-                  w.speed_base_rate, w.defense_base_rate,
-                  w.resistance_base_rate, w.magic_base_rate,
-                  w.luck_base_rate, w.charisma_base_rate,
-                  w.skill_base_rate, w.dexterity_base_rate]:
-            set_item_colors(x, ["window_background_color", "window_background_color", "list_background_color"],
-                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
-        
         set_item_color(w.font_size, "node_grid_background_color", d.mvThemeCol_FrameBg)
         
         for x in [w.current_class, w.pronouns, w.theme_menu, w.font]:
@@ -191,7 +181,12 @@ class Colors():
         for x in [w.strength, w.hp, w.speed, w.defense,
                   w.magic, w.resistance, w.luck, w.charisma,
                   w.skill, w.dexterity, w.padding, w.window_padding,
-                  w.item_spacing]:
+                  w.item_spacing, w.corners_round,
+                  w.hp_base_rate, w.strength_base_rate,
+                  w.speed_base_rate, w.defense_base_rate,
+                  w.resistance_base_rate, w.magic_base_rate,
+                  w.luck_base_rate, w.charisma_base_rate,
+                  w.skill_base_rate, w.dexterity_base_rate]:
             set_item_colors(x, ["window_background_color", "window_background_color", "list_background_color"],
                         [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
 
@@ -267,6 +262,14 @@ def add_menu():
                 w.window_padding = d.add_input_int(min_clamped=True,max_clamped=True,
                                           min_value=0,max_value=30,step=0,
                                           callback=c.window_padding, default_value=g.window_padding)
+            
+            w.corners_round_label = d.add_text("Corners rounded amount")
+            set_font_size(w.corners_round_label, -1)
+            set_item_style(w.corners_round_label, 0, d.mvStyleVar_ItemSpacing)
+            
+            w.corners_round = d.add_slider_int(clamped=True,
+                                            min_value=0,max_value=10,
+                                            callback=c.corners_round, default_value=g.corners_round)
         
         w.info_left = d.add_spacer(width=0)
         with d.menu(label="",enabled=False) as w.status_bar:
@@ -274,7 +277,7 @@ def add_menu():
             
             
 def unit_editor_update_height():
-    d.configure_item(w.info_left, width=d.get_viewport_width()-400)
+    d.configure_item(w.info_left, width=d.get_viewport_width()-500)
     for row in g.unit_editor_rows:
             d.configure_item(row, 
                              height=int(g.current_height/len(g.unit_editor_rows)-(g.window_padding*2)-30)
