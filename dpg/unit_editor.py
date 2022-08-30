@@ -1,4 +1,4 @@
-from ctypes import alignment
+from ctypes import alignment, resize
 from subprocess import call
 import dearpygui.dearpygui as d
 from ui_layout_helpers import *
@@ -162,6 +162,9 @@ def add_menu():
             d.add_menu_item(label="Save", callback=c.basic, tag="save")
             d.set_item_user_data("save", "user data")
             d.add_menu_item(label="Save As", callback=None)
+        with d.menu(label="View"):
+            d.add_checkbox(label="Arrange Layout", callback=arrange, tag="arrange")
+            d.add_checkbox(label="Re-Size Columns", callback=resize, tag="resize", default_value=True)
     
 def unit_editor_update_height():
     for row in g.unit_editor_rows:
@@ -181,11 +184,27 @@ def unit_editor_centers_in_column():
         2, w.left_portrait_spacing, 300
     )
 
+def arrange():
+    if g.is_arranging:
+        g.is_arranging = False
+        ue_no_arrange()
+    else:
+        g.is_arranging = True
+        ue_arrange()
+        
 def ue_arrange():
-    d.configure_item(w.unit_editor_table, header_row=True, reorderable=True)
+    d.configure_item(g.unit_editor_table, header_row=True, reorderable=True, resizable=g.can_resize_columns)
 
 def ue_no_arrange():
-    d.configure_item(w.unit_editor_table, header_row=False, reorderable=False)
+    d.configure_item(g.unit_editor_table, header_row=False, reorderable=True, resizable=g.can_resize_columns)
+
+def resize():
+    if g.can_resize_columns:
+        g.can_resize_columns = False
+        d.configure_item(g.unit_editor_table, resizable=False)
+    else:
+        g.can_resize_columns = True
+        d.configure_item(g.unit_editor_table, resizable=True)
     
 def ue_do():
     if g.is_editing.is_generic == True:
