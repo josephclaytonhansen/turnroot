@@ -112,16 +112,20 @@ def populate():
     #right side
     d.add_text(default_value="Stats", parent=right)
     with d.collapsing_header(label="Base stats", parent=right, default_open=True) as h:
-        w.hp = d.add_input_int(label="HP", min_value=0, min_clamped=True, width=-g.text_size*6,callback=c.ChangeBaseStat)
-        w.strength = d.add_input_int(label="Strength", min_clamped=True, min_value=0, width=-g.text_size*6,callback=c.ChangeBaseStat)
-        w.speed = d.add_input_int(label="Speed", min_clamped=True, min_value=0, width=-g.text_size*6,callback=c.ChangeBaseStat)
-        w.defense = d.add_input_int(label="Defense", min_clamped=True, min_value=0, width=-g.text_size*6,callback=c.ChangeBaseStat)
-        w.resistance = d.add_input_int(label="Resistance", min_clamped=True, min_value=0, width=-g.text_size*6,callback=c.ChangeBaseStat)
-        w.magic = d.add_input_int(label="Magic", min_value=0, min_clamped=True, width=-g.text_size*6,callback=c.ChangeBaseStat)
-        w.luck = d.add_input_int(label="Luck", min_value=0, min_clamped=True, width=-g.text_size*6,callback=c.ChangeBaseStat)
-        w.charisma = d.add_input_int(label="Charisma", min_clamped=True, min_value=0, width=-g.text_size*6,callback=c.ChangeBaseStat)
-        w.skill = d.add_input_int(label="Skill", min_value=0, min_clamped=True, width=-g.text_size*6,callback=c.ChangeBaseStat)
-        w.dexterity = d.add_input_int(label="Dexterity", min_clamped=True, min_value=0, width=-g.text_size*6,callback=c.ChangeBaseStat)
+        tmp = d.add_text("Ctrl+Click to enter a value with your keyboard")
+        set_item_style(tmp, 0, d.mvStyleVar_FramePadding)
+        set_font_size(tmp, -2)
+        
+        w.hp = d.add_slider_int(label="HP", min_value=0, max_value=100, clamped=True,callback=c.ChangeBaseStat)
+        w.strength = d.add_slider_int(label="Strength", max_value=100, clamped=True, min_value=0,callback=c.ChangeBaseStat)
+        w.speed = d.add_slider_int(label="Speed", clamped=True,max_value=100,  min_value=0,callback=c.ChangeBaseStat)
+        w.defense = d.add_slider_int(label="Defense", clamped=True,max_value=100, min_value=0,callback=c.ChangeBaseStat)
+        w.resistance = d.add_slider_int(label="Resistance", max_value=100,clamped=True, min_value=0,callback=c.ChangeBaseStat)
+        w.magic = d.add_slider_int(label="Magic", min_value=0, max_value=100,clamped=True,callback=c.ChangeBaseStat)
+        w.luck = d.add_slider_int(label="Luck", min_value=0, max_value=100,clamped=True,callback=c.ChangeBaseStat)
+        w.charisma = d.add_slider_int(label="Charisma", max_value=100,clamped=True, min_value=0,callback=c.ChangeBaseStat)
+        w.skill = d.add_slider_int(label="Skill", min_value=0, max_value=100,clamped=True,callback=c.ChangeBaseStat)
+        w.dexterity = d.add_slider_int(label="Dexterity", max_value=100,clamped=True, min_value=0,callback=c.ChangeBaseStat)
         
         d.add_spacer(height=g.item_spacing)
         
@@ -145,16 +149,16 @@ def populate():
         set_item_style(tmp, 0, d.mvStyleVar_FramePadding)
         set_font_size(tmp, -2)
         
-        w.hp_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="HP",callback=c.ChangeBaseStatGrowth)
-        w.strength_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Strength",callback=c.ChangeBaseStatGrowth)
-        w.speed_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Speed",callback=c.ChangeBaseStatGrowth)
-        w.defense_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Defense",callback=c.ChangeBaseStatGrowth)
-        w.resistance_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Resistance",callback=c.ChangeBaseStatGrowth)
-        w.magic_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Magic",callback=c.ChangeBaseStatGrowth)
-        w.luck_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Luck",callback=c.ChangeBaseStatGrowth)
-        w.charisma_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Charisma",callback=c.ChangeBaseStatGrowth)
-        w.skill_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Skill",callback=c.ChangeBaseStatGrowth)
-        w.dexterity_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Dexterity",callback=c.ChangeBaseStatGrowth)
+        w.hp_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="HP",callback=c.ChangeBaseStatGrowth,format="%d%%")
+        w.strength_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Strength",callback=c.ChangeBaseStatGrowth,format="%d%%")
+        w.speed_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Speed",callback=c.ChangeBaseStatGrowth,format="%d%%")
+        w.defense_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Defense",callback=c.ChangeBaseStatGrowth,format="%d%%")
+        w.resistance_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Resistance",callback=c.ChangeBaseStatGrowth,format="%d%%")
+        w.magic_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Magic",callback=c.ChangeBaseStatGrowth,format="%d%%")
+        w.luck_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Luck",callback=c.ChangeBaseStatGrowth,format="%d%%")
+        w.charisma_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Charisma",callback=c.ChangeBaseStatGrowth,format="%d%%")
+        w.skill_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Skill",callback=c.ChangeBaseStatGrowth,format="%d%%")
+        w.dexterity_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Dexterity",callback=c.ChangeBaseStatGrowth,format="%d%%")
     
             
 class Colors():
@@ -194,7 +198,8 @@ class Colors():
                   w.magic, w.resistance, w.luck, w.charisma,
                   w.skill, w.dexterity, w.padding, w.window_padding,
                   w.item_spacing]:
-            set_item_color(x, "node_grid_background_color", d.mvThemeCol_FrameBg)
+            set_item_colors(x, ["window_background_color", "window_background_color", "list_background_color"],
+                        [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
 
         set_item_color(w.notes, "list_background_color")
         set_item_color(w.desc, "list_background_color")
