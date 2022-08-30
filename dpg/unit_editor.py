@@ -144,6 +144,7 @@ def populate():
             
 class Colors():
     def set(self):
+        set_item_color(w.font_size, "node_grid_background_color", d.mvThemeCol_FrameBg)
         set_item_colors(w.current_class, ["window_background_color", "button_alt_color"],
                         [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
         set_item_colors(w.pronouns, ["window_background_color", "button_alt_color"],
@@ -151,7 +152,10 @@ class Colors():
         set_item_colors(w.theme_menu, ["window_background_color", "button_alt_color"],
                         [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
         set_item_color(w.name, "list_background_color")
-        for x in [w.strength, w.hp, w.speed, w.defense, w.magic, w.resistance, w.luck, w.charisma, w.skill, w.dexterity]:
+        for x in [w.strength, w.hp, w.speed, w.defense,
+                  w.magic, w.resistance, w.luck, w.charisma,
+                  w.skill, w.dexterity, w.padding, w.window_padding,
+                  w.item_spacing]:
             set_item_color(x, "node_grid_background_color", d.mvThemeCol_FrameBg)
 
         set_item_color(w.notes, "list_background_color")
@@ -160,6 +164,7 @@ w.colors = Colors()
    
 def make_functions():
    d.set_item_user_data(w.theme_menu, w)
+   d.set_item_user_data(w.font_size, w)
 
 def add_menu():
     with d.menu_bar(parent="unit_editor"):
@@ -176,6 +181,27 @@ def add_menu():
             w.theme_menu = d.add_combo(default_value=g.color_theme.tag,
                                        items=[themes[t].tag for t in themes],
                                        callback=c.color_theme)
+            w.font_size_label = d.add_text("Font size (requires restart)")
+            set_font_size(w.font_size_label, -1)
+            set_item_style(w.font_size_label, 0, d.mvStyleVar_ItemSpacing)
+            w.font_size = d.add_input_int(min_clamped=True,max_clamped=True,
+                                          min_value=4,max_value=36,
+                                          callback=c.font_size, default_value=g.text_size)
+            w.padding_label = d.add_text("Padding/Item Spacing/Window Padding")
+            set_font_size(w.padding_label, -1)
+            set_item_style(w.padding_label, 0, d.mvStyleVar_ItemSpacing)
+            
+            with d.group(horizontal=True,width=80):
+                w.padding = d.add_input_int(min_clamped=True,max_clamped=True,
+                                          min_value=0,max_value=30,step=0,
+                                          callback=c.padding, default_value=g.padding)
+                w.item_spacing = d.add_input_int(min_clamped=True,max_clamped=True,
+                                          min_value=0,max_value=30,step=0,
+                                          callback=c.item_spacing, default_value=g.item_spacing)
+                w.window_padding = d.add_input_int(min_clamped=True,max_clamped=True,
+                                          min_value=0,max_value=30,step=0,
+                                          callback=c.window_padding, default_value=g.window_padding)
+            
             
 def unit_editor_update_height():
     for row in g.unit_editor_rows:
