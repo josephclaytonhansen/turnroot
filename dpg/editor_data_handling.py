@@ -17,6 +17,8 @@ def LoadUserPrefs():
             g.window_padding = g.prefs["window_padding"]
             g.mono_text_size = g.prefs["mono_text_size"]
             g.text_size = g.prefs["text_size"]
+            g.font_family = g.prefs["font_family"]
+            print(g.font_family)
 
 def SaveUserPrefs():
     with open("user_preferences.trup", "w") as f:
@@ -27,6 +29,10 @@ def SaveUserPrefs():
         g.prefs["window_padding"] = g.window_padding
         g.prefs["mono_text_size"] = g.mono_text_size
         g.prefs["text_size"] = g.text_size
+        if g.font_family.startswith("Assets"):
+            g.prefs["font_family"] = g.font_family
+        else:
+            g.prefs["font_family"] = "Assets/Fonts/"+g.font_family+"-Regular.ttf"
         json.dump(g.prefs, f)
     
     

@@ -8,15 +8,15 @@ from editor_data_handling import LoadUserPrefs
 
 d.create_context()
 LoadUserPrefs()
-    
 d.bind_theme(set_colors(g.color_theme))
-set_fonts()    
 
 init_viewport(True)
-#add_global_menu()
+print(g.font_family)
+set_fonts()   
 
 add_unit_editor()
-    
+
+
 while d.is_dearpygui_running():
     d.render_dearpygui_frame()
     ue_do()

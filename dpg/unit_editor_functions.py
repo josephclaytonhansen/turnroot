@@ -51,10 +51,14 @@ def color_theme(sender, app_data, user_data):
 
 def font_size(sender, app_data, user_data):
     g.text_size = app_data
-    print(g.text_size)
     set_fonts()
     SaveUserPrefs()
 
+def font(sender, app_data, user_data):
+    g.font_family = app_data
+    set_fonts(label="Assets/Fonts/"+app_data+"-Regular.ttf")
+    SaveUserPrefs()
+    
 def window_padding(sender, app_data, user_data):
     g.window_padding = app_data
     d.bind_theme(set_colors(g.color_theme))
