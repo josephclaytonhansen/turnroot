@@ -92,7 +92,7 @@ def ChangeBaseStat(sender, app_data, user_data):
     print(g.is_editing.base_stats)
 
 class Widgets():
-    pass
+    use_class_stats = False
 
 w = Widgets()
 w.ignore_hp = False
@@ -113,49 +113,54 @@ def ignoreHP():
         d.set_axis_limits("y_axis", 0, largest_value)
 
 def GrowOnce():
-    g.is_editing.datax.append(g.is_editing.datax[-1]+1)
-    for stat in ["hp", "strength", "speed",
-                 "magic","resistance", "defense",
-                 "luck", "skill", "dexterity", "charisma"]:
-        
-        try:
-            threshold = g.is_editing.growth_rates[stat]
-        except:
-            threshold = 0
-        
-        try:
-            baseline = g.is_editing.base_stats[stat]
-            if baseline < g.is_editing.stat_data[stat][-1]:
-                baseline = g.is_editing.stat_data[stat][-1]
-        except Exception as e:
-            print(e)
-            if 0 < g.is_editing.stat_data[stat][-1]:
-                baseline = g.is_editing.stat_data[stat][-1]
-            else:
-                baseline = 0
-        
-        growth = random.random() * 100
-        print(growth, threshold)
-        if growth <= threshold: 
-            g.is_editing.stat_data[stat].append(baseline+1)
-        else:
-            g.is_editing.stat_data[stat].append(baseline)
-        d.set_value("growth"+stat.upper(), [g.is_editing.datax,g.is_editing.stat_data[stat]])
-        d.set_axis_limits("x_axis", 0, len(g.is_editing.datax))
-        
-        largest_value = 0
-        for x in g.is_editing.stat_data.keys():
-            for y in g.is_editing.stat_data[x]:
-                if w.ignore_hp and x.lower() == "hp":
-                    pass
+    if not w.use_class_stats:
+        g.is_editing.datax.append(g.is_editing.datax[-1]+1)
+        for stat in ["hp", "strength", "speed",
+                    "magic","resistance", "defense",
+                    "luck", "skill", "dexterity", "charisma"]:
+            
+            try:
+                threshold = g.is_editing.growth_rates[stat]
+            except:
+                threshold = 0
+            
+            try:
+                baseline = g.is_editing.base_stats[stat]
+                if baseline < g.is_editing.stat_data[stat][-1]:
+                    baseline = g.is_editing.stat_data[stat][-1]
+            except Exception as e:
+                if 0 < g.is_editing.stat_data[stat][-1]:
+                    baseline = g.is_editing.stat_data[stat][-1]
                 else:
-                    if y > largest_value:
-                        largest_value = y
-        
-        d.set_axis_limits("y_axis", 0, largest_value)
-        d.set_value("current_stat"+stat, str(g.is_editing.stat_data[stat][-1])+": up +"+
-                    str(g.is_editing.stat_data[stat][-1]-g.is_editing.stat_data[stat][0])+" from base")
-        
+                    baseline = 0
+            
+            growth = random.random() * 100
+
+            if growth <= threshold: 
+                g.is_editing.stat_data[stat].append(baseline+1)
+            else:
+                g.is_editing.stat_data[stat].append(baseline)
+            d.set_value("growth"+stat.upper(), [g.is_editing.datax,g.is_editing.stat_data[stat]])
+            d.set_axis_limits("x_axis", 0, len(g.is_editing.datax))
+            
+            largest_value = 0
+            for x in g.is_editing.stat_data.keys():
+                for y in g.is_editing.stat_data[x]:
+                    if w.ignore_hp and x.lower() == "hp":
+                        pass
+                    else:
+                        if y > largest_value:
+                            largest_value = y
+            
+            d.set_axis_limits("y_axis", 0, largest_value)
+            d.set_value("current_stat"+stat, str(g.is_editing.stat_data[stat][-1])+": up +"+
+                        str(g.is_editing.stat_data[stat][-1]-g.is_editing.stat_data[stat][0])+" from base")
+            
+    else:
+        pass #class stats are not yet implemented
+            
+def TestGrowthUseClassStats():
+    w.use_class_stats = True
     
 def TestGrowth():
     stat_data = {}
@@ -175,9 +180,10 @@ def TestGrowth():
 
     try: d.show_item("Growth")
     except:
-        with d.window(label="Growth", tag = "Stat Growth Testing", height=800, width=1000, no_close=True, no_collapse=True) as fi:
+        with d.window(label="Stat Growth Testing", tag = "Growth", height=800, width=1000, no_close=True, no_title_bar=False, no_collapse=True) as fi:
             tmp = Widgets()
             BuildTable(tmp,[65,35], fi)
+            d.add_button(parent=tmp.columns[1],label="Close and reset",callback=lambda:(d.hide_item(fi)))
             d.set_item_pos(fi, [(d.get_viewport_width()-1000)/2, (d.get_viewport_height()-700)/2])
             
             with d.theme() as item_theme:
@@ -190,7 +196,7 @@ def TestGrowth():
             d.bind_item_theme(fi, item_theme)
         
             # create plot
-            with d.plot(label="Line Series", width=-1, height=600, parent=tmp.columns[0]) as f:
+            with d.plot(label="Line Series", width=-1, height=600, parent=tmp.columns[0], query=False, no_box_select=True) as f:
                 d.add_plot_legend()
                 # REQUIRED: create x and y axes
                 d.add_plot_axis(d.mvXAxis, label="Times leveled up", tag ="x_axis")
@@ -221,7 +227,6 @@ def TestGrowth():
                          tag = "showhp", callback=lambda:(d.show_item("growthHP"),d.hide_item("showhp"),d.show_item("hidehp"),ignoreHP()))
             d.hide_item("showhp")
             
-            d.add_button(parent=tmp.columns[0],label="Close and reset", callback=lambda:(d.hide_item(fi)))
             tmp = d.add_text("Right click to see graph options",parent=tmp.columns[0])
             set_item_style(tmp, 0, d.mvStyleVar_FramePadding)
             set_font_size(tmp, -2)

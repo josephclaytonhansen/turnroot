@@ -60,7 +60,7 @@ def populate():
     #d.add_spacer(parent=w.name_row.columns[0], height = int((0.466 * (g.padding*2 + g.text_size)/2)))
     
     i = -1
-    for x in ["Unit name", "Current class"]:
+    for x in ["Unit name", "Default class"]:
         i +=1
         tmp = d.add_text(parent=w.name_row.columns[i], default_value=x)
         #set padding to 0
@@ -177,6 +177,8 @@ def populate():
         
         w.test_growth = d.add_button(label="Test stat growth", 
                      parent=tmp.columns[0],width=-1, callback=c.TestGrowth)
+        w.use_class_stats = d.add_checkbox(label="Use class stats for testing", enabled=False,
+                     parent=tmp.columns[1], callback=c.TestGrowthUseClassStats)
         
     
             
