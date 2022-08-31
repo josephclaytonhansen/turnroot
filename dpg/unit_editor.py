@@ -39,8 +39,9 @@ def add_unit_editor(params={}):
     #you can only be editing one thing at a time, technically, so this works
     g.is_editing = u
     g.is_editing.type = "unit"
-    LoadUnit("test_unit")
-    c.UseLoadedData(w, "test_unit")
+    g.path = "test_unit"
+    LoadUnit(g.path)
+    c.UseLoadedData(w, g.path)
     TimedEvent(g.autosave_time)
     
     
@@ -247,7 +248,7 @@ def add_menu():
     w.status_bar = None
     with d.menu_bar(parent="unit_editor"):
         with d.menu(label="File"):
-            d.add_menu_item(label="Save", callback=lambda:SaveUnit("test_unit"), tag="save")
+            d.add_menu_item(label="Save", callback=lambda:(SaveUnit(g.path),TimedInfoMessage("Unit saved", w.status_bar, 2)), tag="save")
             d.set_item_user_data("save", "user data")
             d.add_menu_item(label="Save As", callback=None)
             
@@ -299,7 +300,7 @@ def add_menu():
             set_item_style(w.autosave_label, 0, d.mvStyleVar_ItemSpacing)
             
             w.autosave = d.add_input_int(min_clamped=True,max_clamped=True,
-                                          min_value=60,max_value=1200,step=60,
+                                          min_value=15,max_value=600,step=15,
                                           callback=c.ChangeAutosave, default_value=g.autosave_time)
         
         w.info_left = d.add_spacer(width=0)
@@ -353,7 +354,7 @@ def ue_do():
         if g.now > g.timeout_event:
             TimedEvent(g.autosave_time)
             TimedInfoMessage("Auto-saved", w.status_bar, 2)
-            SaveUnit("test_unit")
+            SaveUnit(g.path)
     except:
         pass
 

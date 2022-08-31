@@ -111,8 +111,6 @@ def ChangeNotes(sender, app_data, user_data):
 def ChangeDescription(sender, app_data, user_data):
     g.is_editing.description = app_data
 
-
-
 class Widgets():
     use_class_stats = False
 
