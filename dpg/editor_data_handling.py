@@ -18,7 +18,6 @@ def LoadUserPrefs():
             g.mono_text_size = g.prefs["mono_text_size"]
             g.text_size = g.prefs["text_size"]
             g.font_family = g.prefs["font_family"]
-            print(g.font_family)
 
 def SaveUserPrefs():
     with open("user_preferences.trup", "w") as f:

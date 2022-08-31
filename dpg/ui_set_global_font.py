@@ -23,4 +23,4 @@ def set_fonts(label=g.font_family, mono="Assets/Fonts/FiraCode-Regular.ttf"):
         ]
         g.monospace = d.add_font(mono, g.mono_text_size)
         d.bind_font(g.default_font)
-        d.set_item_font("unit_editor", g.default_font)
+        d.bind_item_font("unit_editor", g.default_font)

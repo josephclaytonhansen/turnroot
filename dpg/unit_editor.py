@@ -24,6 +24,7 @@ u = Unit()
 
 #you can only be editing one thing at a time, technically, so this works
 g.is_editing = u
+g.is_editing.type = "unit"
 
 def add_unit_editor(params={}):
     buildUnitEditor()
