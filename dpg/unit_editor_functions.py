@@ -6,6 +6,7 @@ import dearpygui.dearpygui as d
 from editor_data_handling import SaveUserPrefs
 from ui_item_style_helpers import *
 from ui_layout_helpers import TimedInfoMessage, BuildTable
+from editor_save_load_unit import SaveUnit, LoadUnit
 import random
 
 def basic(sender, app_data, user_data):
@@ -85,11 +86,13 @@ def item_spacing(sender, app_data, user_data):
 
 def ChangeBaseStatGrowth(sender, app_data, user_data):
     g.is_editing.growth_rates[user_data] = app_data
-    print(g.is_editing.growth_rates)
+    SaveUnit("test_unit")
+
 
 def ChangeBaseStat(sender, app_data, user_data):
     g.is_editing.base_stats[user_data] = app_data
-    print(g.is_editing.base_stats)
+    SaveUnit("test_unit")
+
 
 class Widgets():
     use_class_stats = False
@@ -231,3 +234,34 @@ def TestGrowth():
             set_item_style(tmp, 0, d.mvStyleVar_FramePadding)
             set_font_size(tmp, -2)
     
+def UseLoadedData(Widgets, path):
+    data = g.is_editing
+    base_stats = data.base_stats
+    growth_rates = data.growth_rates
+
+    w = Widgets
+    keys = ["hp", "strength", "speed", "defense", "resistance", "luck", "magic", "charisma", "skill", "dexterity"]
+    i = -1
+    for bs in [w.hp, w.strength, w.speed, w.defense,
+                  w.resistance, w.luck, w.magic, w.charisma,
+                  w.skill, w.dexterity]: 
+        i+=1 
+        try:
+            d.set_value(bs, base_stats[keys[i]])
+        except:
+            d.set_value(bs, 0)
+            base_stats[keys[i]] = 0
+        
+    i = -1
+    for gr in [w.hp_base_rate, w.strength_base_rate, w.speed_base_rate, w.defense_base_rate,
+                  w.resistance_base_rate, w.luck_base_rate, w.magic_base_rate, w.charisma_base_rate,
+                  w.skill_base_rate, w.dexterity_base_rate]: 
+        i+=1 
+        try:
+            d.set_value(gr, growth_rates[keys[i]])
+        except:
+            d.set_value(gr, 0)
+            growth_rates[keys[i]] = 0
+            
+    SaveUnit(path)
+        

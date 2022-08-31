@@ -6,6 +6,7 @@ from ui_item_style_helpers import *
 import unit_editor_functions as c
 from ui_tooltips import make_tooltip
 from ui_colorthemes import colorthemes as themes
+from editor_save_load_unit import LoadUnit
 
 class Widgets():
     pwm = 2.26666
@@ -19,12 +20,6 @@ class Unit():
     has_stats = True
     base_stats = {}
     growth_rates = {}
-    
-u = Unit()
-
-#you can only be editing one thing at a time, technically, so this works
-g.is_editing = u
-g.is_editing.type = "unit"
 
 def add_unit_editor(params={}):
     buildUnitEditor()
@@ -34,6 +29,12 @@ def add_unit_editor(params={}):
     make_functions()
     w.colors.set()
     g.editors.append("unit_editor")
+    u = Unit()
+    #you can only be editing one thing at a time, technically, so this works
+    g.is_editing = u
+    g.is_editing.type = "unit"
+    LoadUnit("test_unit")
+    c.UseLoadedData(w, "test_unit")
     
     
 def populate():

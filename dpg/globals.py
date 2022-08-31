@@ -1,4 +1,5 @@
 import ui_colorthemes
+import pathlib
 
 class globals:
     editors = []
