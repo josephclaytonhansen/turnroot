@@ -6,20 +6,25 @@ from ui_item_style_helpers import *
 import unit_editor_functions as c
 from ui_tooltips import make_tooltip
 from ui_colorthemes import colorthemes as themes
-from editor_save_load_unit import LoadUnit
+from editor_save_load_unit import LoadUnit, SaveUnit
 
 class Widgets():
     pwm = 2.26666
 w = Widgets()
 g.active_window_widgets = w
 
-#remove this in favor of save/load, temporarily for dev
 class Unit():
     is_generic = False
     is_avatar = False
     has_stats = True
     base_stats = {}
     growth_rates = {}
+    name = ""
+    pronouns = ""
+    unit_type = ""
+    current_class = ""
+    notes = ""
+    description = ""
 
 def add_unit_editor(params={}):
     buildUnitEditor()
@@ -29,6 +34,7 @@ def add_unit_editor(params={}):
     make_functions()
     w.colors.set()
     g.editors.append("unit_editor")
+    #remove this in favor of save/load, temporarily for dev
     u = Unit()
     #you can only be editing one thing at a time, technically, so this works
     g.is_editing = u
@@ -71,10 +77,10 @@ def populate():
         with d.tooltip(parent=tmp) as f:
             make_tooltip(g.tooltips.unit_editor, x, f)
     
-    w.name = d.add_input_text(parent=w.name_row.columns[0], callback=c.basic, hint="Unit Name",width=-1,height =-1)
+    w.name = d.add_input_text(parent=w.name_row.columns[0], callback=c.ChangeName, hint="Unit Name",width=-1,height =-1)
     set_font_size(w.name, 1)
     
-    w.current_class = d.add_combo(parent=w.name_row.columns[1], callback=c.basic, items=["Myrmidon", "Assassin"], width=-1)
+    w.current_class = d.add_combo(parent=w.name_row.columns[1], callback=c.ChangeCurrentClass, items=["Myrmidon", "Assassin"], width=-1)
     set_font_size(w.current_class, 1)
     d.add_image_button(parent=w.name_row.columns[2],texture_tag=ImageToTexture("assets/ui_icons/white/edit.png"))
     
@@ -89,7 +95,7 @@ def populate():
         w.pronouns_label = d.add_text(parent=w.pronouns_row.columns[0], default_value="Pronouns")
         set_item_style(w.pronouns_label, 0, d.mvStyleVar_ItemSpacing)
         set_font_size(w.pronouns_label, -1)
-        w.pronouns = d.add_combo(parent=w.pronouns_row.columns[0],
+        w.pronouns = d.add_combo(parent=w.pronouns_row.columns[0],callback=c.ChangePronouns,
                     items=["He/him", "She/her", "They/them", "Custom pronouns"], width=-1)
         
         w.is_ = d.add_radio_button(go["unit_types"], callback=c.unit_type_pipe,
@@ -109,10 +115,10 @@ def populate():
         
         tmp = d.add_text(default_value="Notes\n(not added to game)",parent=w.notes_row.columns[0])
         set_font_size(tmp, -1)
-        w.notes = d.add_input_text(multiline=True,parent=w.notes_row.columns[0],width=-1)
+        w.notes = d.add_input_text(multiline=True,parent=w.notes_row.columns[0],width=-1, callback = c.ChangeNotes)
         
         tmp = d.add_text(default_value="Description\n(added to game as flavor text)",parent=w.notes_row.columns[1])
-        w.desc = d.add_input_text(multiline=True,parent=w.notes_row.columns[1],width=-1)
+        w.desc = d.add_input_text(multiline=True,parent=w.notes_row.columns[1],width=-1, callback=c.ChangeDescription)
         set_font_size(tmp, -1)
     
     #right side
@@ -240,7 +246,7 @@ def add_menu():
     w.status_bar = None
     with d.menu_bar(parent="unit_editor"):
         with d.menu(label="File"):
-            d.add_menu_item(label="Save", callback=c.basic, tag="save")
+            d.add_menu_item(label="Save", callback=lambda:SaveUnit("test_unit"), tag="save")
             d.set_item_user_data("save", "user data")
             d.add_menu_item(label="Save As", callback=None)
             

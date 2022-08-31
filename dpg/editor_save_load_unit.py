@@ -9,13 +9,28 @@ def LoadUnit(path):
         with open(path+".truf", "w") as f:
            
            save_dict = {"base_stats":unit.base_stats,
-                        "growth_rates":unit.growth_rates}
+                        "growth_rates":unit.growth_rates,
+                        "name":unit.name,
+                        "pronouns":unit.pronouns,
+                        "current_class":unit.current_class,
+                        "unit_type":unit.unit_type,
+                        "notes":unit.notes,
+                        "description":unit.description}
            json.dump(save_dict, f)
     else:
         with open(path+".truf", "r") as f:
             save_dict = json.load(f)
             unit.base_stats = save_dict["base_stats"]
             unit.growth_rates = save_dict["growth_rates"]
+
+            unit.name = save_dict["name"]
+            unit.pronouns = save_dict["pronouns"]
+            unit.current_class = save_dict["current_class"]
+            unit.unit_type = save_dict["unit_type"]
+            unit.notes = save_dict["notes"]
+            unit.description = save_dict["description"]
+
+
             
 
 def SaveUnit(path):
@@ -23,5 +38,11 @@ def SaveUnit(path):
     with open(path+".truf", "w") as f:
         
         save_dict = {"base_stats":unit.base_stats,
-                        "growth_rates":unit.growth_rates}
+                    "growth_rates":unit.growth_rates,
+                    "name":unit.name,
+                    "pronouns":unit.pronouns,
+                    "current_class":unit.current_class,
+                    "unit_type":unit.unit_type,
+                    "notes":unit.notes,
+                    "description":unit.description}
         json.dump(save_dict, f)

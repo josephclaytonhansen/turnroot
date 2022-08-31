@@ -13,6 +13,7 @@ def basic(sender, app_data, user_data):
     print(sender, app_data, user_data)
 
 def unit_type_pipe(sender, app_data, user_data):
+    g.is_editing.unit_type = app_data
     try:
         if app_data == "Generic Unit":
             g.is_editing.is_generic = True
@@ -86,12 +87,25 @@ def item_spacing(sender, app_data, user_data):
 
 def ChangeBaseStatGrowth(sender, app_data, user_data):
     g.is_editing.growth_rates[user_data] = app_data
-    SaveUnit("test_unit")
-
 
 def ChangeBaseStat(sender, app_data, user_data):
     g.is_editing.base_stats[user_data] = app_data
-    SaveUnit("test_unit")
+    
+def ChangeName(sender, app_data, user_data):
+    g.is_editing.name = app_data
+
+def ChangeCurrentClass(sender, app_data, user_data):
+    g.is_editing.current_class = app_data
+
+def ChangePronouns(sender, app_data, user_data):
+    g.is_editing.pronouns = app_data
+
+def ChangeNotes(sender, app_data, user_data):
+    g.is_editing.notes = app_data
+
+def ChangeDescription(sender, app_data, user_data):
+    g.is_editing.description = app_data
+
 
 
 class Widgets():
@@ -238,8 +252,20 @@ def UseLoadedData(Widgets, path):
     data = g.is_editing
     base_stats = data.base_stats
     growth_rates = data.growth_rates
-
+    
     w = Widgets
+    
+    try:
+        d.set_value(w.name, data.name)
+        d.set_value(w.pronouns, data.pronouns)
+        d.set_value(w.current_class, data.current_class)
+        d.set_value(w.is_, data.unit_type)
+        d.set_value(w.notes, data.notes)
+        d.set_value(w.desc, data.description)
+        
+    except Exception as e:
+        print(e)
+    
     keys = ["hp", "strength", "speed", "defense", "resistance", "luck", "magic", "charisma", "skill", "dexterity"]
     i = -1
     for bs in [w.hp, w.strength, w.speed, w.defense,
