@@ -41,6 +41,7 @@ def add_unit_editor(params={}):
     g.is_editing.type = "unit"
     LoadUnit("test_unit")
     c.UseLoadedData(w, "test_unit")
+    TimedEvent(g.autosave_time)
     
     
 def populate():
@@ -203,7 +204,7 @@ class Colors():
         for x in [w.strength, w.hp, w.speed, w.defense,
                   w.magic, w.resistance, w.luck, w.charisma,
                   w.skill, w.dexterity, w.padding, w.window_padding,
-                  w.item_spacing, w.corners_round,
+                  w.item_spacing, w.corners_round, w.autosave,
                   w.hp_base_rate, w.strength_base_rate,
                   w.speed_base_rate, w.defense_base_rate,
                   w.resistance_base_rate, w.magic_base_rate,
@@ -292,6 +293,14 @@ def add_menu():
             w.corners_round = d.add_slider_int(clamped=True,
                                             min_value=0,max_value=10,
                                             callback=c.corners_round, default_value=g.corners_round)
+            
+            w.autosave_label = d.add_text("Autosave interval (in seconds)")
+            set_font_size(w.autosave_label, -1)
+            set_item_style(w.autosave_label, 0, d.mvStyleVar_ItemSpacing)
+            
+            w.autosave = d.add_input_int(min_clamped=True,max_clamped=True,
+                                          min_value=60,max_value=1200,step=60,
+                                          callback=c.ChangeAutosave, default_value=g.autosave_time)
         
         w.info_left = d.add_spacer(width=0)
         with d.menu(label="",enabled=False) as w.status_bar:
@@ -340,6 +349,14 @@ def resize():
         d.configure_item(g.unit_editor_table, resizable=True)
     
 def ue_do():
+    try:
+        if g.now > g.timeout_event:
+            TimedEvent(g.autosave_time)
+            TimedInfoMessage("Auto-saved", w.status_bar, 2)
+            SaveUnit("test_unit")
+    except:
+        pass
+
     try:
         if g.now > g.timeout:
             d.configure_item(w.status_bar, label="")

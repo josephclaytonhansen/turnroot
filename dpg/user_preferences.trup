@@ -1,1 +1,1 @@
-{"color_theme": "turnroot", "corners_round": 4, "padding": 5, "item_spacing": 10, "window_padding": 18, "text_size": 19, "mono_text_size": 14, "font_family": "Assets/Fonts/FiraSans-Regular.ttf"}
+{"color_theme": "turnroot", "corners_round": 4, "padding": 5, "item_spacing": 10, "window_padding": 25, "text_size": 19, "mono_text_size": 14, "font_family": "Assets/Fonts/FiraSans-Regular.ttf", "autosave_time": 60}

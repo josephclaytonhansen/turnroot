@@ -14,6 +14,9 @@ def TimedInfoMessage(message, status_bar, time=4):
     g.timeout = datetime.now() + timedelta(seconds=time)
     d.configure_item(status_bar, label=message)
     set_item_color(status_bar, "node_selected_color", d.mvThemeCol_TextDisabled)
+
+def TimedEvent(time=5):
+    g.timeout_event = datetime.now() + timedelta(seconds=time)
     
 class PercentageBasedLayoutHelper:
     def __init__(self, parent=""):

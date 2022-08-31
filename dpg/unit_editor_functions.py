@@ -80,6 +80,11 @@ def padding(sender, app_data, user_data):
     d.bind_theme(set_colors(g.color_theme))
     SaveUserPrefs()
 
+def ChangeAutosave(sender, app_data, user_data):
+    g.autosave_time = app_data
+    d.bind_theme(set_colors(g.color_theme))
+    SaveUserPrefs()
+
 def item_spacing(sender, app_data, user_data):
     g.item_spacing = app_data
     d.bind_theme(set_colors(g.color_theme))
