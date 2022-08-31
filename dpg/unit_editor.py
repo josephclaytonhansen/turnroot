@@ -17,6 +17,9 @@ class Unit():
     is_generic = False
     is_avatar = False
     has_stats = True
+    base_stats = {}
+    growth_rates = {}
+    
 u = Unit()
 
 #you can only be editing one thing at a time, technically, so this works
@@ -136,15 +139,15 @@ def populate():
         
         d.add_spacer(height=g.item_spacing)
         
-        w.base_stats_buttons_row = Widgets()
-        BuildTable(w.base_stats_buttons_row,[50,50], h)
+        tmp = Widgets()
+        BuildTable(tmp,[50,50], h)
         
         w.compare_stats = d.add_button(label="Compare to other units", 
-                     parent=w.base_stats_buttons_row.columns[0],width=-1)
+                     parent=tmp.columns[0],width=-1)
         w.all_growth_stats =d.add_button(label="Stats + class stats", 
-                     parent=w.base_stats_buttons_row.columns[1],width=-1)
+                     parent=tmp.columns[1],width=-1)
         w.stat_variation =d.add_button(label="Stat variation", 
-                     parent=w.base_stats_buttons_row.columns[1],width=-1, show=False)
+                     parent=tmp.columns[1],width=-1, show=False)
 
         with d.tooltip(parent=w.compare_stats) as f:
             make_tooltip(g.tooltips.unit_editor, "Compare stats", f)
@@ -166,6 +169,15 @@ def populate():
         w.charisma_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Charisma",callback=c.ChangeBaseStatGrowth,format="%d%%")
         w.skill_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Skill",callback=c.ChangeBaseStatGrowth,format="%d%%")
         w.dexterity_base_rate = d.add_slider_int(clamped=True, min_value=0,max_value=100,label="Dexterity",callback=c.ChangeBaseStatGrowth,format="%d%%")
+        
+        d.add_spacer(height=g.item_spacing)
+        
+        tmp = Widgets()
+        BuildTable(tmp,[50,50], h)
+        
+        w.test_growth = d.add_button(label="Test stat growth", 
+                     parent=tmp.columns[0],width=-1, callback=c.TestGrowth)
+        
     
             
 class Colors():

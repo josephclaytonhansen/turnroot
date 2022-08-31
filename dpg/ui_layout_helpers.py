@@ -14,9 +14,7 @@ def TimedInfoMessage(message, status_bar, time=4):
     g.timeout = datetime.now() + timedelta(seconds=time)
     d.configure_item(status_bar, label=message)
     set_item_color(status_bar, "node_selected_color", d.mvThemeCol_TextDisabled)
-
     
-
 class PercentageBasedLayoutHelper:
     def __init__(self, parent=""):
         self.table_id = d.add_table(header_row=False, policy=d.mvTable_SizingStretchProp, parent=parent)
