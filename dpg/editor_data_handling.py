@@ -19,6 +19,7 @@ def LoadUserPrefs():
             g.text_size = g.prefs["text_size"]
             g.font_family = g.prefs["font_family"]
             g.autosave_time = g.prefs["autosave_time"]
+            g.fullscreen = g.prefs["fullscreen"]
 
 def SaveUserPrefs():
     with open("user_preferences.trup", "w") as f:
@@ -30,6 +31,7 @@ def SaveUserPrefs():
         g.prefs["mono_text_size"] = g.mono_text_size
         g.prefs["text_size"] = g.text_size
         g.prefs["autosave_time"] = g.autosave_time
+        g.prefs["fullscreen"] = g.fullscreen
         
         if g.font_family.startswith("Assets"):
             g.prefs["font_family"] = g.font_family

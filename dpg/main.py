@@ -13,12 +13,12 @@ d.bind_theme(set_colors(g.color_theme))
 
 init_viewport(True)
 d.maximize_viewport()
+if g.fullscreen:
+    d.toggle_viewport_fullscreen()
 
 set_fonts()   
 
 add_unit_editor()
-d.bind_item_theme("unit_editor_tabs", set_colors(g.color_theme))
-
 
 while d.is_dearpygui_running():
     d.render_dearpygui_frame()

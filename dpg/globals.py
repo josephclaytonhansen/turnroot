@@ -11,11 +11,12 @@ class globals:
     text_size = 18
     mono_text_size = 14
     debug = False
-    font_family = "Assets/Fonts/FiraCode-Regular.ttf"
+    font_family = "Assets/Fonts/FiraSans-Regular.ttf"
     autosave_time = 120
     current_height = 771
     now = 0
     timeout = 0
+    fullscreen=True
     prefs = {"color_theme":color_theme.tag, 
              "corners_round":corners_round,
              "padding":padding,
@@ -24,4 +25,5 @@ class globals:
              "text_size":text_size,
              "mono_text_size":mono_text_size,
              "font_family":font_family,
-             "autosave_time":autosave_time,}
+             "autosave_time":autosave_time,
+             "fullscreen":fullscreen}

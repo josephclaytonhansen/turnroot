@@ -9,6 +9,7 @@ from ui_colorthemes import colorthemes as themes
 from editor_save_load_unit import LoadUnit, SaveUnit
 from ui_set_global_colors import htr
 from ui_unit_editor_populates import *
+import sys
 
 g.active_window_widgets = w
 
@@ -104,8 +105,10 @@ def add_menu():
             d.add_menu_item(label="Save", callback=lambda:(SaveUnit(g.path),TimedInfoMessage("Unit saved", w.status_bar, 2)), tag="save")
             d.set_item_user_data("save", "user data")
             d.add_menu_item(label="Save As", callback=c.ShowFileDialog)
+            d.add_menu_item(label="Exit", callback=lambda:sys.exit())
             
         with d.menu(label="View"):
+            d.add_checkbox(label="Fullscreen", callback=fullscreen, tag="fullscreen", default_value=True)
             d.add_checkbox(label="Arrange Layout", callback=arrange, tag="arrange")
             d.add_checkbox(label="Re-size Columns", callback=resize, tag="resize", default_value=False)
             w.theme_menu_label = d.add_text("Color theme:")
@@ -190,6 +193,11 @@ def arrange():
         
 def ue_arrange():
     d.configure_item(g.unit_editor_table, header_row=True, reorderable=True, resizable=g.can_resize_columns)
+
+def fullscreen():
+    g.fullscreen = not g.fullscreen
+    d.toggle_viewport_fullscreen()
+    d.set_viewport_pos([0,0])
 
 def ue_no_arrange():
     d.configure_item(g.unit_editor_table, header_row=False, reorderable=True, resizable=g.can_resize_columns)
