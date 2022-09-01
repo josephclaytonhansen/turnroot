@@ -19,18 +19,22 @@ def unit_type_pipe(sender, app_data, user_data):
             g.is_editing.is_generic = True
             g.is_editing.is_avatar = False
             g.is_editing.has_stats = True
+            d.show_item("unit_editor_weapona")
         elif app_data == "Avatar/Player Character":
             g.is_editing.is_generic = False
             g.is_editing.is_avatar = True
             g.is_editing.has_stats = True
+            d.show_item("unit_editor_weapona")
         elif app_data == "NPC":
             g.is_editing.is_generic = True
             g.is_editing.is_avatar = True
             g.is_editing.has_stats = False
+            d.hide_item("unit_editor_weapona")
         else:
             g.is_editing.is_generic = False
             g.is_editing.is_avatar = False
             g.is_editing.has_stats = True
+            d.show_item("unit_editor_weapona")
         return True
     except:
         return False

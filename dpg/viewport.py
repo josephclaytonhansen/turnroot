@@ -31,7 +31,10 @@ def init_viewport(use_screeninfo=True):
     else:
         d.create_viewport(title='Turnroot 0.0.1', width=800, height=600, clear_color=(25, 25, 25), x_pos = 0, y_pos = 0)
         
-    with d.window(tag="unit_editor", label = "unit_editor", width = 600, height = 600, no_collapse=True, menubar=True) as unit_editor:
+    with d.window(tag="unit_editor", label = "unit_editor", width = 600, height = 600, no_collapse=True, menubar=True, no_scrollbar=True) as unit_editor:
+        with d.tab_bar(reorderable=True,tag="unit_editor_tabs"):
+            d.add_tab(label="Attributes/Stats", tag = "unit_editor_basic" )
+            d.add_tab(label="Affinities/Behavior", tag = "unit_editor_weapona")
         g.active_window = unit_editor
 
     # if g.debug:

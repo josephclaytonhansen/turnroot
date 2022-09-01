@@ -17,6 +17,7 @@ d.maximize_viewport()
 set_fonts()   
 
 add_unit_editor()
+d.bind_item_theme("unit_editor_tabs", set_colors(g.color_theme))
 
 
 while d.is_dearpygui_running():
