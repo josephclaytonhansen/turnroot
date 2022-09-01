@@ -157,6 +157,7 @@ def NewUnitFile():
         d.set_value(g.active_window_widgets.is_, g.is_editing.unit_type)
         d.set_value(g.active_window_widgets.notes, g.is_editing.notes)
         d.set_value(g.active_window_widgets.desc, g.is_editing.description)
+        ShowFileDialog("new", None, None)
         
 
 def SaveToFile():
