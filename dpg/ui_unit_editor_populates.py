@@ -165,3 +165,21 @@ def populateAffinities():
     right = d.add_child_window(parent=g.unit_editor_right)
     w.left = left
     w.right = right
+    
+    with d.collapsing_header(label="Default Affinities", parent=left, default_open=True) as h:
+        w.dwa_rows = {}
+        for weapon in g.uw.weapon_types:
+            label = d.add_text(default_value=weapon)
+            print(label)
+            set_item_style(label, 0, d.mvStyleVar_FramePadding)
+            tmp = d.add_radio_button(g.uw.affinity_levels, horizontal=True, callback=c.SetAffinity)
+            d.set_item_user_data(tmp, weapon)
+            w.dwa_rows[weapon] = tmp
+        d.add_spacer(height=g.item_spacing)
+            
+    
+    with d.collapsing_header(label="Behavior", parent=right, default_open=True) as h:
+        pass
+    
+    with d.collapsing_header(label="How does behavior work?", parent=right, default_open=False) as h:
+        pass

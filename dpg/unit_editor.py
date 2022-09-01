@@ -4,14 +4,15 @@ from globals import globals as g
 from game_options import game_options as go
 from ui_item_style_helpers import *
 import unit_editor_functions as c
-from ui_tooltips import make_tooltip
 from ui_colorthemes import colorthemes as themes
 from editor_save_load_unit import LoadUnit, SaveUnit
 from ui_set_global_colors import htr
 from ui_unit_editor_populates import *
 import sys
+from universal_weapon_types import universal_weapons as uw
 
 g.active_window_widgets = w
+g.uw = uw()
 
 class Unit():
     is_generic = False
@@ -25,6 +26,7 @@ class Unit():
     current_class = ""
     notes = ""
     description = ""
+    default_affinities = {}
 
 def add_unit_editor(params={}):
     buildUnitEditorAttributes()
@@ -108,7 +110,7 @@ def add_menu():
             d.add_menu_item(label="Exit", callback=lambda:sys.exit())
             
         with d.menu(label="View"):
-            d.add_checkbox(label="Fullscreen", callback=fullscreen, tag="fullscreen", default_value=True)
+            d.add_checkbox(label="Fullscreen", callback=c.fullscreen, tag="fullscreen", default_value=True)
             d.add_checkbox(label="Arrange Layout", callback=arrange, tag="arrange")
             d.add_checkbox(label="Re-size Columns", callback=resize, tag="resize", default_value=False)
             w.theme_menu_label = d.add_text("Color theme:")
@@ -193,11 +195,6 @@ def arrange():
         
 def ue_arrange():
     d.configure_item(g.unit_editor_table, header_row=True, reorderable=True, resizable=g.can_resize_columns)
-
-def fullscreen():
-    g.fullscreen = not g.fullscreen
-    d.toggle_viewport_fullscreen()
-    d.set_viewport_pos([0,0])
 
 def ue_no_arrange():
     d.configure_item(g.unit_editor_table, header_row=False, reorderable=True, resizable=g.can_resize_columns)

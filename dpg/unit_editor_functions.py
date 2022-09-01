@@ -63,6 +63,12 @@ def font_size(sender, app_data, user_data):
     SaveUserPrefs()
     TimedInfoMessage("Requires restart- no changes will be visible", g.active_window_widgets.status_bar)
 
+def fullscreen():
+    g.fullscreen = not g.fullscreen
+    d.toggle_viewport_fullscreen()
+    d.set_viewport_pos([0,0])
+    SaveUserPrefs()
+
 def font(sender, app_data, user_data):
     g.font_family = app_data
     set_fonts(label="Assets/Fonts/"+app_data+"-Regular.ttf")
@@ -114,6 +120,9 @@ def ChangeNotes(sender, app_data, user_data):
 
 def ChangeDescription(sender, app_data, user_data):
     g.is_editing.description = app_data
+
+def SetAffinity(sender, app_data, user_data):
+    g.is_editing.default_affinities[user_data] = app_data
 
 def ShowFileDialog(sender, app_data, user_data):
     if sender == "open":
@@ -319,6 +328,9 @@ def UseLoadedData(Widgets, path):
         d.set_value(w.pronouns, data.pronouns)
         d.set_value(w.current_class, data.current_class)
         d.set_value(w.is_, data.unit_type)
+        for row in w.dwa_rows.keys():
+            d.set_value(w.dwa_rows[row], data.default_affinities[row])
+            
         d.set_value(w.notes, data.notes)
         d.set_value(w.desc, data.description)
         

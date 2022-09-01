@@ -15,7 +15,8 @@ def LoadUnit(path):
                         "current_class":unit.current_class,
                         "unit_type":unit.unit_type,
                         "notes":unit.notes,
-                        "description":unit.description}
+                        "description":unit.description,
+                        "default_affinities":unit.default_affinities}
            json.dump(save_dict, f)
     else:
         with open(path, "r") as f:
@@ -29,6 +30,7 @@ def LoadUnit(path):
             unit.unit_type = save_dict["unit_type"]
             unit.notes = save_dict["notes"]
             unit.description = save_dict["description"]
+            unit.default_affinities = save_dict["default_affinities"]
 
 
             
@@ -44,6 +46,7 @@ def SaveUnit(path):
                     "current_class":unit.current_class,
                     "unit_type":unit.unit_type,
                     "notes":unit.notes,
-                    "description":unit.description}
+                    "description":unit.description,
+                    "default_affinities":unit.default_affinities}
         json.dump(save_dict, f)
 
