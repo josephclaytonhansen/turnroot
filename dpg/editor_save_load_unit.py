@@ -5,8 +5,8 @@ from globals import globals as g
 
 def LoadUnit(path):
     if g.is_editing.type == "unit": unit = g.is_editing 
-    if not exists(path+".truf"): 
-        with open(path+".truf", "w") as f:
+    if not exists(path): 
+        with open(path, "w") as f:
            
            save_dict = {"base_stats":unit.base_stats,
                         "growth_rates":unit.growth_rates,
@@ -18,7 +18,7 @@ def LoadUnit(path):
                         "description":unit.description}
            json.dump(save_dict, f)
     else:
-        with open(path+".truf", "r") as f:
+        with open(path, "r") as f:
             save_dict = json.load(f)
             unit.base_stats = save_dict["base_stats"]
             unit.growth_rates = save_dict["growth_rates"]
@@ -35,7 +35,7 @@ def LoadUnit(path):
 
 def SaveUnit(path):
     if g.is_editing.type == "unit": unit = g.is_editing 
-    with open(path+".truf", "w") as f:
+    with open(path, "w") as f:
         
         save_dict = {"base_stats":unit.base_stats,
                     "growth_rates":unit.growth_rates,

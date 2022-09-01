@@ -7,6 +7,7 @@ import unit_editor_functions as c
 from ui_tooltips import make_tooltip
 from ui_colorthemes import colorthemes as themes
 from editor_save_load_unit import LoadUnit, SaveUnit
+from ui_set_global_colors import htr
 
 class Widgets():
     pwm = 2.26666
@@ -39,9 +40,7 @@ def add_unit_editor(params={}):
     #you can only be editing one thing at a time, technically, so this works
     g.is_editing = u
     g.is_editing.type = "unit"
-    g.path = "test_unit"
-    LoadUnit(g.path)
-    c.UseLoadedData(w, g.path)
+    g.path = ""
     TimedEvent(g.autosave_time)
     
     
@@ -50,6 +49,10 @@ def populate():
     right = d.add_child_window(parent=g.unit_editor_right)
     w.left = left
     w.right = right
+
+    with d.file_dialog(directory_selector=False, show=False, width=600, height = 600, callback=c.GetUnitFile, tag="UnitSelect") as w.unit_select:
+        d.bind_item_theme(w.unit_select, set_colors(g.color_theme))
+        d.add_file_extension(".truf", color=htr("node_selected_color"), custom_text="[Turnroot Unit File]")
     
     #use this format (group, spacer, item) to center something of fixed width in a column
     #don't forget to add it to unit_editor_centers_in_column()
@@ -248,6 +251,7 @@ def add_menu():
     w.status_bar = None
     with d.menu_bar(parent="unit_editor"):
         with d.menu(label="File"):
+            d.add_menu_item(label="Open", tag="open", callback=lambda:d.show_item("UnitSelect"))
             d.add_menu_item(label="Save", callback=lambda:(SaveUnit(g.path),TimedInfoMessage("Unit saved", w.status_bar, 2)), tag="save")
             d.set_item_user_data("save", "user data")
             d.add_menu_item(label="Save As", callback=None)

@@ -111,6 +111,11 @@ def ChangeNotes(sender, app_data, user_data):
 def ChangeDescription(sender, app_data, user_data):
     g.is_editing.description = app_data
 
+def GetUnitFile(sender, app_data, user_data):
+    g.path = app_data["file_path_name"]
+    LoadUnit(g.path)
+    UseLoadedData(Widgets = g.active_window_widgets, path = g.path)
+
 class Widgets():
     use_class_stats = False
 
