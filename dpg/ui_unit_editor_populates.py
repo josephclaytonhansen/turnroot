@@ -170,16 +170,39 @@ def populateAffinities():
         w.dwa_rows = {}
         for weapon in g.uw.weapon_types:
             label = d.add_text(default_value=weapon)
-            print(label)
             set_item_style(label, 0, d.mvStyleVar_FramePadding)
             tmp = d.add_radio_button(g.uw.affinity_levels, horizontal=True, callback=c.SetAffinity)
             d.set_item_user_data(tmp, weapon)
             w.dwa_rows[weapon] = tmp
         d.add_spacer(height=g.item_spacing)
+        d.add_button(label="Change weapon types?",callback=c.ShowChangeWeaponTypes)
             
+    with d.collapsing_header(label="Basic Behavior", parent=right, default_open=True) as h:
+        w.behavior_sliders = [None, None, None]
+        labels = [["Soldier", "Lone Wolf"], ["Strategic", "Mindless"], ["Cautious", "Brash"]]
+        for x in [0,1,2]:
+            tmp = Widgets()
+            BuildTable(tmp,[10,80,10], h)
+            t = d.add_button(label=labels[x][0],parent=tmp.columns[0],callback=c.JumpToBehavior)
+            set_item_color(t, "window_background_color", d.mvThemeCol_Button)
+            d.set_item_user_data(t, [x, 0])
+            w.behavior_sliders[x] = d.add_slider_int(format="", clamped=True,parent=tmp.columns[1], width=-1)
+            t = d.add_button(label=labels[x][1],parent=tmp.columns[2],callback=c.JumpToBehavior)
+            set_item_color(t, "window_background_color", d.mvThemeCol_Button)
+            d.set_item_user_data(t, [x, 100])
+        
+        d.add_button(label="Show advanced behavior graph",callback=c.ShowAdvancedBehaviorGraph)
+        d.add_spacer(height=g.item_spacing, parent=h)
     
-    with d.collapsing_header(label="Behavior", parent=right, default_open=True) as h:
+    with d.collapsing_header(label="Advanced Behavior Graph", tag = "advanced_behavior_graph", parent=right, show=False) as h:
         pass
     
-    with d.collapsing_header(label="How does behavior work?", parent=right, default_open=False) as h:
+    with d.collapsing_header(label="Behavior Objectives", parent=right, default_open=False) as h:
+        pass
+    
+    with d.collapsing_header(label="Special Behavior", parent=right, default_open=False) as h:
+        pass
+    
+    with d.collapsing_header(label="How does behavior work?", parent=right, default_open=False) as hi:
+        set_item_color(hi, "list_background_color", d.mvThemeCol_Header)
         pass

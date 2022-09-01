@@ -75,3 +75,13 @@ Error from caller 'E:\GitHub\turnroot\deprec\src\UI_unit_editor_wnd.py' using fu
 1
 4114
 E:/TR-TEST
+
+
+
+==========Turnroot instance at 01/09/2022 16:14:51==========
+==========Windows-10-10.0.19044-SP0==========
+Error from caller 'E:\GitHub\turnroot\deprec\src\UI_unit_editor_wnd.py' using function 'createClass': ''NoneType' object has no attribute 'save_status''
+Error from caller 'E:\GitHub\turnroot\deprec\src\UI_unit_editor_wnd.py' using function 'colorizeSliderB': ''mainN' object has no attribute 'selected_unit''
+1
+4561
+E:/TR-TEST

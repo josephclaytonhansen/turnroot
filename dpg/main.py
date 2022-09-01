@@ -12,8 +12,9 @@ LoadUserPrefs()
 d.bind_theme(set_colors(g.color_theme))
 
 init_viewport(True)
-d.maximize_viewport()
+
 if g.fullscreen:
+    d.maximize_viewport()
     d.toggle_viewport_fullscreen()
 
 set_fonts()   

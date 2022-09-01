@@ -64,7 +64,9 @@ class Colors():
                   w.speed_base_rate, w.defense_base_rate,
                   w.resistance_base_rate, w.magic_base_rate,
                   w.luck_base_rate, w.charisma_base_rate,
-                  w.skill_base_rate, w.dexterity_base_rate]:
+                  w.skill_base_rate, w.dexterity_base_rate,
+                  w.behavior_sliders[0], w.behavior_sliders[1],
+                  w.behavior_sliders[2]]:
             set_item_colors(x, ["window_background_color", "window_background_color", "list_background_color"],
                         [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
 
@@ -110,7 +112,7 @@ def add_menu():
             d.add_menu_item(label="Exit", callback=lambda:sys.exit())
             
         with d.menu(label="View"):
-            d.add_checkbox(label="Fullscreen", callback=c.fullscreen, tag="fullscreen", default_value=True)
+            d.add_checkbox(label="Fullscreen", callback=c.fullscreen, tag="fullscreen", default_value=False)
             d.add_checkbox(label="Arrange Layout", callback=arrange, tag="arrange")
             d.add_checkbox(label="Re-size Columns", callback=resize, tag="resize", default_value=False)
             w.theme_menu_label = d.add_text("Color theme:")

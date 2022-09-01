@@ -142,6 +142,16 @@ def GetUnitFile(sender, app_data, user_data):
 def LoadFromFile():
     LoadUnit(g.path)
     UseLoadedData(Widgets = g.active_window_widgets, path = g.path)
+    
+def ShowChangeWeaponTypes():
+    pass
+
+def ShowAdvancedBehaviorGraph(sender, app_data, user_data):
+    d.show_item("advanced_behavior_graph")
+    d.hide_item(sender)
+
+def JumpToBehavior(sender, app_data, user_data):
+    d.set_value(g.active_window_widgets.behavior_sliders[user_data[0]], user_data[1])
 
 def NewUnitFile():
     g.path = ""
