@@ -31,7 +31,7 @@ def set_colors(palette):
     g.clear_color = darken(htr("window_background_color"),30)
     
     with d.theme() as global_theme:
-        for x in [d.mvFileDialog, d.mvAll]:
+        for x in [d.mvFileDialog, d.mvAll, d.mvChildWindow]:
             with d.theme_component(x):
                 for c in [
                     d.mvStyleVar_FrameRounding,

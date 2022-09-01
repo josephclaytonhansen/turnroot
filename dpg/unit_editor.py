@@ -50,7 +50,7 @@ def populate():
     w.left = left
     w.right = right
 
-    with d.file_dialog(directory_selector=False, show=False, width=600, height = 600, callback=c.GetUnitFile, tag="UnitSelect") as w.unit_select:
+    with d.file_dialog(directory_selector=False, show=False, width=700, modal=True, height = 600, callback=c.GetUnitFile, tag="UnitSelect") as w.unit_select:
         d.bind_item_theme(w.unit_select, set_colors(g.color_theme))
         d.add_file_extension(".truf", color=htr("node_selected_color"), custom_text="[Turnroot Unit File]")
     
@@ -251,10 +251,11 @@ def add_menu():
     w.status_bar = None
     with d.menu_bar(parent="unit_editor"):
         with d.menu(label="File"):
-            d.add_menu_item(label="Open", tag="open", callback=lambda:d.show_item("UnitSelect"))
+            d.add_menu_item(label="Open", tag="open", callback=c.ShowFileDialog)
+            d.add_menu_item(label="New", tag="new", callback=c.NewUnitFile)
             d.add_menu_item(label="Save", callback=lambda:(SaveUnit(g.path),TimedInfoMessage("Unit saved", w.status_bar, 2)), tag="save")
             d.set_item_user_data("save", "user data")
-            d.add_menu_item(label="Save As", callback=None)
+            d.add_menu_item(label="Save As", callback=c.ShowFileDialog)
             
         with d.menu(label="View"):
             d.add_checkbox(label="Arrange Layout", callback=arrange, tag="arrange")

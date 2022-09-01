@@ -111,10 +111,56 @@ def ChangeNotes(sender, app_data, user_data):
 def ChangeDescription(sender, app_data, user_data):
     g.is_editing.description = app_data
 
+def ShowFileDialog(sender, app_data, user_data):
+    if sender == "open":
+        d.show_item("UnitSelect")
+        d.set_item_user_data("UnitSelect", "open")
+    else:
+        d.show_item("UnitSelect")
+        d.set_item_user_data("UnitSelect", "save")
+
 def GetUnitFile(sender, app_data, user_data):
     g.path = app_data["file_path_name"]
+    if user_data == "open":
+        LoadFromFile()
+    else:
+        SaveToFile()
+
+def LoadFromFile():
     LoadUnit(g.path)
     UseLoadedData(Widgets = g.active_window_widgets, path = g.path)
+
+def NewUnitFile():
+    g.path = ""
+    g.is_editing.is_generic = False
+    g.is_editing.is_avatar = False
+    g.is_editing.has_stats = True
+    g.is_editing.base_stats = {}
+    g.is_editing.growth_rates = {}
+    g.is_editing.name = ""
+    g.is_editing.pronouns = ""
+    g.is_editing.unit_type = ""
+    g.is_editing.current_class = ""
+    g.is_editing.notes = ""
+    g.is_editing.description = ""
+    for bs in [g.active_window_widgets.hp, g.active_window_widgets.strength, g.active_window_widgets.speed, g.active_window_widgets.defense,
+                  g.active_window_widgets.resistance, g.active_window_widgets.luck, g.active_window_widgets.magic, g.active_window_widgets.charisma,
+                  g.active_window_widgets.skill, g.active_window_widgets.dexterity]:
+        d.set_value(bs, 0)
+    for gr in [g.active_window_widgets.hp_base_rate, g.active_window_widgets.strength_base_rate, g.active_window_widgets.speed_base_rate, g.active_window_widgets.defense_base_rate,
+                  g.active_window_widgets.resistance_base_rate, g.active_window_widgets.luck_base_rate, g.active_window_widgets.magic_base_rate, g.active_window_widgets.charisma_base_rate,
+                  g.active_window_widgets.skill_base_rate, g.active_window_widgets.dexterity_base_rate]: 
+        d.set_value(gr, 0)
+        d.set_value(g.active_window_widgets.name, g.is_editing.name)
+        d.set_value(g.active_window_widgets.pronouns, g.is_editing.pronouns)
+        d.set_value(g.active_window_widgets.current_class, g.is_editing.current_class)
+        d.set_value(g.active_window_widgets.is_, g.is_editing.unit_type)
+        d.set_value(g.active_window_widgets.notes, g.is_editing.notes)
+        d.set_value(g.active_window_widgets.desc, g.is_editing.description)
+        
+
+def SaveToFile():
+    SaveUnit(g.path)
 
 class Widgets():
     use_class_stats = False
