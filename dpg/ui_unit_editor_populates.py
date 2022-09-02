@@ -178,7 +178,11 @@ def populateAffinities():
             w.dwa_rows[weapon] = tmp
         d.add_spacer(height=g.item_spacing)
         d.add_button(label="Change weapon types?",callback=c.ShowChangeWeaponTypes)
-            
+    
+    with d.collapsing_header(label="How does behavior work?", parent=right, default_open=False) as hi:
+        set_item_color(hi, "list_background_color", d.mvThemeCol_Header)
+        pass
+    
     with d.collapsing_header(label="Basic Behavior", parent=right, default_open=True) as h:
         w.behavior_sliders = [None, None, None]
         labels = [["Soldier", "Lone Wolf"], ["Strategic", "Mindless"], ["Cautious", "Brash"]]
@@ -199,23 +203,12 @@ def populateAffinities():
         
         d.add_spacer(height=g.item_spacing, parent=h)
         tmp = Widgets()
-        BuildTable(tmp,[60,40], h)
+        BuildTable(tmp,[20,80], h)
         w.behavior_preset = d.add_combo(items=[behavior.pretty_name for behavior in behavioral_presets],
-                                        parent=tmp.columns[0],width=-1,default_value="Foot Soldier", callback=c.ChangeBehavioralPreset)
+                                        parent=tmp.columns[0],width=-1,default_value="", callback=c.ChangeBehavioralPreset)
         d.set_item_user_data(w.behavior_preset, behavioral_presets)
         
-        d.add_button(label="Show advanced behavior graph",callback=c.ShowAdvancedBehaviorGraph)
-        d.add_spacer(height=g.item_spacing, parent=h)
-    
-    with d.collapsing_header(label="Advanced Behavior Graph", tag = "advanced_behavior_graph", parent=right, show=False) as h:
-        pass
-    
-    with d.collapsing_header(label="Behavior Objectives", parent=right, default_open=False) as h:
-        pass
+        w.preset_description = d.add_text(default_value="--Preset Description--", parent = tmp.columns[1])
     
     with d.collapsing_header(label="Special Behavior", parent=right, default_open=False) as h:
-        pass
-    
-    with d.collapsing_header(label="How does behavior work?", parent=right, default_open=False) as hi:
-        set_item_color(hi, "list_background_color", d.mvThemeCol_Header)
         pass

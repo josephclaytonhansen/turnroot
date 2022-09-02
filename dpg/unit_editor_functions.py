@@ -147,15 +147,12 @@ def LoadFromFile():
 def ShowChangeWeaponTypes():
     pass
 
-def ShowAdvancedBehaviorGraph(sender, app_data, user_data):
-    d.show_item("advanced_behavior_graph")
-    d.hide_item(sender)
-
 def ChangeBehavioralPreset(sender, app_data, user_data):
     for preset in user_data:
         if preset.is_me(app_data):
             g.is_editing.behavior_preset = preset.tag
             g.is_editing.non_saving_behavior_preset = preset
+            d.set_value(g.active_window_widgets.preset_description, preset.desc)
 
 def ChangeBehaviorSlider(sender, app_data, user_data):
 
