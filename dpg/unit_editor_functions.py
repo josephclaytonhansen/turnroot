@@ -8,6 +8,7 @@ from ui_item_style_helpers import *
 from ui_layout_helpers import TimedInfoMessage, BuildTable
 from editor_save_load_unit import SaveUnit, LoadUnit
 import random
+from universal_behavior_presets import behavioral_presets
 
 def basic(sender, app_data, user_data):
     print(sender, app_data, user_data)
@@ -149,6 +150,16 @@ def ShowChangeWeaponTypes():
 def ShowAdvancedBehaviorGraph(sender, app_data, user_data):
     d.show_item("advanced_behavior_graph")
     d.hide_item(sender)
+
+def ChangeBehavioralPreset(sender, app_data, user_data):
+    for preset in user_data:
+        if preset.is_me(app_data):
+            g.is_editing.behavior_preset = preset.tag
+            g.is_editing.non_saving_behavior_preset = preset
+
+def ChangeBehaviorSlider(sender, app_data, user_data):
+
+    g.is_editing.behavorial_sliders[user_data] = app_data
 
 def JumpToBehavior(sender, app_data, user_data):
     d.set_value(g.active_window_widgets.behavior_sliders[user_data[0]], user_data[1])
@@ -333,19 +344,32 @@ def UseLoadedData(Widgets, path):
     
     w = Widgets
     
+    
     try:
         d.set_value(w.name, data.name)
         d.set_value(w.pronouns, data.pronouns)
         d.set_value(w.current_class, data.current_class)
         d.set_value(w.is_, data.unit_type)
-        for row in w.dwa_rows.keys():
-            d.set_value(w.dwa_rows[row], data.default_affinities[row])
-            
-        d.set_value(w.notes, data.notes)
-        d.set_value(w.desc, data.description)
-        
     except Exception as e:
         print(e)
+    try:
+        for preset in behavioral_presets:
+            if preset.is_me(data.behavior_preset):
+                d.set_value(w.behavior_preset, preset.pretty_name)
+                data.non_saving_behavior_preset = preset
+    except Exception as e:
+        print(e)
+
+    try:
+        for x in [0,1,2]:
+            d.set_value(w.behavior_sliders[x], data.behavorial_sliders[x])
+        
+        d.set_value(w.notes, data.notes)
+        d.set_value(w.desc, data.description)
+    except Exception as e:
+        print(e)
+        
+
     
     keys = ["hp", "strength", "speed", "defense", "resistance", "luck", "magic", "charisma", "skill", "dexterity"]
     i = -1

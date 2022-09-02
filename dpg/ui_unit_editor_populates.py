@@ -1,3 +1,4 @@
+from xml.dom.pulldom import default_bufsize
 import dearpygui.dearpygui as d
 from ui_layout_helpers import *
 from globals import globals as g
@@ -6,6 +7,7 @@ from ui_item_style_helpers import *
 import unit_editor_functions as c
 from ui_tooltips import make_tooltip
 from ui_set_global_colors import htr
+from universal_behavior_presets import behavioral_presets
 
 class Widgets():
     pwm = 2.26666
@@ -183,13 +185,24 @@ def populateAffinities():
         for x in [0,1,2]:
             tmp = Widgets()
             BuildTable(tmp,[10,80,10], h)
+            
             t = d.add_button(label=labels[x][0],parent=tmp.columns[0],callback=c.JumpToBehavior)
             set_item_color(t, "window_background_color", d.mvThemeCol_Button)
             d.set_item_user_data(t, [x, 0])
-            w.behavior_sliders[x] = d.add_slider_int(format="", clamped=True,parent=tmp.columns[1], width=-1)
+            
+            w.behavior_sliders[x] = d.add_slider_int(format="", clamped=True,parent=tmp.columns[1], width=-1, callback=c.ChangeBehaviorSlider)
+            d.set_item_user_data(w.behavior_sliders[x], x)
+            
             t = d.add_button(label=labels[x][1],parent=tmp.columns[2],callback=c.JumpToBehavior)
             set_item_color(t, "window_background_color", d.mvThemeCol_Button)
             d.set_item_user_data(t, [x, 100])
+        
+        d.add_spacer(height=g.item_spacing, parent=h)
+        tmp = Widgets()
+        BuildTable(tmp,[60,40], h)
+        w.behavior_preset = d.add_combo(items=[behavior.pretty_name for behavior in behavioral_presets],
+                                        parent=tmp.columns[0],width=-1,default_value="Foot Soldier", callback=c.ChangeBehavioralPreset)
+        d.set_item_user_data(w.behavior_preset, behavioral_presets)
         
         d.add_button(label="Show advanced behavior graph",callback=c.ShowAdvancedBehaviorGraph)
         d.add_spacer(height=g.item_spacing, parent=h)

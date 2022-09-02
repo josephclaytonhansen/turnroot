@@ -26,6 +26,9 @@ class Unit():
     current_class = ""
     notes = ""
     description = ""
+    behavior_preset = ""
+    non_saving_behavior_preset = None
+    behavorial_sliders = [0,0,0]
     default_affinities = {}
 
 def add_unit_editor(params={}):
@@ -50,7 +53,7 @@ class Colors():
     def set(self):
         set_item_color(w.font_size, "node_grid_background_color", d.mvThemeCol_FrameBg)
         
-        for x in [w.current_class, w.pronouns, w.theme_menu, w.font]:
+        for x in [w.current_class, w.pronouns, w.theme_menu, w.font, w.behavior_preset]:
             set_item_colors(x, ["window_background_color", "button_alt_color"],
                         [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
             
