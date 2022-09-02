@@ -27,11 +27,13 @@ def init_viewport(use_screeninfo=True):
                 screen_width = m.width
                 screen_height = m.height
 
-        d.create_viewport(title='Turnroot 0.0.1', width=int(screen_width*0.75), height=int(screen_height*0.75), min_width=900,clear_color=g.clear_color, x_pos = int(screen_width * .125), y_pos = int(screen_height * .125))
+        d.create_viewport(title='Turnroot 0.0.1', width=int(screen_width*0.75),
+                          height=int(screen_height*0.84), min_width=900,clear_color=g.clear_color,
+                          x_pos = int(screen_width * .125), y_pos = int(screen_height * .08))
     else:
         d.create_viewport(title='Turnroot 0.0.1', width=800, height=600, clear_color=(25, 25, 25), x_pos = 0, y_pos = 0)
         
-    with d.window(tag="unit_editor", label = "unit_editor", width = 750, height = 600, no_collapse=True, menubar=True, no_scrollbar=True) as unit_editor:
+    with d.window(tag="unit_editor", label = "unit_editor", width = 750, height = 800, no_collapse=True, menubar=True, no_scrollbar=True) as unit_editor:
         with d.tab_bar(reorderable=True,tag="unit_editor_tabs"):
             d.add_tab(label="Attributes/Stats", tag = "unit_editor_basic" )
             d.add_tab(label="Affinities/Behavior", tag = "unit_editor_weapona")

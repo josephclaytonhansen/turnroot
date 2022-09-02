@@ -21,11 +21,19 @@ def unit_type_pipe(sender, app_data, user_data):
             g.is_editing.is_avatar = False
             g.is_editing.has_stats = True
             d.show_item("unit_editor_weapona")
+            d.show_item("behavior_window")
+            d.show_item("special_behavior_window")
+            d.show_item("behavior_e_window")
+            d.configure_item("unit_editor_weapona", label="Affinities/Behavior")
         elif app_data == "Avatar/Player Character":
             g.is_editing.is_generic = False
             g.is_editing.is_avatar = True
             g.is_editing.has_stats = True
             d.show_item("unit_editor_weapona")
+            d.hide_item("behavior_window")
+            d.hide_item("special_behavior_window")
+            d.hide_item("behavior_e_window")
+            d.configure_item("unit_editor_weapona", label="Affinities")
         elif app_data == "NPC":
             g.is_editing.is_generic = True
             g.is_editing.is_avatar = True
@@ -36,6 +44,10 @@ def unit_type_pipe(sender, app_data, user_data):
             g.is_editing.is_avatar = False
             g.is_editing.has_stats = True
             d.show_item("unit_editor_weapona")
+            d.show_item("behavior_window")
+            d.show_item("special_behavior_window")
+            d.show_item("behavior_e_window")
+            d.configure_item("unit_editor_weapona", label="Affinities/Behavior")
         return True
     except:
         return False

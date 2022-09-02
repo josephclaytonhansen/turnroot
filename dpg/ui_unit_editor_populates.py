@@ -179,11 +179,11 @@ def populateAffinities():
         d.add_spacer(height=g.item_spacing)
         d.add_button(label="Change weapon types?",callback=c.ShowChangeWeaponTypes)
     
-    with d.collapsing_header(label="How does behavior work?", parent=right, default_open=False) as hi:
+    with d.collapsing_header(label="How does behavior work?", parent=right, default_open=False,  tag = "behavior_e_window") as hi:
         set_item_color(hi, "list_background_color", d.mvThemeCol_Header)
         pass
     
-    with d.collapsing_header(label="Basic Behavior", parent=right, default_open=True) as h:
+    with d.collapsing_header(label="Basic Behavior", parent=right, default_open=True,  tag = "behavior_window") as h:
         w.behavior_sliders = [None, None, None]
         labels = [["Soldier", "Lone Wolf"], ["Strategic", "Mindless"], ["Cautious", "Brash"]]
         for x in [0,1,2]:
@@ -210,5 +210,5 @@ def populateAffinities():
         
         w.preset_description = d.add_text(default_value="--Preset Description--", parent = tmp.columns[1])
     
-    with d.collapsing_header(label="Special Behavior", parent=right, default_open=False) as h:
+    with d.collapsing_header(label="Special Behavior", parent=right, default_open=False,  tag = "special_behavior_window") as h:
         pass
