@@ -103,3 +103,26 @@ def BuildTable(cont, widths, parent):
                             cont.cells.append(cell)
         
         cont.columns = cont.cells
+
+
+def buildSkillEditor():
+    g.unit_editor_rows = []
+    g.unit_editor_cells = []
+
+    with d.table(reorderable=False,header_row=False, resizable=False, policy=d.mvTable_SizingStretchProp,
+                borders_outerH=g.debug, borders_innerV=g.debug, borders_innerH=g.debug, borders_outerV=g.debug, parent = "skill_editor") as g.unit_editor_table:
+
+        d.add_table_column(init_width_or_weight=.80-(g.item_spacing/170))
+        d.add_table_column(init_width_or_weight=.0+((g.item_spacing/170)/2))
+        d.add_table_column(init_width_or_weight=.20-(g.item_spacing/170))
+        
+        for i in range(0, 1, 2):
+            with d.table_row(height=6) as f:
+                g.unit_editor_rows.append(f)
+                for j in range(0, 3):
+                    with d.table_cell() as cell:
+                        g.unit_editor_cells.append(cell)
+        
+        g.unit_editor_left = g.unit_editor_cells[0]
+        g.unit_editor_gutter = g.unit_editor_cells[1]
+        g.unit_editor_right = g.unit_editor_cells[2]

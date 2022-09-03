@@ -44,6 +44,7 @@ def add_unit_editor(params={}):
     u = Unit()
     #you can only be editing one thing at a time, technically, so this works
     g.is_editing = u
+    g.unit_editor_unit = u
     g.is_editing.type = "unit"
     g.path = ""
     TimedEvent(g.autosave_time)
@@ -215,27 +216,30 @@ def resize():
         d.configure_item(g.unit_editor_table, resizable=True)
     
 def ue_do():
-    try:
-        if g.now > g.timeout_event:
-            TimedEvent(g.autosave_time)
-            TimedInfoMessage("Auto-saved", w.status_bar, 2)
-            SaveUnit(g.path)
-    except:
-        pass
+    if g.is_editing.type == "unit":
+        try:
+            if g.now > g.timeout_event:
+                TimedEvent(g.autosave_time)
+                TimedInfoMessage("Auto-saved", w.status_bar, 2)
+                SaveUnit(g.path)
+        except:
+            pass
 
-    try:
-        if g.now > g.timeout:
+        try:
+            if g.now > g.timeout:
+                d.configure_item(w.status_bar, label="")
+        except:
             d.configure_item(w.status_bar, label="")
-    except:
-        d.configure_item(w.status_bar, label="")
-    if g.is_editing.is_generic == True:
-        c.show_stat_variation(w)
+        if g.is_editing.is_generic == True:
+            c.show_stat_variation(w)
+        else:
+            c.hide_stat_variation(w)
+        if g.is_editing.is_avatar == True:
+            pass
+        if g.is_editing.has_stats == True:
+            c.show_stats(w)
+        else:
+            c.hide_stats(w)
     else:
-        c.hide_stat_variation(w)
-    if g.is_editing.is_avatar == True:
         pass
-    if g.is_editing.has_stats == True:
-        c.show_stats(w)
-    else:
-        c.hide_stats(w)
-    
+        

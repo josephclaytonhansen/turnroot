@@ -3,6 +3,7 @@ from globals import globals as g
 from ui_layout_helpers import BuildTable
 from ui_item_style_helpers import *
 
+
 class Widgets():
     pass
 
@@ -26,8 +27,19 @@ def buildEditorMenu(parent):
         set_item_colors(t, [x, "black"],
                         [d.mvThemeCol_Button, d.mvThemeCol_Text])
     
-    
+
 def SwitchEditors(sender, app_data, user_data):
     if user_data == "Skill Editor":
         d.set_primary_window("skill_editor", True)
         g.active_window = "skill_editor"
+        d.hide_item("unit_editor")
+        d.show_item("skill_editor")
+        g.is_editing = g.skill_editor_skill
+        g.is_editing.type = "skill"
+    elif user_data == "Unit Editor":
+        d.set_primary_window("unit_editor", True)
+        g.active_window = "unit_editor"
+        d.hide_item("skill_editor")
+        d.show_item("unit_editor")
+        g.is_editing = g.unit_editor_unit
+        g.is_editing.type = "unit"
