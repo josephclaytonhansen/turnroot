@@ -114,3 +114,22 @@ def add_menu():
         w_skill.info_left = d.add_spacer(width=0)
         with d.menu(label="",enabled=False) as w_skill.status_bar:
             pass
+
+def se_do():
+    if g.is_editing.type == "skill":
+        try:
+            if g.now > g.timeout_event:
+                TimedEvent(g.autosave_time)
+                TimedInfoMessage("Auto-saved", w_skill.status_bar, 2)
+                SaveSkill(g.path)
+        except:
+            pass
+
+        try:
+            if g.now > g.timeout:
+                d.configure_item(w_skill.status_bar, label="")
+        except:
+            d.configure_item(w_skill.status_bar, label="")
+        
+    else:
+        pass
