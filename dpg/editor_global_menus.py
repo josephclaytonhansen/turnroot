@@ -1,6 +1,6 @@
 import dearpygui.dearpygui as d
 from globals import globals as g
-from ui_layout_helpers import BuildTable
+from ui_layout_helpers import BuildTable, TimedInfoMessage
 from ui_item_style_helpers import *
 
 
@@ -45,4 +45,5 @@ def SwitchEditors(sender, app_data, user_data):
         g.is_editing = g.unit_editor_unit
         g.is_editing.type = "unit"
         g.active_window_widgets = g.window_widgets_unit
-    print(g.is_editing, g.is_editing.type, g.active_window_widgets)
+    if g.debug:
+        TimedInfoMessage(str(g.is_editing)+str(g.is_editing.type)+str(g.active_window_widgets), g.active_window_widgets.status_bar, 2)
