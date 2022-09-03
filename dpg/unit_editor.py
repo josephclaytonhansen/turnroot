@@ -1,15 +1,14 @@
 import dearpygui.dearpygui as d
 from ui_layout_helpers import *
 from globals import globals as g
-from game_options import game_options as go
 from ui_item_style_helpers import *
 import unit_editor_functions as c
 from ui_colorthemes import colorthemes as themes
-from editor_save_load_unit import LoadUnit, SaveUnit
-from ui_set_global_colors import htr
+from editor_save_load_unit import SaveUnit
 from ui_unit_editor_populates import *
 import sys
 from universal_weapon_types import universal_weapons as uw
+from editor_global_menus import buildEditorMenu
 
 g.active_window_widgets = w
 g.uw = uw()
@@ -106,6 +105,9 @@ def make_functions():
 def add_menu():
     w.status_bar = None
     with d.menu_bar(parent="unit_editor"):
+        with d.menu(label="Editor") as e:
+            buildEditorMenu(e)
+            
         with d.menu(label="File"):
             d.add_menu_item(label="Open", tag="open", callback=c.ShowFileDialog)
             d.add_menu_item(label="New", tag="new", callback=c.NewUnitFile)
