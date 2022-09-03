@@ -36,6 +36,7 @@ def SwitchEditors(sender, app_data, user_data):
         d.show_item("skill_editor")
         g.is_editing = g.skill_editor_skill
         g.is_editing.type = "skill"
+        g.active_window_widgets = g.window_widgets_skill
     elif user_data == "Unit Editor":
         d.set_primary_window("unit_editor", True)
         g.active_window = "unit_editor"
@@ -43,3 +44,5 @@ def SwitchEditors(sender, app_data, user_data):
         d.show_item("unit_editor")
         g.is_editing = g.unit_editor_unit
         g.is_editing.type = "unit"
+        g.active_window_widgets = g.window_widgets_unit
+    print(g.is_editing, g.is_editing.type, g.active_window_widgets)

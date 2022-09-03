@@ -10,7 +10,7 @@ import sys
 from universal_weapon_types import universal_weapons as uw
 from editor_global_menus import buildEditorMenu
 
-g.active_window_widgets = w
+g.window_widgets_skill = w_skill
 g.uw = uw()
 
 class Skill():
@@ -18,19 +18,19 @@ class Skill():
 
 class Colors():
     def set(self):
-        set_item_color(w.font_size, "node_grid_background_color", d.mvThemeCol_FrameBg)
+        set_item_color(w_skill.font_size, "node_grid_background_color", d.mvThemeCol_FrameBg)
         
-        for x in [w.theme_menu, w.font]:
+        for x in [w_skill.theme_menu, w_skill.font]:
             set_item_colors(x, ["window_background_color", "button_alt_color"],
                         [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
             
         
-        for x in [w.padding, w.window_padding,
-                  w.item_spacing, w.corners_round, w.autosave]:
+        for x in [w_skill.padding, w_skill.window_padding,
+                  w_skill.item_spacing, w_skill.corners_round, w_skill.autosave]:
             set_item_colors(x, ["window_background_color", "window_background_color", "list_background_color"],
                         [d.mvThemeCol_FrameBg, d.mvThemeCol_FrameBgHovered, d.mvThemeCol_FrameBgActive])
 
-w.colors = Colors()
+w_skill.colors = Colors()
 
 def add_skill_editor(params={}):
     buildSkillEditor()
@@ -38,7 +38,7 @@ def add_skill_editor(params={}):
     add_menu()
     # unit_editor_centers_in_column()
     # make_functions()
-    w.colors.set()
+    w_skill.colors.set()
     g.editors.append("skill_editor")
     #remove this in favor of save/load, temporarily for dev
     s = Skill()
@@ -48,7 +48,7 @@ def add_skill_editor(params={}):
     TimedEvent(g.autosave_time)
 
 def add_menu():
-    w.status_bar = None
+    w_skill.status_bar = None
     with d.menu_bar(parent="skill_editor"):
         with d.menu(label="Editor") as e:
             buildEditorMenu(e)
@@ -56,61 +56,61 @@ def add_menu():
         with d.menu(label="File"):
             d.add_menu_item(label="Open", tag="skillopen", callback=c_skill.ShowFileDialog)
             d.add_menu_item(label="New", tag="skillnew", callback=c_skill.NewSkillFile)
-            d.add_menu_item(label="Save", callback=lambda:(SaveSkill(g.path),TimedInfoMessage("Skill saved", w.status_bar, 2)), tag="skillsave")
+            d.add_menu_item(label="Save", callback=lambda:(SaveSkill(g.path),TimedInfoMessage("Skill saved", w_skill.status_bar, 2)), tag="skillsave")
             d.set_item_user_data("skillsave", "user data")
             d.add_menu_item(label="Save As", callback=c_skill.ShowFileDialog)
             d.add_menu_item(label="Exit", callback=lambda:sys.exit())
             
         with d.menu(label="View"):
             d.add_checkbox(label="Fullscreen", callback=c_skill.fullscreen, tag="skillfullscreen", default_value=False)
-            w.theme_menu_label = d.add_text("Color theme:")
-            set_item_style(w.theme_menu_label, 0, d.mvStyleVar_ItemSpacing)
-            set_font_size(w.theme_menu_label, -1)
-            w.theme_menu = d.add_combo(default_value=g.color_theme.tag,
+            w_skill.theme_menu_label = d.add_text("Color theme:")
+            set_item_style(w_skill.theme_menu_label, 0, d.mvStyleVar_ItemSpacing)
+            set_font_size(w_skill.theme_menu_label, -1)
+            w_skill.theme_menu = d.add_combo(default_value=g.color_theme.tag,
                                        items=[themes[t].tag for t in themes],
                                        callback=c_skill.color_theme)
-            w.font_size_label = d.add_text("Font size/Font (requires restart)")
-            set_font_size(w.font_size_label, -1)
-            set_item_style(w.font_size_label, 0, d.mvStyleVar_ItemSpacing)
+            w_skill.font_size_label = d.add_text("Font size/Font (requires restart)")
+            set_font_size(w_skill.font_size_label, -1)
+            set_item_style(w_skill.font_size_label, 0, d.mvStyleVar_ItemSpacing)
             
             with d.group(horizontal=True):
-                w.font_size = d.add_input_int(min_clamped=True,max_clamped=True,
+                w_skill.font_size = d.add_input_int(min_clamped=True,max_clamped=True,
                                             min_value=4,max_value=36, step =0, width = 30,
                                             callback=c_skill.font_size, default_value=g.text_size)
-                w.font = d.add_combo(items=["FiraCode","FiraSans","Montserrat","NotoSans"],callback=c_skill.font,width=-1,
+                w_skill.font = d.add_combo(items=["FiraCode","FiraSans","Montserrat","NotoSans"],callback=c_skill.font,width=-1,
                                      default_value=g.font_family.split("/")[2].split("-")[0])
             
-            w.padding_label = d.add_text("Padding/Item Spacing/Window Padding")
-            set_font_size(w.padding_label, -1)
-            set_item_style(w.padding_label, 0, d.mvStyleVar_ItemSpacing)
+            w_skill.padding_label = d.add_text("Padding/Item Spacing/Window Padding")
+            set_font_size(w_skill.padding_label, -1)
+            set_item_style(w_skill.padding_label, 0, d.mvStyleVar_ItemSpacing)
             
             with d.group(horizontal=True,width=80):
-                w.padding = d.add_input_int(min_clamped=True,max_clamped=True,
+                w_skill.padding = d.add_input_int(min_clamped=True,max_clamped=True,
                                           min_value=0,max_value=30,step=0,
                                           callback=c_skill.padding, default_value=g.padding)
-                w.item_spacing = d.add_input_int(min_clamped=True,max_clamped=True,
+                w_skill.item_spacing = d.add_input_int(min_clamped=True,max_clamped=True,
                                           min_value=0,max_value=30,step=0,
                                           callback=c_skill.item_spacing, default_value=g.item_spacing)
-                w.window_padding = d.add_input_int(min_clamped=True,max_clamped=True,
+                w_skill.window_padding = d.add_input_int(min_clamped=True,max_clamped=True,
                                           min_value=0,max_value=30,step=0,
                                           callback=c_skill.window_padding, default_value=g.window_padding)
             
-            w.corners_round_label = d.add_text("Corners rounded amount")
-            set_font_size(w.corners_round_label, -1)
-            set_item_style(w.corners_round_label, 0, d.mvStyleVar_ItemSpacing)
+            w_skill.corners_round_label = d.add_text("Corners rounded amount")
+            set_font_size(w_skill.corners_round_label, -1)
+            set_item_style(w_skill.corners_round_label, 0, d.mvStyleVar_ItemSpacing)
             
-            w.corners_round = d.add_slider_int(clamped=True,
+            w_skill.corners_round = d.add_slider_int(clamped=True,
                                             min_value=0,max_value=10,
                                             callback=c_skill.corners_round, default_value=g.corners_round)
             
-            w.autosave_label = d.add_text("Autosave interval (in seconds)")
-            set_font_size(w.autosave_label, -1)
-            set_item_style(w.autosave_label, 0, d.mvStyleVar_ItemSpacing)
+            w_skill.autosave_label = d.add_text("Autosave interval (in seconds)")
+            set_font_size(w_skill.autosave_label, -1)
+            set_item_style(w_skill.autosave_label, 0, d.mvStyleVar_ItemSpacing)
             
-            w.autosave = d.add_input_int(min_clamped=True,max_clamped=True,
+            w_skill.autosave = d.add_input_int(min_clamped=True,max_clamped=True,
                                           min_value=15,max_value=600,step=15,
                                           callback=c_skill.ChangeAutosave, default_value=g.autosave_time)
         
-        w.info_left = d.add_spacer(width=0)
-        with d.menu(label="",enabled=False) as w.status_bar:
+        w_skill.info_left = d.add_spacer(width=0)
+        with d.menu(label="",enabled=False) as w_skill.status_bar:
             pass

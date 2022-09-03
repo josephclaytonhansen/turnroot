@@ -8,12 +8,12 @@ from ui_tooltips import make_tooltip
 from ui_set_global_colors import htr
 from universal_behavior_presets import behavioral_presets
 
-class Widgets():
+class WidgetsSkill():
     pwm = 2.26666
-w = Widgets()
+w_skill = WidgetsSkill()
 
 def populateSkillEditor():
     left = g.unit_editor_left
     right = d.add_child_window(parent=g.unit_editor_right)
-    w.left = left
-    w.right = right
+    w_skill.left = left
+    w_skill.right = right

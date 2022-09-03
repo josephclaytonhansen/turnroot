@@ -11,6 +11,8 @@ from universal_weapon_types import universal_weapons as uw
 from editor_global_menus import buildEditorMenu
 
 g.active_window_widgets = w
+g.window_widgets_unit = w
+g.active_window_widgets = g.window_widgets_unit
 g.uw = uw()
 
 class Unit():
