@@ -76,7 +76,7 @@ def add_menu():
             set_font_size(w_skill.theme_menu_label, -1)
             w_skill.theme_menu = d.add_combo(default_value=g.color_theme.tag,
                                        items=[themes[t].tag for t in themes],
-                                       callback=c_skill.color_theme)
+                                       callback=c_skill.color_theme)          
             w_skill.font_size_label = d.add_text("Font size/Font (requires restart)")
             set_font_size(w_skill.font_size_label, -1)
             set_item_style(w_skill.font_size_label, 0, d.mvStyleVar_ItemSpacing)

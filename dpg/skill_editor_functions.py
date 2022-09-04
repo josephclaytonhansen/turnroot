@@ -25,7 +25,7 @@ def font_size(sender, app_data, user_data):
     set_fonts()
     SaveUserPrefs()
     TimedInfoMessage("Requires restart- no changes will be visible", g.active_window_widgets.status_bar)
-
+    
 def fullscreen():
     g.fullscreen = not g.fullscreen
     d.toggle_viewport_fullscreen()
@@ -44,7 +44,6 @@ def window_padding(sender, app_data, user_data):
     SaveUserPrefs()
 
 def corners_round(sender, app_data, user_data):
-    print(g)
     g.corners_round = app_data
     d.bind_theme(set_colors(g.color_theme))
     SaveUserPrefs()
