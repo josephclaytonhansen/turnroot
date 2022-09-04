@@ -51,6 +51,8 @@ def add_skill_editor(params={}):
     #remove this in favor of save/load, temporarily for dev
     s = Skill()
     g.skill_editor_skill = s
+    g.skill_editor_skill_connections = []
+    g.skill_editor_skill_positions = {}
     #you can only be editing one thing at a time, technically, so this works
     g.path = ""
     TimedEvent(g.autosave_time)
