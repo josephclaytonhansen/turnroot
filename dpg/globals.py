@@ -3,7 +3,7 @@ import pathlib
 
 class globals:
     editors = []
-    color_theme = ui_colorthemes.turnroot()
+    color_theme = ui_colorthemes.charcoal_blue()
     corners_round = 5
     padding = 5
     item_spacing = 10

@@ -127,25 +127,25 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
             i += 1
             with d.node_attribute(attribute_type=d.mvNode_Attr_Output, shape=d.mvNode_PinShape_CircleFilled) as tmp:
                 if socket.startswith( "float"):
-                    t= d.add_text(default_value=outputs[socket], indent=100)
+                    t= d.add_text(default_value=outputs[socket], indent=120)
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_font_size(t,-1)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
 
                 elif socket .startswith( "int"):
-                    t=d.add_text(default_value=outputs[socket], indent=100)
+                    t=d.add_text(default_value=outputs[socket], indent=120)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_font_size(t,-1)
                 elif socket .startswith( "bool"):
-                    t=d.add_text(default_value=outputs[socket], indent=100)
+                    t=d.add_text(default_value=outputs[socket], indent=120)
                     set_node_colors(tmp, ["node_socket_boolean_color", "node_socket_boolean_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
                 elif socket .startswith( "trigger"):
-                    t=d.add_text(default_value=outputs[socket], indent=100)
+                    t=d.add_text(default_value=outputs[socket], indent=120)
                     set_node_colors(tmp, ["node_socket_trigger_color", "node_socket_trigger_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
@@ -181,14 +181,14 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
             with d.node_attribute(attribute_type=d.mvNode_Attr_Static) as tmp:
                 if socket .startswith( "float"):
                     t= d.add_input_float(label=static[socket],step=0,
-                                            width=80)
+                                            width=40)
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
                 if socket .startswith( "combo"):
                     t= d.add_combo(label=static[socket],items=combo_items[socket+static[socket]],
-                                            width=80)
+                                            width=100)
                     set_item_colors(t, ["button_alt_color", "window_background_color"],
                         [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
@@ -197,7 +197,7 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
                     set_font_size(t,-1)
                 elif socket .startswith( "int"):
                     t=d.add_input_int(label=static[socket],step=0,
-                                            width=80)
+                                            width=40)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
