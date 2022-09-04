@@ -32,12 +32,16 @@ class Colors():
 
 w_skill.colors = Colors()
 
+
+def make_functions():
+       d.set_item_user_data(w_skill.theme_menu, w_skill)
+
 def add_skill_editor(params={}):
     buildSkillEditor()
     populateSkillEditor()
     add_menu()
     # unit_editor_centers_in_column()
-    # make_functions()
+    make_functions()
     w_skill.colors.set()
     g.editors.append("skill_editor")
     #remove this in favor of save/load, temporarily for dev

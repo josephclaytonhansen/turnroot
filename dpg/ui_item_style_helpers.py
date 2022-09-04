@@ -8,6 +8,12 @@ def set_item_color(item, color, what = d.mvThemeCol_Text):
             d.add_theme_color(what, htr(color), category=d.mvThemeCat_Core)
     d.bind_item_theme(item, item_theme)
 
+def set_node_color(item, color, what = d.mvThemeCol_Text):
+    with d.theme() as item_theme:
+        with d.theme_component(d.mvAll):
+            d.add_theme_color(what, htr(color), category=d.mvThemeCat_Nodes)
+    d.bind_item_theme(item, item_theme)
+
 def set_item_colors(item, colors, whats = d.mvThemeCol_Text):
     with d.theme() as item_theme:
         i = -1
@@ -15,6 +21,16 @@ def set_item_colors(item, colors, whats = d.mvThemeCol_Text):
             i +=1
             with d.theme_component(d.mvAll):
                 d.add_theme_color(whats[i], htr(colors[i]), category=d.mvThemeCat_Core)
+
+    d.bind_item_theme(item, item_theme)
+
+def set_node_colors(item, colors, whats = d.mvThemeCol_Text):
+    with d.theme() as item_theme:
+        i = -1
+        for color in colors:
+            i +=1
+            with d.theme_component(d.mvAll):
+                d.add_theme_color(whats[i], htr(colors[i]), category=d.mvThemeCat_Nodes)
 
     d.bind_item_theme(item, item_theme)
 

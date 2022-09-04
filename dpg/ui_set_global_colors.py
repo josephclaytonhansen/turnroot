@@ -6,6 +6,12 @@ def htr(h):
     w = tuple(int(w[i:i+2], 16) for i in (0, 2, 4))
     return w
 
+def htra(h,a):
+    w = g.color_theme.__getattribute__(h).lstrip('#')
+    w = list(int(w[i:i+2], 16) for i in (0, 2, 4))
+    w.append(a)
+    w = tuple(w)
+    return w
 def lighten(t, i = 10):
     w =  list(t)
     w[0] += i
@@ -45,6 +51,26 @@ def set_colors(palette):
                     ]:
                     
                     d.add_theme_style(c, g.corners_round, category=d.mvThemeCat_Core)
+                d.add_theme_style(d.mvNodeStyleVar_NodeCornerRounding, g.corners_round, category=d.mvThemeCat_Nodes)
+                d.add_theme_style(d.mvNodeStyleVar_GridSpacing, 50, category=d.mvThemeCat_Nodes)
+                d.add_theme_style(d.mvNodeStyleVar_PinCircleRadius, 6, category=d.mvThemeCat_Nodes)
+                d.add_theme_style(d.mvNodeStyleVar_NodePadding, g.item_spacing, g.item_spacing, category=d.mvThemeCat_Nodes)
+                
+                d.add_theme_color(d.mvNodeCol_NodeBackground, htr("node_background_color"), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_NodeBackgroundHovered, lighten(htr("node_background_color"),10), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_NodeBackgroundSelected, darken(htr("node_background_color"),20), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_NodeOutline, htr("node_text_color"), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_TitleBar, htr("node_title_background_color"), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_TitleBarHovered, lighten(htr("node_title_background_color"),10), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_TitleBarSelected, darken(htr("node_selected_color"),10), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_Link, htr("node_wire_color"), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_LinkHovered, lighten(htr("node_wire_color"),10), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_LinkSelected, htr("node_selected_color"), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_BoxSelector,htra("node_text_color",20), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_BoxSelectorOutline, htr("node_text_color"), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_GridBackground, htr("node_grid_background_color"), category=d.mvThemeCat_Nodes)
+                d.add_theme_color(d.mvNodeCol_GridLine, htr("node_grid_lines_color"), category=d.mvThemeCat_Nodes)
+                
                 d.add_theme_style(d.mvStyleVar_WindowPadding, g.window_padding, g.window_padding, category=d.mvThemeCat_Core) 
                 d.add_theme_style(d.mvStyleVar_ItemSpacing, g.item_spacing, g.item_spacing, category=d.mvThemeCat_Core) 
                 d.add_theme_style(d.mvStyleVar_FramePadding, g.padding, g.padding, category=d.mvThemeCat_Core) 
