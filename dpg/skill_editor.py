@@ -38,6 +38,7 @@ def make_functions():
 
 def skill_editor_set_wrap():
     d.configure_item(w_skill.node_information, wrap=int((.12 * d.get_viewport_width())))
+    d.configure_item(w_skill.instructions, wrap=int((.12 * d.get_viewport_width())))
 
 def add_skill_editor(params={}):
     buildSkillEditor()

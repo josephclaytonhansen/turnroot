@@ -115,14 +115,18 @@ def HideNode():
     for node in d.get_selected_nodes(g.active_window_widgets.node_editor):
         d.delete_item(node)
         g.active_window_widgets.active_nodes.pop(g.active_window_widgets.active_nodes.index(node))
+    for line in d.get_selected_links(g.active_window_widgets.node_editor):
+        d.delete_item(line)
+
+
 
 def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, combo_items={None:None},desc=""):
-    with d.node(pos=d.get_mouse_pos(),label=name,parent=node_editor) as f:
+    with d.node(pos=d.get_mouse_pos(local=False),label=name,parent=node_editor) as f:
         i = -1
         for socket in outputs.keys():
             i += 1
             with d.node_attribute(attribute_type=d.mvNode_Attr_Output, shape=d.mvNode_PinShape_CircleFilled) as tmp:
-                if socket == "float":
+                if socket.startswith( "float"):
                     t= d.add_input_float(label=outputs[socket],step=0,
                                             width=80, indent=100)
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
@@ -130,19 +134,19 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
 
-                elif socket == "int":
+                elif socket .startswith( "int"):
                     t=d.add_input_int(label=outputs[socket],step=0,
                                             width=80, indent=100)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_font_size(t,-1)
-                elif socket == "bool":
-                    t=d.add_checkbox(label=outputs[socket], indent=100)
+                elif socket .startswith( "bool"):
+                    t=d.add_text(default_value=outputs[socket], indent=100)
                     set_node_colors(tmp, ["node_socket_boolean_color", "node_socket_boolean_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
-                elif socket == "trigger":
+                elif socket .startswith( "trigger"):
                     t=d.add_text(default_value=outputs[socket], indent=100)
                     set_node_colors(tmp, ["node_socket_trigger_color", "node_socket_trigger_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
@@ -150,7 +154,7 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
         for socket in inputs.keys():
             i += 1
             with d.node_attribute(attribute_type=d.mvNode_Attr_Input) as tmp:
-                if socket == "float":
+                if socket .startswith( "float"):
                     t= d.add_input_float(label=inputs[socket],step=0,
                                             width=80)
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
@@ -158,19 +162,19 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
 
-                elif socket == "int":
+                elif socket .startswith( "int"):
                     t=d.add_input_int(label=inputs[socket],step=0,
                                             width=80)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_font_size(t,-1)
-                elif socket == "bool":
-                    t=d.add_checkbox(label=inputs[socket])
+                elif socket .startswith( "bool"):
+                    t=d.add_text(default_value=inputs[socket])
                     set_node_colors(tmp, ["node_socket_boolean_color", "node_socket_boolean_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
-                elif socket == "trigger":
+                elif socket .startswith( "trigger"):
                     t=d.add_text(default_value=inputs[socket])
                     set_node_colors(tmp, ["node_socket_trigger_color", "node_socket_trigger_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
@@ -178,39 +182,42 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
         for socket in static.keys():
             i += 1
             with d.node_attribute(attribute_type=d.mvNode_Attr_Static) as tmp:
-                if socket == "float":
+                if socket .startswith( "float"):
                     t= d.add_input_float(label=static[socket],step=0,
                                             width=80)
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
-                if socket == "combo":
+                if socket .startswith( "combo"):
                     t= d.add_combo(label=static[socket],items=combo_items[socket+static[socket]],
                                             width=80)
-                    set_item_colors(t, ["window_background_color", "button_alt_color"],
+                    set_item_colors(t, ["button_alt_color", "window_background_color"],
                         [d.mvThemeCol_Text, d.mvThemeCol_PopupBg])
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
+                    set_item_color(tmp, "window_background_color", d.mvThemeCol_FrameBg)
                     set_font_size(t,-1)
-                elif socket == "int":
+                elif socket .startswith( "int"):
                     t=d.add_input_int(label=static[socket],step=0,
                                             width=80)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_font_size(t,-1)
-                elif socket == "bool":
+                elif socket .startswith( "bool"):
                     t=d.add_checkbox(label=static[socket])
                     set_node_colors(tmp, ["node_socket_boolean_color", "node_socket_boolean_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
-                elif socket == "trigger":
+                elif socket .startswith( "trigger"):
                     t=d.add_text(default_value=static[socket])
                     set_node_colors(tmp, ["node_socket_trigger_color", "node_socket_trigger_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
+    g.window_widgets_skill.active_nodes.append(f)
+    g.window_widgets_skill.node_desc[f] = desc
     return f
-        
-                
+    
+     
     
