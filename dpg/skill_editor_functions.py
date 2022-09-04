@@ -112,8 +112,9 @@ def delink_callback(sender, app_data):
 
 def HideNode():
     for node in d.get_selected_nodes(g.active_window_widgets.node_editor):
-        d.delete_item(node)
-        g.active_window_widgets.active_nodes.pop(g.active_window_widgets.active_nodes.index(node))
+        if node != g.do_not_delete_node:
+            d.delete_item(node)
+            g.active_window_widgets.active_nodes.pop(g.active_window_widgets.active_nodes.index(node))
     for line in d.get_selected_links(g.active_window_widgets.node_editor):
         d.delete_item(line)
 
@@ -126,16 +127,14 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
             i += 1
             with d.node_attribute(attribute_type=d.mvNode_Attr_Output, shape=d.mvNode_PinShape_CircleFilled) as tmp:
                 if socket.startswith( "float"):
-                    t= d.add_input_float(label=outputs[socket],step=0,
-                                            width=80, indent=100)
+                    t= d.add_text(default_value=outputs[socket], indent=100)
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_font_size(t,-1)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
 
                 elif socket .startswith( "int"):
-                    t=d.add_input_int(label=outputs[socket],step=0,
-                                            width=80, indent=100)
+                    t=d.add_text(default_value=outputs[socket], indent=100)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
@@ -152,18 +151,17 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
                     set_font_size(t,-1)
         for socket in inputs.keys():
             i += 1
+
             with d.node_attribute(attribute_type=d.mvNode_Attr_Input) as tmp:
                 if socket .startswith( "float"):
-                    t= d.add_input_float(label=inputs[socket],step=0,
-                                            width=80)
+                    t= d.add_text(default_value=inputs[socket])
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
 
                 elif socket .startswith( "int"):
-                    t=d.add_input_int(label=inputs[socket],step=0,
-                                            width=80)
+                    t=d.add_text(default_value=inputs[socket])
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)

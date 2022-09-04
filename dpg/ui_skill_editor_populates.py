@@ -46,15 +46,23 @@ Ctrl+Click on node connections, Delete, or X to remove node connections.
         w_skill.node_editor = f
         g.show_add_node = False
         g.window_widgets_skill.add_nodes = d.add_window(no_title_bar=True, label = "Add Node", show=False,
-                     width=280, max_size=[280, 1000], height=300, min_size=[280,20],
+                     width=g.text_size * 11,
                      modal=True, tag="add_node", no_resize=False, popup=True)
         w_skill.add_nodes = g.window_widgets_skill.add_nodes
         
-        d.add_button(parent=w_skill.add_nodes, label="Activate Skill When", callback=ActivateWhen)
+        ActivateWhen()
+    
+        d.add_button(parent=w_skill.add_nodes, label="Number", callback=Number)
+        d.add_button(parent=w_skill.add_nodes, label="Math Operation", callback=MathOperation)
+        d.add_button(parent=w_skill.add_nodes, label="Math Condition", callback=MathCondition)
+        d.add_button(parent=w_skill.add_nodes, label="Number % Chance", callback=PercentChance)
+        
+        d.add_spacer(parent=w_skill.add_nodes, height=g.item_spacing)
+        
+        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Stat Value", callback=UnitStat)
         d.add_button(parent=w_skill.add_nodes, label="Tile/Map Is", callback=TileAttribute)
         d.add_button(parent=w_skill.add_nodes, label="Turn Is", callback=TurnAttribute)
         d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Is", callback=UnitSelfAttribute)
-        d.add_button(parent=w_skill.add_nodes, label="If X and Y", callback=AndNode)
         
         with d.handler_registry():
             d.add_key_press_handler(key=d.mvKey_LShift + d.mvKey_A, callback=c_skill.ShowAddNodeMenu)
