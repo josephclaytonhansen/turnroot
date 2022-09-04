@@ -2,12 +2,14 @@ import dearpygui.dearpygui as d
 from screeninfo import get_monitors
 from globals import globals as g
 from unit_editor import unit_editor_update_height, unit_editor_centers_in_column, ue_arrange, ue_no_arrange
+from skill_editor import skill_editor_set_wrap
 from ui_tooltips import Tooltips
 
 def getGeometry():
     g.current_height = d.get_viewport_client_height()
     unit_editor_update_height()
     unit_editor_centers_in_column()
+    skill_editor_set_wrap()
 
 def add_global_menu():
     with d.viewport_menu_bar():

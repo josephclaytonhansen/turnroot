@@ -36,6 +36,9 @@ w_skill.colors = Colors()
 def make_functions():
        d.set_item_user_data(w_skill.theme_menu, w_skill)
 
+def skill_editor_set_wrap():
+    d.configure_item(w_skill.node_information, wrap=int((.12 * d.get_viewport_width())))
+
 def add_skill_editor(params={}):
     buildSkillEditor()
     populateSkillEditor()
@@ -121,6 +124,17 @@ def add_menu():
 
 def se_do():
     if g.is_editing.type == "skill":
+        node_is_hovered = False
+        for node in w_skill.active_nodes:
+            if d.is_item_hovered(node):
+                d.set_value(w_skill.node_information, w_skill.node_desc[node])
+                node_is_hovered = True
+        if not node_is_hovered:
+            try:
+                d.set_value(w_skill.node_information, "Hover over a node to learn more about it")
+            except:
+                pass
+
         try:
             if g.now > g.timeout_event:
                 TimedEvent(g.autosave_time)

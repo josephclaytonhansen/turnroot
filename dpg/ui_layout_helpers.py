@@ -1,3 +1,4 @@
+from pkgutil import get_importer
 import dearpygui.dearpygui as d
 from globals import globals as g
 from datetime import datetime, timedelta
@@ -31,9 +32,9 @@ class PercentageBasedLayoutHelper:
         return uuid
 
     def add_column(self,percentage):
-        g = d.add_table_column(init_width_or_weight=percentage/100.0, width=percentage/100.0, parent=self.table_id)
-        print(d.get_item_configuration(g))
-        return g
+        gi = d.add_table_column(init_width_or_weight=percentage/100.0, width=percentage/100.0, parent=self.table_id)
+        print(d.get_item_configuration(gi))
+        return gi
 
     def submit(self):
         d.pop_container_stack() # pop stage
