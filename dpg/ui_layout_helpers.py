@@ -33,7 +33,8 @@ class PercentageBasedLayoutHelper:
 
     def add_column(self,percentage):
         gi = d.add_table_column(init_width_or_weight=percentage/100.0, width=percentage/100.0, parent=self.table_id)
-        print(d.get_item_configuration(gi))
+        if g.debug:
+            print(d.get_item_configuration(gi))
         return gi
 
     def submit(self):

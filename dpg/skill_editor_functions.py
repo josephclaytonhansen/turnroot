@@ -76,7 +76,8 @@ def ShowFileDialog(sender, app_data, user_data):
 
 def GetSkillFile(sender, app_data, user_data):
     g.path = app_data["file_path_name"]
-    print(g.path)
+    if g.debug:
+        print(g.path)
     if user_data == "open":
         LoadFromFile()
     else:
@@ -129,7 +130,8 @@ def HideNode():
 def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, combo_items={None:None},desc="", tag = "", me=None):
     statics = []
     attributes = []
-    print(name)
+    if g.debug:
+        print(name)
     if me == None:
         me = str(int(random.random()*1000))+str(int(random.random()*1000))
     with d.node(pos=d.get_mouse_pos(local=False),label=name,parent=node_editor, tag=me+":"+name+str(len(g.window_widgets_skill.active_nodes))) as f:

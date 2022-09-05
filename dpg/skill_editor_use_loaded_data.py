@@ -146,7 +146,8 @@ def Lines(con, attributes,g, node_id):
                 connected_nodes.append(left)
             if right_id == attr:
                 connected_nodes.append(right)
-            print(connected_nodes)
+            if g.debug:
+                print(connected_nodes)
         if len(connected_nodes) == 2:
             d.add_node_link(connected_nodes[1], connected_nodes[0], parent=g.window_widgets_skill.node_editor)
             if connected_nodes[0]+":"+connected_nodes[1] not in g.skill_editor_skill_connections:
