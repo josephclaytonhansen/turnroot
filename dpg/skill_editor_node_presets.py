@@ -5,7 +5,7 @@ import dearpygui.dearpygui as d
 import random
 
 def ActivateWhen():
-    tmp = addBasicNode(
+    tmp, st = addBasicNode(
 
             inputs={"bool":"if"},
             outputs={"trigger":"activate"},
@@ -13,7 +13,7 @@ def ActivateWhen():
             combo_items={"combowhen":["Passive (always active)", "Unit Action", "Enemy Action", "Player Turn Start", "Enemy Turn Start",
                                       "Player Takes Damage", "Enemy Takes Damage"]},
             name = "Activate When",
-            tag = str(int(random.random()*1000))+str(int(random.random()*1000))+":"+"Activate When"+str(len(g.window_widgets_skill.active_nodes)),
+            tag = "0:Activate When:0",
             node_editor=g.window_widgets_skill.node_editor,
             desc="""This node is a required node for all skills.\n\n
 Define when a skill- the rest of the node tree- is activated. The if input is used to add conditions to skills.\n
@@ -22,9 +22,10 @@ If the input is left empty, the skill will always activate.\n\n
 Since it's required, this node cannot be deleted or added.""")
     d.configure_item(tmp, pos=[d.get_viewport_width()/2, d.get_viewport_height()/2])
     g.do_not_delete_node = tmp
+    g.do_not_delete_statics = st
 
 def TileAttribute():
-    tmp = addBasicNode(
+    tmp, st = addBasicNode(
             inputs={},
             outputs={"bool":"if"},
             static={"combo":"attr"},
@@ -34,9 +35,10 @@ def TileAttribute():
             node_editor=g.window_widgets_skill.node_editor,
             desc="""Get an attribute of the tile or map the unit is currently on. Outputs a True or False value.""")
     ShowAddNodeMenu()
+    return [tmp, st]
     
 def TurnAttribute():
-    tmp = addBasicNode(
+    tmp, st = addBasicNode(
             inputs={},
             outputs={"bool":"if attribute", "int":"turn number"},
             static={"combo":"attribute"},
@@ -46,9 +48,10 @@ def TurnAttribute():
             node_editor=g.window_widgets_skill.node_editor,
             desc="""Get an attribute of the current turn. Outputs a True or False value and/or a turn number.""")
     ShowAddNodeMenu()
+    return [tmp, st]
 
 def UnitSelfAttribute():
-    tmp = addBasicNode(
+    tmp, st = addBasicNode(
             inputs={},
             outputs={"bool":"if"},
             static={"combo":"attr"},
@@ -59,9 +62,9 @@ def UnitSelfAttribute():
             node_editor=g.window_widgets_skill.node_editor,
             desc="""Get an attribute of this unit. Outputs True or False.""")
     ShowAddNodeMenu()
-
+    return [tmp, st]
 def AndNode():
-    tmp = addBasicNode(
+    tmp, st = addBasicNode(
             inputs={"bool1":"if", "bool2":"if"},
             outputs={"bool":"if"},
             name = "And",
@@ -69,6 +72,7 @@ def AndNode():
             node_editor=g.window_widgets_skill.node_editor,
             desc="""Combine two conditions. Outputs true if both are true, otherwise, outputs false.""")
     ShowAddNodeMenu()
+    return [tmp, st]
 
 def UnitStat():
     l = ["HP", "Max HP", "Strength", "Speed", "Magic", "Defense", "Resistance", "Luck", "Skill"]
@@ -76,7 +80,7 @@ def UnitStat():
         l.append("Dexterity")
     if go["use_stat_charisma"]:
         l.append("Charisma")
-    tmp = addBasicNode(
+    tmp, st = addBasicNode(
             inputs={},
             outputs={"int":"stat"},
             static={"combo":"stat"},
@@ -86,9 +90,10 @@ def UnitStat():
             node_editor=g.window_widgets_skill.node_editor,
             desc="""Get the stat value of this unit at the moment of skill activation. Outputs the stat value as a number.""")
     ShowAddNodeMenu()
+    return [tmp, st]
 
 def Number():
-    tmp = addBasicNode(
+    tmp, st = addBasicNode(
             inputs={},
             outputs={"float":""},
             static={"float":"number"},
@@ -97,9 +102,10 @@ def Number():
             node_editor=g.window_widgets_skill.node_editor,
             desc="""Add a number, used for calcuations (for example, checking if HP is greater than 50%. This node would specify the '50' part of that.)""")
     ShowAddNodeMenu()
+    return [tmp, st]
 
 def MathOperation():
-    tmp = addBasicNode(
+    tmp, st = addBasicNode(
                 inputs={"float":"number","float2":"number"},
                 outputs={"float":"result"},
                 static={"combo":"operation"},
@@ -109,9 +115,10 @@ def MathOperation():
                 node_editor=g.window_widgets_skill.node_editor,
                 desc="""Use a basic math operation on two numbers. Outputs a decimal number as the result.""")
     ShowAddNodeMenu()
-    
+    return [tmp, st]
+
 def MathCondition():
-    tmp = addBasicNode(
+    tmp, st = addBasicNode(
             inputs={"int":"number","float":"threshold"},
             outputs={"bool":"if"},
             static={"combo":"check"},
@@ -121,9 +128,10 @@ def MathCondition():
             node_editor=g.window_widgets_skill.node_editor,
             desc="""Check a number against a (numerical) threshold. Outputs a True or False value.""")
     ShowAddNodeMenu()
+    return [tmp, st]
 
 def PercentChance():
-    tmp = addBasicNode(
+    tmp, st = addBasicNode(
             inputs={"float":"percent"},
             outputs={"bool":"if chance"},
             name = "Percent Chance (N%)",
@@ -132,3 +140,4 @@ def PercentChance():
             desc="""This node has an n% chance of activating. Combine with unit stats generally.\n
 For example, you could use this to do a 'luck % chance' activation. Outputs True or False- will vary per use.""")
     ShowAddNodeMenu()
+    return [tmp, st]

@@ -10,7 +10,7 @@ class globals:
     window_padding = 25
     text_size = 18
     mono_text_size = 14
-    debug = False
+    debug = True
     font_family = "Assets/Fonts/FiraSans-Regular.ttf"
     autosave_time = 120
     current_height = 771
