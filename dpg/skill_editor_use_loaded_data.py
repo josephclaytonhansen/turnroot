@@ -149,6 +149,8 @@ def Lines(con, attributes,g, node_id):
             print(connected_nodes)
         if len(connected_nodes) == 2:
             d.add_node_link(connected_nodes[1], connected_nodes[0], parent=g.window_widgets_skill.node_editor)
+            if connected_nodes[0]+":"+connected_nodes[1] not in g.skill_editor_skill_connections:
+                g.skill_editor_skill_connections.append(connected_nodes[0]+":"+connected_nodes[1])
                 # try:
                 #     d.add_node_link(sce[1], sce[0], parent=g.window_widgets_skill.node_editor)
                 # except Exception as e:
