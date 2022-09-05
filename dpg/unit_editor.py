@@ -177,7 +177,7 @@ def add_menu():
             
             
 def unit_editor_update_height():
-    d.configure_item(w.info_left, width=d.get_viewport_width()-500)
+    d.configure_item(w.info_left, width=d.get_viewport_width()-700)
     for row in g.unit_editor_rows:
             d.configure_item(row, 
                              height=int(g.current_height/len(g.unit_editor_rows)-(g.window_padding*6))
@@ -222,16 +222,23 @@ def ue_do():
         try:
             if g.now > g.timeout_event:
                 TimedEvent(g.autosave_time)
-                TimedInfoMessage("Auto-saved", w.status_bar, 2)
+                TimedInfoMessage("Auto-saved unit file to"+g.path, w.status_bar, 2)
                 SaveUnit(g.path)
         except:
             pass
 
         try:
             if g.now > g.timeout:
-                d.configure_item(w.status_bar, label="")
+                if g.path == "":
+                    d.configure_item(w.status_bar, label="File not saved")
+                else:
+                    d.configure_item(w.status_bar, label="")
         except:
-            d.configure_item(w.status_bar, label="")
+            if g.path == "":
+                d.configure_item(w.status_bar, label="File not saved")
+            else:
+                d.configure_item(w.status_bar, label="")
+
         if g.is_editing.is_generic == True:
             c.show_stat_variation(w)
         else:

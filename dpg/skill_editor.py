@@ -14,7 +14,15 @@ g.window_widgets_skill = w_skill
 g.uw = uw()
 
 class Skill():
-    pass
+    data = {"pos":None, "con":None, "sta":None, "awn":None}
+    def PrettyPrint(self):
+        print(
+        "\n\n\n----------Current Skill Data----------\n",
+        "Positions:\t"+str(self.data["pos"]),
+        "\nConnections:\t"+str(self.data["con"]),
+        "\nStatics:\t"+str(self.data["sta"]),
+        "\nActive nodes:\t"+str(self.data["awn"]),
+    )
 
 class Colors():
     def set(self):
@@ -37,6 +45,7 @@ def make_functions():
        d.set_item_user_data(w_skill.theme_menu, w_skill)
 
 def skill_editor_set_wrap():
+    d.configure_item(w_skill.info_left, width=d.get_viewport_width()-700)
     d.configure_item(w_skill.node_information, wrap=int((.12 * d.get_viewport_width())))
     d.configure_item(w_skill.instructions, wrap=int((.12 * d.get_viewport_width())))
 
@@ -53,6 +62,8 @@ def add_skill_editor(params={}):
     g.skill_editor_skill = s
     g.skill_editor_skill_connections = []
     g.skill_editor_skill_positions = {}
+    g.skill_editor_skill_statics = {}
+    
     #you can only be editing one thing at a time, technically, so this works
     g.path = ""
     TimedEvent(g.autosave_time)
@@ -127,30 +138,50 @@ def add_menu():
 
 def se_do():
     if g.is_editing.type == "skill":
+        try:
+            for i in g.skill_editor_skill_positions.keys():
+                if g.skill_editor_skill_positions[i] == None:
+                    g.skill_editor_skill_positions.pop(i, None)
+        except:
+            pass
         node_is_hovered = False
         for node in w_skill.active_nodes:
-            if d.is_item_hovered(node):
-                d.set_value(w_skill.node_information, w_skill.node_desc[node])
-                node_is_hovered = True
-        if not node_is_hovered:
+            i = node.split(":")[0]
             try:
-                d.set_value(w_skill.node_information, "Hover over a node to learn more about it")
+                g.skill_editor_skill_positions[i] = d.get_item_pos(node)
+            except:
+                g.skill_editor_skill_positions[i] = None
+            try:
+                if d.is_item_hovered(node):
+                    d.set_value(w_skill.node_information, w_skill.node_desc[node])
+                    node_is_hovered = True
+                if not node_is_hovered:
+                    try:
+                        d.set_value(w_skill.node_information, "Hover over a node to learn more about it")
+                    except:
+                        pass
             except:
                 pass
 
         try:
             if g.now > g.timeout_event:
                 TimedEvent(g.autosave_time)
-                TimedInfoMessage("Auto-saved", w_skill.status_bar, 2)
+                TimedInfoMessage("Auto-saved skill file to "+g.path, w_skill.status_bar, 3)
                 SaveSkill(g.path)
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
         try:
             if g.now > g.timeout:
-                d.configure_item(w_skill.status_bar, label="")
+                if g.path == "":
+                    d.configure_item(w_skill.status_bar, label="File not saved")
+                else:
+                    d.configure_item(w_skill.status_bar, label="")
         except:
-            d.configure_item(w_skill.status_bar, label="")
+                if g.path == "":
+                    d.configure_item(w_skill.status_bar, label="File not saved")
+                else:
+                    d.configure_item(w_skill.status_bar, label="")
         
     else:
         pass

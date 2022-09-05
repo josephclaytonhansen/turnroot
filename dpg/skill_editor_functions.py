@@ -102,14 +102,13 @@ def ShowAddNodeMenu():
 def link_callback(sender, app_data, user_data):
     # app_data -> (link_id1, link_id2)
     d.add_node_link(app_data[0], app_data[1], parent=sender)
-    attrs = [d.get_item_info(app_data[0])["parent"], d.get_item_info(app_data[1])["parent"]]
+    attrs = [d.get_item_alias(app_data[0]), d.get_item_alias(app_data[1])]
     st = ""
     for a in attrs:
         st = st + a
         if a != attrs[1]:
             st = st + ":"
     g.skill_editor_skill_connections.append(st)
-    print(g.skill_editor_skill_connections)
 # callback runs when user attempts to disconnect attributes
 def delink_callback(sender, app_data):
     # app_data -> link_id
@@ -118,17 +117,23 @@ def delink_callback(sender, app_data):
 def HideNode():
     for node in d.get_selected_nodes(g.active_window_widgets.node_editor):
         if node != g.do_not_delete_node:
+            g.skill_editor_skill_positions.pop(d.get_item_alias(node).split(":")[0])
+            g.active_window_widgets.active_nodes.pop(g.active_window_widgets.active_nodes.index(d.get_item_alias(node)))
             d.delete_item(node)
-            g.active_window_widgets.active_nodes.pop(g.active_window_widgets.active_nodes.index(node))
     for line in d.get_selected_links(g.active_window_widgets.node_editor):
         d.delete_item(line)
 
 def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, combo_items={None:None},desc="",tag=""):
     with d.node(pos=d.get_mouse_pos(local=False),label=name,parent=node_editor, tag=tag) as f:
         i = -1
+        outputs_count = -1
+        inputs_count = -1
         for socket in outputs.keys():
+            outputs_count += 1
             i += 1
-            with d.node_attribute(attribute_type=d.mvNode_Attr_Output, shape=d.mvNode_PinShape_CircleFilled) as tmp:
+            with d.node_attribute(attribute_type=d.mvNode_Attr_Output, shape=d.mvNode_PinShape_CircleFilled,
+                                  tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":output:"+str(outputs_count)) as tmp:
+                d.set_item_user_data(tmp,name+":outputs:"+str(i)+":")
                 if socket.startswith( "float"):
                     t= d.add_text(default_value=outputs[socket], indent=120, tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":output:float"+str(i))
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
@@ -137,20 +142,20 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
 
-                elif socket .startswith( "int"):
+                elif socket.startswith( "int"):
                     t=d.add_text(default_value=outputs[socket], indent=120, tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":output:int"+str(i))
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_font_size(t,-1)
                     d.set_item_user_data(t,name+":static:bool"+str(i)+":")
-                elif socket .startswith( "bool"):
+                elif socket.startswith( "bool"):
                     t=d.add_text(default_value=outputs[socket], indent=120, tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":output:bool"+str(i))
                     set_node_colors(tmp, ["node_socket_boolean_color", "node_socket_boolean_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
                     d.set_item_user_data(t,name+":static:bool"+str(i)+":")
-                elif socket .startswith( "trigger"):
+                elif socket.startswith( "trigger"):
                     t=d.add_text(default_value=outputs[socket], indent=120, tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":output:trigger"+str(i))
                     set_node_colors(tmp, ["node_socket_trigger_color", "node_socket_trigger_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
@@ -158,9 +163,11 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
                     d.set_item_user_data(t,name+":static:bool"+str(i)+":")
         for socket in inputs.keys():
             i += 1
-
-            with d.node_attribute(attribute_type=d.mvNode_Attr_Input) as tmp:
-                if socket .startswith( "float"):
+            inputs_count +=1
+            with d.node_attribute(attribute_type=d.mvNode_Attr_Input,
+                                  tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":inputs:"+str(inputs_count)) as tmp:
+                d.set_item_user_data(tmp,name+":inputs:"+str(i)+":")
+                if socket.startswith( "float"):
                     t= d.add_text(default_value=inputs[socket], tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":input:float"+str(i))
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
@@ -168,20 +175,20 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
                     set_font_size(t,-1)
                     d.set_item_user_data(t,name+":static:bool"+str(i)+":")
 
-                elif socket .startswith( "int"):
+                elif socket.startswith( "int"):
                     t=d.add_text(default_value=inputs[socket], tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":input:int"+str(i))
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_font_size(t,-1)
                     d.set_item_user_data(t,name+":static:bool"+str(i)+":")
-                elif socket .startswith( "bool"):
+                elif socket.startswith( "bool"):
                     t=d.add_text(default_value=inputs[socket], tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":input:bool"+str(i))
                     set_node_colors(tmp, ["node_socket_boolean_color", "node_socket_boolean_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
                     d.set_item_user_data(t,name+":static:bool"+str(i)+":")
-                elif socket .startswith( "trigger"):
+                elif socket.startswith( "trigger"):
                     t=d.add_text(default_value=inputs[socket], tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":input:trigger"+str(i))
                     set_node_colors(tmp, ["node_socket_trigger_color", "node_socket_trigger_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
@@ -189,8 +196,10 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
                     d.set_item_user_data(t,name+":static:bool"+str(i)+":")
         for socket in static.keys():
             i += 1
-            with d.node_attribute(attribute_type=d.mvNode_Attr_Static) as tmp:
-                if socket .startswith( "float"):
+            with d.node_attribute(attribute_type=d.mvNode_Attr_Static,
+                                  tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":statics:"+str(i)) as tmp:
+                d.set_item_user_data(tmp,name+":static:"+str(i)+":")
+                if socket.startswith( "float"):
                     t= d.add_input_float(label=static[socket],step=0, tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":static:float"+str(i)+":", callback=updateTag,
                                             width=40)
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
@@ -198,7 +207,7 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
                     d.set_item_user_data(t,name+":static:bool"+str(i)+":")
-                if socket .startswith( "combo"):
+                if socket.startswith( "combo"):
                     t= d.add_combo(label=static[socket],items=combo_items[socket+static[socket]], tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":static:combo"+str(i)+":", callback=updateTag,
                                             width=100)
                     set_item_colors(t, ["button_alt_color", "window_background_color"],
@@ -208,7 +217,7 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
                     set_item_color(tmp, "window_background_color", d.mvThemeCol_FrameBg)
                     set_font_size(t,-1)
                     d.set_item_user_data(t,name+":static:bool"+str(i)+":")
-                elif socket .startswith( "int"):
+                elif socket.startswith( "int"):
                     t=d.add_input_int(label=static[socket],step=0, tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":static:int"+str(i)+":", callback=updateTag,
                                             width=40)
                     set_node_colors(tmp, ["node_socket_object_color", "node_socket_object_color"],
@@ -216,13 +225,13 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
                     set_item_color(t, "node_grid_background_color", d.mvThemeCol_FrameBg)
                     set_font_size(t,-1)
                     d.set_item_user_data(t,name+":static:bool"+str(i)+":")
-                elif socket .startswith( "bool"):
+                elif socket.startswith( "bool"):
                     t=d.add_checkbox(label=static[socket], callback=updateTag, tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":static:bool"+str(i))
                     set_node_colors(tmp, ["node_socket_boolean_color", "node_socket_boolean_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
                     set_font_size(t,-1)
                     d.set_item_user_data(t,name+":static:bool"+str(i)+":")
-                elif socket .startswith( "trigger"):
+                elif socket.startswith( "trigger"):
                     t=d.add_text(default_value=static[socket], tag=str(int(random.random()*1000))+str(int(random.random()*1000))+":"+name+":static:trigger"+str(i))
                     set_node_colors(tmp, ["node_socket_trigger_color", "node_socket_trigger_color"],
                                     [d.mvNodeCol_Pin, d.mvNodeCol_PinHovered])
@@ -236,9 +245,15 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
 def updateTag(which, app_data, user_data):
     n = d.get_item_alias(which)
     n = n.split(":")
+    i = n[0]
     n[3] = app_data
-    t = ":".join(x for x in n)
-    
-    print(t)
+    t = ":".join(str(x) for x in n)
+    g.skill_editor_skill_statics[i] = t[:-1]
      
+def PrintSkillDebug():
+    try:
+        if g.debug:
+            g.skill_editor_skill.PrettyPrint()
+    except Exception as e:
+        print(e)
     
