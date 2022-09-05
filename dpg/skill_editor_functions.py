@@ -128,6 +128,7 @@ def HideNode():
 
 def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, combo_items={None:None},desc="",tag=""):
     statics = []
+    attributes = []
     with d.node(pos=d.get_mouse_pos(local=False),label=name,parent=node_editor, tag=tag) as f:
         me = str(int(random.random()*1000))+str(int(random.random()*1000))
         i = -1
@@ -139,6 +140,7 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
             
             with d.node_attribute(attribute_type=d.mvNode_Attr_Output, shape=d.mvNode_PinShape_CircleFilled,
                                   tag=me+":"+name+":output:"+str(outputs_count)) as tmp:
+                attributes.append(tmp)
                 d.set_item_user_data(tmp,name+":outputs:"+str(i)+":")
                 if socket.startswith( "float"):
                     t= d.add_text(default_value=outputs[socket], indent=120, tag=me+":"+name+":output:float"+str(i))
@@ -172,6 +174,7 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
             inputs_count +=1
             with d.node_attribute(attribute_type=d.mvNode_Attr_Input,
                                   tag=me+":"+name+":inputs:"+str(inputs_count)) as tmp:
+                attributes.append(tmp)
                 d.set_item_user_data(tmp,name+":inputs:"+str(i)+":")
                 if socket.startswith( "float"):
                     t= d.add_text(default_value=inputs[socket], tag=me+":"+name+":input:float"+str(i))
@@ -204,6 +207,7 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
             i += 1
             with d.node_attribute(attribute_type=d.mvNode_Attr_Static,
                                   tag=me+":"+name+":statics:"+str(i)) as tmp:
+                attributes.append(tmp)
                 d.set_item_user_data(tmp,name+":static:"+str(i)+":")
                 if socket.startswith( "float"):
                     t= d.add_input_float(label=static[socket],step=0, tag=me+":"+name+":static:float"+str(i)+":", callback=updateTag,
@@ -250,7 +254,7 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
 
     g.window_widgets_skill.active_nodes.append(f)
     g.window_widgets_skill.node_desc[f] = desc
-    return [f,t]
+    return [f,t, attributes]
     
 def updateTag(which, app_data, user_data):
     n = d.get_item_alias(d.get_item_parent(which))
