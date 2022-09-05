@@ -7,6 +7,7 @@ from editor_data_handling import SaveUserPrefs
 from ui_item_style_helpers import *
 from ui_layout_helpers import TimedInfoMessage, BuildTable
 from editor_save_load_skill import SaveSkill, LoadSkill
+from skill_editor_use_loaded_data import UseLoadedData
 import random
 
 def basic(sender, app_data, user_data):
@@ -62,7 +63,7 @@ def item_spacing(sender, app_data, user_data):
     SaveUserPrefs()
 
 def ShowFileDialog(sender, app_data, user_data):
-    if sender == "open":
+    if sender == "skillopen":
         d.show_item("SkillSelect")
         d.set_item_user_data("SkillSelect", "open")
     else:
@@ -71,6 +72,7 @@ def ShowFileDialog(sender, app_data, user_data):
 
 def GetSkillFile(sender, app_data, user_data):
     g.path = app_data["file_path_name"]
+    print(g.path)
     if user_data == "open":
         LoadFromFile()
     else:
@@ -78,16 +80,13 @@ def GetSkillFile(sender, app_data, user_data):
 
 def LoadFromFile():
     LoadSkill(g.path)
-    UseLoadedData(Widgets = g.active_window_widgets, path = g.path)
+    UseLoadedData()
      
 def NewSkillFile():
     pass
 
 def SaveToFile():
     SaveSkill(g.path)
-
-def UseLoadedData():
-    pass
 
 def ShowAddNodeMenu():
     if g.show_add_node:

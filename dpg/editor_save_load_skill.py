@@ -3,18 +3,13 @@ import json
 from globals import globals as g
 
 def LoadSkill(path):
-    if g.is_editing.type == "skill": unit = g.is_editing 
+    if g.is_editing.type == "skill": skill = g.is_editing 
     if not exists(path): 
         with open(path, "w") as f:
-           
-           save_dict = {"":""}
-           json.dump(save_dict, f)
+           json.dump(g.skill_editor_skill.data, f)
     else:
         with open(path, "r") as f:
-            pass
-
-
-            
+            g.skill_editor_skill.data = json.load(f)
 
 def SaveSkill(path):
     if g.is_editing.type == "skill": skill = g.is_editing 
