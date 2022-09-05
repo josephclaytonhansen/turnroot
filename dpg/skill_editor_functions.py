@@ -126,11 +126,13 @@ def HideNode():
     for line in d.get_selected_links(g.active_window_widgets.node_editor):
         d.delete_item(line)
 
-def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, combo_items={None:None},desc="",tag=""):
+def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, combo_items={None:None},desc="", tag = "", me=None):
     statics = []
     attributes = []
-    with d.node(pos=d.get_mouse_pos(local=False),label=name,parent=node_editor, tag=tag) as f:
+    print(name)
+    if me == None:
         me = str(int(random.random()*1000))+str(int(random.random()*1000))
+    with d.node(pos=d.get_mouse_pos(local=False),label=name,parent=node_editor, tag=me+":"+name+str(len(g.window_widgets_skill.active_nodes))) as f:
         i = -1
         outputs_count = -1
         inputs_count = -1
