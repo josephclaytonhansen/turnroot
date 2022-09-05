@@ -15,6 +15,7 @@ def UseLoadedData():
     g.skill_editor_skill_statics = {}
     try:
         d.set_value(g.do_not_delete_statics, sta["0"].split(":")[-1])
+        g.skill_editor_skill_statics["0"] = sta["0"].split(":")[-1]
     except Exception as e:
         print(e)
         
