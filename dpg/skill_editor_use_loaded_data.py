@@ -8,13 +8,13 @@ sce = SkillConnectionEnds().skill_connection_ends
 #this has to be here to prevent circular imports
 def UseLoadedData():
     from skill_editor_node_presets import (ActivateWhen, TileAttribute, TurnAttribute, UnitSelfAttribute, 
-                                           AndNode, UnitStat, Number, MathOperation, MathCondition, PercentChance)
+                                           AndNode, UnitStat, Number, MathOperation, MathCondition, PercentChance,
+                                           UnitSStat, SetUnitSStat, SetUnitStat)
     #add nodes from pos dictionary
     pos = g.skill_editor_skill.data["pos"]
     awn = g.skill_editor_skill.data["awn"]
     sta = g.skill_editor_skill.data["sta"]
     con = g.skill_editor_skill.data["con"]
-    
     g.window_widgets_skill.active_nodes = ["0:Activate When:0"]
     g.skill_editor_skill_statics = {}
     g.skill_editor_skill_connections = []
@@ -85,6 +85,16 @@ def UseLoadedData():
             if not no_st:
                 d.set_value(st, statics.split(":")[-1])
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+        
+        elif node_type.startswith( "Unit (Self) Secondary Stat"):
+            tmp, st, attributes=UnitSStat(me=node_id)
+            
+            d.configure_item(tmp, pos=node_pos)
+            sce[tmp.split(":")[0]]=attributes
+            Lines(con, attributes,g, d.get_item_alias(tmp).split(":")[0])
+            if not no_st:
+                d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
 
         elif node_type.startswith( "Number"):
             tmp, st, attributes=Number(me=node_id)
@@ -122,6 +132,26 @@ def UseLoadedData():
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
             Lines(con, attributes,g, node_id)
+        
+        elif node_type.startswith( "Set Unit Stat"):
+            tmp, st, attributes=SetUnitStat(me=node_id)
+            
+            d.configure_item(tmp, pos=node_pos)
+            sce[tmp.split(":")[0]]=attributes
+            Lines(con, attributes,g, node_id)
+            if not no_st:
+                d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+        
+        elif node_type.startswith( "Set Unit Secondary Stat"):
+            tmp, st, attributes=SetUnitSStat(me=node_id)
+            
+            d.configure_item(tmp, pos=node_pos)
+            sce[tmp.split(":")[0]]=attributes
+            Lines(con, attributes,g, node_id)
+            if not no_st:
+                d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
         
     
 def Lines(con, attributes,g, node_id):  

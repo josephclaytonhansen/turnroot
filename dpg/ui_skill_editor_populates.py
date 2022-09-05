@@ -46,7 +46,7 @@ Ctrl+Click on node connections, Delete, or X to remove node connections.
         w_skill.node_editor = f
         g.show_add_node = False
         g.window_widgets_skill.add_nodes = d.add_window(no_title_bar=True, label = "Add Node", show=False,
-                     width=g.text_size * 11,
+                     width=g.text_size * 15, height = 300,
                      modal=True, tag="add_node", no_resize=False, popup=True)
         w_skill.add_nodes = g.window_widgets_skill.add_nodes
         
@@ -60,9 +60,15 @@ Ctrl+Click on node connections, Delete, or X to remove node connections.
         d.add_spacer(parent=w_skill.add_nodes, height=g.item_spacing)
         
         d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Stat Value", callback=UnitStat)
+        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Secondary Stat Value", callback=UnitSStat)
         d.add_button(parent=w_skill.add_nodes, label="Tile/Map Is", callback=TileAttribute)
         d.add_button(parent=w_skill.add_nodes, label="Turn Is", callback=TurnAttribute)
         d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Is", callback=UnitSelfAttribute)
+        
+        d.add_spacer(parent=w_skill.add_nodes, height=g.item_spacing)
+        
+        d.add_button(parent=w_skill.add_nodes, label="Set Unit (Self) Stat To", callback=SetUnitStat)
+        d.add_button(parent=w_skill.add_nodes, label="Set Unit (Self) Secondary Stat To", callback=SetUnitSStat)
         
         with d.handler_registry():
             d.add_key_press_handler(key=d.mvKey_LShift + d.mvKey_A, callback=c_skill.ShowAddNodeMenu)

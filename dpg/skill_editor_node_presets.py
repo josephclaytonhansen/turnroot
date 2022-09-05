@@ -97,6 +97,21 @@ def UnitStat(me=None):
     ShowAddNodeMenu()
     return [tmp, st, attributes]
 
+def UnitSStat(me=None):
+    l = ["Hit", "Avoid", "Critical", "Dodge"]
+    tmp, st, attributes = addBasicNode(
+            me=me,
+            inputs={},
+            outputs={"int":"stat"},
+            static={"combo":"stat"},
+            combo_items={"combostat":l},
+            name = "Unit (Self) Secondary Stat",
+
+            node_editor=g.window_widgets_skill.node_editor,
+            desc="""Get the secondary stat value of this unit at the moment of skill activation. Outputs the stat value as a number.""")
+    ShowAddNodeMenu()
+    return [tmp, st, attributes]
+
 def Number(me=None):
     tmp, st, attributes = addBasicNode(
             me=me,
@@ -148,5 +163,43 @@ def PercentChance(me=None):
             node_editor=g.window_widgets_skill.node_editor,
             desc="""This node has an n% chance of activating. Combine with unit stats generally.\n
 For example, you could use this to do a 'luck % chance' activation. Outputs True or False- will vary per use.""")
+    ShowAddNodeMenu()
+    return [tmp, st, attributes]
+
+def SetUnitStat(me=None):
+    l = ["HP", "Max HP", "Strength", "Speed", "Magic", "Defense", "Resistance", "Luck", "Skill"]
+    if go["use_stat_dexterity"]:
+        l.append("Dexterity")
+    if go["use_stat_charisma"]:
+        l.append("Charisma")
+    tmp, st, attributes = addBasicNode(
+            me=me,
+            inputs={"trigger":"activate", "int":"number"},
+            outputs={"trigger":"activate"},
+            static={"combo":"stat"},
+            combo_items={"combostat":l},
+            name = "Set Unit Stat",
+
+            node_editor=g.window_widgets_skill.node_editor,
+            desc="""Change a stat for this unit to a new value. Will display as a bonus or penalty.\n
+You should combine this with a UnitStat node to get dynamic values, rather then setting stats to arbitrary static values.\n
+Outputs a trigger- this node takes an active trigger, changes the stats, and passes the trigger to the next node.""")
+    ShowAddNodeMenu()
+    return [tmp, st, attributes]
+
+def SetUnitSStat(me=None):
+    l = ["Hit", "Avoid", "Critical", "Dodge"]
+    tmp, st, attributes = addBasicNode(
+            me=me,
+            inputs={"trigger":"activate", "int":"number"},
+            outputs={"trigger":"activate"},
+            static={"combo":"stat"},
+            combo_items={"combostat":l},
+            name = "Set Unit Secondary Stat",
+
+            node_editor=g.window_widgets_skill.node_editor,
+            desc="""Change a secondary stat for this unit to a new value. Will display as a bonus or penalty.\n
+You should combine this with a UnitSecondaryStat node to get dynamic values, rather then setting stats to arbitrary static values.\n
+Outputs a trigger- this node takes an active trigger, changes the stats, and passes the trigger to the next node.""")
     ShowAddNodeMenu()
     return [tmp, st, attributes]

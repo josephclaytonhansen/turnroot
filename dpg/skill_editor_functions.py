@@ -133,8 +133,10 @@ def addBasicNode(inputs={}, static={}, outputs={}, name="", node_editor=None, co
     if g.debug:
         print(name)
     if me == None:
-        me = str(int(random.random()*1000))+str(int(random.random()*1000))
-    with d.node(pos=d.get_mouse_pos(local=False),label=name,parent=node_editor, tag=me+":"+name+str(len(g.window_widgets_skill.active_nodes))) as f:
+        me = str(str(int(random.random()*1000))+str(int(random.random()*1000)))
+    else:
+        me = str(me)
+    with d.node(pos=d.get_mouse_pos(local=False),label=name,parent=node_editor, tag=me+":"+str(name)+str(len(g.window_widgets_skill.active_nodes))) as f:
         i = -1
         outputs_count = -1
         inputs_count = -1

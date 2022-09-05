@@ -1,6 +1,7 @@
 from os.path import exists
 import json
 from globals import globals as g
+import dearpygui.dearpygui as d
 
 def LoadSkill(path):
     if g.is_editing.type == "skill": skill = g.is_editing 
@@ -14,7 +15,6 @@ def LoadSkill(path):
 def SaveSkill(path):
     if g.is_editing.type == "skill": skill = g.is_editing 
     with open(path, "w") as f:
-        
         g.skill_editor_skill.data["pos"] = g.skill_editor_skill_positions
         g.skill_editor_skill.data["con"] = g.skill_editor_skill_connections
         g.skill_editor_skill.data["awn"] = g.window_widgets_skill.active_nodes
