@@ -10,6 +10,9 @@ def UseLoadedData():
     awn = g.skill_editor_skill.data["awn"]
     sta = g.skill_editor_skill.data["sta"]
     con = g.skill_editor_skill.data["con"]
+    
+    g.window_widgets_skill.active_nodes = ["0:Activate When:0"]
+    g.skill_editor_skill_statics = {}
     try:
         d.set_value(g.do_not_delete_statics, sta["0"].split(":")[-1])
     except Exception as e:
@@ -37,12 +40,15 @@ def UseLoadedData():
             d.configure_item(tmp, pos=node_pos)
             if not no_st:
                 d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
             
         elif node_type.startswith( "Turn Is"):
             tmp,st=TurnAttribute()
             d.configure_item(tmp, pos=node_pos)
             if not no_st:
                 d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+
 
             
         elif node_type.startswith( "Unit (Self) Is"):
@@ -50,11 +56,15 @@ def UseLoadedData():
             d.configure_item(tmp, pos=node_pos)
             if not no_st:
                 d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+
 
             
         elif node_type.startswith( "And"):
             tmp,st=AndNode()
             d.configure_item(tmp, pos=node_pos)
+
+
 
             
         elif node_type.startswith( "Unit (Self) Stat"):
@@ -62,6 +72,8 @@ def UseLoadedData():
             d.configure_item(tmp, pos=node_pos)
             if not no_st:
                 d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+
 
             
         elif node_type.startswith( "Number"):
@@ -69,22 +81,31 @@ def UseLoadedData():
             d.configure_item(tmp, pos=node_pos)
             if not no_st:
                 d.set_value(st, float(statics.split(":")[-1]))
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+
             
         elif node_type.startswith( "Math Operation"):
             tmp,st=MathOperation()
             d.configure_item(tmp, pos=node_pos)
             if not no_st:
                 d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+
             
         elif node_type.startswith( "If Number Is"):
             tmp,st=MathCondition()
             d.configure_item(tmp, pos=node_pos)
             if not no_st:
                 d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+
             
         elif node_type.startswith( "Percent Chance"):
             tmp,st=PercentChance()
             d.configure_item(tmp, pos=node_pos)
+
+            
+
 
             
         
