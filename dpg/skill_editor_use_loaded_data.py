@@ -21,13 +21,10 @@ def UseLoadedData():
         
     for node in awn:
         t = node.split(":")
-        
         node_id = t[0]
-        
 
         try:
             statics = sta[node_id]
-            print(node_id, statics)
             no_st = False
         except Exception as e:
             #this node doesn't have statics
@@ -49,8 +46,6 @@ def UseLoadedData():
             if not no_st:
                 d.set_value(st, statics.split(":")[-1])
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
-
-
             
         elif node_type.startswith( "Unit (Self) Is"):
             tmp,st=UnitSelfAttribute()
@@ -58,15 +53,10 @@ def UseLoadedData():
             if not no_st:
                 d.set_value(st, statics.split(":")[-1])
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
-
-
             
         elif node_type.startswith( "And"):
             tmp,st=AndNode()
             d.configure_item(tmp, pos=node_pos)
-
-
-
             
         elif node_type.startswith( "Unit (Self) Stat"):
             tmp,st=UnitStat()
@@ -75,8 +65,6 @@ def UseLoadedData():
                 d.set_value(st, statics.split(":")[-1])
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
 
-
-            
         elif node_type.startswith( "Number"):
             tmp,st=Number()
             d.configure_item(tmp, pos=node_pos)
@@ -84,7 +72,6 @@ def UseLoadedData():
                 d.set_value(st, float(statics.split(":")[-1]))
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
 
-            
         elif node_type.startswith( "Math Operation"):
             tmp,st=MathOperation()
             d.configure_item(tmp, pos=node_pos)
@@ -92,7 +79,6 @@ def UseLoadedData():
                 d.set_value(st, statics.split(":")[-1])
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
 
-            
         elif node_type.startswith( "If Number Is"):
             tmp,st=MathCondition()
             d.configure_item(tmp, pos=node_pos)
@@ -100,7 +86,6 @@ def UseLoadedData():
                 d.set_value(st, statics.split(":")[-1])
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
 
-            
         elif node_type.startswith( "Percent Chance"):
             tmp,st=PercentChance()
             d.configure_item(tmp, pos=node_pos)

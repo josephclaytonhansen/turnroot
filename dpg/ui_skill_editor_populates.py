@@ -66,6 +66,7 @@ Ctrl+Click on node connections, Delete, or X to remove node connections.
         
         with d.handler_registry():
             d.add_key_press_handler(key=d.mvKey_LShift + d.mvKey_A, callback=c_skill.ShowAddNodeMenu)
+            d.add_key_press_handler(key=d.mvKey_O, callback=c_skill.HardOpen)
             d.add_key_press_handler(key=d.mvKey_D, callback=c_skill.PrintSkillDebug)
             d.add_key_press_handler(key=d.mvKey_Delete, callback=c_skill.HideNode)
             d.add_key_press_handler(key=d.mvKey_X, callback=c_skill.HideNode)

@@ -62,6 +62,10 @@ def item_spacing(sender, app_data, user_data):
     d.bind_theme(set_colors(g.color_theme))
     SaveUserPrefs()
 
+def HardOpen():
+    d.show_item("SkillSelect")
+    d.set_item_user_data("SkillSelect", "open")
+
 def ShowFileDialog(sender, app_data, user_data):
     if sender == "skillopen":
         d.show_item("SkillSelect")

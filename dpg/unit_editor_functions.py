@@ -137,6 +137,10 @@ def ChangeDescription(sender, app_data, user_data):
 def SetAffinity(sender, app_data, user_data):
     g.is_editing.default_affinities[user_data] = app_data
 
+def HardOpen():
+    d.show_item("UnitSelect")
+    d.set_item_user_data("UnitSelect", "open")
+
 def ShowFileDialog(sender, app_data, user_data):
     if sender == "open":
         d.show_item("UnitSelect")
