@@ -52,23 +52,28 @@ Ctrl+Click on node connections, Delete, or X to remove node connections.
         
         ActivateWhen()
     
-        d.add_button(parent=w_skill.add_nodes, label="Number", callback=Number)
-        d.add_button(parent=w_skill.add_nodes, label="Math Operation", callback=MathOperation)
-        d.add_button(parent=w_skill.add_nodes, label="Math Condition", callback=MathCondition)
-        d.add_button(parent=w_skill.add_nodes, label="Number % Chance", callback=PercentChance)
+        d.add_button(parent=w_skill.add_nodes, label="Number", callback=lambda:Number(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="Math Operation", callback=lambda:MathOperation(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="Math Condition", callback=lambda:MathCondition(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="Number % Chance", callback=lambda:PercentChance(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="And", callback=lambda:AndNode(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="Or", callback=lambda:OrNode(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="Not", callback=lambda:NotNode(m=None,c=True))
         
         d.add_spacer(parent=w_skill.add_nodes, height=g.item_spacing)
         
-        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Stat Value", callback=UnitStat)
-        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Secondary Stat Value", callback=UnitSStat)
-        d.add_button(parent=w_skill.add_nodes, label="Tile/Map Is", callback=TileAttribute)
-        d.add_button(parent=w_skill.add_nodes, label="Turn Is", callback=TurnAttribute)
-        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Is", callback=UnitSelfAttribute)
+        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Stat Value", callback=lambda:UnitStat(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Secondary Stat Value", callback=lambda:UnitSStat(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="Tile/Map Is", callback=lambda:TileAttribute(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="Turn Is", callback=lambda:TurnAttribute(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Is", callback=lambda:UnitSelfAttribute(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Weapon Type Is", callback=lambda:UnitWeapon(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="Enemy Weapon Type Is", callback=lambda:EnemyWeapon(m=None,c=True))
         
         d.add_spacer(parent=w_skill.add_nodes, height=g.item_spacing)
         
-        d.add_button(parent=w_skill.add_nodes, label="Set Unit (Self) Stat To", callback=SetUnitStat)
-        d.add_button(parent=w_skill.add_nodes, label="Set Unit (Self) Secondary Stat To", callback=SetUnitSStat)
+        d.add_button(parent=w_skill.add_nodes, label="Set Unit (Self) Stat To", callback=lambda:SetUnitStat(m=None,c=True))
+        d.add_button(parent=w_skill.add_nodes, label="Set Unit (Self) Secondary Stat To", callback=lambda:SetUnitSStat(m=None,c=True))
         
         with d.handler_registry():
             d.add_key_press_handler(key=d.mvKey_LShift + d.mvKey_A, callback=c_skill.ShowAddNodeMenu)

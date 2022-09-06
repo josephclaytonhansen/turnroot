@@ -40,7 +40,7 @@ def UseLoadedData():
         #set node positions
         node_pos = pos[node_id]
         if node_type.startswith( "Tile Is"):
-            tmp, st, attributes=TileAttribute(me=node_id)
+            tmp, st, attributes=TileAttribute(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
@@ -50,7 +50,7 @@ def UseLoadedData():
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
             
         elif node_type.startswith( "Turn Is"):
-            tmp, st, attributes=TurnAttribute(me=node_id)
+            tmp, st, attributes=TurnAttribute(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
@@ -60,7 +60,7 @@ def UseLoadedData():
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
             
         elif node_type.startswith( "Unit (Self) Is"):
-            tmp, st, attributes=UnitSelfAttribute(me=node_id)
+            tmp, st, attributes=UnitSelfAttribute(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
@@ -70,14 +70,14 @@ def UseLoadedData():
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
             
         elif node_type.startswith( "And"):
-            tmp, st, attributes=AndNode(me=node_id)
+            tmp, st, attributes=AndNode(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
             Lines(con, attributes,g, d.get_item_alias(tmp).split(":")[0])
             
         elif node_type.startswith( "Unit (Self) Stat"):
-            tmp, st, attributes=UnitStat(me=node_id)
+            tmp, st, attributes=UnitStat(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
@@ -87,7 +87,7 @@ def UseLoadedData():
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
         
         elif node_type.startswith( "Unit (Self) Secondary Stat"):
-            tmp, st, attributes=UnitSStat(me=node_id)
+            tmp, st, attributes=UnitSStat(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
@@ -97,7 +97,7 @@ def UseLoadedData():
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
 
         elif node_type.startswith( "Number"):
-            tmp, st, attributes=Number(me=node_id)
+            tmp, st, attributes=Number(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
@@ -107,7 +107,7 @@ def UseLoadedData():
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
 
         elif node_type.startswith( "Math Operation"):
-            tmp, st, attributes=MathOperation(me=node_id)
+            tmp, st, attributes=MathOperation(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
@@ -117,7 +117,7 @@ def UseLoadedData():
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
 
         elif node_type.startswith( "If Number Is"):
-            tmp, st, attributes=MathCondition(me=node_id)
+            tmp, st, attributes=MathCondition(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
@@ -127,14 +127,14 @@ def UseLoadedData():
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
 
         elif node_type.startswith( "Percent Chance"):
-            tmp, st, attributes=PercentChance(me=node_id)
+            tmp, st, attributes=PercentChance(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
             Lines(con, attributes,g, node_id)
         
         elif node_type.startswith( "Set Unit Stat"):
-            tmp, st, attributes=SetUnitStat(me=node_id)
+            tmp, st, attributes=SetUnitStat(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
@@ -143,8 +143,38 @@ def UseLoadedData():
                 d.set_value(st, statics.split(":")[-1])
                 g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
         
-        elif node_type.startswith( "Set Unit Secondary Stat"):
-            tmp, st, attributes=SetUnitSStat(me=node_id)
+        elif node_type.startswith( "Enemy Weapon"):
+            tmp, st, attributes=EnemyWeapon(m=node_id, c = False)
+            
+            d.configure_item(tmp, pos=node_pos)
+            sce[tmp.split(":")[0]]=attributes
+            Lines(con, attributes,g, node_id)
+            if not no_st:
+                d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+        
+        elif node_type.startswith( "Unit (Self) Weapon"):
+            tmp, st, attributes=UnitWeapon(m=node_id, c = False)
+            
+            d.configure_item(tmp, pos=node_pos)
+            sce[tmp.split(":")[0]]=attributes
+            Lines(con, attributes,g, node_id)
+            if not no_st:
+                d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+        
+        elif node_type.startswith( "Not"):
+            tmp, st, attributes=NotNode(m=node_id, c = False)
+            
+            d.configure_item(tmp, pos=node_pos)
+            sce[tmp.split(":")[0]]=attributes
+            Lines(con, attributes,g, node_id)
+            if not no_st:
+                d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+        
+        elif node_type.startswith( "Or"):
+            tmp, st, attributes=OrNode(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes
