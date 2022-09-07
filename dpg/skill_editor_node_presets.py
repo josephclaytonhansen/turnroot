@@ -240,7 +240,7 @@ def SetUnitStat(m=None, c=True):
             node_editor=g.window_widgets_skill.node_editor,
             desc="""Change a stat for this unit to a new value. Will display as a bonus or penalty.\n
 You should combine this with a UnitStat node to get dynamic values, rather then setting stats to arbitrary static values.\n
-Outputs a trigger- this node takes an active trigger, changes the stats, and passes the trigger to the next node.""")
+Outputs a trigger- this node takes an active trigger, changes the stats, and passes the trigger to the next node (if needed)""")
     ShowAddNodeMenu()
     return [tmp, st, attributes]
 
@@ -257,6 +257,6 @@ def SetUnitSStat(m=None, c=True):
             node_editor=g.window_widgets_skill.node_editor,
             desc="""Change a secondary stat for this unit to a new value. Will display as a bonus or penalty.\n
 You should combine this with a UnitSecondaryStat node to get dynamic values, rather then setting stats to arbitrary static values.\n
-Outputs a trigger- this node takes an active trigger, changes the stats, and passes the trigger to the next node.""")
+Outputs a trigger- this node takes an active trigger, changes the stats, and passes the trigger to the next node (if needed)""")
     ShowAddNodeMenu()
     return [tmp, st, attributes]
