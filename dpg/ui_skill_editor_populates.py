@@ -21,8 +21,8 @@ def populateSkillEditor():
     w_skill.right = right
     
     with d.collapsing_header(label="Instructions",parent=right):
-        w_skill.instructions = d.add_text( default_value="""Press Shift + A or Right Click to add a skill node.\n
-Right click again, press Shift + A again, or double-click to close the add menu.\n
+        w_skill.instructions = d.add_text( default_value="""Right Click to add a skill node.\n
+Right click again or double-click to close the add menu.\n
 Press Delete or X to remove an added node.\n
 Drag the middle mouse button or Space to move.\n
 Ctrl+Click on node connections, Delete, or X to remove node connections.
@@ -46,34 +46,49 @@ Ctrl+Click on node connections, Delete, or X to remove node connections.
         w_skill.node_editor = f
         g.show_add_node = False
         g.window_widgets_skill.add_nodes = d.add_window(no_title_bar=True, label = "Add Node", show=False,
-                     width=g.text_size * 15, height = 300,
+                     width=g.text_size * 29, height = 300,
                      modal=True, tag="add_node", no_resize=False, popup=True)
         w_skill.add_nodes = g.window_widgets_skill.add_nodes
         
         ActivateWhen()
-    
-        d.add_button(parent=w_skill.add_nodes, label="Number", callback=lambda:Number(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="Math Operation", callback=lambda:MathOperation(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="Math Condition", callback=lambda:MathCondition(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="Number % Chance", callback=lambda:PercentChance(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="And", callback=lambda:AndNode(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="Or", callback=lambda:OrNode(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="Not", callback=lambda:NotNode(m=None,c=True))
         
-        d.add_spacer(parent=w_skill.add_nodes, height=g.item_spacing)
+        tmp = d.add_text(default_value="Operations", parent=w_skill.add_nodes)
+        set_font_size(tmp, 2)
         
-        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Stat Value", callback=lambda:UnitStat(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Secondary Stat Value", callback=lambda:UnitSStat(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="Tile/Map Is", callback=lambda:TileAttribute(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="Turn Is", callback=lambda:TurnAttribute(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Is", callback=lambda:UnitSelfAttribute(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="Unit (Self) Weapon Type Is", callback=lambda:UnitWeapon(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="Enemy Weapon Type Is", callback=lambda:EnemyWeapon(m=None,c=True))
+        row1 = WidgetsSkill()
+        BuildTable(row1,[50, 50],w_skill.add_nodes)
+        tmp = d.add_text(default_value="Attributes", parent=w_skill.add_nodes)
+        set_font_size(tmp, 2)
         
-        d.add_spacer(parent=w_skill.add_nodes, height=g.item_spacing)
+        d.add_button(parent=row1.columns[0], label="Number", callback=lambda:Number(m=None,c=True))
+        d.add_button(parent=row1.columns[0], label="Math Operation", callback=lambda:MathOperation(m=None,c=True))
+        d.add_button(parent=row1.columns[0], label="Math Condition", callback=lambda:MathCondition(m=None,c=True))
+        d.add_button(parent=row1.columns[0], label="Number % Chance", callback=lambda:PercentChance(m=None,c=True))
+        d.add_button(parent=row1.columns[1], label="And", callback=lambda:AndNode(m=None,c=True))
+        d.add_button(parent=row1.columns[1], label="Or", callback=lambda:OrNode(m=None,c=True))
+        d.add_button(parent=row1.columns[1], label="Not", callback=lambda:NotNode(m=None,c=True))
         
-        d.add_button(parent=w_skill.add_nodes, label="Set Unit (Self) Stat To", callback=lambda:SetUnitStat(m=None,c=True))
-        d.add_button(parent=w_skill.add_nodes, label="Set Unit (Self) Secondary Stat To", callback=lambda:SetUnitSStat(m=None,c=True))
+        
+        
+        row2 = WidgetsSkill()
+        BuildTable(row2,[50, 50],w_skill.add_nodes)
+        
+        tmp = d.add_text(default_value="Effects", parent=w_skill.add_nodes)
+        set_font_size(tmp, 2)
+        
+        d.add_button(parent=row2.columns[0], label="Unit (Self) Stat Value", callback=lambda:UnitStat(m=None,c=True))
+        d.add_button(parent=row2.columns[0], label="Unit (Self) Secondary Stat Value", callback=lambda:UnitSStat(m=None,c=True))
+        d.add_button(parent=row2.columns[0], label="Tile/Map Is", callback=lambda:TileAttribute(m=None,c=True))
+        d.add_button(parent=row2.columns[0], label="Turn Is", callback=lambda:TurnAttribute(m=None,c=True))
+        d.add_button(parent=row2.columns[1], label="Unit (Self) Is", callback=lambda:UnitSelfAttribute(m=None,c=True))
+        d.add_button(parent=row2.columns[1], label="Unit (Self) Weapon Type Is", callback=lambda:UnitWeapon(m=None,c=True))
+        d.add_button(parent=row2.columns[1], label="Enemy Weapon Type Is", callback=lambda:EnemyWeapon(m=None,c=True))
+        
+        row3 = WidgetsSkill()
+        BuildTable(row3,[50, 50],w_skill.add_nodes)
+        
+        d.add_button(parent=row3.columns[0], label="Set Unit (Self) Stat To", callback=lambda:SetUnitStat(m=None,c=True))
+        d.add_button(parent=row3.columns[1], label="Set Unit (Self) Secondary Stat To", callback=lambda:SetUnitSStat(m=None,c=True))
         
         with d.handler_registry():
             d.add_key_press_handler(key=d.mvKey_LShift + d.mvKey_A, callback=c_skill.ShowAddNodeMenu)

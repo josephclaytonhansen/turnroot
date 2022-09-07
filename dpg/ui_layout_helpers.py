@@ -107,6 +107,7 @@ def BuildTable(cont, widths, parent):
         cont.columns = cont.cells
 
 
+
 def buildSkillEditor():
     g.unit_editor_rows = []
     g.unit_editor_cells = []
