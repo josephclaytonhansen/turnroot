@@ -10,7 +10,7 @@ def UseLoadedData():
     from skill_editor_node_presets import (ActivateWhen, TileAttribute, TurnAttribute, UnitSelfAttribute, 
                                            AndNode, UnitStat, Number, MathOperation, MathCondition, PercentChance,
                                            UnitSStat, SetUnitSStat, SetUnitStat, UnitWeapon, EnemyWeapon, AndNode,
-                                           OrNode, NotNode)
+                                           OrNode, NotNode, AffectFlow, SplitFlow)
     #add nodes from pos dictionary
     pos = g.skill_editor_skill.data["pos"]
     awn = g.skill_editor_skill.data["awn"]
@@ -186,6 +186,26 @@ def UseLoadedData():
         
         elif node_type.startswith( "Or"):
             tmp, st, attributes=OrNode(m=node_id, c = False)
+            
+            d.configure_item(tmp, pos=node_pos)
+            sce[tmp.split(":")[0]]=attributes
+            Lines(con, attributes,g, node_id)
+            if not no_st:
+                d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+        
+        elif node_type.startswith( "Affect Battle Flow"):
+            tmp, st, attributes=AffectFlow(m=node_id, c = False)
+            
+            d.configure_item(tmp, pos=node_pos)
+            sce[tmp.split(":")[0]]=attributes
+            Lines(con, attributes,g, node_id)
+            if not no_st:
+                d.set_value(st, statics.split(":")[-1])
+                g.skill_editor_skill_statics[d.get_item_alias(tmp).split(":")[0]] = statics
+        
+        elif node_type.startswith( "Dual Effect"):
+            tmp, st, attributes=SplitFlow(m=node_id, c = False)
             
             d.configure_item(tmp, pos=node_pos)
             sce[tmp.split(":")[0]]=attributes

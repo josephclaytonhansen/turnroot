@@ -260,3 +260,32 @@ You should combine this with a UnitSecondaryStat node to get dynamic values, rat
 Outputs a trigger- this node takes an active trigger, changes the stats, and passes the trigger to the next node (if needed)""")
     ShowAddNodeMenu()
     return [tmp, st, attributes]
+
+def AffectFlow(m=None, c=True):
+    l=["This unit attacks first (even on enemy turns)", "This unit will perform a follow-up attack","This unit will attack twice", "The enemy unit cannot make a follow-up attack",
+"This unit will not make a follow-up attack", "Unit cannot attack twice"]
+    tmp, st, attributes = addBasicNode(
+        me=m,
+        inputs={"trigger":"activate"},
+        outputs={},
+        static={"combo":"effect"},
+        name = "Affect Battle Flow",
+        combo_items={'comboeffect':l},
+        calc_me=c,
+        node_editor=g.window_widgets_skill.node_editor,
+        desc="""This node changes the normal flow of a battle.""")
+    ShowAddNodeMenu()
+    return [tmp, st, attributes]
+
+def SplitFlow(m=None, c=True):
+    tmp, st, attributes = addBasicNode(
+        me=m,
+        inputs={"trigger":"activate"},
+        outputs={"trigger1":"activate", "trigger2":"activate"},
+        static={},
+        name = "Dual Effect",
+        calc_me=c,
+        node_editor=g.window_widgets_skill.node_editor,
+        desc="""This node allows one trigger to activate two results.""")
+    ShowAddNodeMenu()
+    return [tmp, st, attributes]

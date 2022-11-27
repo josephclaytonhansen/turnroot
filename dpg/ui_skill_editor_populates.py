@@ -89,6 +89,8 @@ Ctrl+Click on node connections, Delete, or X to remove node connections.
         
         d.add_button(parent=row3.columns[0], label="Set Unit (Self) Stat To", callback=lambda:SetUnitStat(m=None,c=True))
         d.add_button(parent=row3.columns[1], label="Set Unit (Self) Secondary Stat To", callback=lambda:SetUnitSStat(m=None,c=True))
+        d.add_button(parent=row3.columns[0], label="Affect Battle Flow", callback=lambda:AffectFlow(m=None,c=True))
+        d.add_button(parent=row3.columns[1], label="Dual Effect", callback=lambda:SplitFlow(m=None,c=True))
         
         with d.handler_registry():
             d.add_key_press_handler(key=d.mvKey_LShift + d.mvKey_A, callback=c_skill.ShowAddNodeMenu)
